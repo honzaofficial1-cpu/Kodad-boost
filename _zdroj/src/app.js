@@ -694,7 +694,7 @@ function vSettings() {
       <p class="mut" style="font-size:13px;margin:0">Poslední záloha: ${S.settings.lastBackup ? new Date(S.settings.lastBackup).toLocaleDateString('cs-CZ') : 'zatím nikdy'}</p></div></section>
     ${typeof pushCard === 'function' ? pushCard() : ''}
     ${demo ? `<section class="sec"><button class="btn danger block" data-a="demo-clear">Smazat ukázková data</button></section>` : ''}
-    <div style="margin:40px auto 0;opacity:.5;display:grid;justify-items:center;gap:8px">${MARKHTML(22)}<span class="mut" style="font-size:12px">Kodad boost · fáze 1</span></div>
+    <div style="margin:40px auto 0;opacity:.5;display:grid;justify-items:center;gap:8px">${MARKHTML(22)}<span class="mut" style="font-size:12px">Kodad boost · verze ${typeof APP_VERSION !== 'undefined' ? APP_VERSION : ''}</span></div>
   </div>${tabs()}`;
 }
 async function exportData() {

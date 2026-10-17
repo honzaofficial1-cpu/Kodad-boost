@@ -4,11 +4,11 @@ from PIL import Image, ImageDraw, ImageFont
 B = os.path.dirname(os.path.abspath(__file__))
 src = lambda f: open(os.path.join(B, 'src', f), encoding='utf-8').read()
 mark = open(os.path.join(B,'assets','mark.svg'),encoding='utf-8').read().replace('<svg ','<svg aria-hidden="true" ')
-css, js = src('style.css'), 'const MARK = ' + json.dumps(mark) + ';\n' + src('data.js') + '\n' + src('app.js') + '\n' + src('body.js') + '\n' + src('extra.js') + '\nrender();\n'
+VERSION = '1.5.2'
+css, js = src('style.css'), 'const APP_VERSION = ' + json.dumps(VERSION) + ';\nconst MARK = ' + json.dumps(mark) + ';\n' + src('data.js') + '\n' + src('app.js') + '\n' + src('body.js') + '\n' + src('extra.js') + '\nrender();\n'
 FONTS_OLD = '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">'
 FONTS = ''
 BODY = '<div id="app"></div><div id="sheet" hidden></div><div id="toast" role="status" aria-live="polite"></div>'
-VERSION = '1.5.1'
 
 # 1) artefakt (náhled v Claudovi)
 os.makedirs(os.path.join(B, 'dist'), exist_ok=True)
@@ -44,7 +44,7 @@ idx = f'''<!doctype html>
 <body>
 {BODY}
 <script>{js}</script>
-<script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{{}}));</script>
+<script>if('serviceWorker' in navigator){{let rl=false;const had=!!navigator.serviceWorker.controller;navigator.serviceWorker.addEventListener('controllerchange',()=>{{if(rl||!had)return;rl=true;location.reload();}});addEventListener('load',()=>navigator.serviceWorker.register('sw.js',{{updateViaCache:'none'}}).then(reg=>{{document.addEventListener('visibilitychange',()=>{{if(document.visibilityState==='visible')reg.update().catch(()=>{{}});}});}}).catch(()=>{{}}));}}</script>
 </body>
 </html>
 '''
@@ -66,7 +66,7 @@ self.addEventListener('fetch', e => {{
   const u = new URL(r.url);
   if (u.origin === location.origin) {{
     // aplikace: síť, když je; jinak cache (vždy funguje offline)
-    e.respondWith(fetch(r).then(res => {{ const cp = res.clone(); caches.open(C).then(c => c.put(r, cp)); return res; }}).catch(() => caches.match(r).then(m => m || caches.match('./index.html'))));
+    e.respondWith(fetch(r, {{ cache: 'no-store' }}).then(res => {{ const cp = res.clone(); caches.open(C).then(c => c.put(r, cp)); return res; }}).catch(() => caches.match(r).then(m => m || caches.match('./index.html'))));
   }} else if (/fonts\\.(googleapis|gstatic)\\.com/.test(u.host)) {{
     e.respondWith(caches.match(r).then(m => m || fetch(r).then(res => {{ const cp = res.clone(); caches.open(C).then(c => c.put(r, cp)); return res; }})));
   }}
