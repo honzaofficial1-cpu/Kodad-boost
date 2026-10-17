@@ -245,3 +245,57 @@ Object.assign(A, {
 });
 document.addEventListener('input', e => { if (e.target.id === 'pl-w') $('#pl-out').innerHTML = plateResult(num(e.target.value), num(e.target.dataset.bar)); });
 (function () { try { const q = new URLSearchParams(location.search); if (q.get('open') === 'week') { history.replaceState(null, '', location.pathname); const mk = dkey(monday(new Date())); setTimeout(() => { S.settings.wkSeen = mk; save(); weekSheet(mk); }, 50); } } catch (e) { } })();
+
+// ===================== v1.8: sauna jako „trénink“ – víc saun za sebou, typy, sdílení po dokončení =====================
+const SAUNA_KINDS = ['Finská', 'Parní', 'Infra', 'Bylinková'];
+// sjednocení: stará sauna (rounds/min/temp) = jedna položka
+const saunaItems = a => a.items && a.items.length ? a.items : [{ kind: a.kind || null, rounds: a.rounds, min: a.min, temp: a.temp }];
+function saunaTotals(a) {
+  const it = saunaItems(a); const rounds = it.reduce((s, x) => s + (x.rounds || 1), 0); const mins = it.reduce((s, x) => s + (x.rounds || 1) * (x.min || 0), 0);
+  return { it, rounds, mins };
+}
+const saunaLine = x => [x.kind, x.rounds ? `${x.rounds}× ${x.min ? x.min + ' min' : ''}`.trim() : x.min ? `${x.min} min` : '', x.temp ? `${x.temp} °C` : ''].filter(Boolean).join(' · ');
+let sDraft = null;
+function saunaSheet(a, id) {
+  if (!sDraft || sDraft.id !== (id || 'new')) sDraft = { id: id || 'new', date: a.date || today(), note: a.note || '', items: JSON.parse(JSON.stringify(id ? saunaItems(a) : [{ kind: 'Finská', rounds: null, min: null, temp: null }])) };
+  const d = sDraft;
+  sheet(`<h2>Sauna</h2><div class="form">
+    <label class="f">Datum<input id="a-date" type="date" value="${d.date}"></label>
+    ${d.items.map((x, i) => `<div class="sblock" data-i="${i}">
+      <div class="sbh"><b>${i + 1}. sauna</b>${d.items.length > 1 ? `<button class="rm" data-a="sa-rm" data-i="${i}" aria-label="Odebrat">${ico('x')}</button>` : ''}</div>
+      <div class="seg wrap4">${SAUNA_KINDS.map(k => `<button data-a="sa-kind" data-i="${i}" data-v="${k}" class="${x.kind === k ? 'on' : ''}">${k}</button>`).join('')}</div>
+      <div class="three"><label class="f">Kola<input data-sf="rounds" inputmode="numeric" value="${x.rounds ?? ''}" placeholder="3"></label><label class="f">Min / kolo<input data-sf="min" inputmode="numeric" value="${x.min ?? ''}" placeholder="12"></label><label class="f">Teplota °C<input data-sf="temp" inputmode="numeric" value="${x.temp ?? ''}" placeholder="${x.kind === 'Parní' ? '45' : x.kind === 'Infra' ? '55' : '90'}"></label></div>
+    </div>`).join('')}
+    <button class="btn block" data-a="sa-add">${ico('plus')} Přidat další saunu</button>
+    <label class="f">Poznámka<input id="a-note" value="${esc(d.note)}" placeholder="nepovinné"></label></div>
+    <div class="actions">${id ? `<button class="btn danger" data-a="act-del" data-id="${id}" aria-label="Smazat">${ico('trash')}</button><button class="btn" data-a="act-share" data-id="${id}" aria-label="Sdílet">${ico('share')}</button>` : ''}<button class="btn" data-a="sa-cancel">Zrušit</button><button class="btn white" data-a="sa-done">Hotovo</button></div>`);
+}
+function saunaRead() {
+  const d = sDraft; d.date = $('#a-date')?.value || d.date; d.note = $('#a-note')?.value || '';
+  $$('.sblock').forEach(b => { const x = d.items[+b.dataset.i]; ['rounds', 'min', 'temp'].forEach(f => x[f] = num($(`[data-sf=${f}]`, b).value)); });
+}
+const _actSheet = actSheet;
+actSheet = function (type, k, id) {
+  const a = id ? S.activities.find(x => x.id === id) : null;
+  if ((a && a.type === 'sauna') || (!a && type === 'sauna')) { if (!id) sDraft = null; return saunaSheet(a || { date: k || today() }, id); }
+  return _actSheet(type, k, id);
+};
+// po uložení nové aktivity rovnou nabídnout kartu ke sdílení
+const _actSave = A['act-save'];
+A['act-save'] = b => { const isNew = !b.dataset.id; _actSave(b); if (isNew) { const a = S.activities[S.activities.length - 1]; setTimeout(() => storyActivity(a), 1500); } };
+Object.assign(A, {
+  'sa-kind': b => { saunaRead(); const x = sDraft.items[+b.dataset.i]; x.kind = x.kind === b.dataset.v ? null : b.dataset.v; saunaSheet({}, sDraft.id === 'new' ? null : sDraft.id); },
+  'sa-add': () => { saunaRead(); const last = sDraft.items[sDraft.items.length - 1]; sDraft.items.push({ kind: last.kind, rounds: null, min: last.min, temp: null }); saunaSheet({}, sDraft.id === 'new' ? null : sDraft.id); setTimeout(() => { const el = $$('.sblock').pop(); el && el.scrollIntoView({ block: 'center', behavior: 'smooth' }); }, 50); },
+  'sa-rm': b => { saunaRead(); sDraft.items.splice(+b.dataset.i, 1); saunaSheet({}, sDraft.id === 'new' ? null : sDraft.id); },
+  'sa-cancel': () => { sDraft = null; closeSheet(); },
+  'sa-done': () => {
+    saunaRead(); const d = sDraft; const items = d.items.filter(x => x.kind || x.rounds || x.min || x.temp);
+    if (!items.length) return toast('Vyplň aspoň jednu saunu');
+    const isNew = d.id === 'new';
+    const a = isNew ? { id: uid(), type: 'sauna', ts: Date.now() } : S.activities.find(x => x.id === d.id);
+    a.date = d.date; a.note = d.note.trim(); a.items = items; delete a.rounds; delete a.min; delete a.temp; delete a.kind;
+    if (isNew) S.activities.push(a);
+    sDraft = null; save(true); closeSheet(); render();
+    storyActivity(a);
+  },
+});

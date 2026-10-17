@@ -635,7 +635,7 @@ function vActs() {
 }
 function actDesc(a) {
   const p = [];
-  if (a.type === 'sauna') { if (a.rounds) p.push(`${a.rounds} ${a.rounds === 1 ? 'kolo' : a.rounds < 5 ? 'kola' : 'kol'}`); if (a.min) p.push(`${a.min} min/kolo`); if (a.temp) p.push(`${a.temp} °C`); }
+  if (a.type === 'sauna') { p.push(saunaTotals(a).it.map(saunaLine).join(' + ')); }
   else if (a.type === 'cold') { if (a.kind) p.push(a.kind); if (a.sec) p.push(`${Math.floor(a.sec / 60)}:${pad(a.sec % 60)}`); if (a.temp != null && a.temp !== '') p.push(`${kg(a.temp)} °C`); }
   else { if (a.kind) p.push(a.kind); if (a.min) p.push(`${a.min} min`); if (a.bpm) p.push(`${a.bpm} bpm`); }
   return p.join(' · ');
@@ -800,16 +800,18 @@ async function storyExercise(s, e) {
 async function storyActivity(a) {
   const t = ACT_TYPES[a.type] || ACT_TYPES.other; const key = PICTO[a.type] ? a.type : 'other';
   let big, unit = '', sub = [];
-  if (a.type === 'sauna') { big = `${a.rounds || 1}×`; unit = a.min ? `${a.min} min` : ''; if (a.temp) sub.push(`${a.temp} °C`); }
+  if (a.type === 'sauna') { const t = saunaTotals(a); big = `${t.rounds}×`; unit = t.mins ? `${t.mins} min` : ''; sub = t.it.map(x => [x.kind, `${x.rounds || 1}×${x.min ? ' ' + x.min + ' min' : ''}`, x.temp ? x.temp + ' °C' : ''].filter(Boolean).join(' ')); }
   else if (a.type === 'cold') { big = a.sec ? `${Math.floor(a.sec / 60)}:${pad(a.sec % 60)}` : '✓'; unit = a.sec ? 'min' : ''; if (a.kind) sub.push(a.kind); if (a.temp != null) sub.push(`voda ${kg(a.temp)} °C`); }
   else { big = a.min ? String(a.min) : '✓'; unit = a.min ? 'min' : ''; if (a.kind) sub.push(a.kind); if (a.bpm) sub.push(`${a.bpm} bpm`); }
   if (a.note) sub.push(a.note);
   const title = (a.type === 'other' && a.label ? a.label : t.name).toUpperCase();
-  const c = await miniCard(500, key, (x, col, X) => {
+  const multi = a.type === 'sauna' && sub.length > 1 + (a.note ? 1 : 0);
+  const c = await miniCard(multi ? 452 + sub.length * 50 : 500, key, (x, col, X) => {
     if (a.type === 'cold') { x.fillStyle = 'rgba(225,240,255,.35)'; for (let i = 0; i < 30; i++) { const px = 420 + (i * 197) % 620, py = 40 + (i * 131) % 420; x.beginPath(); x.arc(px, py, 1.5 + (i % 3), 0, 6.28); x.fill(); } }
     x.fillStyle = col; x.font = `700 30px ${CF}`; spacedL(x, clip(x, title, 480), X, 150, 7);
     bigNum(x, big, unit, X - 4, 300, 170);
-    if (sub.length) { x.fillStyle = '#C7C7CC'; x.font = `500 36px ${CF}`; x.fillText(clip(x, sub.join('  ·  '), 600), X, 372); }
+    if (multi) { sub.forEach((t, i) => { x.fillStyle = i < sub.length - (a.note ? 1 : 0) ? '#C7C7CC' : '#8E8E93'; x.font = `500 34px ${CF}`; x.fillText(clip(x, t, 600), X, 372 + i * 50); }); }
+    else if (sub.length) { x.fillStyle = '#C7C7CC'; x.font = `500 36px ${CF}`; x.fillText(clip(x, sub.join('  ·  '), 600), X, 372); }
   }, fdate(a.date));
   showShot(c, `${t.name}-${a.date}.png`);
 }

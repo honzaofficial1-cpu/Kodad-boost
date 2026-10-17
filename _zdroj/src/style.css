@@ -520,3 +520,12 @@ button.ck{background:none;border:0;padding:0;cursor:pointer}
 .cmpr span:first-child{color:var(--mut)}
 .cmpr i{font-style:normal;text-align:right;font-weight:600;color:var(--mut)}
 .cmpr i.g{color:var(--done)} .cmpr i.b{color:var(--down)}
+
+/* v1.8 sauna */
+.sblock{display:grid;gap:10px;padding:14px;border-radius:20px;background:var(--card)}
+.sblock .sbh{display:flex;align-items:center;justify-content:space-between}
+.sblock .sbh b{font-size:16px;color:var(--heat)}
+.sblock .rm{width:34px;height:34px;color:var(--dim);display:grid;place-items:center}
+.sblock .seg{background:var(--card2)}
+.seg.wrap4{display:grid;grid-template-columns:repeat(4,1fr)}
+.seg.wrap4 button{font-size:13px;padding:0 2px}

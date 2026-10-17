@@ -536,11 +536,20 @@ button.ck{background:none;border:0;padding:0;cursor:pointer}
 .cmpr span:first-child{color:var(--mut)}
 .cmpr i{font-style:normal;text-align:right;font-weight:600;color:var(--mut)}
 .cmpr i.g{color:var(--done)} .cmpr i.b{color:var(--down)}
+
+/* v1.8 sauna */
+.sblock{display:grid;gap:10px;padding:14px;border-radius:20px;background:var(--card)}
+.sblock .sbh{display:flex;align-items:center;justify-content:space-between}
+.sblock .sbh b{font-size:16px;color:var(--heat)}
+.sblock .rm{width:34px;height:34px;color:var(--dim);display:grid;place-items:center}
+.sblock .seg{background:var(--card2)}
+.seg.wrap4{display:grid;grid-template-columns:repeat(4,1fr)}
+.seg.wrap4 button{font-size:13px;padding:0 2px}
 </style>
 </head>
 <body>
 <div id="app"></div><div id="sheet" hidden></div><div id="toast" role="status" aria-live="polite"></div>
-<script>const APP_VERSION = "1.7.0";
+<script>const APP_VERSION = "1.8.0";
 const MARK = "<svg aria-hidden=\"true\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 994 296\"><path fill=\"currentColor\" d=\"M612 5L611 4L571 4L570 5L567 5L566 4L561 4L560 5L448 5L447 6L442 6L441 5L439 6L438 5L435 5L434 6L430 6L429 5L426 5L425 6L414 6L413 5L409 5L408 6L385 5L378 11L366 27L355 39L352 44L335 63L323 79L316 86L312 92L282 127L274 138L267 145L263 151L233 186L233 187L219 203L219 204L210 213L210 214L202 222L202 223L192 232L186 236L171 243L169 243L162 246L155 247L154 248L149 248L148 249L140 249L139 250L85 250L84 251L78 251L77 250L37 250L29 258L29 259L24 264L19 271L13 277L13 278L4 288L0 294L1 295L48 295L49 296L51 295L58 295L59 296L94 296L95 295L97 295L98 296L100 296L101 295L154 295L155 294L184 294L185 293L202 293L203 292L232 291L233 290L241 290L242 289L253 289L254 288L263 288L264 287L271 287L272 286L281 286L282 285L288 285L289 284L294 284L295 283L301 283L302 282L313 281L314 280L328 278L332 276L336 276L337 275L352 272L358 269L361 269L362 268L367 267L369 265L379 262L393 255L408 245L433 221L436 216L448 203L456 192L477 168L485 157L492 150L494 146L506 133L506 132L521 115L525 109L544 88L548 82L560 69L563 64L570 57L570 56L578 48L578 47L589 35L594 28L602 20L604 16L611 9ZM994 1L993 0L974 0L973 1L967 1L966 0L964 0L963 1L866 1L865 2L860 2L859 1L842 2L840 1L839 2L804 2L794 7L792 7L786 11L784 11L777 15L775 15L760 23L758 23L749 28L747 28L734 35L732 35L717 43L715 43L706 48L704 48L696 53L694 53L689 56L685 57L683 59L681 59L670 65L668 65L658 70L656 72L647 76L645 78L636 82L634 84L629 86L624 90L619 92L614 96L606 100L586 115L579 119L575 123L559 135L554 140L553 140L537 155L536 155L502 190L502 193L509 191L512 189L529 184L532 182L538 181L549 176L555 175L558 173L566 171L569 169L586 164L589 162L597 160L606 168L606 169L620 185L632 201L655 228L663 239L677 255L680 260L686 266L694 277L704 288L749 288L750 287L755 287L756 288L760 288L761 287L914 287L916 286L916 284L896 264L895 264L827 199L826 199L797 171L796 171L776 151L775 151L766 142L765 142L757 133L749 127L736 113L736 109L742 104L747 103L757 98L762 97L767 94L777 91L782 88L784 88L787 86L789 86L792 84L794 84L797 82L802 81L807 78L809 78L812 76L814 76L817 74L824 72L829 69L831 69L844 63L849 62L854 59L856 59L861 56L863 56L866 54L873 52L878 49L880 49L883 47L885 47L898 41L903 40L910 36L912 36L920 32L925 31L937 25L939 25L942 23L944 23L947 21L949 21L952 19L954 19L957 17L959 17L962 15L969 13L974 10L976 10L979 8L981 8L984 6L993 3Z\"/></svg>";
 // ===== Výchozí knihovna cviků (informace jsou skryté pod „Info o cviku“) =====
 const R = (min, max, fail = true) => ({ min, max, fail });
@@ -1333,7 +1342,7 @@ function vActs() {
 }
 function actDesc(a) {
   const p = [];
-  if (a.type === 'sauna') { if (a.rounds) p.push(`${a.rounds} ${a.rounds === 1 ? 'kolo' : a.rounds < 5 ? 'kola' : 'kol'}`); if (a.min) p.push(`${a.min} min/kolo`); if (a.temp) p.push(`${a.temp} °C`); }
+  if (a.type === 'sauna') { p.push(saunaTotals(a).it.map(saunaLine).join(' + ')); }
   else if (a.type === 'cold') { if (a.kind) p.push(a.kind); if (a.sec) p.push(`${Math.floor(a.sec / 60)}:${pad(a.sec % 60)}`); if (a.temp != null && a.temp !== '') p.push(`${kg(a.temp)} °C`); }
   else { if (a.kind) p.push(a.kind); if (a.min) p.push(`${a.min} min`); if (a.bpm) p.push(`${a.bpm} bpm`); }
   return p.join(' · ');
@@ -1498,16 +1507,18 @@ async function storyExercise(s, e) {
 async function storyActivity(a) {
   const t = ACT_TYPES[a.type] || ACT_TYPES.other; const key = PICTO[a.type] ? a.type : 'other';
   let big, unit = '', sub = [];
-  if (a.type === 'sauna') { big = `${a.rounds || 1}×`; unit = a.min ? `${a.min} min` : ''; if (a.temp) sub.push(`${a.temp} °C`); }
+  if (a.type === 'sauna') { const t = saunaTotals(a); big = `${t.rounds}×`; unit = t.mins ? `${t.mins} min` : ''; sub = t.it.map(x => [x.kind, `${x.rounds || 1}×${x.min ? ' ' + x.min + ' min' : ''}`, x.temp ? x.temp + ' °C' : ''].filter(Boolean).join(' ')); }
   else if (a.type === 'cold') { big = a.sec ? `${Math.floor(a.sec / 60)}:${pad(a.sec % 60)}` : '✓'; unit = a.sec ? 'min' : ''; if (a.kind) sub.push(a.kind); if (a.temp != null) sub.push(`voda ${kg(a.temp)} °C`); }
   else { big = a.min ? String(a.min) : '✓'; unit = a.min ? 'min' : ''; if (a.kind) sub.push(a.kind); if (a.bpm) sub.push(`${a.bpm} bpm`); }
   if (a.note) sub.push(a.note);
   const title = (a.type === 'other' && a.label ? a.label : t.name).toUpperCase();
-  const c = await miniCard(500, key, (x, col, X) => {
+  const multi = a.type === 'sauna' && sub.length > 1 + (a.note ? 1 : 0);
+  const c = await miniCard(multi ? 452 + sub.length * 50 : 500, key, (x, col, X) => {
     if (a.type === 'cold') { x.fillStyle = 'rgba(225,240,255,.35)'; for (let i = 0; i < 30; i++) { const px = 420 + (i * 197) % 620, py = 40 + (i * 131) % 420; x.beginPath(); x.arc(px, py, 1.5 + (i % 3), 0, 6.28); x.fill(); } }
     x.fillStyle = col; x.font = `700 30px ${CF}`; spacedL(x, clip(x, title, 480), X, 150, 7);
     bigNum(x, big, unit, X - 4, 300, 170);
-    if (sub.length) { x.fillStyle = '#C7C7CC'; x.font = `500 36px ${CF}`; x.fillText(clip(x, sub.join('  ·  '), 600), X, 372); }
+    if (multi) { sub.forEach((t, i) => { x.fillStyle = i < sub.length - (a.note ? 1 : 0) ? '#C7C7CC' : '#8E8E93'; x.font = `500 34px ${CF}`; x.fillText(clip(x, t, 600), X, 372 + i * 50); }); }
+    else if (sub.length) { x.fillStyle = '#C7C7CC'; x.font = `500 36px ${CF}`; x.fillText(clip(x, sub.join('  ·  '), 600), X, 372); }
   }, fdate(a.date));
   showShot(c, `${t.name}-${a.date}.png`);
 }
@@ -2222,6 +2233,60 @@ Object.assign(A, {
 });
 document.addEventListener('input', e => { if (e.target.id === 'pl-w') $('#pl-out').innerHTML = plateResult(num(e.target.value), num(e.target.dataset.bar)); });
 (function () { try { const q = new URLSearchParams(location.search); if (q.get('open') === 'week') { history.replaceState(null, '', location.pathname); const mk = dkey(monday(new Date())); setTimeout(() => { S.settings.wkSeen = mk; save(); weekSheet(mk); }, 50); } } catch (e) { } })();
+
+// ===================== v1.8: sauna jako „trénink“ – víc saun za sebou, typy, sdílení po dokončení =====================
+const SAUNA_KINDS = ['Finská', 'Parní', 'Infra', 'Bylinková'];
+// sjednocení: stará sauna (rounds/min/temp) = jedna položka
+const saunaItems = a => a.items && a.items.length ? a.items : [{ kind: a.kind || null, rounds: a.rounds, min: a.min, temp: a.temp }];
+function saunaTotals(a) {
+  const it = saunaItems(a); const rounds = it.reduce((s, x) => s + (x.rounds || 1), 0); const mins = it.reduce((s, x) => s + (x.rounds || 1) * (x.min || 0), 0);
+  return { it, rounds, mins };
+}
+const saunaLine = x => [x.kind, x.rounds ? `${x.rounds}× ${x.min ? x.min + ' min' : ''}`.trim() : x.min ? `${x.min} min` : '', x.temp ? `${x.temp} °C` : ''].filter(Boolean).join(' · ');
+let sDraft = null;
+function saunaSheet(a, id) {
+  if (!sDraft || sDraft.id !== (id || 'new')) sDraft = { id: id || 'new', date: a.date || today(), note: a.note || '', items: JSON.parse(JSON.stringify(id ? saunaItems(a) : [{ kind: 'Finská', rounds: null, min: null, temp: null }])) };
+  const d = sDraft;
+  sheet(`<h2>Sauna</h2><div class="form">
+    <label class="f">Datum<input id="a-date" type="date" value="${d.date}"></label>
+    ${d.items.map((x, i) => `<div class="sblock" data-i="${i}">
+      <div class="sbh"><b>${i + 1}. sauna</b>${d.items.length > 1 ? `<button class="rm" data-a="sa-rm" data-i="${i}" aria-label="Odebrat">${ico('x')}</button>` : ''}</div>
+      <div class="seg wrap4">${SAUNA_KINDS.map(k => `<button data-a="sa-kind" data-i="${i}" data-v="${k}" class="${x.kind === k ? 'on' : ''}">${k}</button>`).join('')}</div>
+      <div class="three"><label class="f">Kola<input data-sf="rounds" inputmode="numeric" value="${x.rounds ?? ''}" placeholder="3"></label><label class="f">Min / kolo<input data-sf="min" inputmode="numeric" value="${x.min ?? ''}" placeholder="12"></label><label class="f">Teplota °C<input data-sf="temp" inputmode="numeric" value="${x.temp ?? ''}" placeholder="${x.kind === 'Parní' ? '45' : x.kind === 'Infra' ? '55' : '90'}"></label></div>
+    </div>`).join('')}
+    <button class="btn block" data-a="sa-add">${ico('plus')} Přidat další saunu</button>
+    <label class="f">Poznámka<input id="a-note" value="${esc(d.note)}" placeholder="nepovinné"></label></div>
+    <div class="actions">${id ? `<button class="btn danger" data-a="act-del" data-id="${id}" aria-label="Smazat">${ico('trash')}</button><button class="btn" data-a="act-share" data-id="${id}" aria-label="Sdílet">${ico('share')}</button>` : ''}<button class="btn" data-a="sa-cancel">Zrušit</button><button class="btn white" data-a="sa-done">Hotovo</button></div>`);
+}
+function saunaRead() {
+  const d = sDraft; d.date = $('#a-date')?.value || d.date; d.note = $('#a-note')?.value || '';
+  $$('.sblock').forEach(b => { const x = d.items[+b.dataset.i]; ['rounds', 'min', 'temp'].forEach(f => x[f] = num($(`[data-sf=${f}]`, b).value)); });
+}
+const _actSheet = actSheet;
+actSheet = function (type, k, id) {
+  const a = id ? S.activities.find(x => x.id === id) : null;
+  if ((a && a.type === 'sauna') || (!a && type === 'sauna')) { if (!id) sDraft = null; return saunaSheet(a || { date: k || today() }, id); }
+  return _actSheet(type, k, id);
+};
+// po uložení nové aktivity rovnou nabídnout kartu ke sdílení
+const _actSave = A['act-save'];
+A['act-save'] = b => { const isNew = !b.dataset.id; _actSave(b); if (isNew) { const a = S.activities[S.activities.length - 1]; setTimeout(() => storyActivity(a), 1500); } };
+Object.assign(A, {
+  'sa-kind': b => { saunaRead(); const x = sDraft.items[+b.dataset.i]; x.kind = x.kind === b.dataset.v ? null : b.dataset.v; saunaSheet({}, sDraft.id === 'new' ? null : sDraft.id); },
+  'sa-add': () => { saunaRead(); const last = sDraft.items[sDraft.items.length - 1]; sDraft.items.push({ kind: last.kind, rounds: null, min: last.min, temp: null }); saunaSheet({}, sDraft.id === 'new' ? null : sDraft.id); setTimeout(() => { const el = $$('.sblock').pop(); el && el.scrollIntoView({ block: 'center', behavior: 'smooth' }); }, 50); },
+  'sa-rm': b => { saunaRead(); sDraft.items.splice(+b.dataset.i, 1); saunaSheet({}, sDraft.id === 'new' ? null : sDraft.id); },
+  'sa-cancel': () => { sDraft = null; closeSheet(); },
+  'sa-done': () => {
+    saunaRead(); const d = sDraft; const items = d.items.filter(x => x.kind || x.rounds || x.min || x.temp);
+    if (!items.length) return toast('Vyplň aspoň jednu saunu');
+    const isNew = d.id === 'new';
+    const a = isNew ? { id: uid(), type: 'sauna', ts: Date.now() } : S.activities.find(x => x.id === d.id);
+    a.date = d.date; a.note = d.note.trim(); a.items = items; delete a.rounds; delete a.min; delete a.temp; delete a.kind;
+    if (isNew) S.activities.push(a);
+    sDraft = null; save(true); closeSheet(); render();
+    storyActivity(a);
+  },
+});
 
 render();
 </script>
