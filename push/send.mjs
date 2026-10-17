@@ -5,7 +5,7 @@ const cfg = JSON.parse(fs.readFileSync('push/config.json', 'utf8'));
 const subs = JSON.parse(fs.readFileSync('push/subscriptions.json', 'utf8'));
 if (!subs.length) { console.log('Žádné zařízení.'); process.exit(0); }
 const priv = process.env.VAPID_PRIVATE_KEY;
-if (!priv) { console.error('Chybí secret VAPID_PRIVATE_KEY.'); process.exit(1); }
+if (!priv) { console.log('::error::Chybí secret VAPID_PRIVATE_KEY'); process.exit(1); }
 const ev = process.env.EVENT, sched = process.env.SCHEDULE || '';
 const off = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Prague', timeZoneName: 'shortOffset' }).formatToParts(new Date()).find(p => p.type === 'timeZoneName').value;
 const plus = off.includes('+2') ? 2 : 1;
@@ -21,7 +21,7 @@ webpush.setVapidDetails(cfg.subject, cfg.publicKey, priv);
 let ok = 0;
 for (const s of subs) {
   try { await webpush.sendNotification(s, JSON.stringify(payload), { TTL: 3600 }); ok++; }
-  catch (e) { console.error('Chyba', e.statusCode, e.body); }
+  catch (e) { console.log(`::error::Push selhal: ${e.statusCode || ''} ${(e.body || e.message || '').toString().slice(0, 200)}`); }
 }
 console.log(`Odesláno ${ok}/${subs.length}.`);
 if (!ok) process.exit(1);
