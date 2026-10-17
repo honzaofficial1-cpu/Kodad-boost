@@ -728,11 +728,11 @@ function rr(x, X, Y, w, h, r) { x.beginPath(); x.moveTo(X + r, Y); x.arcTo(X + w
 function spacedL(x, t, X, Y, sp) { x.textAlign = 'left'; let cx = X; for (const ch of [...t]) { x.fillText(ch, cx, Y); cx += x.measureText(ch).width + sp; } return cx; }
 function fitFont(x, t, weight, size, maxW) { do { x.font = `${weight} ${size}px ${CF}`; size -= 3; } while (x.measureText(t).width > maxW && size > 28); }
 function clip(x, t, maxW) { let n = t; while (x.measureText(n).width > maxW && n.length > 3) n = n.slice(0, -2); return n === t ? t : n.trim() + '…'; }
-const CARD_COL = { gym: ['#8BD43B', 'rgba(139,212,59,'], sauna: ['#F28C4E', 'rgba(242,140,78,'], cold: ['#9ACBF5', 'rgba(154,203,245,'], thai: ['#E5484D', 'rgba(229,72,77,'], yoga: ['#B59CF0', 'rgba(181,156,240,'], bike: ['#35D0C9', 'rgba(53,208,201,'], other: ['#35D0C9', 'rgba(53,208,201,'], pr: ['#F4C542', 'rgba(244,197,66,'] };
+const CARD_COL = { gym: ['#8BD43B', 'rgba(139,212,59,'], sauna: ['#F28C4E', 'rgba(242,140,78,'], cold: ['#9ACBF5', 'rgba(154,203,245,'], thai: ['#E5484D', 'rgba(229,72,77,'], run: ['#8BD43B', 'rgba(139,212,59,'], swim: ['#4A9DFF', 'rgba(74,157,255,'], stretch: ['#B59CF0', 'rgba(181,156,240,'], yoga: ['#B59CF0', 'rgba(181,156,240,'], bike: ['#35D0C9', 'rgba(53,208,201,'], other: ['#35D0C9', 'rgba(53,208,201,'], pr: ['#F4C542', 'rgba(244,197,66,'] };
 function drawPicto(x, key, cx, cy, size, col) {
-  const s = size / 24; x.save(); x.translate(cx - size / 2, cy - size / 2); x.scale(s, s);
-  x.strokeStyle = col; x.lineWidth = 1.5; x.lineCap = 'round'; x.lineJoin = 'round';
-  try { x.stroke(new Path2D(PICTO[key] || PICTO.other)); } catch (e) { }
+  const p = PICTO[key] || PICTO.other; const s = size / 24; x.save(); x.translate(cx - size / 2, cy - size / 2); x.scale(s, s);
+  x.strokeStyle = col; x.fillStyle = col; x.lineCap = 'round'; x.lineJoin = 'round';
+  try { p.s.forEach(([d, w]) => { x.lineWidth = w; x.stroke(new Path2D(d)); }); (p.f || []).forEach(d => x.fill(new Path2D(d))); [...p.c, ...(p.c2 || [])].forEach(([X, Y, r]) => { x.beginPath(); x.arc(X, Y, r, 0, Math.PI * 2); x.fill(); }); } catch (e) { }
   x.restore();
 }
 // kostra karty: kruh s piktogramem vlevo, obsah vpravo, logo dole

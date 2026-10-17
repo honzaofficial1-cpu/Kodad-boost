@@ -529,3 +529,10 @@ button.ck{background:none;border:0;padding:0;cursor:pointer}
 .sblock .seg{background:var(--card2)}
 .seg.wrap4{display:grid;grid-template-columns:repeat(4,1fr)}
 .seg.wrap4 button{font-size:13px;padding:0 2px}
+
+/* v1.9 siluety */
+.agrid .at .ic{width:60px;height:60px;background:var(--card2);color:#B8B8BD}
+.agrid .at .ic svg.i{width:34px;height:34px}
+.agrid .at.heat .ic{color:var(--heat)} .agrid .at.cold .ic{color:var(--ice)}
+.li .ic svg.i{width:24px;height:24px}
+.at.act[data-t=thai] .ic{color:#E5484D} .at.act[data-t=yoga] .ic,.at.act[data-t=stretch] .ic{color:#B59CF0} .at.act[data-t=bike] .ic{color:var(--prog)} .at.act[data-t=run] .ic{color:var(--done)} .at.act[data-t=swim] .ic{color:#4A9DFF}
