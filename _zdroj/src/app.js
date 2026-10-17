@@ -637,7 +637,7 @@ function actDesc(a) {
   const p = [];
   if (a.type === 'sauna') { p.push(saunaTotals(a).it.map(saunaLine).join(' + ')); }
   else if (a.type === 'cold') { if (a.kind) p.push(a.kind); if (a.sec) p.push(`${Math.floor(a.sec / 60)}:${pad(a.sec % 60)}`); if (a.temp != null && a.temp !== '') p.push(`${kg(a.temp)} °C`); }
-  else { if (a.kind) p.push(a.kind); if (a.min) p.push(`${a.min} min`); if (a.bpm) p.push(`${a.bpm} bpm`); }
+  else { if (a.kind) p.push(a.kind); if (a.km) p.push(`${kg(a.km)} km`); if (a.laps) p.push(`${a.laps} bazénů${a.pool ? ' × ' + a.pool + ' m' : ''}`); if (a.reps) p.push(`${a.reps} × ${a.dist ? a.dist + ' m' : 'úsek'}`); if (a.min) p.push(`${a.min} min`); if (a.bpm) p.push(`${a.bpm} bpm`); }
   return p.join(' · ');
 }
 function actRow(a) {
@@ -653,7 +653,14 @@ function actSheet(type, k, id) {
   else if (type === 'cold') f = `<div class="seg" data-seg="kind">${['Ledová sprcha', 'Káď', 'Venku'].map(o => `<button data-a="seg" data-v="${o}" class="${(a.kind || 'Ledová sprcha') === o ? 'on' : ''}">${o}</button>`).join('')}</div>
     <div class="three"><label class="f">Minuty<input id="a-mm" inputmode="numeric" value="${a.sec ? Math.floor(a.sec / 60) : ''}" placeholder="3"></label><label class="f">Sekundy<input id="a-ss" inputmode="numeric" value="${a.sec ? a.sec % 60 : ''}" placeholder="0"></label><label class="f">Voda °C<input id="a-temp" inputmode="decimal" value="${kg(a.temp)}" placeholder="5"></label></div>`;
   else if (type === 'bike') f = `<div class="seg" data-seg="kind">${['Rotoped', 'Kolo venku'].map(o => `<button data-a="seg" data-v="${o}" class="${(a.kind || 'Rotoped') === o ? 'on' : ''}">${o}</button>`).join('')}</div><div class="two"><label class="f">Minuty<input id="a-min" inputmode="numeric" value="${a.min ?? ''}" placeholder="20"></label><label class="f">Tep (bpm)<input id="a-bpm" inputmode="numeric" value="${a.bpm ?? ''}" placeholder="120"></label></div>`;
-  else f = `${type === 'other' ? `<label class="f">Co to bylo<input id="a-label" value="${esc(a.label || '')}" placeholder="např. Plavání"></label>` : ''}<label class="f">Minuty<input id="a-min" inputmode="numeric" value="${a.min ?? ''}" placeholder="60"></label>`;
+  else {
+    const km = ['run', 'xcski'].includes(type), sw = type === 'swim', sp = type === 'sprint';
+    f = `${type === 'other' ? `<label class="f">Co to bylo<input id="a-label" value="${esc(a.label || '')}" placeholder="např. Fotbal"></label>` : ''}
+    ${km ? `<div class="two"><label class="f">Vzdálenost (km)<input id="a-km" inputmode="decimal" value="${kg(a.km)}" placeholder="5"></label><label class="f">Minuty<input id="a-min" inputmode="numeric" value="${a.min ?? ''}" placeholder="30"></label></div>` : ''}
+    ${sw ? `<div class="three"><label class="f">Bazény<input id="a-laps" inputmode="numeric" value="${a.laps ?? ''}" placeholder="40"></label><label class="f">Délka (m)<input id="a-pool" inputmode="numeric" value="${a.pool ?? ''}" placeholder="25"></label><label class="f">Minuty<input id="a-min" inputmode="numeric" value="${a.min ?? ''}" placeholder="40"></label></div>` : ''}
+    ${sp ? `<div class="three"><label class="f">Úseky<input id="a-reps" inputmode="numeric" value="${a.reps ?? ''}" placeholder="8"></label><label class="f">Délka (m)<input id="a-dist" inputmode="numeric" value="${a.dist ?? ''}" placeholder="60"></label><label class="f">Minuty<input id="a-min" inputmode="numeric" value="${a.min ?? ''}" placeholder="25"></label></div>` : ''}
+    ${!km && !sw && !sp ? `<label class="f">Minuty<input id="a-min" inputmode="numeric" value="${a.min ?? ''}" placeholder="60"></label>` : ''}`;
+  }
   sheet(`<h2>${esc(t.name)}</h2><div class="form">
     <label class="f">Datum<input id="a-date" type="date" value="${a.date}"></label>${f}
     <label class="f">Poznámka<input id="a-note" value="${esc(a.note || '')}" placeholder="nepovinné"></label></div>
@@ -971,6 +978,7 @@ const A = {
     if ($('#a-temp')) a.temp = num($('#a-temp').value);
     if ($('#a-bpm')) a.bpm = num($('#a-bpm').value);
     if ($('#a-label')) a.label = $('#a-label').value.trim();
+    ['km', 'laps', 'pool', 'reps', 'dist'].forEach(k => { const el = $('#a-' + k); if (el) a[k] = num(el.value); });
     if ($('#a-mm')) a.sec = (num($('#a-mm').value) || 0) * 60 + (num($('#a-ss').value) || 0);
     if (!id) S.activities.push(a);
     save(true); closeSheet(); render();

@@ -310,7 +310,7 @@ async function markTinted(col) {
   return new Promise(res => { const im = new Image(); im.onload = () => res(im); im.onerror = () => res(null); im.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(MARK.replace('currentColor', col)); });
 }
 async function drawShare(sp, style, on) {
-  const W = 1080, L = 64, X = 318, col = sp.col;
+  const W = 900, L = 54, X = 270, col = sp.col;
   const isOn = id => on[id] !== false;
   const stats = (sp.stats || []).filter(s => isOn(s.id));
   const lists = (sp.lists || []).filter(l => isOn(l.id) && l.items.length);
@@ -319,14 +319,14 @@ async function drawShare(sp, style, on) {
   const fg = colr ? '#0B0B0C' : '#F5F5F7', mut = colr ? 'rgba(11,11,12,.6)' : clear ? 'rgba(255,255,255,.82)' : '#9A9AA0', acc = colr ? '#0B0B0C' : col, faint = colr ? 'rgba(11,11,12,.12)' : clear ? 'rgba(255,255,255,.28)' : 'rgba(255,255,255,.08)';
   // rozvržení (měření předem)
   const m = document.createElement('canvas').getContext('2d');
-  const size = (() => { let s = 150; m.font = `italic 900 ${s}px ${CF}`; while (m.measureText(sp.big).width > 470 && s > 96) { s -= 8; m.font = `italic 900 ${s}px ${CF}`; } return s; })();
+  const size = (() => { let s = 150; m.font = `italic 900 ${s}px ${CF}`; while (m.measureText(sp.big).width > 400 && s > 84) { s -= 8; m.font = `italic 900 ${s}px ${CF}`; } return s; })();
   const titleY = 138, bigY = titleY + 22 + Math.round(size * .86);
   // statistiky v řádcích (inline)
   const statLines = []; let cur = [], cw = 0, maxW = W - L - X;
   stats.forEach(s => { m.font = `italic 800 40px ${CF}`; const vw = m.measureText(s.value).width; m.font = `600 22px ${CF}`; const lw = m.measureText(s.label.toUpperCase()).width + s.label.length * 2; const w = vw + 12 + lw + 40; if (cw + w > maxW && cur.length) { statLines.push(cur); cur = []; cw = 0; } cur.push({ ...s, vw }); cw += w; });
   if (cur.length) statLines.push(cur);
   let topEnd = bigY + 54; if (statLines.length) topEnd = bigY + 50 + statLines.length * 58;
-  topEnd = Math.max(topEnd, 372);
+  topEnd = Math.max(topEnd, 350);
   const listH = lists.reduce((a, l) => a + 50 + l.items.length * 54 + 8, 0), vizH = vizs.reduce((a, v) => a + v.h + 26, 0);
   const h = topEnd + (listH || vizH ? 26 : 0) + vizH + listH + (listH || vizH ? 96 : 52);
   const c = document.createElement('canvas'); c.width = W; c.height = h; const x = c.getContext('2d');
@@ -341,14 +341,14 @@ async function drawShare(sp, style, on) {
   }
   if (clear) { x.shadowColor = 'rgba(0,0,0,.6)'; x.shadowBlur = 24; x.shadowOffsetY = 2; }
   // medailon se siluetou
-  const mx = L + 108, my = 196, R = 108;
+  const mx = L + 92, my = 190, R = 92;
   x.beginPath(); x.arc(mx, my, R, 0, Math.PI * 2); x.fillStyle = colr ? 'rgba(11,11,12,.10)' : clear ? 'rgba(255,255,255,.12)' : hexA(col, .12); x.fill();
   x.lineWidth = 3; x.strokeStyle = colr ? 'rgba(11,11,12,.35)' : clear ? 'rgba(255,255,255,.55)' : hexA(col, .45); x.stroke();
-  drawPicto(x, sp.picto, mx, my, 128, colr ? '#0B0B0C' : clear ? '#FFFFFF' : col);
+  drawPicto(x, sp.picto, mx, my, 112, colr ? '#0B0B0C' : clear ? '#FFFFFF' : col);
   // datum + titulky
   x.fillStyle = mut; x.font = `600 26px ${CF}`; x.textAlign = 'right'; x.fillText(sp.date || sp.kicker || '', W - L, 92); x.textAlign = 'left';
-  if (sp.kicker && sp.date) { x.fillStyle = mut; x.font = `600 24px ${CF}`; spacedL(x, clip(x, sp.kicker.toUpperCase(), 420), X, 92, 5); }
-  x.fillStyle = acc; x.font = `italic 800 36px ${CF}`; spacedL(x, clip(x, sp.title.toUpperCase(), 600), X, titleY, 3);
+  if (sp.kicker && sp.date) { x.fillStyle = mut; x.font = `600 24px ${CF}`; spacedL(x, clip(x, sp.kicker.toUpperCase(), 330), X, 92, 5); }
+  x.fillStyle = acc; x.font = `italic 800 36px ${CF}`; spacedL(x, clip(x, sp.title.toUpperCase(), 540), X, titleY, 3);
   x.fillStyle = fg; x.font = `italic 900 ${size}px ${CF}`; x.fillText(sp.big, X - 6, bigY); const bw = x.measureText(sp.big).width;
   if (sp.unit) { x.fillStyle = mut; x.font = `italic 700 ${Math.round(size * .3)}px ${CF}`; x.fillText(sp.unit, X + bw + 12, bigY); }
   x.fillStyle = acc; slab(x, X, bigY + 20, 110, 9); x.fill(); x.globalAlpha = .45; slab(x, X + 126, bigY + 20, 34, 9); x.fill(); x.globalAlpha = 1;
@@ -362,7 +362,7 @@ async function drawShare(sp, style, on) {
     x.fillStyle = mut; x.font = `600 22px ${CF}`; spacedL(x, l.title.toUpperCase(), L, y + 30, 5); y += 50;
     l.items.forEach(([Lt, Rt, rc]) => {
       x.fillStyle = faint; x.fillRect(L, y, W - 2 * L, 2);
-      x.fillStyle = fg; x.font = `500 31px ${CF}`; x.fillText(clip(x, Lt, 600), L, y + 39);
+      x.fillStyle = fg; x.font = `500 31px ${CF}`; x.fillText(clip(x, Lt, 480), L, y + 39);
       x.textAlign = 'right'; x.fillStyle = rc && !colr ? rc : fg; x.font = `italic 800 32px ${CF}`; x.fillText(Rt, W - L, y + 40); x.textAlign = 'left';
       y += 54;
     });
@@ -376,7 +376,7 @@ async function drawShare(sp, style, on) {
 function hexA(hex, a) { const n = parseInt(hex.slice(1), 16); return `rgba(${n >> 16},${(n >> 8) & 255},${n & 255},${a})`; }
 function vizMonth(yy, mm) {
   const first = new Date(yy, mm, 1), off = (first.getDay() + 6) % 7, days = new Date(yy, mm + 1, 0).getDate(), rows = Math.ceil((off + days) / 7);
-  const cell = 74, gap = 12;
+  const cell = 66, gap = 10;
   return {
     id: 'cal', label: 'Kalendář', h: 40 + rows * (cell + gap), draw: (x, X, Y, W, k) => {
       const tw = 7 * cell + 6 * gap, sx = X + (W - tw) / 2;
@@ -446,10 +446,13 @@ function specExercise(s, e) {
 }
 function specActivity(a) {
   const t = ACT_TYPES[a.type] || ACT_TYPES.other; const key = PICTO[a.type] ? a.type : 'other'; const col = COLK(key); const pic = a.type === 'bike' && a.kind === 'Rotoped' ? 'rotoped' : key;
-  const title = a.type === 'other' && a.label ? a.label : t.name; let big = '✓', unit = '', st = [], lists = [];
-  if (a.type === 'sauna') { const T = saunaTotals(a); big = `${T.rounds}×`; unit = T.mins ? `${T.mins} min` : 'kol'; const mt = Math.max(0, ...T.it.map(i => i.temp || 0)); st = [{ id: 'kol', label: 'kol', value: String(T.rounds) }, { id: 'min', label: 'minut', value: String(T.mins || '–') }, mt ? { id: 'tep', label: 'max °C', value: `${mt}°` } : null].filter(Boolean); lists = [{ id: 'saunas', title: 'Sauny', items: T.it.map(i => [i.kind || 'Sauna', `${i.rounds || 1}× ${i.min ? i.min + ' min' : ''}${i.temp ? ' · ' + i.temp + '°' : ''}`.trim()]) }]; }
-  else if (a.type === 'cold') { big = a.sec ? `${Math.floor(a.sec / 60)}:${pad(a.sec % 60)}` : '✓'; unit = a.sec ? 'min' : ''; st = [a.kind ? { id: 'kind', label: 'kde', value: a.kind } : null, a.temp != null ? { id: 'tep', label: 'voda', value: `${kg(a.temp)} °C` } : null].filter(Boolean); }
-  else { big = a.min ? String(a.min) : '✓'; unit = a.min ? 'min' : ''; st = [a.kind ? { id: 'kind', label: 'typ', value: a.kind } : null, a.bpm ? { id: 'bpm', label: 'tep', value: `${a.bpm} bpm` } : null].filter(Boolean); }
+  let title = a.type === 'other' && a.label ? a.label : t.name; let big = '✓', unit = '', st = [], lists = [];
+  if (a.type === 'sauna') { const T = saunaTotals(a); const one = T.it.length === 1; big = `${T.rounds}×`; unit = one && T.it[0].min ? `${T.it[0].min} min` : T.mins ? `${T.mins} min celkem` : 'kol'; const mt = Math.max(0, ...T.it.map(i => i.temp || 0)); st = [mt ? { id: 'tep', label: 'max', value: `${mt} °C` } : null].filter(Boolean); if (one && T.it[0].kind) title = `${t.name} · ${T.it[0].kind}`; if (!one) lists = [{ id: 'saunas', title: 'Sauny', items: T.it.map(i => [i.kind || 'Sauna', `${i.rounds || 1}× ${i.min ? i.min + ' min' : ''}${i.temp ? ' · ' + i.temp + '°' : ''}`.trim()]) }]; }
+  else if (a.type === 'cold') { big = a.sec ? `${Math.floor(a.sec / 60)}:${pad(a.sec % 60)}` : (a.kind || 'Hotovo'); unit = a.sec ? 'min' : ''; if (a.kind && a.sec) title = `${t.name} · ${a.kind}`; st = [a.temp != null ? { id: 'tep', label: 'voda', value: `${kg(a.temp)} °C` } : null].filter(Boolean); }
+  else if (a.km) { big = kg(a.km); unit = 'km'; const pace = a.min ? a.min / a.km : null; st = [a.min ? { id: 'min', label: 'min', value: String(a.min) } : null, pace ? { id: 'pace', label: 'min/km', value: `${Math.floor(pace)}:${pad(Math.round((pace % 1) * 60))}` } : null].filter(Boolean); }
+  else if (a.laps) { big = String(a.laps); unit = 'bazénů'; st = [a.pool ? { id: 'dist', label: 'metrů', value: thou(a.laps * a.pool) } : null, a.min ? { id: 'min', label: 'min', value: String(a.min) } : null].filter(Boolean); }
+  else if (a.reps) { big = `${a.reps}×`; unit = a.dist ? `${a.dist} m` : 'úseků'; st = [a.dist ? { id: 'dist', label: 'metrů celkem', value: thou(a.reps * a.dist) } : null, a.min ? { id: 'min', label: 'min', value: String(a.min) } : null].filter(Boolean); }
+  else { big = a.min ? String(a.min) : 'Hotovo'; unit = a.min ? 'min' : ''; if (a.kind) title = `${title} · ${a.kind}`; st = [a.bpm ? { id: 'bpm', label: 'tep', value: `${a.bpm} bpm` } : null].filter(Boolean); }
   if (a.note) lists.push({ id: 'note', title: 'Poznámka', items: [[a.note, '']], def: false });
   return { picto: pic, col, kicker: '', title, big, unit, date: fdate(a.date), stats: st, lists };
 }
