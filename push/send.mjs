@@ -1,10 +1,13 @@
 // Odešle push upozornění na všechna zařízení v push/subscriptions.json
-import webpush from 'web-push';
 import fs from 'fs';
+process.on('uncaughtException', e => { console.log(`::error::Pád skriptu: ${String(e && e.stack || e).replace(/\n/g, ' | ').slice(0, 400)}`); process.exit(1); });
+process.on('unhandledRejection', e => { console.log(`::error::Pád skriptu: ${String(e && e.stack || e).replace(/\n/g, ' | ').slice(0, 400)}`); process.exit(1); });
+const webpush = (await import('web-push')).default;
 const cfg = JSON.parse(fs.readFileSync('push/config.json', 'utf8'));
 const subs = JSON.parse(fs.readFileSync('push/subscriptions.json', 'utf8'));
 if (!subs.length) { console.log('Žádné zařízení.'); process.exit(0); }
-const priv = process.env.VAPID_PRIVATE_KEY;
+const priv = (process.env.VAPID_PRIVATE_KEY || '').trim();
+console.log(`::notice::Klíč: ${priv ? priv.length + ' znaků' : 'chybí'}, zařízení: ${subs.length}, událost: ${process.env.EVENT}`);
 if (!priv) { console.log('::error::Chybí secret VAPID_PRIVATE_KEY'); process.exit(1); }
 const ev = process.env.EVENT, sched = process.env.SCHEDULE || '';
 const off = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Prague', timeZoneName: 'shortOffset' }).formatToParts(new Date()).find(p => p.type === 'timeZoneName').value;
