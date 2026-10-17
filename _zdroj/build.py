@@ -4,7 +4,7 @@ from PIL import Image, ImageDraw, ImageFont
 B = os.path.dirname(os.path.abspath(__file__))
 src = lambda f: open(os.path.join(B, 'src', f), encoding='utf-8').read()
 mark = open(os.path.join(B,'assets','mark.svg'),encoding='utf-8').read().replace('<svg ','<svg aria-hidden="true" ')
-VERSION = '2.1.0'
+VERSION = '2.2.0'
 css, js = src('style.css'), 'const APP_VERSION = ' + json.dumps(VERSION) + ';\nconst MARK = ' + json.dumps(mark) + ';\n' + src('data.js') + '\n' + src('app.js') + '\n' + src('body.js') + '\n' + src('extra.js') + '\nrender();\n'
 FONTS_OLD = '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">'
 FONTS = ''
@@ -51,7 +51,7 @@ idx = f'''<!doctype html>
 open(os.path.join(P, 'index.html'), 'w', encoding='utf-8').write(idx)
 json.dump({
   "name": "Kodad boost", "short_name": "JK Boost", "lang": "cs", "start_url": "./", "scope": "./",
-  "display": "standalone", "orientation": "portrait", "background_color": "#0C0D10", "theme_color": "#0C0D10",
+  "display": "standalone", "orientation": "portrait", "background_color": "#0C0D10", "theme_color": "#0A0A0A",
   "icons": [{"src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png"},
             {"src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png"},
             {"src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}]

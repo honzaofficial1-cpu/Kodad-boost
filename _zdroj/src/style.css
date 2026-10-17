@@ -2,10 +2,10 @@
 :root{
   --bg:#0A0A0A; --card:#1C1C1E; --card2:#262628; --card3:#323234; --line:#2E2E31;
   --fg:#F5F5F7; --mut:#8E8E93; --dim:#5C5C61;
-  --done:#8BD43B; --done-soft:rgba(139,212,59,.14);
+  --done:#F2F2F2; --done-soft:rgba(242,242,242,.12); --hot:#FF6A2B; --hot-soft:rgba(255,106,43,.14);
   --prog:#35D0C9; --prog-soft:rgba(53,208,201,.15);
   --down:#E5484D; --down-soft:rgba(229,72,77,.15);
-  --warn:#F07B2C; --ice:#9ACBF5; --heat:#F28C4E; --sick:#D46A93;
+  --warn:#F07B2C; --ice:#9ACBF5; --heat:#F7A25C; --sick:#D46A93;
   --white:#FFFFFF; --ink:#0A0A0A;
   --f:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",system-ui,"Helvetica Neue",Arial,sans-serif;
   --r:26px;
@@ -558,3 +558,24 @@ button.ck{background:none;border:0;padding:0;cursor:pointer}
 .agrid .at .ic{width:42px;height:42px}
 .agrid .at .ic svg.i{width:22px;height:22px}
 .amore{margin-top:8px}
+
+/* v2.2 barvy: černobílý základ + žhavá oranžová na akce */
+.gcard .lbl{color:var(--hot)}
+.gcard::after{background:radial-gradient(circle,rgba(255,106,43,.18),transparent 70%)}
+.gplay{background:var(--hot);color:#0A0A0A;box-shadow:0 10px 30px rgba(255,106,43,.3)}
+.gplay.ok{background:var(--card3);color:var(--fg);box-shadow:none}
+.gtime{color:var(--hot)}
+.gcard.live{background:linear-gradient(160deg,#2A1A12 0%,#131110 75%);border-color:rgba(255,106,43,.35)}
+.dock .fin{background:var(--hot);color:#0A0A0A}
+.tools .tb.cdb{color:var(--hot)}
+.cdbar .pg{background:rgba(255,106,43,.14)}
+.cdbar.go{background:var(--hot);border-color:var(--hot)}
+.wpromo{background:linear-gradient(120deg,rgba(255,106,43,.16),var(--card) 65%);border-color:rgba(255,106,43,.3)}
+.wpromo .hic{background:rgba(255,106,43,.14);color:var(--hot)}
+.wpromo small{color:var(--hot)}
+.perfc .seg button.on{background:var(--hot);color:#0A0A0A}
+.sw.on .k{background:var(--hot)}
+.chip.tg.on{background:var(--fg)}
+.cd.gym .c{border-color:var(--hot);color:var(--hot)}
+.legend u[style*="--done"]{background:var(--hot)!important}
+.at.act[data-t=run] .ic{color:#8BD43B}
