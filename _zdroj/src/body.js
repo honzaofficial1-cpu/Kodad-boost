@@ -1,6 +1,6 @@
 // ===================== MÍRY · Deník nabírání =====================
 const SCALES = []; // pocity zrušeny – stačí hodiny spánku
-const MEAS = [['shoulders', 'Ramena', 'nejširší místo přes delty'], ['chest', 'Hrudník', 'přes bradavky, po výdechu'], ['bicepsL', 'Biceps L', 'napnutý, nejširší místo'], ['biceps', 'Biceps P', 'napnutý, nejširší místo'], ['forearm', 'Předloktí', 'nejširší místo, pěst sevřená'], ['waist', 'Pas', 'v úrovni pupku, nezatahovat'], ['thighL', 'Stehno L', 'nejširší místo pod hýždí'], ['thigh', 'Stehno P', 'nejširší místo pod hýždí'], ['calf', 'Lýtko', 'nejširší místo, uvolněně'], ['neck', 'Krk', 'těsně pod ohryzkem']];
+const MEAS = [['shoulders', 'Ramena', 'nejširší místo přes delty'], ['chest', 'Hrudník', 'přes bradavky, po výdechu'], ['bicepsL', 'Biceps L', 'napnutý, nejširší místo'], ['biceps', 'Biceps P', 'napnutý, nejširší místo'], ['forearmL', 'Předloktí L', 'nejširší místo, pěst sevřená'], ['forearm', 'Předloktí P', 'nejširší místo, pěst sevřená'], ['waist', 'Pas', 'v úrovni pupku, nezatahovat'], ['thighL', 'Stehno L', 'nejširší místo pod hýždí'], ['thigh', 'Stehno P', 'nejširší místo pod hýždí'], ['calfL', 'Lýtko L', 'nejširší místo, uvolněně'], ['calf', 'Lýtko P', 'nejširší místo, uvolněně'], ['neck', 'Krk', 'těsně pod ohryzkem']];
 const TRAIN = ['Volno', 'Silový', 'Silový + kardio', 'Kardio', 'Thai box', 'Jiné'];
 const DMS = 864e5;
 const toU = k => { const [y, m, d] = k.split('-').map(Number); return Date.UTC(y, m - 1, d); };
@@ -125,7 +125,7 @@ function mMiry() {
   if (!bf || bf.kind !== 'm' || bf.date !== k) bf = { kind: 'm', date: k, photos: m.photos ?? null };
   return `<div class="card mform">
     <div class="mh"><h2>Týdenní míry</h2>${BD().meas[k] ? '<span class="chip prog">uloženo</span>' : ''}</div>
-    <p class="mut hint">1× týdně, stejný den ráno nalačno. Metr přiložit, nezařezávat. Biceps a stehno měř na obou stranách.</p>
+    <p class="mut hint">1× týdně, stejný den ráno nalačno. Metr přiložit, nezařezávat. Končetiny měř na obou stranách.</p>
     <div class="form">
       <label class="f">Datum<input id="m-date" type="date" value="${k}"></label>
       <div class="two">${MEAS.map(([f, l, h]) => `<label class="f">${l} (cm)<input id="m-${f}" inputmode="decimal" value="${kg(m[f])}"><small class="mut">${h}</small></label>`).join('')}</div>
@@ -172,7 +172,7 @@ function mGrafy() {
   const C = bComp(); const M = Object.entries(b.meas).sort((a, c) => a[0] < c[0] ? -1 : 1);
   const comp = C.length >= 2 ? (() => { const c0 = C[0]; const ser = [{ pts: C.map(c => ({ x: c.x, y: c.lean - c0.lean })), line: true, dots: true, c: 'var(--done)', name: 'Beztuková hmota' }, { pts: C.map(c => ({ x: c.x, y: c.fat - c0.fat })), line: true, dots: true, c: 'var(--heat)', name: 'Tuk' }]; const mu = C.filter(c => c.muscle != null); if (mu.length >= 2) ser.push({ pts: mu.map(c => ({ x: c.x, y: c.muscle - mu[0].muscle })), line: true, dots: true, dash: true, c: 'var(--ice)', name: 'Svaly InBody' }); const l = C[C.length - 1]; return lineChart({ label: 'Složení přírůstku', series: ser, fmtY: v => (v > .04 ? '+' : '') + nf(v, 1) }) + `<p class="mut" style="font-size:13px;margin:8px 0 0">Poslední ${l.src}: ${nf(l.bf * 100, 1)} % tuku, beztuková hmota ${nf(l.lean, 1)} kg.</p>`; })() : '<p class="mut">Ukáže se po dvou měřeních s krkem a pasem (a vážením kolem stejného dne).</p>';
   const wp = M.filter(([, m]) => m.waist != null).map(([k, m]) => ({ x: toU(k), y: m.waist })), sp = M.filter(([, m]) => m.shoulders != null).map(([k, m]) => ({ x: toU(k), y: m.shoulders }));
-  const cols = ['var(--heat)', '#AE95E0', '#E07FA0', '#C97AA8', '#89A9DB', 'var(--prog)', 'var(--done)', '#A6D96A', '#CDBB5E', '#8E8E93'];
+  const cols = ['var(--heat)', '#AE95E0', '#E07FA0', '#C97AA8', '#89A9DB', 'var(--prog)', 'var(--done)', '#A6D96A', '#E2A65A', '#CDBB5E', '#D9D27A', '#8E8E93'];
   const ds = []; MEAS.forEach(([f, l], i) => { const a = M.filter(([, m]) => m[f] != null); if (a.length >= 2) { const b0 = a[0][1][f]; ds.push({ pts: a.map(([k, m]) => ({ x: toU(k), y: m[f] - b0 })), line: true, dots: true, c: cols[i], name: l }); } });
   const W = bWeeks().filter(w => w.energy != null || w.adherence != null);
   const feel = W.length >= 2 ? (() => { const x = w => toU(w.from) + 3 * DMS; const fs = [['energy', 'Energie', 'var(--done)'], ['mood', 'Psychika', '#AE95E0'], ['sleepQ', 'Spánek', 'var(--ice)'], ['hunger', 'Hlad', 'var(--heat)']].map(([k, n, c]) => ({ pts: W.filter(w => w[k] != null).map(w => ({ x: x(w), y: w[k] })), line: true, dots: true, c, name: n })); fs.push({ pts: W.filter(w => w.adherence != null).map(w => ({ x: x(w), y: 1 + 4 * w.adherence })), line: true, dash: true, c: '#8E8E93', name: 'Dodržení (100 % = 5)', w: 2 }); return lineChart({ label: 'Týdenní pocity', series: fs, y0: 1, y1: 5 }); })() : '<p class="mut">Ukáže se po dvou týdnech záznamů.</p>';
