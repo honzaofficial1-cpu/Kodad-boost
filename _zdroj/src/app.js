@@ -262,7 +262,7 @@ function exCard(s, e, idx) {
   const st = exState(e, ex); const open = s.open === idx;
   const dots = usedSets(e, ex).map(x => `<u class="${hasData(x, ex) ? 'ok' : ''}"></u>`).join('');
   return `<article class="ex ${st} ${open ? 'open' : ''}" data-idx="${idx}">
-    <button class="exh" data-a="ex-tog"><span class="bar"></span><div class="t"><div class="nm">${esc(ex.name)}<span class="inf" data-a="ex-info" data-id="${ex.id}" role="button" aria-label="Info o cviku">${ico('info')}</span></div><div class="sb">${esc(ex.muscle || '')}<span class="dots">${dots}</span></div></div><span class="cv">${ico('chevd')}</span></button>
+    <button class="exh" data-a="ex-tog"><span class="bar"></span><div class="t"><div class="nm">${esc(ex.name)}<span class="inf" data-a="ex-info" data-id="${ex.id}" role="button" aria-label="Info o cviku">${ico('info')}</span></div><div class="sb"><span class="dots">${dots}</span></div></div><span class="cv">${ico('chevd')}</span></button>
     ${open ? exBody(s, e, ex) : ''}
   </article>`;
 }
@@ -296,7 +296,6 @@ function exBody(s, e, ex) {
     <div class="tools"><div class="chips">${chips}</div><button class="tb cdb" data-a="cd-start" aria-label="Odpočet před pracovní sérií">${ico('timer')}<span>${fcd(cdOf(ex))}</span></button>${ex.plates ? `<button class="tb" data-a="plates" aria-label="Kalkulačka kotoučů">${ico('plate')}</button>` : ''}<button class="tb" data-a="prog-ex" data-id="${ex.id}" aria-label="Statistiky cviku">${ico('bars')}</button><button class="tb" data-a="story-ex" aria-label="Uložit na story">${ico('share')}</button><button class="tb" data-a="ex-menu" aria-label="Možnosti">${ico('more')}</button></div>
     <div class="last">${last ? `Minule · ${fday(last.s.date)} — <b class="num">${usedSets(last.e, ex).map(x => setTxt(x, ex)).join(' · ')}</b>` : 'První záznam tohoto cviku'}</div>
     <div class="tbl"><div class="th"><span>#</span><span>Kg</span><span>Opak.</span><span>Rozsah</span><span>${ico('check')}</span></div>${rows}</div>
-    <div class="nx" data-nx>${nextLines(s, e, ex, last)}</div>
     <textarea class="notep" data-in="exnote" rows="1" placeholder="Napiš poznámku…">${esc(ex.note)}</textarea>
   </div>`;
 }
@@ -325,7 +324,7 @@ function updateCard(card, s, e) {
     $('[data-ck]', row).classList.toggle('ok', ok);
     if (f) { const wi = $('[data-f=w]', row); if (document.activeElement !== wi) wi.value = kg(num(st.w)); }
   });
-  $('[data-nx]', card).innerHTML = nextLines(s, e, ex, last);
+
   const stt = exState(e, ex); card.classList.remove('done', 'part'); if (stt) card.classList.add(stt);
   $('.dots', card).innerHTML = usedSets(e, ex).map(x => `<u class="${hasData(x, ex) ? 'ok' : ''}"></u>`).join('');
 }
@@ -486,12 +485,13 @@ function bestOf(h, ex) { let b = null; h.forEach(({ s, e }) => usedSets(e, ex).f
 function vProgEx() {
   const ex = exById(view.id); if (!ex) return vProg();
   const h = exHistory(ex.id); const best = bestOf(h, ex);
+  const fw = h.length ? num(h[0].e.sets[0]?.w) : null, lw = h.length ? num(h[h.length - 1].e.sets[0]?.w) : null; const dW = fw != null && lw != null && h.length > 1 ? r2(lw - fw) : null;
   const totalSets = h.reduce((a, { e }) => a + usedSets(e, ex).filter(st => hasData(st, ex)).length, 0);
   const tr = trendOf(ex.id);
   return `<div class="wrap">
     ${hdr(`<button class="round" data-a="back-from-stats" aria-label="Zpět">${ico('back')}</button>`, `<h1 style="font-size:17px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(ex.name)}</h1>`, `<button class="round" data-a="ex-edit" data-id="${ex.id}" aria-label="Upravit cvik">${ico('more')}</button>`)}
     <div class="lbl" style="margin:0 6px 12px">Statistiky cviku ${tr.k !== 'na' ? `<span class="chip ${tr.k === 'up' ? 'prog' : tr.k === 'down' ? 'down' : ''}" style="margin-left:8px;letter-spacing:0;text-transform:none">${tr.t}</span>` : ''}</div>
-    <div class="stat3"><div>${ico('weight')}<span>Nejlepší váha</span><b>${best ? kg(best.w) + ' kg' : '–'}</b></div><div>${ico('bolt')}<span>Celkem sérií</span><b>${totalSets}</b></div><div>${ico('arm')}<span>Celkem tréninků</span><b>${h.length}</b></div></div>
+    <div class="stat3"><div>${ico('weight')}<span>Nejlepší váha</span><b>${best ? kg(best.w) + ' kg' : '–'}</b></div><div>${ico('up')}<span>Od začátku</span><b class="${dW > 0 ? 'up' : ''}">${dW == null ? '–' : (dW > 0 ? '+' : '') + kg(dW) + ' kg'}</b></div><div>${ico('arm')}<span>Tréninků</span><b>${h.length}</b></div></div>
     <div class="card" style="margin-top:14px;padding:18px 14px">${chartSVG(h, ex)}</div>
     <div class="actions"><button class="btn block" data-a="ex-info" data-id="${ex.id}">${ico('info')} Info o cviku</button></div>
     <div class="lbl" style="margin:26px 6px 0">Historie cviku</div>

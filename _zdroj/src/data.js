@@ -80,14 +80,14 @@ const SEED = [
 ];
 
 const ACT_TYPES = {
-  sauna:  { name: 'Sauna',      cls: 'heat', icon: 'flame' },
   cold:   { name: 'Otužování',  cls: 'cold', icon: 'snow' },
   thai:   { name: 'Thai box',   cls: 'act',  icon: 'glove' },
-  yoga:   { name: 'Jóga',       cls: 'act',  icon: 'lotus' },
-  stretch:{ name: 'Strečink',   cls: 'act',  icon: 'plus' },
   bike:   { name: 'Kolo / rotoped', cls: 'act', icon: 'bike' },
-  run:    { name: 'Běh',        cls: 'act',  icon: 'plus' },
-  swim:   { name: 'Plavání',    cls: 'act',  icon: 'plus' },
+  sauna:  { name: 'Sauna',      cls: 'heat', icon: 'flame', extra: 1 },
+  yoga:   { name: 'Jóga',       cls: 'act',  icon: 'lotus', extra: 1 },
+  stretch:{ name: 'Strečink',   cls: 'act',  icon: 'plus', extra: 1 },
+  run:    { name: 'Běh',        cls: 'act',  icon: 'plus', extra: 1 },
+  swim:   { name: 'Plavání',    cls: 'act',  icon: 'plus', extra: 1 },
   climb:  { name: 'Lezení',     cls: 'act',  icon: 'plus', extra: 1 },
   xcski:  { name: 'Běžkování',  cls: 'act',  icon: 'plus', extra: 1 },
   sprint: { name: 'Sprint',     cls: 'act',  icon: 'plus', extra: 1 },
@@ -175,6 +175,6 @@ for (const k in ACT_TYPES) ACT_TYPES[k].icon = 'p_' + (PICTO[k] ? k : 'other');
 function actGrid(attrs = '') {
   const tile = ([k, t]) => `<button class="at ${t.cls}" data-a="act-new" data-t="${k}" ${attrs}><span class="ic">${ico(t.icon)}</span>${t.name}</button>`;
   const E = Object.entries(ACT_TYPES), main = E.filter(([, t]) => !t.extra), more = E.filter(([, t]) => t.extra);
-  return `<div class="agrid">${main.map(tile).join('')}<button class="at more" data-a="act-more" aria-expanded="false"><span class="ic">${ico('more')}</span>Další</button></div>
+  return `<div class="agrid">${main.map(tile).join('')}<button class="at more" data-a="act-more" aria-expanded="false"><span class="ic">${ico('plus')}</span>Další</button></div>
     <div class="agrid amore" hidden>${more.map(tile).join('')}</div>`;
 }

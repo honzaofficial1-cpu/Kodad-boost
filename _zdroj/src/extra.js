@@ -182,10 +182,10 @@ async function storyWeek(monK) {
 }
 
 // ---------- kalkulačka kotoučů ----------
-const PLATE_ALL = [25, 20, 15, 10, 5, 2.5, 1.25, 0.5, 0.25];
-const PLATE_DEF = [25, 20, 15, 10, 5, 2.5, 1.25];
-const PLATE_COL = { 25: '#E5484D', 20: '#3B82F6', 15: '#F4C542', 10: '#8BD43B', 5: '#F5F5F7', 2.5: '#C2403F', 1.25: '#A1A1A6', 0.5: '#8E8E93', 0.25: '#6C6C70' };
-const PLATE_H = { 25: 112, 20: 112, 15: 98, 10: 82, 5: 62, 2.5: 48, 1.25: 38, 0.5: 30, 0.25: 26 };
+const PLATE_ALL = [25, 20, 15, 10, 5, 2.5, 1.25, 1, 0.5, 0.25];
+const PLATE_DEF = [25, 20, 15, 10, 5, 2.5, 1.25, 1];
+const PLATE_COL = { 25: '#E5484D', 20: '#3B82F6', 15: '#F4C542', 10: '#8BD43B', 5: '#F5F5F7', 2.5: '#C2403F', 1.25: '#A1A1A6', 1: '#C7C7CC', 0.5: '#8E8E93', 0.25: '#6C6C70' };
+const PLATE_H = { 25: 112, 20: 112, 15: 98, 10: 82, 5: 62, 2.5: 48, 1.25: 38, 1: 34, 0.5: 30, 0.25: 26 };
 const plateSet = () => (S.settings.plates && S.settings.plates.length ? S.settings.plates : PLATE_DEF).slice().sort((a, b) => b - a);
 function platesFor(total, bar) {
   let side = r2((total - bar) / 2); if (side < -1e-9) return { err: `Méně než samotná osa (${kg(bar)} kg)` };
@@ -310,82 +310,83 @@ async function markTinted(col) {
   return new Promise(res => { const im = new Image(); im.onload = () => res(im); im.onerror = () => res(null); im.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(MARK.replace('currentColor', col)); });
 }
 async function drawShare(sp, style, on) {
-  const W = 1080, X = 84, col = sp.col;
+  const W = 1080, L = 64, X = 318, col = sp.col;
   const isOn = id => on[id] !== false;
   const stats = (sp.stats || []).filter(s => isOn(s.id));
   const lists = (sp.lists || []).filter(l => isOn(l.id) && l.items.length);
   const vizs = (sp.viz || []).filter(v => isOn(v.id));
-  let h = 560 + (stats.length ? 150 : 0) + lists.reduce((a, l) => a + 70 + l.items.length * 64, 0) + vizs.reduce((a, v) => a + v.h + 40, 0) + 60;
-  const c = document.createElement('canvas'); c.width = W; c.height = h; const x = c.getContext('2d');
   const colr = style === 'barva', clear = style === 'cista';
   const fg = colr ? '#0B0B0C' : '#F5F5F7', mut = colr ? 'rgba(11,11,12,.6)' : clear ? 'rgba(255,255,255,.82)' : '#9A9AA0', acc = colr ? '#0B0B0C' : col, faint = colr ? 'rgba(11,11,12,.12)' : clear ? 'rgba(255,255,255,.28)' : 'rgba(255,255,255,.08)';
+  // rozvržení (měření předem)
+  const m = document.createElement('canvas').getContext('2d');
+  const size = (() => { let s = 150; m.font = `italic 900 ${s}px ${CF}`; while (m.measureText(sp.big).width > 470 && s > 96) { s -= 8; m.font = `italic 900 ${s}px ${CF}`; } return s; })();
+  const titleY = 138, bigY = titleY + 22 + Math.round(size * .86);
+  // statistiky v řádcích (inline)
+  const statLines = []; let cur = [], cw = 0, maxW = W - L - X;
+  stats.forEach(s => { m.font = `italic 800 40px ${CF}`; const vw = m.measureText(s.value).width; m.font = `600 22px ${CF}`; const lw = m.measureText(s.label.toUpperCase()).width + s.label.length * 2; const w = vw + 12 + lw + 40; if (cw + w > maxW && cur.length) { statLines.push(cur); cur = []; cw = 0; } cur.push({ ...s, vw }); cw += w; });
+  if (cur.length) statLines.push(cur);
+  let topEnd = bigY + 54; if (statLines.length) topEnd = bigY + 50 + statLines.length * 58;
+  topEnd = Math.max(topEnd, 372);
+  const listH = lists.reduce((a, l) => a + 50 + l.items.length * 54 + 8, 0), vizH = vizs.reduce((a, v) => a + v.h + 26, 0);
+  const h = topEnd + (listH || vizH ? 26 : 0) + vizH + listH + (listH || vizH ? 96 : 52);
+  const c = document.createElement('canvas'); c.width = W; c.height = h; const x = c.getContext('2d');
   // pozadí
   if (!clear) {
-    rr(x, 0, 0, W, h, 64); x.save(); x.clip();
-    if (colr) { const g = x.createLinearGradient(0, 0, W, h); g.addColorStop(0, col); g.addColorStop(1, shade(col, .72)); x.fillStyle = g; x.fillRect(0, 0, W, h); }
-    else { const g = x.createLinearGradient(0, 0, 0, h); g.addColorStop(0, '#1D1D20'); g.addColorStop(1, '#0C0C0E'); x.fillStyle = g; x.fillRect(0, 0, W, h); }
-    // šikmé tahy
-    x.globalAlpha = colr ? .16 : .09; x.fillStyle = colr ? '#FFFFFF' : col; slab(x, W - 520, -10, 150, h + 20);
-    x.globalAlpha = colr ? .10 : .05; slab(x, W - 330, -10, 70, h + 20); x.globalAlpha = 1;
+    rr(x, 0, 0, W, h, 56); x.save(); x.clip();
+    if (colr) { const g = x.createLinearGradient(0, 0, W, h); g.addColorStop(0, col); g.addColorStop(1, shade(col, .74)); x.fillStyle = g; x.fillRect(0, 0, W, h); }
+    else { const g = x.createLinearGradient(0, 0, W, h); g.addColorStop(0, '#1E1E21'); g.addColorStop(1, '#0D0D0F'); x.fillStyle = g; x.fillRect(0, 0, W, h); const rg = x.createRadialGradient(170, 200, 10, 170, 200, 460); rg.addColorStop(0, hexA(col, .16)); rg.addColorStop(1, hexA(col, 0)); x.fillStyle = rg; x.fillRect(0, 0, W, h); }
+    x.globalAlpha = colr ? .14 : .06; x.fillStyle = colr ? '#FFFFFF' : col; slab(x, W - 300, -10, 110, h + 20); x.globalAlpha = colr ? .08 : .035; slab(x, W - 160, -10, 46, h + 20); x.globalAlpha = 1;
     x.restore();
-    if (!colr) { x.strokeStyle = 'rgba(255,255,255,.07)'; x.lineWidth = 2.5; rr(x, 1.25, 1.25, W - 2.5, h - 2.5, 63); x.stroke(); }
+    if (!colr) { x.strokeStyle = 'rgba(255,255,255,.07)'; x.lineWidth = 2.5; rr(x, 1.25, 1.25, W - 2.5, h - 2.5, 55); x.stroke(); }
   }
-  if (clear) { x.shadowColor = 'rgba(0,0,0,.6)'; x.shadowBlur = 26; x.shadowOffsetY = 2; }
-  // silueta
-  x.globalAlpha = colr ? .9 : 1; drawPicto(x, sp.picto, W - 230, 330, 330, colr ? '#0B0B0C' : clear ? '#FFFFFF' : col); x.globalAlpha = 1;
-  // hlavička
-  const mk = await markTinted(colr ? '#0B0B0C' : '#FFFFFF');
-  if (mk) { const lh = 46, lw = lh * (mk.naturalWidth || mk.width) / (mk.naturalHeight || mk.height); x.globalAlpha = colr ? .85 : .9; x.drawImage(mk, X, 78, lw, lh); x.globalAlpha = 1; }
-  x.fillStyle = mut; x.font = `600 28px ${CF}`; x.textAlign = 'right'; x.fillText(sp.date || '', W - 84, 112); x.textAlign = 'left';
-  // titulky
-  let y = 230;
-  if (sp.kicker) { x.fillStyle = mut; x.font = `600 26px ${CF}`; spacedL(x, clip(x, sp.kicker.toUpperCase(), 560), X, y, 6); y += 50; }
-  x.fillStyle = acc; x.font = `italic 800 40px ${CF}`; spacedL(x, clip(x, sp.title.toUpperCase(), 600), X, y, 3);
-  // velké číslo
-  x.fillStyle = fg; let size = 220; x.font = `italic 900 ${size}px ${CF}`; while (x.measureText(sp.big).width > 560 && size > 120) { size -= 10; x.font = `italic 900 ${size}px ${CF}`; }
-  x.fillText(sp.big, X - 6, y + size * .9); const bw = x.measureText(sp.big).width;
-  if (sp.unit) { x.fillStyle = mut; x.font = `italic 700 ${Math.round(size * .32)}px ${CF}`; x.fillText(sp.unit, X + bw + 16, y + size * .9); }
-  y += size * .9 + 34;
-  // podpis: šikmá lišta
-  x.fillStyle = acc; slab(x, X, y, 150, 12); x.fill(); x.globalAlpha = .45; slab(x, X + 172, y, 46, 12); x.fill(); x.globalAlpha = 1;
-  y += 60;
-  // statistiky
-  if (stats.length) {
-    const n = stats.length, cw = (W - 2 * X) / n, fs = n >= 4 ? 46 : n === 3 ? 54 : 62;
-    stats.forEach((s, i) => { const sx = X + i * cw; x.fillStyle = fg; x.font = `italic 800 ${fs}px ${CF}`; x.fillText(clip(x, s.value, cw - 20), sx, y + 58); x.fillStyle = mut; x.font = `600 24px ${CF}`; spacedL(x, s.label.toUpperCase(), sx, y + 100, 3); if (i) { x.fillStyle = faint; x.fillRect(sx - 18, y + 10, 2, 96); } });
-    y += 150;
-  }
-  // grafika
-  vizs.forEach(v => { v.draw(x, X, y + 10, W - 2 * X, { fg, mut, acc, faint, colr }); y += v.h + 40; });
+  if (clear) { x.shadowColor = 'rgba(0,0,0,.6)'; x.shadowBlur = 24; x.shadowOffsetY = 2; }
+  // medailon se siluetou
+  const mx = L + 108, my = 196, R = 108;
+  x.beginPath(); x.arc(mx, my, R, 0, Math.PI * 2); x.fillStyle = colr ? 'rgba(11,11,12,.10)' : clear ? 'rgba(255,255,255,.12)' : hexA(col, .12); x.fill();
+  x.lineWidth = 3; x.strokeStyle = colr ? 'rgba(11,11,12,.35)' : clear ? 'rgba(255,255,255,.55)' : hexA(col, .45); x.stroke();
+  drawPicto(x, sp.picto, mx, my, 128, colr ? '#0B0B0C' : clear ? '#FFFFFF' : col);
+  // datum + titulky
+  x.fillStyle = mut; x.font = `600 26px ${CF}`; x.textAlign = 'right'; x.fillText(sp.date || sp.kicker || '', W - L, 92); x.textAlign = 'left';
+  if (sp.kicker && sp.date) { x.fillStyle = mut; x.font = `600 24px ${CF}`; spacedL(x, clip(x, sp.kicker.toUpperCase(), 420), X, 92, 5); }
+  x.fillStyle = acc; x.font = `italic 800 36px ${CF}`; spacedL(x, clip(x, sp.title.toUpperCase(), 600), X, titleY, 3);
+  x.fillStyle = fg; x.font = `italic 900 ${size}px ${CF}`; x.fillText(sp.big, X - 6, bigY); const bw = x.measureText(sp.big).width;
+  if (sp.unit) { x.fillStyle = mut; x.font = `italic 700 ${Math.round(size * .3)}px ${CF}`; x.fillText(sp.unit, X + bw + 12, bigY); }
+  x.fillStyle = acc; slab(x, X, bigY + 20, 110, 9); x.fill(); x.globalAlpha = .45; slab(x, X + 126, bigY + 20, 34, 9); x.fill(); x.globalAlpha = 1;
+  let y = bigY + 50;
+  statLines.forEach(line => { let sx = X; line.forEach(s => { x.fillStyle = fg; x.font = `italic 800 40px ${CF}`; x.fillText(s.value, sx, y + 40); sx += s.vw + 12; x.fillStyle = mut; x.font = `600 22px ${CF}`; sx = spacedL(x, s.label.toUpperCase(), sx, y + 39, 2) + 38; }); y += 58; });
+  y = topEnd + (listH || vizH ? 26 : 0);
+  // grafika (od levého okraje pod medailonem)
+  vizs.forEach(v => { v.draw(x, L, y, W - 2 * L, { fg, mut, acc, faint, colr }); y += v.h + 26; });
   // seznamy
   lists.forEach(l => {
-    x.fillStyle = mut; x.font = `600 24px ${CF}`; spacedL(x, l.title.toUpperCase(), X, y + 34, 5); y += 56;
-    l.items.forEach(([L, R, rc]) => {
-      x.fillStyle = faint; x.fillRect(X, y, W - 2 * X, 2);
-      x.fillStyle = fg; x.font = `500 36px ${CF}`; x.fillText(clip(x, L, 560), X, y + 46);
-      x.textAlign = 'right'; x.fillStyle = rc && !colr ? rc : fg; x.font = `italic 800 38px ${CF}`; x.fillText(R, W - X, y + 47); x.textAlign = 'left';
-      y += 64;
+    x.fillStyle = mut; x.font = `600 22px ${CF}`; spacedL(x, l.title.toUpperCase(), L, y + 30, 5); y += 50;
+    l.items.forEach(([Lt, Rt, rc]) => {
+      x.fillStyle = faint; x.fillRect(L, y, W - 2 * L, 2);
+      x.fillStyle = fg; x.font = `500 31px ${CF}`; x.fillText(clip(x, Lt, 600), L, y + 39);
+      x.textAlign = 'right'; x.fillStyle = rc && !colr ? rc : fg; x.font = `italic 800 32px ${CF}`; x.fillText(Rt, W - L, y + 40); x.textAlign = 'left';
+      y += 54;
     });
-    y += 14;
+    y += 8;
   });
+  // logo
+  x.shadowBlur = 0; const mk = await markTinted(colr ? '#0B0B0C' : '#FFFFFF');
+  if (mk) { const lh = 30, lw = lh * (mk.naturalWidth || mk.width) / (mk.naturalHeight || mk.height); x.globalAlpha = .5; x.drawImage(mk, W - L - lw, h - 40 - lh, lw, lh); x.globalAlpha = 1; }
   return c;
 }
-// ---------- vizualizace ----------
+function hexA(hex, a) { const n = parseInt(hex.slice(1), 16); return `rgba(${n >> 16},${(n >> 8) & 255},${n & 255},${a})`; }
 function vizMonth(yy, mm) {
   const first = new Date(yy, mm, 1), off = (first.getDay() + 6) % 7, days = new Date(yy, mm + 1, 0).getDate(), rows = Math.ceil((off + days) / 7);
-  const cell = 96, gap = 14;
+  const cell = 74, gap = 12;
   return {
-    id: 'cal', label: 'Kalendář', h: 50 + rows * (cell + gap), draw: (x, X, Y, W, k) => {
+    id: 'cal', label: 'Kalendář', h: 40 + rows * (cell + gap), draw: (x, X, Y, W, k) => {
       const tw = 7 * cell + 6 * gap, sx = X + (W - tw) / 2;
-      ['po', 'út', 'st', 'čt', 'pá', 'so', 'ne'].forEach((d, i) => { x.fillStyle = k.mut; x.font = `600 24px ${CF}`; x.textAlign = 'center'; x.fillText(d.toUpperCase(), sx + i * (cell + gap) + cell / 2, Y + 26); });
+      ['po', 'út', 'st', 'čt', 'pá', 'so', 'ne'].forEach((d, i) => { x.fillStyle = k.mut; x.font = `600 21px ${CF}`; x.textAlign = 'center'; x.fillText(d.toUpperCase(), sx + i * (cell + gap) + cell / 2, Y + 22); });
       for (let d = 1; d <= days; d++) {
-        const p = off + d - 1, r = Math.floor(p / 7), cI = p % 7, cx = sx + cI * (cell + gap), cy = Y + 50 + r * (cell + gap); const kk = dkey(new Date(yy, mm, d));
-        const s = sessionOn(kk), a = actsOn(kk);
-        x.globalAlpha = 1;
-        if (s && s.end) { x.fillStyle = k.acc; slab(x, cx - 8, cy, cell - 12, cell); x.fill(); }
-        else { x.fillStyle = k.faint; rr(x, cx, cy, cell, cell, 18); x.fill(); }
-        if (a.length) { x.fillStyle = s && s.end ? (k.colr ? '#FFFFFF' : '#0B0B0C') : k.acc; x.beginPath(); x.arc(cx + cell - 20, cy + 20, 8, 0, 6.28); x.fill(); }
-        x.fillStyle = s && s.end ? (k.colr ? '#FFFFFF' : '#0B0B0C') : k.mut; x.font = `700 26px ${CF}`; x.fillText(String(d), cx + cell / 2, cy + cell / 2 + 10);
+        const p = off + d - 1, r = Math.floor(p / 7), ci = p % 7, cx = sx + ci * (cell + gap), cy = Y + 40 + r * (cell + gap); const kk = dkey(new Date(yy, mm, d));
+        const s = sessionOn(kk), a = actsOn(kk); const done = s && s.end;
+        if (done) { x.fillStyle = k.acc; slab(x, cx - 6, cy, cell - 10, cell); x.fill(); } else { x.fillStyle = k.faint; rr(x, cx, cy, cell, cell, 14); x.fill(); }
+        if (a.length) { x.fillStyle = done ? (k.colr ? '#FFFFFF' : '#0B0B0C') : k.acc; x.beginPath(); x.arc(cx + cell - 15, cy + 15, 6, 0, 6.28); x.fill(); }
+        x.fillStyle = done ? (k.colr ? '#FFFFFF' : '#0B0B0C') : k.mut; x.font = `700 22px ${CF}`; x.fillText(String(d), cx + cell / 2, cy + cell / 2 + 8);
       }
       x.textAlign = 'left';
     }
@@ -393,13 +394,13 @@ function vizMonth(yy, mm) {
 }
 function vizWeek(mon) {
   return {
-    id: 'days', label: 'Dny', h: 170, draw: (x, X, Y, W, k) => {
-      const cw = (W - 6 * 16) / 7;
+    id: 'days', label: 'Dny', h: 116, draw: (x, X, Y, W, k) => {
+      const gap = 14, cw = (W - 6 * gap) / 7;
       for (let i = 0; i < 7; i++) {
-        const kk = dkey(addDays(mon, i)); const s = sessionOn(kk), a = actsOn(kk); const cx = X + i * (cw + 16);
-        if (s && s.end) { x.fillStyle = k.acc; slab(x, cx - 10, Y, cw - 18, 110); x.fill(); } else { x.fillStyle = k.faint; rr(x, cx, Y, cw, 110, 18); x.fill(); }
-        if (a.length) { x.fillStyle = s && s.end ? (k.colr ? '#FFFFFF' : '#0B0B0C') : k.acc; x.beginPath(); x.arc(cx + cw / 2, Y + 55, 9, 0, 6.28); x.fill(); }
-        x.fillStyle = k.mut; x.font = `700 24px ${CF}`; x.textAlign = 'center'; x.fillText(DOW[addDays(mon, i).getDay()].toUpperCase(), cx + cw / 2, Y + 152);
+        const kk = dkey(addDays(mon, i)); const s = sessionOn(kk), a = actsOn(kk); const cx = X + i * (cw + gap); const done = s && s.end;
+        if (done) { x.fillStyle = k.acc; slab(x, cx - 8, Y, cw - 14, 72); x.fill(); } else { x.fillStyle = k.faint; rr(x, cx, Y, cw, 72, 14); x.fill(); }
+        if (a.length) { x.fillStyle = done ? (k.colr ? '#FFFFFF' : '#0B0B0C') : k.acc; x.beginPath(); x.arc(cx + cw / 2, Y + 36, 7, 0, 6.28); x.fill(); }
+        x.fillStyle = k.mut; x.font = `700 21px ${CF}`; x.textAlign = 'center'; x.fillText(DOW[addDays(mon, i).getDay()].toUpperCase(), cx + cw / 2, Y + 106);
       }
       x.textAlign = 'left';
     }
@@ -409,15 +410,16 @@ function vizWeight(ks) {
   const pts = ks.map(k => ({ k, w: BD().days[k]?.weight })).filter(p => p.w != null);
   if (pts.length < 2) return null;
   return {
-    id: 'vaha', label: 'Křivka váhy', h: 170, def: false, draw: (x, X, Y, W, k) => {
+    id: 'vaha', label: 'Křivka váhy', h: 110, def: false, draw: (x, X, Y, W, k) => {
       const mn = Math.min(...pts.map(p => p.w)), mx = Math.max(...pts.map(p => p.w)), sp = Math.max(mx - mn, .6);
-      const px = i => X + (W - 220) * i / (pts.length - 1), py = v => Y + 130 - (v - mn) / sp * 110;
-      x.strokeStyle = k.acc; x.lineWidth = 7; x.lineJoin = 'round'; x.lineCap = 'round'; x.beginPath(); pts.forEach((p, i) => i ? x.lineTo(px(i), py(p.w)) : x.moveTo(px(i), py(p.w))); x.stroke();
-      const l = pts[pts.length - 1]; x.fillStyle = k.acc; x.beginPath(); x.arc(px(pts.length - 1), py(l.w), 12, 0, 6.28); x.fill();
-      const d = l.w - pts[0].w; x.fillStyle = k.fg; x.font = `italic 800 52px ${CF}`; x.textAlign = 'right'; x.fillText(`${d >= 0 ? '+' : '−'}${kg(Math.abs(r2(d)))} kg`, X + W, Y + 80); x.textAlign = 'left';
+      const px = i => X + (W - 200) * i / (pts.length - 1), py = v => Y + 92 - (v - mn) / sp * 80;
+      x.strokeStyle = k.acc; x.lineWidth = 6; x.lineJoin = 'round'; x.lineCap = 'round'; x.beginPath(); pts.forEach((p, i) => i ? x.lineTo(px(i), py(p.w)) : x.moveTo(px(i), py(p.w))); x.stroke();
+      const l = pts[pts.length - 1]; x.fillStyle = k.acc; x.beginPath(); x.arc(px(pts.length - 1), py(l.w), 10, 0, 6.28); x.fill();
+      const d = l.w - pts[0].w; x.fillStyle = k.fg; x.font = `italic 800 44px ${CF}`; x.textAlign = 'right'; x.fillText(`${d >= 0 ? '+' : '−'}${kg(Math.abs(r2(d)))} kg`, X + W, Y + 62); x.textAlign = 'left';
     }
   };
 }
+
 // ---------- specifikace karet ----------
 const COLK = k => (CARD_COL[k] || CARD_COL.other)[0];
 function specWorkout(s) {
@@ -427,7 +429,7 @@ function specWorkout(s) {
   const cmpI = p ? (() => { const b = stats(p); return [['Objem', `${sg(st.vol - b.vol, 0)} kg`, st.vol >= b.vol ? '#8BD43B' : '#E5484D'], ['Zlepšení', `${st.up}`, null]]; })() : [];
   return {
     picto: 'gym', col: prs.length ? '#F4C542' : COLK('gym'), kicker: prs.length ? 'Nový rekord' : 'Trénink', title: s.name, big: String(min), unit: 'min', date: fdate(s.date),
-    stats: [{ id: 'vol', label: 'nazvedáno', value: `${thou(st.vol)} kg` }, { id: 'sets', label: 'série', value: String(st.sets) }, { id: 'ex', label: 'cviky', value: String(st.ex) }],
+    stats: [{ id: 'vol', label: 'nazvedáno', value: `${thou(st.vol)} kg` }, { id: 'sets', label: pl(st.sets, 'série', 'série', 'sérií').split(' ')[1], value: String(st.sets) }, { id: 'ex', label: pl(st.ex, 'cvik', 'cviky', 'cviků').split(' ')[1], value: String(st.ex) }],
     lists: [{ id: 'pr', title: 'Rekordy', items: prs.map(q => [q.ex.name, `${kg(q.w)} × ${q.r}`, '#F4C542']) }, { id: 'extra', title: 'Navíc', items: extra }, { id: 'top', title: 'Nejlepší série', items: tops, def: false }, { id: 'cmp', title: p ? `Proti minule (${fday(p.date)})` : '', items: cmpI, def: false }],
   };
 }
@@ -512,3 +514,5 @@ Object.assign(A, {
   'month-share': () => storyMonth(calM.y, calM.m),
   'tog-pace': () => { S.settings.paceEval = !S.settings.paceEval; save(true); render(); },
 });
+
+(function () { if (S.settings.plates && !S.settings.migP1) { if (!S.settings.plates.includes(1)) S.settings.plates.push(1); S.settings.plates.sort((a, b) => b - a); } S.settings.migP1 = 1; save(true); })();

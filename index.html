@@ -567,11 +567,18 @@ button.ck{background:none;border:0;padding:0;cursor:pointer}
 .chip.tg{padding:8px 14px;font-size:14px;background:var(--card);border:1.5px solid var(--card3);color:var(--mut)}
 .chip.tg.on{background:var(--fg);color:var(--ink);border-color:var(--fg)}
 .cal-h~.bottom-acts,.bottom-acts:has([data-a=month-share]){grid-template-columns:1fr 1fr}
+
+/* v2.1 menší aktivity */
+.agrid{grid-template-columns:repeat(4,1fr);gap:8px}
+.agrid .at{padding:12px 4px 10px;gap:7px;border-radius:18px;font-size:12px;line-height:1.2;text-align:center}
+.agrid .at .ic{width:42px;height:42px}
+.agrid .at .ic svg.i{width:22px;height:22px}
+.amore{margin-top:8px}
 </style>
 </head>
 <body>
 <div id="app"></div><div id="sheet" hidden></div><div id="toast" role="status" aria-live="polite"></div>
-<script>const APP_VERSION = "2.0.0";
+<script>const APP_VERSION = "2.1.0";
 const MARK = "<svg aria-hidden=\"true\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 994 296\"><path fill=\"currentColor\" d=\"M612 5L611 4L571 4L570 5L567 5L566 4L561 4L560 5L448 5L447 6L442 6L441 5L439 6L438 5L435 5L434 6L430 6L429 5L426 5L425 6L414 6L413 5L409 5L408 6L385 5L378 11L366 27L355 39L352 44L335 63L323 79L316 86L312 92L282 127L274 138L267 145L263 151L233 186L233 187L219 203L219 204L210 213L210 214L202 222L202 223L192 232L186 236L171 243L169 243L162 246L155 247L154 248L149 248L148 249L140 249L139 250L85 250L84 251L78 251L77 250L37 250L29 258L29 259L24 264L19 271L13 277L13 278L4 288L0 294L1 295L48 295L49 296L51 295L58 295L59 296L94 296L95 295L97 295L98 296L100 296L101 295L154 295L155 294L184 294L185 293L202 293L203 292L232 291L233 290L241 290L242 289L253 289L254 288L263 288L264 287L271 287L272 286L281 286L282 285L288 285L289 284L294 284L295 283L301 283L302 282L313 281L314 280L328 278L332 276L336 276L337 275L352 272L358 269L361 269L362 268L367 267L369 265L379 262L393 255L408 245L433 221L436 216L448 203L456 192L477 168L485 157L492 150L494 146L506 133L506 132L521 115L525 109L544 88L548 82L560 69L563 64L570 57L570 56L578 48L578 47L589 35L594 28L602 20L604 16L611 9ZM994 1L993 0L974 0L973 1L967 1L966 0L964 0L963 1L866 1L865 2L860 2L859 1L842 2L840 1L839 2L804 2L794 7L792 7L786 11L784 11L777 15L775 15L760 23L758 23L749 28L747 28L734 35L732 35L717 43L715 43L706 48L704 48L696 53L694 53L689 56L685 57L683 59L681 59L670 65L668 65L658 70L656 72L647 76L645 78L636 82L634 84L629 86L624 90L619 92L614 96L606 100L586 115L579 119L575 123L559 135L554 140L553 140L537 155L536 155L502 190L502 193L509 191L512 189L529 184L532 182L538 181L549 176L555 175L558 173L566 171L569 169L586 164L589 162L597 160L606 168L606 169L620 185L632 201L655 228L663 239L677 255L680 260L686 266L694 277L704 288L749 288L750 287L755 287L756 288L760 288L761 287L914 287L916 286L916 284L896 264L895 264L827 199L826 199L797 171L796 171L776 151L775 151L766 142L765 142L757 133L749 127L736 113L736 109L742 104L747 103L757 98L762 97L767 94L777 91L782 88L784 88L787 86L789 86L792 84L794 84L797 82L802 81L807 78L809 78L812 76L814 76L817 74L824 72L829 69L831 69L844 63L849 62L854 59L856 59L861 56L863 56L866 54L873 52L878 49L880 49L883 47L885 47L898 41L903 40L910 36L912 36L920 32L925 31L937 25L939 25L942 23L944 23L947 21L949 21L952 19L954 19L957 17L959 17L962 15L969 13L974 10L976 10L979 8L981 8L984 6L993 3Z\"/></svg>";
 // ===== Výchozí knihovna cviků (informace jsou skryté pod „Info o cviku“) =====
 const R = (min, max, fail = true) => ({ min, max, fail });
@@ -655,14 +662,14 @@ const SEED = [
 ];
 
 const ACT_TYPES = {
-  sauna:  { name: 'Sauna',      cls: 'heat', icon: 'flame' },
   cold:   { name: 'Otužování',  cls: 'cold', icon: 'snow' },
   thai:   { name: 'Thai box',   cls: 'act',  icon: 'glove' },
-  yoga:   { name: 'Jóga',       cls: 'act',  icon: 'lotus' },
-  stretch:{ name: 'Strečink',   cls: 'act',  icon: 'plus' },
   bike:   { name: 'Kolo / rotoped', cls: 'act', icon: 'bike' },
-  run:    { name: 'Běh',        cls: 'act',  icon: 'plus' },
-  swim:   { name: 'Plavání',    cls: 'act',  icon: 'plus' },
+  sauna:  { name: 'Sauna',      cls: 'heat', icon: 'flame', extra: 1 },
+  yoga:   { name: 'Jóga',       cls: 'act',  icon: 'lotus', extra: 1 },
+  stretch:{ name: 'Strečink',   cls: 'act',  icon: 'plus', extra: 1 },
+  run:    { name: 'Běh',        cls: 'act',  icon: 'plus', extra: 1 },
+  swim:   { name: 'Plavání',    cls: 'act',  icon: 'plus', extra: 1 },
   climb:  { name: 'Lezení',     cls: 'act',  icon: 'plus', extra: 1 },
   xcski:  { name: 'Běžkování',  cls: 'act',  icon: 'plus', extra: 1 },
   sprint: { name: 'Sprint',     cls: 'act',  icon: 'plus', extra: 1 },
@@ -750,7 +757,7 @@ for (const k in ACT_TYPES) ACT_TYPES[k].icon = 'p_' + (PICTO[k] ? k : 'other');
 function actGrid(attrs = '') {
   const tile = ([k, t]) => `<button class="at ${t.cls}" data-a="act-new" data-t="${k}" ${attrs}><span class="ic">${ico(t.icon)}</span>${t.name}</button>`;
   const E = Object.entries(ACT_TYPES), main = E.filter(([, t]) => !t.extra), more = E.filter(([, t]) => t.extra);
-  return `<div class="agrid">${main.map(tile).join('')}<button class="at more" data-a="act-more" aria-expanded="false"><span class="ic">${ico('more')}</span>Další</button></div>
+  return `<div class="agrid">${main.map(tile).join('')}<button class="at more" data-a="act-more" aria-expanded="false"><span class="ic">${ico('plus')}</span>Další</button></div>
     <div class="agrid amore" hidden>${more.map(tile).join('')}</div>`;
 }
 
@@ -1018,7 +1025,7 @@ function exCard(s, e, idx) {
   const st = exState(e, ex); const open = s.open === idx;
   const dots = usedSets(e, ex).map(x => `<u class="${hasData(x, ex) ? 'ok' : ''}"></u>`).join('');
   return `<article class="ex ${st} ${open ? 'open' : ''}" data-idx="${idx}">
-    <button class="exh" data-a="ex-tog"><span class="bar"></span><div class="t"><div class="nm">${esc(ex.name)}<span class="inf" data-a="ex-info" data-id="${ex.id}" role="button" aria-label="Info o cviku">${ico('info')}</span></div><div class="sb">${esc(ex.muscle || '')}<span class="dots">${dots}</span></div></div><span class="cv">${ico('chevd')}</span></button>
+    <button class="exh" data-a="ex-tog"><span class="bar"></span><div class="t"><div class="nm">${esc(ex.name)}<span class="inf" data-a="ex-info" data-id="${ex.id}" role="button" aria-label="Info o cviku">${ico('info')}</span></div><div class="sb"><span class="dots">${dots}</span></div></div><span class="cv">${ico('chevd')}</span></button>
     ${open ? exBody(s, e, ex) : ''}
   </article>`;
 }
@@ -1052,7 +1059,6 @@ function exBody(s, e, ex) {
     <div class="tools"><div class="chips">${chips}</div><button class="tb cdb" data-a="cd-start" aria-label="Odpočet před pracovní sérií">${ico('timer')}<span>${fcd(cdOf(ex))}</span></button>${ex.plates ? `<button class="tb" data-a="plates" aria-label="Kalkulačka kotoučů">${ico('plate')}</button>` : ''}<button class="tb" data-a="prog-ex" data-id="${ex.id}" aria-label="Statistiky cviku">${ico('bars')}</button><button class="tb" data-a="story-ex" aria-label="Uložit na story">${ico('share')}</button><button class="tb" data-a="ex-menu" aria-label="Možnosti">${ico('more')}</button></div>
     <div class="last">${last ? `Minule · ${fday(last.s.date)} — <b class="num">${usedSets(last.e, ex).map(x => setTxt(x, ex)).join(' · ')}</b>` : 'První záznam tohoto cviku'}</div>
     <div class="tbl"><div class="th"><span>#</span><span>Kg</span><span>Opak.</span><span>Rozsah</span><span>${ico('check')}</span></div>${rows}</div>
-    <div class="nx" data-nx>${nextLines(s, e, ex, last)}</div>
     <textarea class="notep" data-in="exnote" rows="1" placeholder="Napiš poznámku…">${esc(ex.note)}</textarea>
   </div>`;
 }
@@ -1081,7 +1087,7 @@ function updateCard(card, s, e) {
     $('[data-ck]', row).classList.toggle('ok', ok);
     if (f) { const wi = $('[data-f=w]', row); if (document.activeElement !== wi) wi.value = kg(num(st.w)); }
   });
-  $('[data-nx]', card).innerHTML = nextLines(s, e, ex, last);
+
   const stt = exState(e, ex); card.classList.remove('done', 'part'); if (stt) card.classList.add(stt);
   $('.dots', card).innerHTML = usedSets(e, ex).map(x => `<u class="${hasData(x, ex) ? 'ok' : ''}"></u>`).join('');
 }
@@ -1242,12 +1248,13 @@ function bestOf(h, ex) { let b = null; h.forEach(({ s, e }) => usedSets(e, ex).f
 function vProgEx() {
   const ex = exById(view.id); if (!ex) return vProg();
   const h = exHistory(ex.id); const best = bestOf(h, ex);
+  const fw = h.length ? num(h[0].e.sets[0]?.w) : null, lw = h.length ? num(h[h.length - 1].e.sets[0]?.w) : null; const dW = fw != null && lw != null && h.length > 1 ? r2(lw - fw) : null;
   const totalSets = h.reduce((a, { e }) => a + usedSets(e, ex).filter(st => hasData(st, ex)).length, 0);
   const tr = trendOf(ex.id);
   return `<div class="wrap">
     ${hdr(`<button class="round" data-a="back-from-stats" aria-label="Zpět">${ico('back')}</button>`, `<h1 style="font-size:17px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(ex.name)}</h1>`, `<button class="round" data-a="ex-edit" data-id="${ex.id}" aria-label="Upravit cvik">${ico('more')}</button>`)}
     <div class="lbl" style="margin:0 6px 12px">Statistiky cviku ${tr.k !== 'na' ? `<span class="chip ${tr.k === 'up' ? 'prog' : tr.k === 'down' ? 'down' : ''}" style="margin-left:8px;letter-spacing:0;text-transform:none">${tr.t}</span>` : ''}</div>
-    <div class="stat3"><div>${ico('weight')}<span>Nejlepší váha</span><b>${best ? kg(best.w) + ' kg' : '–'}</b></div><div>${ico('bolt')}<span>Celkem sérií</span><b>${totalSets}</b></div><div>${ico('arm')}<span>Celkem tréninků</span><b>${h.length}</b></div></div>
+    <div class="stat3"><div>${ico('weight')}<span>Nejlepší váha</span><b>${best ? kg(best.w) + ' kg' : '–'}</b></div><div>${ico('up')}<span>Od začátku</span><b class="${dW > 0 ? 'up' : ''}">${dW == null ? '–' : (dW > 0 ? '+' : '') + kg(dW) + ' kg'}</b></div><div>${ico('arm')}<span>Tréninků</span><b>${h.length}</b></div></div>
     <div class="card" style="margin-top:14px;padding:18px 14px">${chartSVG(h, ex)}</div>
     <div class="actions"><button class="btn block" data-a="ex-info" data-id="${ex.id}">${ico('info')} Info o cviku</button></div>
     <div class="lbl" style="margin:26px 6px 0">Historie cviku</div>
@@ -2221,10 +2228,10 @@ async function storyWeek(monK) {
 }
 
 // ---------- kalkulačka kotoučů ----------
-const PLATE_ALL = [25, 20, 15, 10, 5, 2.5, 1.25, 0.5, 0.25];
-const PLATE_DEF = [25, 20, 15, 10, 5, 2.5, 1.25];
-const PLATE_COL = { 25: '#E5484D', 20: '#3B82F6', 15: '#F4C542', 10: '#8BD43B', 5: '#F5F5F7', 2.5: '#C2403F', 1.25: '#A1A1A6', 0.5: '#8E8E93', 0.25: '#6C6C70' };
-const PLATE_H = { 25: 112, 20: 112, 15: 98, 10: 82, 5: 62, 2.5: 48, 1.25: 38, 0.5: 30, 0.25: 26 };
+const PLATE_ALL = [25, 20, 15, 10, 5, 2.5, 1.25, 1, 0.5, 0.25];
+const PLATE_DEF = [25, 20, 15, 10, 5, 2.5, 1.25, 1];
+const PLATE_COL = { 25: '#E5484D', 20: '#3B82F6', 15: '#F4C542', 10: '#8BD43B', 5: '#F5F5F7', 2.5: '#C2403F', 1.25: '#A1A1A6', 1: '#C7C7CC', 0.5: '#8E8E93', 0.25: '#6C6C70' };
+const PLATE_H = { 25: 112, 20: 112, 15: 98, 10: 82, 5: 62, 2.5: 48, 1.25: 38, 1: 34, 0.5: 30, 0.25: 26 };
 const plateSet = () => (S.settings.plates && S.settings.plates.length ? S.settings.plates : PLATE_DEF).slice().sort((a, b) => b - a);
 function platesFor(total, bar) {
   let side = r2((total - bar) / 2); if (side < -1e-9) return { err: `Méně než samotná osa (${kg(bar)} kg)` };
@@ -2349,82 +2356,83 @@ async function markTinted(col) {
   return new Promise(res => { const im = new Image(); im.onload = () => res(im); im.onerror = () => res(null); im.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(MARK.replace('currentColor', col)); });
 }
 async function drawShare(sp, style, on) {
-  const W = 1080, X = 84, col = sp.col;
+  const W = 1080, L = 64, X = 318, col = sp.col;
   const isOn = id => on[id] !== false;
   const stats = (sp.stats || []).filter(s => isOn(s.id));
   const lists = (sp.lists || []).filter(l => isOn(l.id) && l.items.length);
   const vizs = (sp.viz || []).filter(v => isOn(v.id));
-  let h = 560 + (stats.length ? 150 : 0) + lists.reduce((a, l) => a + 70 + l.items.length * 64, 0) + vizs.reduce((a, v) => a + v.h + 40, 0) + 60;
-  const c = document.createElement('canvas'); c.width = W; c.height = h; const x = c.getContext('2d');
   const colr = style === 'barva', clear = style === 'cista';
   const fg = colr ? '#0B0B0C' : '#F5F5F7', mut = colr ? 'rgba(11,11,12,.6)' : clear ? 'rgba(255,255,255,.82)' : '#9A9AA0', acc = colr ? '#0B0B0C' : col, faint = colr ? 'rgba(11,11,12,.12)' : clear ? 'rgba(255,255,255,.28)' : 'rgba(255,255,255,.08)';
+  // rozvržení (měření předem)
+  const m = document.createElement('canvas').getContext('2d');
+  const size = (() => { let s = 150; m.font = `italic 900 ${s}px ${CF}`; while (m.measureText(sp.big).width > 470 && s > 96) { s -= 8; m.font = `italic 900 ${s}px ${CF}`; } return s; })();
+  const titleY = 138, bigY = titleY + 22 + Math.round(size * .86);
+  // statistiky v řádcích (inline)
+  const statLines = []; let cur = [], cw = 0, maxW = W - L - X;
+  stats.forEach(s => { m.font = `italic 800 40px ${CF}`; const vw = m.measureText(s.value).width; m.font = `600 22px ${CF}`; const lw = m.measureText(s.label.toUpperCase()).width + s.label.length * 2; const w = vw + 12 + lw + 40; if (cw + w > maxW && cur.length) { statLines.push(cur); cur = []; cw = 0; } cur.push({ ...s, vw }); cw += w; });
+  if (cur.length) statLines.push(cur);
+  let topEnd = bigY + 54; if (statLines.length) topEnd = bigY + 50 + statLines.length * 58;
+  topEnd = Math.max(topEnd, 372);
+  const listH = lists.reduce((a, l) => a + 50 + l.items.length * 54 + 8, 0), vizH = vizs.reduce((a, v) => a + v.h + 26, 0);
+  const h = topEnd + (listH || vizH ? 26 : 0) + vizH + listH + (listH || vizH ? 96 : 52);
+  const c = document.createElement('canvas'); c.width = W; c.height = h; const x = c.getContext('2d');
   // pozadí
   if (!clear) {
-    rr(x, 0, 0, W, h, 64); x.save(); x.clip();
-    if (colr) { const g = x.createLinearGradient(0, 0, W, h); g.addColorStop(0, col); g.addColorStop(1, shade(col, .72)); x.fillStyle = g; x.fillRect(0, 0, W, h); }
-    else { const g = x.createLinearGradient(0, 0, 0, h); g.addColorStop(0, '#1D1D20'); g.addColorStop(1, '#0C0C0E'); x.fillStyle = g; x.fillRect(0, 0, W, h); }
-    // šikmé tahy
-    x.globalAlpha = colr ? .16 : .09; x.fillStyle = colr ? '#FFFFFF' : col; slab(x, W - 520, -10, 150, h + 20);
-    x.globalAlpha = colr ? .10 : .05; slab(x, W - 330, -10, 70, h + 20); x.globalAlpha = 1;
+    rr(x, 0, 0, W, h, 56); x.save(); x.clip();
+    if (colr) { const g = x.createLinearGradient(0, 0, W, h); g.addColorStop(0, col); g.addColorStop(1, shade(col, .74)); x.fillStyle = g; x.fillRect(0, 0, W, h); }
+    else { const g = x.createLinearGradient(0, 0, W, h); g.addColorStop(0, '#1E1E21'); g.addColorStop(1, '#0D0D0F'); x.fillStyle = g; x.fillRect(0, 0, W, h); const rg = x.createRadialGradient(170, 200, 10, 170, 200, 460); rg.addColorStop(0, hexA(col, .16)); rg.addColorStop(1, hexA(col, 0)); x.fillStyle = rg; x.fillRect(0, 0, W, h); }
+    x.globalAlpha = colr ? .14 : .06; x.fillStyle = colr ? '#FFFFFF' : col; slab(x, W - 300, -10, 110, h + 20); x.globalAlpha = colr ? .08 : .035; slab(x, W - 160, -10, 46, h + 20); x.globalAlpha = 1;
     x.restore();
-    if (!colr) { x.strokeStyle = 'rgba(255,255,255,.07)'; x.lineWidth = 2.5; rr(x, 1.25, 1.25, W - 2.5, h - 2.5, 63); x.stroke(); }
+    if (!colr) { x.strokeStyle = 'rgba(255,255,255,.07)'; x.lineWidth = 2.5; rr(x, 1.25, 1.25, W - 2.5, h - 2.5, 55); x.stroke(); }
   }
-  if (clear) { x.shadowColor = 'rgba(0,0,0,.6)'; x.shadowBlur = 26; x.shadowOffsetY = 2; }
-  // silueta
-  x.globalAlpha = colr ? .9 : 1; drawPicto(x, sp.picto, W - 230, 330, 330, colr ? '#0B0B0C' : clear ? '#FFFFFF' : col); x.globalAlpha = 1;
-  // hlavička
-  const mk = await markTinted(colr ? '#0B0B0C' : '#FFFFFF');
-  if (mk) { const lh = 46, lw = lh * (mk.naturalWidth || mk.width) / (mk.naturalHeight || mk.height); x.globalAlpha = colr ? .85 : .9; x.drawImage(mk, X, 78, lw, lh); x.globalAlpha = 1; }
-  x.fillStyle = mut; x.font = `600 28px ${CF}`; x.textAlign = 'right'; x.fillText(sp.date || '', W - 84, 112); x.textAlign = 'left';
-  // titulky
-  let y = 230;
-  if (sp.kicker) { x.fillStyle = mut; x.font = `600 26px ${CF}`; spacedL(x, clip(x, sp.kicker.toUpperCase(), 560), X, y, 6); y += 50; }
-  x.fillStyle = acc; x.font = `italic 800 40px ${CF}`; spacedL(x, clip(x, sp.title.toUpperCase(), 600), X, y, 3);
-  // velké číslo
-  x.fillStyle = fg; let size = 220; x.font = `italic 900 ${size}px ${CF}`; while (x.measureText(sp.big).width > 560 && size > 120) { size -= 10; x.font = `italic 900 ${size}px ${CF}`; }
-  x.fillText(sp.big, X - 6, y + size * .9); const bw = x.measureText(sp.big).width;
-  if (sp.unit) { x.fillStyle = mut; x.font = `italic 700 ${Math.round(size * .32)}px ${CF}`; x.fillText(sp.unit, X + bw + 16, y + size * .9); }
-  y += size * .9 + 34;
-  // podpis: šikmá lišta
-  x.fillStyle = acc; slab(x, X, y, 150, 12); x.fill(); x.globalAlpha = .45; slab(x, X + 172, y, 46, 12); x.fill(); x.globalAlpha = 1;
-  y += 60;
-  // statistiky
-  if (stats.length) {
-    const n = stats.length, cw = (W - 2 * X) / n, fs = n >= 4 ? 46 : n === 3 ? 54 : 62;
-    stats.forEach((s, i) => { const sx = X + i * cw; x.fillStyle = fg; x.font = `italic 800 ${fs}px ${CF}`; x.fillText(clip(x, s.value, cw - 20), sx, y + 58); x.fillStyle = mut; x.font = `600 24px ${CF}`; spacedL(x, s.label.toUpperCase(), sx, y + 100, 3); if (i) { x.fillStyle = faint; x.fillRect(sx - 18, y + 10, 2, 96); } });
-    y += 150;
-  }
-  // grafika
-  vizs.forEach(v => { v.draw(x, X, y + 10, W - 2 * X, { fg, mut, acc, faint, colr }); y += v.h + 40; });
+  if (clear) { x.shadowColor = 'rgba(0,0,0,.6)'; x.shadowBlur = 24; x.shadowOffsetY = 2; }
+  // medailon se siluetou
+  const mx = L + 108, my = 196, R = 108;
+  x.beginPath(); x.arc(mx, my, R, 0, Math.PI * 2); x.fillStyle = colr ? 'rgba(11,11,12,.10)' : clear ? 'rgba(255,255,255,.12)' : hexA(col, .12); x.fill();
+  x.lineWidth = 3; x.strokeStyle = colr ? 'rgba(11,11,12,.35)' : clear ? 'rgba(255,255,255,.55)' : hexA(col, .45); x.stroke();
+  drawPicto(x, sp.picto, mx, my, 128, colr ? '#0B0B0C' : clear ? '#FFFFFF' : col);
+  // datum + titulky
+  x.fillStyle = mut; x.font = `600 26px ${CF}`; x.textAlign = 'right'; x.fillText(sp.date || sp.kicker || '', W - L, 92); x.textAlign = 'left';
+  if (sp.kicker && sp.date) { x.fillStyle = mut; x.font = `600 24px ${CF}`; spacedL(x, clip(x, sp.kicker.toUpperCase(), 420), X, 92, 5); }
+  x.fillStyle = acc; x.font = `italic 800 36px ${CF}`; spacedL(x, clip(x, sp.title.toUpperCase(), 600), X, titleY, 3);
+  x.fillStyle = fg; x.font = `italic 900 ${size}px ${CF}`; x.fillText(sp.big, X - 6, bigY); const bw = x.measureText(sp.big).width;
+  if (sp.unit) { x.fillStyle = mut; x.font = `italic 700 ${Math.round(size * .3)}px ${CF}`; x.fillText(sp.unit, X + bw + 12, bigY); }
+  x.fillStyle = acc; slab(x, X, bigY + 20, 110, 9); x.fill(); x.globalAlpha = .45; slab(x, X + 126, bigY + 20, 34, 9); x.fill(); x.globalAlpha = 1;
+  let y = bigY + 50;
+  statLines.forEach(line => { let sx = X; line.forEach(s => { x.fillStyle = fg; x.font = `italic 800 40px ${CF}`; x.fillText(s.value, sx, y + 40); sx += s.vw + 12; x.fillStyle = mut; x.font = `600 22px ${CF}`; sx = spacedL(x, s.label.toUpperCase(), sx, y + 39, 2) + 38; }); y += 58; });
+  y = topEnd + (listH || vizH ? 26 : 0);
+  // grafika (od levého okraje pod medailonem)
+  vizs.forEach(v => { v.draw(x, L, y, W - 2 * L, { fg, mut, acc, faint, colr }); y += v.h + 26; });
   // seznamy
   lists.forEach(l => {
-    x.fillStyle = mut; x.font = `600 24px ${CF}`; spacedL(x, l.title.toUpperCase(), X, y + 34, 5); y += 56;
-    l.items.forEach(([L, R, rc]) => {
-      x.fillStyle = faint; x.fillRect(X, y, W - 2 * X, 2);
-      x.fillStyle = fg; x.font = `500 36px ${CF}`; x.fillText(clip(x, L, 560), X, y + 46);
-      x.textAlign = 'right'; x.fillStyle = rc && !colr ? rc : fg; x.font = `italic 800 38px ${CF}`; x.fillText(R, W - X, y + 47); x.textAlign = 'left';
-      y += 64;
+    x.fillStyle = mut; x.font = `600 22px ${CF}`; spacedL(x, l.title.toUpperCase(), L, y + 30, 5); y += 50;
+    l.items.forEach(([Lt, Rt, rc]) => {
+      x.fillStyle = faint; x.fillRect(L, y, W - 2 * L, 2);
+      x.fillStyle = fg; x.font = `500 31px ${CF}`; x.fillText(clip(x, Lt, 600), L, y + 39);
+      x.textAlign = 'right'; x.fillStyle = rc && !colr ? rc : fg; x.font = `italic 800 32px ${CF}`; x.fillText(Rt, W - L, y + 40); x.textAlign = 'left';
+      y += 54;
     });
-    y += 14;
+    y += 8;
   });
+  // logo
+  x.shadowBlur = 0; const mk = await markTinted(colr ? '#0B0B0C' : '#FFFFFF');
+  if (mk) { const lh = 30, lw = lh * (mk.naturalWidth || mk.width) / (mk.naturalHeight || mk.height); x.globalAlpha = .5; x.drawImage(mk, W - L - lw, h - 40 - lh, lw, lh); x.globalAlpha = 1; }
   return c;
 }
-// ---------- vizualizace ----------
+function hexA(hex, a) { const n = parseInt(hex.slice(1), 16); return `rgba(${n >> 16},${(n >> 8) & 255},${n & 255},${a})`; }
 function vizMonth(yy, mm) {
   const first = new Date(yy, mm, 1), off = (first.getDay() + 6) % 7, days = new Date(yy, mm + 1, 0).getDate(), rows = Math.ceil((off + days) / 7);
-  const cell = 96, gap = 14;
+  const cell = 74, gap = 12;
   return {
-    id: 'cal', label: 'Kalendář', h: 50 + rows * (cell + gap), draw: (x, X, Y, W, k) => {
+    id: 'cal', label: 'Kalendář', h: 40 + rows * (cell + gap), draw: (x, X, Y, W, k) => {
       const tw = 7 * cell + 6 * gap, sx = X + (W - tw) / 2;
-      ['po', 'út', 'st', 'čt', 'pá', 'so', 'ne'].forEach((d, i) => { x.fillStyle = k.mut; x.font = `600 24px ${CF}`; x.textAlign = 'center'; x.fillText(d.toUpperCase(), sx + i * (cell + gap) + cell / 2, Y + 26); });
+      ['po', 'út', 'st', 'čt', 'pá', 'so', 'ne'].forEach((d, i) => { x.fillStyle = k.mut; x.font = `600 21px ${CF}`; x.textAlign = 'center'; x.fillText(d.toUpperCase(), sx + i * (cell + gap) + cell / 2, Y + 22); });
       for (let d = 1; d <= days; d++) {
-        const p = off + d - 1, r = Math.floor(p / 7), cI = p % 7, cx = sx + cI * (cell + gap), cy = Y + 50 + r * (cell + gap); const kk = dkey(new Date(yy, mm, d));
-        const s = sessionOn(kk), a = actsOn(kk);
-        x.globalAlpha = 1;
-        if (s && s.end) { x.fillStyle = k.acc; slab(x, cx - 8, cy, cell - 12, cell); x.fill(); }
-        else { x.fillStyle = k.faint; rr(x, cx, cy, cell, cell, 18); x.fill(); }
-        if (a.length) { x.fillStyle = s && s.end ? (k.colr ? '#FFFFFF' : '#0B0B0C') : k.acc; x.beginPath(); x.arc(cx + cell - 20, cy + 20, 8, 0, 6.28); x.fill(); }
-        x.fillStyle = s && s.end ? (k.colr ? '#FFFFFF' : '#0B0B0C') : k.mut; x.font = `700 26px ${CF}`; x.fillText(String(d), cx + cell / 2, cy + cell / 2 + 10);
+        const p = off + d - 1, r = Math.floor(p / 7), ci = p % 7, cx = sx + ci * (cell + gap), cy = Y + 40 + r * (cell + gap); const kk = dkey(new Date(yy, mm, d));
+        const s = sessionOn(kk), a = actsOn(kk); const done = s && s.end;
+        if (done) { x.fillStyle = k.acc; slab(x, cx - 6, cy, cell - 10, cell); x.fill(); } else { x.fillStyle = k.faint; rr(x, cx, cy, cell, cell, 14); x.fill(); }
+        if (a.length) { x.fillStyle = done ? (k.colr ? '#FFFFFF' : '#0B0B0C') : k.acc; x.beginPath(); x.arc(cx + cell - 15, cy + 15, 6, 0, 6.28); x.fill(); }
+        x.fillStyle = done ? (k.colr ? '#FFFFFF' : '#0B0B0C') : k.mut; x.font = `700 22px ${CF}`; x.fillText(String(d), cx + cell / 2, cy + cell / 2 + 8);
       }
       x.textAlign = 'left';
     }
@@ -2432,13 +2440,13 @@ function vizMonth(yy, mm) {
 }
 function vizWeek(mon) {
   return {
-    id: 'days', label: 'Dny', h: 170, draw: (x, X, Y, W, k) => {
-      const cw = (W - 6 * 16) / 7;
+    id: 'days', label: 'Dny', h: 116, draw: (x, X, Y, W, k) => {
+      const gap = 14, cw = (W - 6 * gap) / 7;
       for (let i = 0; i < 7; i++) {
-        const kk = dkey(addDays(mon, i)); const s = sessionOn(kk), a = actsOn(kk); const cx = X + i * (cw + 16);
-        if (s && s.end) { x.fillStyle = k.acc; slab(x, cx - 10, Y, cw - 18, 110); x.fill(); } else { x.fillStyle = k.faint; rr(x, cx, Y, cw, 110, 18); x.fill(); }
-        if (a.length) { x.fillStyle = s && s.end ? (k.colr ? '#FFFFFF' : '#0B0B0C') : k.acc; x.beginPath(); x.arc(cx + cw / 2, Y + 55, 9, 0, 6.28); x.fill(); }
-        x.fillStyle = k.mut; x.font = `700 24px ${CF}`; x.textAlign = 'center'; x.fillText(DOW[addDays(mon, i).getDay()].toUpperCase(), cx + cw / 2, Y + 152);
+        const kk = dkey(addDays(mon, i)); const s = sessionOn(kk), a = actsOn(kk); const cx = X + i * (cw + gap); const done = s && s.end;
+        if (done) { x.fillStyle = k.acc; slab(x, cx - 8, Y, cw - 14, 72); x.fill(); } else { x.fillStyle = k.faint; rr(x, cx, Y, cw, 72, 14); x.fill(); }
+        if (a.length) { x.fillStyle = done ? (k.colr ? '#FFFFFF' : '#0B0B0C') : k.acc; x.beginPath(); x.arc(cx + cw / 2, Y + 36, 7, 0, 6.28); x.fill(); }
+        x.fillStyle = k.mut; x.font = `700 21px ${CF}`; x.textAlign = 'center'; x.fillText(DOW[addDays(mon, i).getDay()].toUpperCase(), cx + cw / 2, Y + 106);
       }
       x.textAlign = 'left';
     }
@@ -2448,15 +2456,16 @@ function vizWeight(ks) {
   const pts = ks.map(k => ({ k, w: BD().days[k]?.weight })).filter(p => p.w != null);
   if (pts.length < 2) return null;
   return {
-    id: 'vaha', label: 'Křivka váhy', h: 170, def: false, draw: (x, X, Y, W, k) => {
+    id: 'vaha', label: 'Křivka váhy', h: 110, def: false, draw: (x, X, Y, W, k) => {
       const mn = Math.min(...pts.map(p => p.w)), mx = Math.max(...pts.map(p => p.w)), sp = Math.max(mx - mn, .6);
-      const px = i => X + (W - 220) * i / (pts.length - 1), py = v => Y + 130 - (v - mn) / sp * 110;
-      x.strokeStyle = k.acc; x.lineWidth = 7; x.lineJoin = 'round'; x.lineCap = 'round'; x.beginPath(); pts.forEach((p, i) => i ? x.lineTo(px(i), py(p.w)) : x.moveTo(px(i), py(p.w))); x.stroke();
-      const l = pts[pts.length - 1]; x.fillStyle = k.acc; x.beginPath(); x.arc(px(pts.length - 1), py(l.w), 12, 0, 6.28); x.fill();
-      const d = l.w - pts[0].w; x.fillStyle = k.fg; x.font = `italic 800 52px ${CF}`; x.textAlign = 'right'; x.fillText(`${d >= 0 ? '+' : '−'}${kg(Math.abs(r2(d)))} kg`, X + W, Y + 80); x.textAlign = 'left';
+      const px = i => X + (W - 200) * i / (pts.length - 1), py = v => Y + 92 - (v - mn) / sp * 80;
+      x.strokeStyle = k.acc; x.lineWidth = 6; x.lineJoin = 'round'; x.lineCap = 'round'; x.beginPath(); pts.forEach((p, i) => i ? x.lineTo(px(i), py(p.w)) : x.moveTo(px(i), py(p.w))); x.stroke();
+      const l = pts[pts.length - 1]; x.fillStyle = k.acc; x.beginPath(); x.arc(px(pts.length - 1), py(l.w), 10, 0, 6.28); x.fill();
+      const d = l.w - pts[0].w; x.fillStyle = k.fg; x.font = `italic 800 44px ${CF}`; x.textAlign = 'right'; x.fillText(`${d >= 0 ? '+' : '−'}${kg(Math.abs(r2(d)))} kg`, X + W, Y + 62); x.textAlign = 'left';
     }
   };
 }
+
 // ---------- specifikace karet ----------
 const COLK = k => (CARD_COL[k] || CARD_COL.other)[0];
 function specWorkout(s) {
@@ -2466,7 +2475,7 @@ function specWorkout(s) {
   const cmpI = p ? (() => { const b = stats(p); return [['Objem', `${sg(st.vol - b.vol, 0)} kg`, st.vol >= b.vol ? '#8BD43B' : '#E5484D'], ['Zlepšení', `${st.up}`, null]]; })() : [];
   return {
     picto: 'gym', col: prs.length ? '#F4C542' : COLK('gym'), kicker: prs.length ? 'Nový rekord' : 'Trénink', title: s.name, big: String(min), unit: 'min', date: fdate(s.date),
-    stats: [{ id: 'vol', label: 'nazvedáno', value: `${thou(st.vol)} kg` }, { id: 'sets', label: 'série', value: String(st.sets) }, { id: 'ex', label: 'cviky', value: String(st.ex) }],
+    stats: [{ id: 'vol', label: 'nazvedáno', value: `${thou(st.vol)} kg` }, { id: 'sets', label: pl(st.sets, 'série', 'série', 'sérií').split(' ')[1], value: String(st.sets) }, { id: 'ex', label: pl(st.ex, 'cvik', 'cviky', 'cviků').split(' ')[1], value: String(st.ex) }],
     lists: [{ id: 'pr', title: 'Rekordy', items: prs.map(q => [q.ex.name, `${kg(q.w)} × ${q.r}`, '#F4C542']) }, { id: 'extra', title: 'Navíc', items: extra }, { id: 'top', title: 'Nejlepší série', items: tops, def: false }, { id: 'cmp', title: p ? `Proti minule (${fday(p.date)})` : '', items: cmpI, def: false }],
   };
 }
@@ -2551,6 +2560,8 @@ Object.assign(A, {
   'month-share': () => storyMonth(calM.y, calM.m),
   'tog-pace': () => { S.settings.paceEval = !S.settings.paceEval; save(true); render(); },
 });
+
+(function () { if (S.settings.plates && !S.settings.migP1) { if (!S.settings.plates.includes(1)) S.settings.plates.push(1); S.settings.plates.sort((a, b) => b - a); } S.settings.migP1 = 1; save(true); })();
 
 render();
 </script>
