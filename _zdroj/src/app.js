@@ -649,7 +649,7 @@ function actSheet(type, k, id) {
   sheet(`<h2>${esc(t.name)}</h2><div class="form">
     <label class="f">Datum<input id="a-date" type="date" value="${a.date}"></label>${f}
     <label class="f">Poznámka<input id="a-note" value="${esc(a.note || '')}" placeholder="nepovinné"></label></div>
-    <div class="actions">${id ? `<button class="btn danger" data-a="act-del" data-id="${id}" aria-label="Smazat">${ico('trash')}</button>` : ''}<button class="btn" data-a="close">Zrušit</button><button class="btn white" data-a="act-save" data-t="${type}" data-id="${id || ''}">Uložit</button></div>`);
+    <div class="actions">${id ? `<button class="btn danger" data-a="act-del" data-id="${id}" aria-label="Smazat">${ico('trash')}</button><button class="btn" data-a="act-share" data-id="${id}" aria-label="Sdílet">${ico('share')}</button>` : ''}<button class="btn" data-a="close">Zrušit</button><button class="btn white" data-a="act-save" data-t="${type}" data-id="${id || ''}">Uložit</button></div>`);
 }
 function fx(cls, title, sub) {
   const el = document.createElement('div'); el.id = 'fx'; el.className = cls;
@@ -712,68 +712,104 @@ function loadMark() {
   return new Promise(res => { const im = new Image(); im.onload = () => { markImg = im; res(im); }; im.onerror = () => res(null);
     im.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(MARK.replace('currentColor', '#FFFFFF')); });
 }
-async function canvasStory(draw) {
-  const mk = await loadMark();
-  const c = document.createElement('canvas'); c.width = 1080; c.height = 1920; const x = c.getContext('2d');
-  x.fillStyle = '#0B0B0C'; x.fillRect(0, 0, 1080, 1920);
-  const g = x.createRadialGradient(540, 860, 50, 540, 860, 1100); g.addColorStop(0, '#2A2A2D'); g.addColorStop(1, '#0B0B0C'); x.fillStyle = g; x.fillRect(0, 0, 1080, 1920);
-  if (mk) { const h = 74, w = h * (mk.naturalWidth || mk.width) / (mk.naturalHeight || mk.height); x.drawImage(mk, 540 - w / 2, 300, w, h); }
-  x.textAlign = 'center'; draw(x); return c;
-}
+// ---------- sdílecí karty (jen obdélník s průhledným okolím, ne celá stránka) ----------
 function rr(x, X, Y, w, h, r) { x.beginPath(); x.moveTo(X + r, Y); x.arcTo(X + w, Y, X + w, Y + h, r); x.arcTo(X + w, Y + h, X, Y + h, r); x.arcTo(X, Y + h, X, Y, r); x.arcTo(X, Y, X + w, Y, r); x.closePath(); }
-function spaced(x, t, X, Y, sp) { const chars = [...t]; const w = chars.reduce((a, ch) => a + x.measureText(ch).width + sp, -sp); let cx = X - w / 2; x.textAlign = 'left'; chars.forEach(ch => { x.fillText(ch, cx, Y); cx += x.measureText(ch).width + sp; }); x.textAlign = 'center'; }
-function chipsRow(x, items, Y) {
-  x.font = `500 42px ${CF}`; const padX = 40, gap = 26, h = 104;
-  const ws = items.map(t => x.measureText(t).width + padX * 2); let X = 540 - (ws.reduce((a, b) => a + b, 0) + gap * (items.length - 1)) / 2;
-  items.forEach((t, i) => { x.strokeStyle = '#E6E6E9'; x.lineWidth = 4; rr(x, X, Y, ws[i], h, h / 2); x.stroke(); x.fillStyle = '#F5F5F7'; x.fillText(t, X + ws[i] / 2, Y + 66); X += ws[i] + gap; });
+function spacedL(x, t, X, Y, sp) { x.textAlign = 'left'; let cx = X; for (const ch of [...t]) { x.fillText(ch, cx, Y); cx += x.measureText(ch).width + sp; } return cx; }
+function fitFont(x, t, weight, size, maxW) { do { x.font = `${weight} ${size}px ${CF}`; size -= 4; } while (x.measureText(t).width > maxW && size > 36); }
+function chipsL(x, items, X, Y) {
+  x.font = `500 38px ${CF}`; const padX = 34, gap = 18, h = 88; let cx = X;
+  items.forEach(t => { const w = x.measureText(t).width + padX * 2; if (cx + w > 1000) return; x.strokeStyle = 'rgba(245,245,247,.85)'; x.lineWidth = 3.5; rr(x, cx, Y, w, h, h / 2); x.stroke(); x.fillStyle = '#F5F5F7'; x.textAlign = 'left'; x.fillText(t, cx + padX, Y + 58); cx += w + gap; });
 }
-function fitFont(x, t, weight, size, maxW) { do { x.font = `${weight} ${size}px ${CF}`; size -= 4; } while (x.measureText(t).width > maxW && size > 40); }
-async function storyExercise(s, e) {
-  const ex = exById(e.exId); const prev = lastBefore(e.exId, s);
-  const c = await canvasStory(x => {
-    if (usedSets(e, ex).some(st => isPR(st, ex, bestBefore(e.exId, s)))) { x.fillStyle = '#F4C542'; x.font = `800 40px ${CF}`; spaced(x, 'NOVÝ REKORD', 540, 490, 12); }
-    x.fillStyle = '#F5F5F7'; x.font = `500 36px ${CF}`; spaced(x, `${s.name} · ${fday(s.date)}`.toUpperCase(), 540, 560, 8);
-    fitFont(x, ex.name, 800, 110, 940); x.fillText(ex.name, 540, 720);
-    x.fillStyle = '#8E8E93'; x.font = `500 40px ${CF}`; x.fillText(ex.muscle || '', 540, 790);
-    let y = 880; const rows = usedSets(e, ex).map((st, i) => ({ st, i })).filter(o => hasData(o.st, ex));
-    x.fillStyle = '#1C1C1E'; rr(x, 110, y, 860, 110 + rows.length * 120, 54); x.fill();
-    x.fillStyle = '#F5F5F7'; x.font = `700 38px ${CF}`;['#', 'Kg', 'Opak.', ''].forEach((h, k) => x.fillText(h, [190, 420, 680, 880][k], y + 70));
-    x.fillStyle = '#2E2E31'; x.fillRect(110, y + 108, 860, 2);
-    rows.forEach(({ st, i }, k) => {
-      const yy = y + 110 + k * 120 + 80; const a = cmp(st, prev && prev.e.sets[i], ex);
-      x.fillStyle = '#F5F5F7'; x.font = `500 56px ${CF}`;
-      x.fillText(String(i + 1), 190, yy); x.fillText(kg(num(st.w)), 420, yy); x.fillText(ex.uni ? `${st.l ?? '–'}/${st.r ?? '–'}` : String(st.reps), 680, yy);
-      if (a === 'up' || a === 'down') { x.fillStyle = a === 'up' ? '#35D0C9' : '#E5484D'; x.font = `800 56px ${CF}`; x.fillText(ARROW[a], 770, yy); }
-      if (ex.sets[i].fail) { x.strokeStyle = '#E5484D'; x.lineWidth = 5; rr(x, 830, yy - 46, 100, 60, 30); x.stroke(); x.fillStyle = '#F5F5F7'; x.font = `800 36px ${CF}`; x.fillText('F', 880, yy - 4); }
-    });
-    y += 110 + rows.length * 120 + 80;
-    const ch = [ex.tempo && `Tempo ${ex.tempo}`, ex.partials && '+ polovičky', ex.uni && 'L / R'].filter(Boolean);
-    if (ch.length) chipsRow(x, ch, y);
-    if (prev) { x.fillStyle = '#5C5C61'; x.font = `500 36px ${CF}`; x.fillText(`Minule: ${usedSets(prev.e, ex).map(t => setTxt(t, ex)).join('  ·  ')}`, 540, 1700); }
-  });
-  showShot(c, `${ex.name}.png`);
+async function shareCard(h, glow, draw, dateTxt) {
+  const mk = await loadMark();
+  const c = document.createElement('canvas'); c.width = 1080; c.height = h; const x = c.getContext('2d');
+  rr(x, 0, 0, 1080, h, 72); const g = x.createLinearGradient(0, 0, 0, h); g.addColorStop(0, '#242427'); g.addColorStop(1, '#101012'); x.fillStyle = g; x.fill();
+  x.save(); rr(x, 0, 0, 1080, h, 72); x.clip();
+  const rg = x.createRadialGradient(1000, 40, 10, 1000, 40, 620); rg.addColorStop(0, glow); rg.addColorStop(1, 'rgba(0,0,0,0)'); x.fillStyle = rg; x.fillRect(0, 0, 1080, h); x.restore();
+  x.strokeStyle = 'rgba(255,255,255,.09)'; x.lineWidth = 3; rr(x, 1.5, 1.5, 1077, h - 3, 70.5); x.stroke();
+  if (mk) { const lh = 52, lw = lh * (mk.naturalWidth || mk.width) / (mk.naturalHeight || mk.height); x.drawImage(mk, 80, 78, lw, lh); }
+  x.fillStyle = '#8E8E93'; x.font = `500 32px ${CF}`; x.textAlign = 'right'; x.fillText(dateTxt || fdate(today()), 1000, 118);
+  x.textAlign = 'left'; draw(x); return c;
 }
 async function storySummary(s) {
   const st = stats(s); const min = fmin((s.end || finEnd || Date.now()) - s.start);
-  const c = await canvasStory(x => {
-    x.fillStyle = '#F5F5F7'; x.font = `500 40px ${CF}`; spaced(x, 'ODJETO', 540, 620, 14);
-    x.font = `800 260px ${CF}`; const t = String(min); const w = x.measureText(t).width; x.font = `800 120px ${CF}`; const w2 = x.measureText(' min').width;
-    x.textAlign = 'left'; x.font = `800 260px ${CF}`; x.fillText(t, 540 - (w + w2) / 2, 880); x.font = `800 120px ${CF}`; x.fillText(' min', 540 - (w + w2) / 2 + w, 880); x.textAlign = 'center';
-    fitFont(x, s.name.toUpperCase(), 800, 96, 940); x.fillText(s.name.toUpperCase(), 540, 1010);
-    chipsRow(x, [`${st.sets} sérií`, `${st.ex} cviků`, `${thou(st.vol)} kg`], 1090);
-    let y = 1290;
-    if (s.cardio && s.cardio.mode === 'join') { x.fillStyle = '#F5F5F7'; x.font = `600 46px ${CF}`; x.fillText(`+ ${s.cardio.kind} ${s.cardio.min ? s.cardio.min + ' min' : ''}${s.cardio.bpm ? ' · ' + s.cardio.bpm + ' bpm' : ''}`, 540, y); y += 70; }
-    if (s.stretch) { x.fillStyle = '#8E8E93'; x.font = `500 40px ${CF}`; x.fillText('+ statický strečink', 540, y); y += 70; }
-    const items = sessionPRs(s).map(p => ({ ex: p.ex, k: 'pr', d: `PR ${kg(p.w)} × ${p.r}` })).concat(progItems(s).filter(i => i.k !== 'down' && !sessionPRs(s).some(p => p.ex === i.ex))).slice(0, 4);
+  const prs = sessionPRs(s);
+  const items = prs.map(p => ({ ex: p.ex, k: 'pr', d: `PR ${kg(p.w)} × ${p.r}` })).concat(progItems(s).filter(i => i.k !== 'down' && !prs.some(p => p.ex === i.ex))).slice(0, 4);
+  const cardio = s.cardio && s.cardio.mode === 'join';
+  const h = 720 + (cardio ? 70 : 0) + (s.stretch ? 60 : 0) + (items.length ? 70 + items.length * 108 : 0) + 50;
+  const c = await shareCard(h, 'rgba(139,212,59,.20)', x => {
+    x.fillStyle = '#8BD43B'; x.font = `600 32px ${CF}`; spacedL(x, 'ODJETO', 80, 250, 10);
+    x.fillStyle = '#F5F5F7'; x.font = `800 210px ${CF}`; const w = x.measureText(String(min)).width; x.fillText(String(min), 70, 445);
+    x.font = `800 84px ${CF}`; x.fillStyle = '#8E8E93'; x.fillText(' min', 70 + w, 445);
+    x.fillStyle = '#F5F5F7'; fitFont(x, s.name.toUpperCase(), 800, 88, 920); x.fillText(s.name.toUpperCase(), 80, 548);
+    chipsL(x, [`${st.sets} sérií`, `${st.ex} cviků`, `${thou(st.vol)} kg`], 80, 594);
+    let y = 760;
+    if (cardio) { x.fillStyle = '#F5F5F7'; x.font = `600 42px ${CF}`; x.fillText(`+ ${s.cardio.kind} ${s.cardio.min ? s.cardio.min + ' min' : ''}${s.cardio.bpm ? ' · ' + s.cardio.bpm + ' bpm' : ''}`, 80, y); y += 70; }
+    if (s.stretch) { x.fillStyle = '#8E8E93'; x.font = `500 38px ${CF}`; x.fillText('+ statický strečink', 80, y); y += 60; }
     if (items.length) {
-      y += 30; x.fillStyle = '#8E8E93'; x.font = `500 34px ${CF}`; spaced(x, 'PROGRES', 540, y, 10); y += 40;
-      items.forEach(it => { x.fillStyle = '#1C1C1E'; rr(x, 110, y, 860, 96, 48); x.fill(); x.textAlign = 'left'; x.fillStyle = '#F5F5F7'; x.font = `500 38px ${CF}`;
-        let n = it.ex.name; while (x.measureText(n).width > 520 && n.length > 4) n = n.slice(0, -2); if (n !== it.ex.name) n = n.trim() + '…';
-        x.fillText(n, 150, y + 61); x.textAlign = 'right'; x.fillStyle = it.k === 'pr' ? '#F4C542' : it.k === 'kg' ? '#8BD43B' : '#35D0C9'; x.font = `700 40px ${CF}`; x.fillText(it.d, 930, y + 62); x.textAlign = 'center'; y += 112; });
+      y += 10; x.fillStyle = '#8E8E93'; x.font = `600 30px ${CF}`; spacedL(x, 'PROGRES', 80, y, 8); y += 34;
+      items.forEach(it => {
+        x.fillStyle = 'rgba(255,255,255,.06)'; rr(x, 60, y, 960, 92, 46); x.fill();
+        x.textAlign = 'left'; x.fillStyle = '#F5F5F7'; x.font = `500 38px ${CF}`;
+        let n = it.ex.name; while (x.measureText(n).width > 560 && n.length > 4) n = n.slice(0, -2); if (n !== it.ex.name) n = n.trim() + '…';
+        x.fillText(n, 100, y + 59); x.textAlign = 'right'; x.fillStyle = it.k === 'pr' ? '#F4C542' : it.k === 'kg' ? '#8BD43B' : '#35D0C9'; x.font = `700 40px ${CF}`; x.fillText(it.d, 980, y + 60); x.textAlign = 'left'; y += 108;
+      });
     }
-  });
+  }, fdate(s.date));
   showShot(c, `trenink-${s.date}.png`);
 }
+async function storyExercise(s, e) {
+  const ex = exById(e.exId); const prev = lastBefore(e.exId, s); const best = bestBefore(e.exId, s);
+  const rows = usedSets(e, ex).map((st, i) => ({ st, i })).filter(o => hasData(o.st, ex));
+  const pr = rows.some(o => isPR(o.st, ex, best));
+  const ch = [ex.tempo && `Tempo ${ex.tempo}`, ex.partials && '+ polovičky', ex.uni && 'L / P'].filter(Boolean);
+  const tblH = 96 + rows.length * 108;
+  const h = 470 + tblH + (ch.length ? 130 : 30) + (prev ? 70 : 0) + 40;
+  const c = await shareCard(h, pr ? 'rgba(244,197,66,.22)' : 'rgba(53,208,201,.18)', x => {
+    x.fillStyle = '#8E8E93'; x.font = `600 30px ${CF}`; spacedL(x, s.name.toUpperCase(), 80, 245, 6);
+    if (pr) { x.fillStyle = '#F4C542'; x.font = `800 30px ${CF}`; x.textAlign = 'right'; x.fillText('NOVÝ REKORD', 1000, 245); x.textAlign = 'left'; }
+    x.fillStyle = '#F5F5F7'; fitFont(x, ex.name, 800, 92, 920); x.fillText(ex.name, 80, 345);
+    x.fillStyle = '#8E8E93'; x.font = `500 38px ${CF}`; x.fillText(ex.muscle || '', 80, 400);
+    let y = 450;
+    x.fillStyle = 'rgba(255,255,255,.06)'; rr(x, 60, y, 960, tblH, 44); x.fill();
+    const cols = [130, 400, 680, 900];
+    x.fillStyle = '#C7C7CC'; x.font = `700 34px ${CF}`; x.textAlign = 'center'; ['#', 'Kg', 'Opak.', ''].forEach((t, k) => x.fillText(t, cols[k], y + 62));
+    x.fillStyle = 'rgba(255,255,255,.08)'; x.fillRect(60, y + 94, 960, 2);
+    rows.forEach(({ st, i }, k) => {
+      const yy = y + 96 + k * 108 + 72; const a = cmp(st, prev && prev.e.sets[i], ex); const isP = isPR(st, ex, best);
+      x.fillStyle = '#F5F5F7'; x.font = `500 52px ${CF}`;
+      x.fillText(String(i + 1), cols[0], yy); x.fillText(kg(num(st.w)), cols[1], yy); x.fillText(ex.uni ? `${st.l ?? '–'}/${st.r ?? '–'}` : String(st.reps), cols[2], yy);
+      if (isP) { x.fillStyle = '#F4C542'; x.font = `800 34px ${CF}`; x.fillText('PR', cols[3] - 70, yy - 6); }
+      else if (a === 'up' || a === 'down') { x.fillStyle = a === 'up' ? '#35D0C9' : '#E5484D'; x.font = `800 52px ${CF}`; x.fillText(ARROW[a], cols[3] - 70, yy); }
+      if (ex.sets[i].fail) { x.strokeStyle = '#E5484D'; x.lineWidth = 4.5; rr(x, cols[3] - 10, yy - 44, 84, 56, 28); x.stroke(); x.fillStyle = '#F5F5F7'; x.font = `800 32px ${CF}`; x.fillText('F', cols[3] + 32, yy - 4); }
+    });
+    x.textAlign = 'left'; y += tblH + 30;
+    if (ch.length) { chipsL(x, ch, 80, y); y += 120; }
+    if (prev) { x.fillStyle = '#6C6C70'; x.font = `500 32px ${CF}`; x.fillText(`Minule: ${usedSets(prev.e, ex).map(t => setTxt(t, ex)).join('  ·  ')}`, 80, y + 40); }
+  }, fdate(s.date));
+  showShot(c, `${ex.name}.png`);
+}
+async function storyActivity(a) {
+  const t = ACT_TYPES[a.type] || ACT_TYPES.other;
+  const col = { cold: '#9ACBF5', heat: '#F28C4E', act: '#35D0C9' }[t.cls];
+  const glow = { cold: 'rgba(154,203,245,.24)', heat: 'rgba(242,140,78,.26)', act: 'rgba(53,208,201,.2)' }[t.cls];
+  let big, small = '', sub = [];
+  if (a.type === 'sauna') { big = `${a.rounds || 1}×`; small = a.min ? ` ${a.min} min` : ''; if (a.temp) sub.push(`${a.temp} °C`); }
+  else if (a.type === 'cold') { big = a.sec ? `${Math.floor(a.sec / 60)}:${pad(a.sec % 60)}` : '✓'; small = a.sec ? ' min' : ''; if (a.kind) sub.push(a.kind); if (a.temp != null) sub.push(`${kg(a.temp)} °C`); }
+  else { big = a.min ? String(a.min) : '✓'; small = a.min ? ' min' : ''; if (a.kind) sub.push(a.kind); if (a.bpm) sub.push(`${a.bpm} bpm`); }
+  const title = (a.type === 'other' && a.label ? a.label : t.name).toUpperCase();
+  const h = 700 + (a.note ? 60 : 0);
+  const c = await shareCard(h, glow, x => {
+    if (a.type === 'cold') { x.fillStyle = 'rgba(225,240,255,.5)'; for (let i = 0; i < 46; i++) { const px = (i * 197) % 1080, py = (i * 131) % h, r = 2 + (i % 4); x.beginPath(); x.arc(px, py, r, 0, 6.28); x.fill(); } }
+    x.fillStyle = col; x.font = `700 34px ${CF}`; spacedL(x, title, 80, 260, 10);
+    x.fillStyle = '#F5F5F7'; x.font = `800 220px ${CF}`; const w = x.measureText(big).width; x.fillText(big, 70, 470);
+    x.font = `800 84px ${CF}`; x.fillStyle = '#8E8E93'; x.fillText(small, 70 + w, 470);
+    if (sub.length) { x.fillStyle = col; x.font = `600 46px ${CF}`; x.fillText(sub.join('  ·  '), 80, 570); }
+    if (a.note) { x.fillStyle = '#8E8E93'; x.font = `500 36px ${CF}`; let n = a.note; while (x.measureText(n).width > 900 && n.length > 4) n = n.slice(0, -2); x.fillText(n, 80, 640); }
+  }, fdate(a.date));
+  showShot(c, `${t.name}-${a.date}.png`);
+}
+
 function showShot(canvas, name) {
   const el = document.createElement('div'); el.id = 'shot';
   el.innerHTML = `<img src="${canvas.toDataURL('image/png')}" alt="Náhled pro story"><p>Klepni na „Uložit / sdílet“ → „Uložit obrázek“. Případně podrž prst na obrázku → „Přidat do Fotek“.</p><div class="bottom-acts"><button class="pill white" data-x="share">${ico('share')} Uložit / sdílet</button><button class="pill dark" data-x="close">Zavřít</button></div>`;
@@ -935,6 +971,7 @@ const A = {
     else if (type === 'sauna') fx('heat', `${a.rounds || 1}× ${a.min ? a.min + ' min' : ''}`.trim(), `Sauna${a.temp ? ' · ' + a.temp + ' °C' : ''}`);
     else fx('act', a.min ? `${a.min} min` : 'Uloženo', a.label || t.name);
   },
+  'act-share': b => { const x = S.activities.find(q => q.id === b.dataset.id); closeSheet(); if (x) storyActivity(x); },
   'act-del': b => { S.activities = S.activities.filter(a => a.id !== b.dataset.id); save(true); closeSheet(); render(); toast('Smazáno'); },
   // settings
   rule: b => { S.settings.rule = b.dataset.v; save(true); render(); },

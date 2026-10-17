@@ -8,7 +8,7 @@ css, js = src('style.css'), 'const MARK = ' + json.dumps(mark) + ';\n' + src('da
 FONTS_OLD = '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">'
 FONTS = ''
 BODY = '<div id="app"></div><div id="sheet" hidden></div><div id="toast" role="status" aria-live="polite"></div>'
-VERSION = '1.4.0'
+VERSION = '1.5.0'
 
 # 1) artefakt (náhled v Claudovi)
 os.makedirs(os.path.join(B, 'dist'), exist_ok=True)

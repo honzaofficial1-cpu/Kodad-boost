@@ -79,7 +79,6 @@ function weekSheet(monK) {
       ${row('Ø ranní váha', aw == null ? '–' : `${nf(aw, 1)} kg`)}
       ${row('Změna proti minulému týdnu', ch == null ? '–' : `${sg(ch, 2)} kg ${tp ? `<i class="stp ${tp[0]}">${tp[1]}</i>` : ''}`)}
       ${row('Jídelníček dodržen', adh == null ? '–' : Math.round(adh * 100) + ' %')}
-      ${row('Ø energie', en == null ? '–' : nf(en, 1) + ' / 5')}
       ${row('Ø spánek', sl == null ? '–' : nf(sl, 1) + ' h')}
       ${row('Ø výkon v tréninku', perf == null ? '–' : nf(perf, 1) + ' / 5')}
       ${sick ? row('Nemoc', `${sick} ${sick === 1 ? 'den' : sick < 5 ? 'dny' : 'dní'}`) : ''}
