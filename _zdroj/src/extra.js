@@ -101,3 +101,41 @@ Object.assign(A, {
   wk: b => weekSheet(b.dataset.k),
   'week-sum': () => weekSheet(dkey(monday(new Date()))),
 });
+
+// ---------- ranní upozornění (web push) ----------
+const VAPID_PUB = 'BLw9-Y2wVl1XeeGYVOkouEb6L_Ncb6LDGH4nr0RBHOYy4Q03K_gzTsOlqW6-h1aJB8O27hOBm1Mi8GDtBEPQ-j8';
+const b64u = s => { const p = '='.repeat((4 - s.length % 4) % 4); const r = atob((s + p).replace(/-/g, '+').replace(/_/g, '/')); return Uint8Array.from([...r].map(c => c.charCodeAt(0))); };
+const isStandalone = () => matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+function pushState() {
+  if (!isStandalone()) return 'browser';
+  if (!('serviceWorker' in navigator) || !('PushManager' in window) || !('Notification' in window)) return 'unsupported';
+  if (Notification.permission === 'denied') return 'denied';
+  return S.settings.pushSub ? 'on' : 'off';
+}
+function pushCard() {
+  const st = pushState();
+  const msg = { browser: 'Upozornění fungují jen v appce spuštěné z ikony na ploše.', unsupported: 'Tady upozornění nejdou. Na iPhonu je potřeba iOS 16.4 nebo novější.', denied: 'Upozornění jsou zakázaná. Povol je v Nastavení iPhonu → Oznámení → Kodad boost.', off: 'Ráno ti appka připomene ranní zápis (váha, spánek, včerejšek).', on: 'Upozornění jsou v tomhle telefonu zapnutá.' }[st];
+  return `<section class="sec"><div class="lbl" style="margin:0 6px 10px">Ranní upozornění</div><div class="card" style="display:grid;gap:14px">
+    <p style="margin:0;font-size:15px" class="mut">${msg}</p>
+    ${st === 'off' ? `<button class="btn white" data-a="push-on">Zapnout upozornění</button>` : ''}
+    ${st === 'on' ? `<button class="btn" data-a="push-copy">Zkopírovat kód pro Clauda</button><p class="mut" style="font-size:13px;margin:0">Kód pošli Claudovi do chatu, ten upozornění dokončí.</p>` : ''}
+  </div></section>`;
+}
+async function pushCopy() {
+  const txt = JSON.stringify(S.settings.pushSub);
+  try { await navigator.clipboard.writeText(txt); toast('Zkopírováno – vlož to Claudovi'); }
+  catch (e) { sheet(`<h2>Kód pro Clauda</h2><p class="mut">Označ celý text a zkopíruj ho.</p><textarea class="inp" style="min-height:200px;font-size:12px" readonly>${esc(txt)}</textarea>`); }
+}
+Object.assign(A, {
+  'push-on': async () => {
+    try {
+      const p = await Notification.requestPermission(); if (p !== 'granted') { toast('Upozornění nepovolena'); return render(); }
+      const reg = await navigator.serviceWorker.ready;
+      let sub = await reg.pushManager.getSubscription();
+      if (!sub) sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64u(VAPID_PUB) });
+      S.settings.pushSub = sub.toJSON(); save(true); render(); pushCopy();
+    } catch (e) { toast('Nepovedlo se: ' + (e.message || e)); }
+  },
+  'push-copy': () => pushCopy(),
+});
+(function () { try { const q = new URLSearchParams(location.search); if (q.get('open') === 'den') { history.replaceState(null, '', location.pathname); setTimeout(() => go('mery', { t: 'den', d: today() }), 0); } } catch (e) { } })();

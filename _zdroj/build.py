@@ -8,7 +8,7 @@ css, js = src('style.css'), 'const MARK = ' + json.dumps(mark) + ';\n' + src('da
 FONTS_OLD = '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">'
 FONTS = ''
 BODY = '<div id="app"></div><div id="sheet" hidden></div><div id="toast" role="status" aria-live="polite"></div>'
-VERSION = '1.3.0'
+VERSION = '1.4.0'
 
 # 1) artefakt (náhled v Claudovi)
 os.makedirs(os.path.join(B, 'dist'), exist_ok=True)
@@ -70,6 +70,18 @@ self.addEventListener('fetch', e => {{
   }} else if (/fonts\\.(googleapis|gstatic)\\.com/.test(u.host)) {{
     e.respondWith(caches.match(r).then(m => m || fetch(r).then(res => {{ const cp = res.clone(); caches.open(C).then(c => c.put(r, cp)); return res; }})));
   }}
+}});
+self.addEventListener('push', e => {{
+  let d = {{}}; try {{ d = e.data.json(); }} catch (_) {{ d = {{ body: e.data ? e.data.text() : '' }}; }}
+  e.waitUntil(self.registration.showNotification(d.title || 'Kodad boost', {{ body: d.body || '', icon: 'icons/icon-192.png', badge: 'icons/icon-192.png', data: {{ url: d.url || './' }} }}));
+}});
+self.addEventListener('notificationclick', e => {{
+  e.notification.close();
+  const url = new URL(e.notification.data.url || './', self.registration.scope).href;
+  e.waitUntil(clients.matchAll({{ type: 'window', includeUncontrolled: true }}).then(cs => {{
+    for (const c of cs) {{ if ('focus' in c) {{ if (c.navigate) c.navigate(url); return c.focus(); }} }}
+    return clients.openWindow(url);
+  }}));
 }});
 '''
 open(os.path.join(P, 'sw.js'), 'w', encoding='utf-8').write(sw)

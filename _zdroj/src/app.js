@@ -692,6 +692,7 @@ function vSettings() {
       <div class="card" style="display:grid;gap:14px"><p style="margin:0;font-size:15px" class="mut">Všechno se ukládá jen v tvém iPhonu, proto appka jede i bez signálu. Když appku smažeš nebo změníš telefon, data zmizí. Záloha je jeden soubor do iCloudu, který kdykoliv nahraješ zpátky.</p>
       <div class="two"><button class="btn white" data-a="export">${ico('share')} Zálohovat</button><label class="btn" for="imp">Obnovit</label></div><input id="imp" type="file" accept="application/json,.json" hidden>
       <p class="mut" style="font-size:13px;margin:0">Poslední záloha: ${S.settings.lastBackup ? new Date(S.settings.lastBackup).toLocaleDateString('cs-CZ') : 'zatím nikdy'}</p></div></section>
+    ${typeof pushCard === 'function' ? pushCard() : ''}
     ${demo ? `<section class="sec"><button class="btn danger block" data-a="demo-clear">Smazat ukázková data</button></section>` : ''}
     <div style="margin:40px auto 0;opacity:.5;display:grid;justify-items:center;gap:8px">${MARKHTML(22)}<span class="mut" style="font-size:12px">Kodad boost · fáze 1</span></div>
   </div>${tabs()}`;

@@ -1,0 +1,24 @@
+name: Ranní upozornění
+on:
+  schedule:
+    # 7:30 v Praze: letní čas = 5:30 UTC, zimní = 6:30 UTC (skript pustí jen ten správný)
+    - cron: '30 5 * * *'
+    - cron: '30 6 * * *'
+  push:
+    branches: [main]
+    paths: ['push/subscriptions.json']
+  workflow_dispatch:
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm i web-push@3.6.7 --no-save --no-package-lock
+      - run: node push/send.mjs
+        env:
+          VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
+          EVENT: ${{ github.event_name }}
+          SCHEDULE: ${{ github.event.schedule }}
