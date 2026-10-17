@@ -582,3 +582,13 @@ button.ck{background:none;border:0;padding:0;cursor:pointer}
 
 .agrid .at .ic svg.i{width:26px;height:26px}
 .li .ic svg.i{width:24px;height:24px}
+
+/* v2.5 editor tréninku */
+.tli{align-items:flex-start}
+.tli .t small{white-space:normal}
+.stp2{display:inline-flex;align-items:center;gap:8px;margin-top:8px}
+.stp2 button{width:30px;height:30px;border-radius:50%;background:var(--card3);font-size:18px;font-weight:700;display:grid;place-items:center}
+.stp2 b{font-size:14px;font-weight:600;min-width:56px;text-align:center}
+.mvs{display:flex;flex-direction:column;gap:6px}
+.mvs .round{width:36px;height:36px}
+.mvs .round[disabled]{opacity:.25}

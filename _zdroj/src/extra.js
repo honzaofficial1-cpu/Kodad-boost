@@ -13,7 +13,7 @@ function isPR(st, ex, best) { if (!best || !hasData(st, ex)) return false; const
 function sessionPRs(s) {
   const out = [];
   for (const e of s.entries) {
-    const ex = exById(e.exId); if (!ex) continue; const best = bestBefore(e.exId, s); if (!best) continue;
+    const ex = exE(e); if (!ex) continue; const best = bestBefore(e.exId, s); if (!best) continue;
     let top = null; usedSets(e, ex).forEach(st => { if (isPR(st, ex, best)) { const w = num(st.w), r = repsOf(st, ex); if (!top || w > top.w || (w === top.w && r > top.r)) top = { w, r }; } });
     if (top) out.push({ ex, ...top, pw: best.w, pr: best.r });
   }
@@ -90,7 +90,7 @@ function weekSheet(monK) {
 }
 
 Object.assign(A, {
-  'cd-start': b => { const s = sesById(view.id); const e = s.entries[+b.closest('.ex').dataset.idx]; const ex = exById(e.exId); const sec = cdOf(ex); S.cd = { end: Date.now() + sec * 1000, total: sec, name: ex.name, done: false }; save(); armAudio(); cdPaint(); },
+  'cd-start': b => { const s = sesById(view.id); const e = s.entries[+b.closest('.ex').dataset.idx]; const ex = exE(e); const sec = cdOf(ex); S.cd = { end: Date.now() + sec * 1000, total: sec, name: ex.name, done: false }; save(); armAudio(); cdPaint(); },
   'cd-add': () => { if (!S.cd) return; S.cd.end += 30000; S.cd.total += 30; save(); cdPaint(); },
   'cd-stop': () => { S.cd = null; save(); cdPaint(); },
   'e-cd': b => { readExDraft(); exDraft.cd = +b.dataset.v || null; drawExEdit(); },
@@ -238,7 +238,7 @@ function compareBlock(s) {
 Object.assign(A, {
   'wk-open': b => { S.settings.wkSeen = b.dataset.k; save(true); render(); weekSheet(b.dataset.k); },
   'wk-share': b => { closeSheet(); storyWeek(b.dataset.k); },
-  plates: b => { const s = sesById(view.id); const e = s.entries[+b.closest('.ex').dataset.idx]; platesSheet(e.exId, e.sets.slice(0, exById(e.exId).sets.length).map(st => num(st.w))); },
+  plates: b => { const s = sesById(view.id); const e = s.entries[+b.closest('.ex').dataset.idx]; platesSheet(e.exId, e.sets.slice(0, exE(e).sets.length).map(st => num(st.w))); },
   'pl-pick': b => { const i = $('#pl-w'); i.value = kg(+b.dataset.v); $('#pl-out').innerHTML = plateResult(+b.dataset.v, num(i.dataset.bar)); },
   'e-plates': () => { readExDraft(); exDraft.plates = exDraft.plates ? null : { bar: 20 }; drawExEdit(); },
   'plate-tog': b => { const v = +b.dataset.v; let p = plateSet(); p = p.includes(v) ? p.filter(x => x !== v) : p.concat(v); S.settings.plates = p.sort((a, c) => c - a); save(true); render(); },
@@ -310,7 +310,9 @@ async function markTinted(col) {
   return new Promise(res => { const im = new Image(); im.onload = () => res(im); im.onerror = () => res(null); im.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(MARK.replace('currentColor', col)); });
 }
 async function drawShare(sp, style, on) {
-  const W = 900, L = 54, X = 270, col = sp.col;
+  const W = (typeof SHARE_W !== 'undefined' ? SHARE_W : 900), L = 54, X = 270;
+  const prOff = sp.prAlt && on.pr === false; if (prOff) sp = { ...sp, ...sp.prAlt };
+  const col = sp.col;
   const isOn = id => on[id] !== false;
   const stats = (sp.stats || []).filter(s => isOn(s.id));
   const lists = (sp.lists || []).filter(l => isOn(l.id) && l.items.length);
@@ -319,7 +321,7 @@ async function drawShare(sp, style, on) {
   const fg = colr ? '#0B0B0C' : '#F5F5F7', mut = colr ? 'rgba(11,11,12,.6)' : clear ? 'rgba(255,255,255,.82)' : '#9A9AA0', acc = colr ? '#0B0B0C' : col, faint = colr ? 'rgba(11,11,12,.12)' : clear ? 'rgba(255,255,255,.28)' : 'rgba(255,255,255,.08)';
   // rozvržení (měření předem)
   const m = document.createElement('canvas').getContext('2d');
-  const size = (() => { let s = 150; m.font = `italic 900 ${s}px ${CF}`; while (m.measureText(sp.big).width > 400 && s > 84) { s -= 8; m.font = `italic 900 ${s}px ${CF}`; } return s; })();
+  const size = (() => { let s = 150; m.font = `italic 900 ${s}px ${CF}`; while (m.measureText(sp.big).width > Math.min(400, W - X - 150) && s > 84) { s -= 8; m.font = `italic 900 ${s}px ${CF}`; } return s; })();
   const titleY = 138, bigY = titleY + 22 + Math.round(size * .86);
   // statistiky v řádcích (inline)
   const statLines = []; let cur = [], cw = 0, maxW = W - L - X;
@@ -347,8 +349,8 @@ async function drawShare(sp, style, on) {
   drawPicto(x, sp.picto, mx, my, 112, colr ? '#0B0B0C' : clear ? '#FFFFFF' : col);
   // datum + titulky
   x.fillStyle = mut; x.font = `600 26px ${CF}`; x.textAlign = 'right'; x.fillText(sp.date || sp.kicker || '', W - L, 92); x.textAlign = 'left';
-  if (sp.kicker && sp.date) { x.fillStyle = mut; x.font = `600 24px ${CF}`; spacedL(x, clip(x, sp.kicker.toUpperCase(), 330), X, 92, 5); }
-  x.fillStyle = acc; x.font = `italic 800 36px ${CF}`; spacedL(x, clip(x, sp.title.toUpperCase(), 540), X, titleY, 3);
+  if (sp.kicker && sp.date) { x.fillStyle = mut; x.font = `600 24px ${CF}`; spacedL(x, clip(x, sp.kicker.toUpperCase(), W - X - 230), X, 92, 5); }
+  x.fillStyle = acc; x.font = `italic 800 36px ${CF}`; spacedL(x, clip(x, sp.title.toUpperCase(), W - X - L - 10), X, titleY, 3);
   x.fillStyle = fg; x.font = `italic 900 ${size}px ${CF}`; x.fillText(sp.big, X - 6, bigY); const bw = x.measureText(sp.big).width;
   if (sp.unit) { x.fillStyle = mut; x.font = `italic 700 ${Math.round(size * .3)}px ${CF}`; x.fillText(sp.unit, X + bw + 12, bigY); }
   x.fillStyle = acc; slab(x, X, bigY + 20, 110, 9); x.fill(); x.globalAlpha = .45; slab(x, X + 126, bigY + 20, 34, 9); x.fill(); x.globalAlpha = 1;
@@ -362,7 +364,7 @@ async function drawShare(sp, style, on) {
     x.fillStyle = mut; x.font = `600 22px ${CF}`; spacedL(x, l.title.toUpperCase(), L, y + 30, 5); y += 50;
     l.items.forEach(([Lt, Rt, rc]) => {
       x.fillStyle = faint; x.fillRect(L, y, W - 2 * L, 2);
-      x.fillStyle = fg; x.font = `500 31px ${CF}`; x.fillText(clip(x, Lt, 480), L, y + 39);
+      x.fillStyle = fg; x.font = `500 31px ${CF}`; x.fillText(clip(x, Lt, W - 2 * L - 220), L, y + 39);
       x.textAlign = 'right'; x.fillStyle = rc && !colr ? rc : fg; x.font = `italic 800 32px ${CF}`; x.fillText(Rt, W - L, y + 40); x.textAlign = 'left';
       y += 54;
     });
@@ -425,24 +427,28 @@ const COLK = k => (CARD_COL[k] || CARD_COL.other)[0];
 function specWorkout(s) {
   const st = stats(s), prs = sessionPRs(s), p = prevSameSession(s), min = fmin((s.end || finEnd || Date.now()) - s.start);
   const extra = []; if (s.cardio && s.cardio.mode === 'join') extra.push([s.cardio.kind, [s.cardio.min ? s.cardio.min + ' min' : '', s.cardio.bpm ? s.cardio.bpm + ' bpm' : ''].filter(Boolean).join(' · ') || '✓']); if (s.stretch) extra.push(['Statický strečink', '✓']);
-  const tops = s.entries.map(e => { const ex = exById(e.exId); if (!ex) return null; const t = usedSets(e, ex).find(q => hasData(q, ex)); return t ? [ex.name, setTxt(t, ex)] : null; }).filter(Boolean);
+  const tops = s.entries.map(e => { const ex = exE(e); if (!ex) return null; const t = usedSets(e, ex).find(q => hasData(q, ex)); return t ? [ex.name, setTxt(t, ex)] : null; }).filter(Boolean);
   const cmpI = p ? (() => { const b = stats(p); return [['Objem', `${sg(st.vol - b.vol, 0)} kg`, st.vol >= b.vol ? '#35D0C9' : '#E5484D'], ['Zlepšení', `${st.up}`, null]]; })() : [];
   return {
-    picto: 'gym', col: prs.length ? '#F4C542' : COLK('gym'), kicker: prs.length ? 'Nový rekord' : 'Trénink', title: s.name, big: String(min), unit: 'min', date: fdate(s.date),
+    picto: 'gym', col: prs.length ? '#F4C542' : COLK('gym'), kicker: prs.length ? 'Nový rekord' : 'Trénink', prAlt: prs.length ? { col: COLK('gym'), kicker: 'Trénink' } : null, title: s.name, big: String(min), unit: 'min', date: fdate(s.date),
     stats: [{ id: 'vol', label: 'nazvedáno', value: `${thou(st.vol)} kg` }, { id: 'sets', label: pl(st.sets, 'série', 'série', 'sérií').split(' ')[1], value: String(st.sets) }, { id: 'ex', label: pl(st.ex, 'cvik', 'cviky', 'cviků').split(' ')[1], value: String(st.ex) }],
     lists: [{ id: 'pr', title: 'Rekordy', items: prs.map(q => [q.ex.name, `${kg(q.w)} × ${q.r}`, '#F4C542']) }, { id: 'extra', title: 'Navíc', items: extra }, { id: 'top', title: 'Nejlepší série', items: tops, def: false }, { id: 'cmp', title: p ? `Proti minule (${fday(p.date)})` : '', items: cmpI, def: false }],
   };
 }
 function specExercise(s, e) {
-  const ex = exById(e.exId), prev = lastBefore(e.exId, s), best = bestBefore(e.exId, s);
+  const ex = exE(e), prev = lastBefore(e.exId, s), best = bestBefore(e.exId, s);
   const rows = usedSets(e, ex).map((st, i) => ({ st, i })).filter(o => hasData(o.st, ex)); const pr = rows.some(o => isPR(o.st, ex, best));
   const top = rows[0]?.st;
-  return {
-    picto: 'dumbbell', col: pr ? '#F4C542' : COLK('gym'), kicker: pr ? 'Nový rekord' : s.name, title: ex.name, big: top ? kg(num(top.w)) : '–', unit: top ? `kg × ${ex.uni ? `${top.l ?? '–'}/${top.r ?? '–'}` : top.reps}` : '', date: fdate(s.date),
+  const setItems = wp => rows.map(({ st, i }) => { const a = cmp(st, prev && prev.e.sets[i], ex), P = wp && isPR(st, ex, best); return [`${i + 1}. série`, `${setTxt(st, ex)}${P ? '  PR' : a === 'up' ? '  ↑' : a === 'down' ? '  ↓' : ''}`, P ? '#F4C542' : a === 'up' ? '#35D0C9' : null]; });
+  const sp = {
+    picto: 'dumbbell', col: pr ? '#F4C542' : COLK('gym'), kicker: pr ? 'Nový rekord' : s.name, prAlt: pr ? { col: COLK('gym'), kicker: s.name, lists: null } : null, title: ex.name, big: top ? kg(num(top.w)) : '–', unit: top ? `kg × ${ex.uni ? `${top.l ?? '–'}/${top.r ?? '–'}` : top.reps}` : '', date: fdate(s.date),
     stats: [ex.tempo ? { id: 'tempo', label: 'tempo', value: ex.tempo } : null, { id: 'musc', label: 'partie', value: ex.muscle || '–', def: false }].filter(Boolean),
-    lists: [{ id: 'sets', title: 'Série', items: rows.map(({ st, i }) => { const a = cmp(st, prev && prev.e.sets[i], ex), P = isPR(st, ex, best); return [`${i + 1}. série`, `${setTxt(st, ex)}${P ? '  PR' : a === 'up' ? '  ↑' : a === 'down' ? '  ↓' : ''}`, P ? '#F4C542' : a === 'up' ? '#35D0C9' : null]; }) },
+    togglesExtra: pr ? [['pr', 'Rekord']] : [],
+    lists: [{ id: 'sets', title: 'Série', items: setItems(true) },
     { id: 'prev', title: 'Minule', items: prev ? [[fday(prev.s.date), usedSets(prev.e, ex).map(t => setTxt(t, ex)).join(' · ')]] : [], def: false }],
   };
+  if (sp.prAlt) sp.prAlt.lists = sp.lists.map(l => l.id === 'sets' ? { ...l, items: setItems(false) } : l);
+  return sp;
 }
 function specActivity(a) {
   const t = ACT_TYPES[a.type] || ACT_TYPES.other; const key = PICTO[a.type] ? a.type : 'other'; const col = COLK(key); const pic = a.type === 'bike' && a.kind === 'Rotoped' ? 'rotoped' : key;
@@ -487,7 +493,7 @@ function openStudio(kind, sp, name) {
   const on = {}; [...(sp.stats || []), ...(sp.lists || []), ...(sp.viz || [])].forEach(i => { on[i.id] = pref.on && i.id in pref.on ? pref.on[i.id] : i.def !== false; });
   STU = { kind, sp, name, style: pref.style || 'noc', on, canvas: null };
   const cap = t => t.charAt(0).toUpperCase() + t.slice(1);
-  const toggles = [...(sp.stats || []).map(s => [s.id, cap(s.label)]), ...(sp.lists || []).filter(l => l.items.length).map(l => [l.id, l.title.replace(/\s*\(.*\)/, '')]), ...(sp.viz || []).map(v => [v.id, v.label])];
+  const toggles = [...(sp.togglesExtra || []), ...(sp.stats || []).map(s => [s.id, cap(s.label)]), ...(sp.lists || []).filter(l => l.items.length).map(l => [l.id, l.title.replace(/\s*\(.*\)/, '')]), ...(sp.viz || []).map(v => [v.id, v.label])];
   sheet(`<div class="stu"><div class="stprev" id="st-prev"><div class="stload"></div></div>
     <div class="seg" style="margin-top:14px">${STYLES.map(([k, l]) => `<button data-a="st-style" data-v="${k}" class="${STU.style === k ? 'on' : ''}">${l}</button>`).join('')}</div>
     ${toggles.length ? `<div class="lbl" style="margin:16px 4px 8px">Co ukázat</div><div class="chips">${toggles.map(([id, l]) => `<button class="chip tg ${on[id] ? 'on' : ''}" data-a="st-tog" data-v="${id}">${esc(l)}</button>`).join('')}</div>` : ''}
@@ -506,7 +512,7 @@ async function stuShare() {
 }
 // přesměrování starých vstupů na studio
 async function storySummary(s) { openStudio('workout', specWorkout(s), `trenink-${s.date}.png`); }
-async function storyExercise(s, e) { openStudio('exercise', specExercise(s, e), `${exById(e.exId).name}.png`); }
+async function storyExercise(s, e) { openStudio('exercise', specExercise(s, e), `${exE(e).name}.png`); }
 async function storyActivity(a) { openStudio('act-' + a.type, specActivity(a), `${(ACT_TYPES[a.type] || {}).name || 'aktivita'}-${a.date}.png`); }
 async function storyWeek(monK) { openStudio('week', specWeek(monK), `tyden-${isoWeek(pdate(monK))}.png`); }
 function storyMonth(yy, mm) { openStudio('month', specMonth(yy, mm), `mesic-${yy}-${pad(mm + 1)}.png`); }
@@ -519,3 +525,55 @@ Object.assign(A, {
 });
 
 (function () { if (S.settings.plates && !S.settings.migP1) { if (!S.settings.plates.includes(1)) S.settings.plates.push(1); S.settings.plates.sort((a, b) => b - a); } S.settings.migP1 = 1; save(true); })();
+
+// ===================== plán uživatele (jednorázový import) =====================
+(function () {
+  if (S.settings.migPlan1) return;
+  const C = (a, b) => [{ min: a[0], max: a[1], fail: true }, { min: b[0], max: b[1], fail: true }];
+  const big = C([4, 8], [6, 9]), mid = C([6, 10], [8, 12]), sml = C([8, 12], [10, 15]);
+  const L = [
+    ['One leg leg press', 'Kvadricepsy', 'Hýždě', 1, 2.5, big, ['Začni slabší (levou) nohou', 'Bedra nesmí odlepit od opěry', 'Koleno ve směru špičky']],
+    ['Zákopy v sedě', 'Hamstringy', 'Lýtka', 0, 2.5, mid, ['Lehký předklon trupu = víc protažení', 'Kontrolovaný návrat']],
+    ['Předkopy', 'Kvadricepsy', '–', 0, 2.5, mid, ['Nahoře krátký stisk', 'Bez švihu']],
+    ['Lýtka ve stoji', 'Lýtka', '–', 0, 2.5, sml, ['Dole pauza v protažení', 'Nahoře maximálně na špičky']],
+    ['Seated hip adductions', 'Adduktory', '–', 0, 2.5, sml, ['Začni z maximálního protažení', 'Kontrola v obou fázích']],
+    ['Decline bench crunches', 'Břicho', '–', 0, 1, sml, ['Stáčej páteř, ne kyčle', 'Výdech při kontrakci']],
+    ['DB wrist curls', 'Předloktí (flexory)', '–', 0, 1, sml, ['Plný rozsah v zápěstí', 'Předloktí opřené']],
+    ['Triceps na kladce', 'Triceps', '–', 0, 1.25, mid, ['Lokty u těla', 'Plné propnutí dole']],
+    ['Incline preacher curls', 'Biceps', 'Brachialis', 0, 1.25, mid, ['Dole plné protažení', 'Lokty se nehýbou']],
+    ['Banded Smith shoulder press', 'Přední delty', 'Triceps, boční delty', 0, 2.5, big, ['Zpevněný trup, bez záklonu', 'Guma přidává odpor nahoře']],
+    ['Pronated lat pulldowns', 'Široký sval zádový', 'Horní záda, biceps', 0, 2.5, mid, ['Táhni lokty dolů k bokům', 'Nahoře nech lopatky vyjet']],
+    ['Pec deck flys', 'Hrudník', 'Přední delty', 0, 2.5, mid, ['Vzadu důraz na protažení', 'Lokty lehce pokrčené']],
+    ['T bar rows', 'Horní záda', 'Široký sval zádový, zadní delty', 0, 2.5, mid, ['Hrudník na opoře, bez švihu', 'Vzadu stisk lopatek']],
+    ['Rameno na kladce', 'Boční delty', 'Trapézy', 1, 0.5, sml, ['Začni z protažení přes tělo', 'Vede loket']],
+    ['Pendulum squats', 'Kvadricepsy', 'Hýždě', 0, 2.5, big, ['Jdi hluboko', 'Záda celou dobu u opěry']],
+    ['45° back extensions', 'Hýždě, hamstringy', 'Vzpřimovače', 0, 1, mid, ['Pohyb z kyčlí', 'Nahoře zpevni hýždě, bez prohnutí']],
+    ['Incline chest press', 'Horní hrudník', 'Přední delty, triceps', 0, 2.5, big, ['Lopatky stažené', 'Hluboké protažení']],
+    ['Machine lat pull over', 'Široký sval zádový', '–', 0, 2.5, mid, ['Ruce vedou lokty, ne dlaně', 'Nahoře plné protažení']],
+    ['Ramena s JČ', 'Boční delty', 'Trapézy', 0, 1, sml, ['Vede loket', 'Bez švihu']],
+    ['Reverse pec deck delt flys', 'Zadní delty', 'Horní záda', 0, 2.5, sml, ['Tah do stran, ne dozadu', 'Lopatky se nestahují']],
+    ['Alternating DB biceps curls', 'Biceps', 'Brachioradialis', 1, 1, mid, ['Začni levou', 'Supinace během zvedání']],
+    ['One hand triceps DB overhead extensions', 'Triceps (dlouhá hlava)', '–', 1, 1, mid, ['Loket míří nahoru', 'Hluboké protažení za hlavou']],
+    ['Smith bench press', 'Hrudník', 'Přední delty, triceps', 0, 2.5, big, ['Lopatky stažené a dolů', 'Osa ke spodní části hrudníku']],
+    ['Zákopy v leže', 'Hamstringy', 'Lýtka', 0, 2.5, mid, ['Boky přitisknuté', 'Kontrolovaný návrat']],
+  ];
+  const byName = n => S.exercises.find(e => e.name.toLowerCase() === n.toLowerCase());
+  L.forEach(([name, muscle, secondary, uni, inc, sets, cues]) => { if (!byName(name)) S.exercises.push({ id: uid(), name, muscle, secondary, uni: !!uni, inc, sets: JSON.parse(JSON.stringify(sets)), cues, tempo: '', partials: false, note: '' }); });
+  const T = [
+    ['LOWER', 1, [['One leg leg press', 2], ['Zákopy v sedě', 2], ['Předkopy', 1], ['Lýtka ve stoji', 2], ['Seated hip adductions', 2], ['Decline bench crunches', 2], ['DB wrist curls', 2]]],
+    ['UPPER', 2, [['Triceps na kladce', 2], ['Incline preacher curls', 2], ['Banded Smith shoulder press', 2], ['Pronated lat pulldowns', 2], ['Pec deck flys', 2], ['T bar rows', 2], ['Rameno na kladce', 1]]],
+    ['FULLBODY 1', 4, [['Pendulum squats', 2], ['45° back extensions', 1], ['Lýtka ve stoji', 2], ['Incline chest press', 1], ['Machine lat pull over', 1], ['Ramena s JČ', 1], ['Reverse pec deck delt flys', 1], ['Alternating DB biceps curls', 1], ['One hand triceps DB overhead extensions', 1], ['DB wrist curls', 2]]],
+    ['FULLBODY 2', 6, [['Pronated lat pulldowns', 2], ['Smith bench press', 1], ['T bar rows', 1], ['Rameno na kladce', 2], ['Triceps na kladce', 2], ['Incline preacher curls', 2], ['Zákopy v leže', 1], ['Předkopy', 1]]],
+  ];
+  // ukázka pryč, ať nemíchá statistiky
+  S.templates = S.templates.filter(t => !t.demo); S.sessions = S.sessions.filter(s => !s.demo); S.activities = S.activities.filter(a => !a.demo);
+  if (S.active && !sesById(S.active)) S.active = null;
+  const mine = [];
+  T.forEach(([name, dow, list]) => {
+    if (S.templates.some(t => t.name.toUpperCase() === name)) return;
+    const ex = [], n = {}; list.forEach(([nm, c]) => { const e = byName(nm); if (e) { ex.push(e.id); n[e.id] = c; } });
+    mine.push({ id: uid(), name, dow, ex, n, finisher: '' });
+  });
+  S.templates = mine.concat(S.templates);
+  S.settings.migPlan1 = 1; save(true);
+})();

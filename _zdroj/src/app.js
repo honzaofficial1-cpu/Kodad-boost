@@ -48,6 +48,8 @@ function save(now) {
 try { navigator.storage && navigator.storage.persist && navigator.storage.persist(); } catch (e) { }
 
 const exById = id => S.exercises.find(e => e.id === id);
+const adjSets = (sets, n) => { if (!n || n === sets.length) return sets; if (n < sets.length) return sets.slice(0, n); const o = sets.slice(); while (o.length < n) o.push({ ...o[o.length - 1] }); return o; };
+const exE = e => { const ex = exById(e.exId); if (!ex || !e.n || e.n === ex.sets.length) return ex; return Object.assign(Object.create(ex), { sets: adjSets(ex.sets, e.n) }); };
 const tplById = id => S.templates.find(t => t.id === id);
 const sesById = id => S.sessions.find(s => s.id === id);
 const finished = () => S.sessions.filter(s => s.end).sort((a, b) => b.start - a.start);
@@ -87,7 +89,7 @@ const usedSets = (e, ex) => e.sets.slice(0, ex.sets.length);
 function stats(s) {
   let sets = 0, up = 0, down = 0, vol = 0;
   for (const e of s.entries) {
-    const ex = exById(e.exId); if (!ex) continue;
+    const ex = exE(e); if (!ex) continue;
     const prev = lastBefore(e.exId, s);
     usedSets(e, ex).forEach((st, i) => {
       if (!hasData(st, ex)) return; sets++;
@@ -95,12 +97,12 @@ function stats(s) {
       const c = cmp(st, prev && prev.e.sets[i], ex); if (c === 'up') up++; if (c === 'down') down++;
     });
   }
-  return { sets, up, down, vol, ex: s.entries.filter(e => { const ex = exById(e.exId); return ex && e.sets.some(st => hasData(st, ex)); }).length };
+  return { sets, up, down, vol, ex: s.entries.filter(e => { const ex = exE(e); return ex && e.sets.some(st => hasData(st, ex)); }).length };
 }
 function progItems(s) {
   const out = [];
   for (const e of s.entries) {
-    const ex = exById(e.exId); if (!ex) continue; const prev = lastBefore(e.exId, s); if (!prev) continue;
+    const ex = exE(e); if (!ex) continue; const prev = lastBefore(e.exId, s); if (!prev) continue;
     const c = [];
     usedSets(e, ex).forEach((st, i) => {
       const p = prev.e.sets[i]; if (!hasData(st, ex) || !hasData(p, ex)) return;
@@ -116,6 +118,7 @@ function progItems(s) {
 }
 function nextTemplate(after) {
   if (!S.templates.length) return null;
+  if (!after) { const dw = new Date().getDay(); const td = S.templates.find(t => t.dow === dw); if (td && !sessionOn(today())) return td; }
   const ref = after || finished().find(s => s.tid && tplById(s.tid))?.tid;
   if (!ref) return S.templates[0];
   const i = S.templates.findIndex(t => t.id === ref);
@@ -234,13 +237,14 @@ function newSession(name, tid) {
 }
 function startSession(tid) {
   const tp = tplById(tid); if (!tp) return;
-  const s = newSession(tp.name, tid); tp.ex.forEach(id => addEntry(s, id));
+  const s = newSession(tp.name, tid); tp.ex.forEach(id => addEntry(s, id, tp.n && tp.n[id]));
   save(true); closeSheet(); go('workout', { id: s.id });
 }
-function addEntry(s, exId) {
-  const ex = exById(exId); if (!ex) return;
+function addEntry(s, exId, n) {
+  const base = exById(exId); if (!base) return;
+  const e = { exId, n: n && n !== base.sets.length ? n : undefined, sets: [], note: '' }; const ex = exE(e);
   const last = lastBefore(exId, s);
-  s.entries.push({ exId, sets: ex.sets.map((c, i) => ({ w: target(ex, i, last).w, reps: null, l: null, r: null })), note: '' });
+  e.sets = ex.sets.map((c, i) => ({ w: target(ex, i, last).w, reps: null, l: null, r: null })); s.entries.push(e);
 }
 
 // ===================== WORKOUT =====================
@@ -257,7 +261,7 @@ function vWorkout() {
   <div class="dock"><button class="pill add" data-a="add-ex">${ico('plus')} Cvik</button>${live ? `<button class="pill fin" data-a="finish">${ico('check')} Dokončit</button>` : `<button class="pill fin" data-a="save-edit">${ico('check')} Uložit</button>`}</div>`;
 }
 function exCard(s, e, idx) {
-  const ex = exById(e.exId); if (!ex) return '';
+  const ex = exE(e); if (!ex) return '';
   while (e.sets.length < ex.sets.length) e.sets.push({ w: null, reps: null, l: null, r: null });
   const st = exState(e, ex); const open = s.open === idx;
   const dots = usedSets(e, ex).map(x => `<u class="${hasData(x, ex) ? 'ok' : ''}"></u>`).join('');
@@ -315,7 +319,7 @@ function nextLines(s, e, ex, last) {
   }).join('');
 }
 function updateCard(card, s, e) {
-  const ex = exById(e.exId); const last = lastBefore(e.exId, s); const best = bestBefore(e.exId, s);
+  const ex = exE(e); const last = lastBefore(e.exId, s); const best = bestBefore(e.exId, s);
   $$('.tr', card).forEach(row => {
     const i = +row.dataset.i, f = row.dataset.side, st = e.sets[i], prev = last && last.e.sets[i];
     const a = f ? cmpSide(st, prev, ex, f) : cmp(st, prev, ex);
@@ -376,7 +380,7 @@ function vFin() {
 }
 function exTables(s, withShare) {
   return s.entries.map((e, idx) => {
-    const ex = exById(e.exId); if (!ex || !e.sets.some(st => hasData(st, ex))) return '';
+    const ex = exE(e); if (!ex || !e.sets.some(st => hasData(st, ex))) return '';
     const prev = lastBefore(e.exId, s); const best = bestBefore(e.exId, s); const hasPR = usedSets(e, ex).some(st => isPR(st, ex, best));
     const rows = usedSets(e, ex).map((st, i) => { if (!hasData(st, ex)) return ''; const a = cmp(st, prev && prev.e.sets[i], ex);
       return `<div class="tr"><span>${i + 1}</span><span>${kg(num(st.w))}</span><span>${a === 'up' || a === 'down' ? `<b class="ar ${a}" style="position:static;transform:none">${ARROW[a]}</b>` : ''}${ex.uni ? `${st.l ?? '–'}/${st.r ?? '–'}` : st.reps}</span><span>${ex.sets[i].fail ? '<span class="fbadge">F</span>' : `${ex.sets[i].min}–${ex.sets[i].max}`}</span></div>`; }).join('');
@@ -594,7 +598,7 @@ function vTpls() {
   return `<div class="wrap">
     ${hdr(backBtn('gym'), '<h1>Moje tréninky</h1>', `<button class="round" data-a="tpl-new" aria-label="Nový trénink">${ico('plus')}</button>`)}
     <p class="mut" style="font-size:14px;margin:0 4px 14px">Pořadí = rotace. Na úvodu se ti vždy nabídne další trénink v pořadí.</p>
-    <div class="list">${S.templates.map((t, i) => `<div class="li"><div class="t" data-a="tpl-edit" data-id="${t.id}" style="cursor:pointer"><b>${esc(t.name)}</b><small>${t.ex.map(id => exById(id)?.name).filter(Boolean).join(', ') || 'bez cviků'}</small></div>
+    <div class="list">${S.templates.map((t, i) => `<div class="li"><div class="t" data-a="tpl-edit" data-id="${t.id}" style="cursor:pointer"><b>${esc(t.name)}${t.dow != null ? ` <span class="chip" style="margin-left:6px">${DOW[t.dow]}</span>` : ''}</b><small>${t.ex.map(id => exById(id)?.name).filter(Boolean).join(', ') || 'bez cviků'}</small></div>
       ${i ? `<button class="round" style="width:42px;height:42px" data-a="tpl-mv" data-id="${t.id}" aria-label="Posunout výš">${ico('up')}</button>` : ''}</div>`).join('') || '<div class="empty">Zatím žádný trénink.</div>'}</div>
   </div>${tabs()}`;
 }
@@ -606,8 +610,10 @@ function vTpl() {
     <div class="form" style="margin-top:0">
       <label class="f">Název<input id="t-name" value="${esc(d.name)}" placeholder="např. Upper A, Leg day"></label>
       <div><div class="lbl" style="margin-bottom:8px">Cviky v pořadí</div>
-        <div class="list">${d.ex.map((id, i) => { const ex = exById(id); return ex ? `<div class="li"><span class="lbl" style="width:16px">${i + 1}</span><div class="t"><b>${esc(ex.name)}</b><small>${ex.sets.map(c => `${c.min}–${c.max}`).join(' / ')} · +${kg(ex.inc)} kg</small></div>
-          ${i ? `<button class="round" style="width:40px;height:40px" data-a="tx-mv" data-i="${i}" aria-label="Nahoru">${ico('up')}</button>` : ''}<button class="round" style="width:40px;height:40px" data-a="tx-rm" data-i="${i}" aria-label="Odebrat">${ico('x')}</button></div>` : ''; }).join('')}</div>
+        <div class="list">${d.ex.map((id, i) => { const ex = exById(id); if (!ex) return ''; const n = (d.n && d.n[id]) || ex.sets.length; return `<div class="li tli"><span class="lbl" style="width:16px">${i + 1}</span><div class="t"><b>${esc(ex.name)}</b><small>${adjSets(ex.sets, n).map(c => `${c.min}–${c.max}`).join(' / ')} · +${kg(ex.inc)} kg</small>
+          <span class="stp2"><button data-a="tx-n" data-id="${id}" data-v="-1" aria-label="Méně sérií">−</button><b>${pl(n, 'série', 'série', 'sérií')}</b><button data-a="tx-n" data-id="${id}" data-v="1" aria-label="Víc sérií">+</button></span></div>
+          <span class="mvs"><button class="round" data-a="tx-mv" data-i="${i}" data-v="-1" aria-label="Nahoru" ${i ? '' : 'disabled'}>${ico('up')}</button><button class="round" data-a="tx-mv" data-i="${i}" data-v="1" aria-label="Dolů" ${i < d.ex.length - 1 ? '' : 'disabled'}>${ico('down')}</button></span>
+          <button class="round" style="width:36px;height:36px" data-a="tx-rm" data-i="${i}" aria-label="Odebrat">${ico('x')}</button></div>`; }).join('')}</div>
         <button class="btn block" style="margin-top:10px" data-a="tx-add">${ico('plus')} Přidat cvik</button></div>
       <label class="f">Doporučení na konec (ukáže se při dokončení)<textarea id="t-fin" placeholder="Rotoped 15 min, tep 120 bpm + statický strečink">${esc(d.finisher || '')}</textarea></label>
     </div>
@@ -784,7 +790,7 @@ async function storySummary(s) {
   showShot(c, `trenink-${s.date}.png`);
 }
 async function storyExercise(s, e) {
-  const ex = exById(e.exId); const prev = lastBefore(e.exId, s); const best = bestBefore(e.exId, s);
+  const ex = exE(e); const prev = lastBefore(e.exId, s); const best = bestBefore(e.exId, s);
   const rows = usedSets(e, ex).map((st, i) => ({ st, i })).filter(o => hasData(o.st, ex));
   const pr = rows.some(o => isPR(o.st, ex, best));
   const h = Math.max(500, 250 + rows.length * 86 + (prev ? 70 : 20) + 60);
@@ -884,8 +890,11 @@ const A = {
   'ex-tog': b => { const s = sesById(view.id); const i = +b.closest('.ex').dataset.idx; s.open = s.open === i ? -1 : i; save(); render(); const el = $(`.ex[data-idx="${i}"]`); if (el && s.open === i) el.scrollIntoView({ block: 'start', behavior: 'smooth' }); },
   'ex-info': b => infoSheet(b.dataset.id),
   'w-menu': () => { const s = sesById(view.id); sheet(`<h2>${esc(s.name)}</h2><div class="list" style="margin-top:16px">
+      <button class="li" data-a="w-order"><div class="t"><b>Pořadí cviků</b><small>Přesunout cviky nahoru a dolů</small></div></button>
       <button class="li" data-a="rename"><div class="t"><b>Přejmenovat trénink</b></div></button>
       ${!s.end ? `<button class="li" data-a="discard"><div class="t"><b style="color:var(--down)">Zahodit trénink</b><small>Smaže dnešní zápis</small></div></button>` : ''}</div><div id="w-conf"></div>`); },
+  'w-order': () => { const s = sesById(view.id); sheet(`<h2>Pořadí cviků</h2><div class="list" style="margin-top:16px">${s.entries.map((e, i) => `<div class="li"><span class="lbl" style="width:16px">${i + 1}</span><div class="t"><b>${esc(exById(e.exId)?.name || '')}</b></div><span class="mvs"><button class="round" data-a="w-mv" data-i="${i}" data-v="-1" aria-label="Nahoru" ${i ? '' : 'disabled'}>${ico('up')}</button><button class="round" data-a="w-mv" data-i="${i}" data-v="1" aria-label="Dolů" ${i < s.entries.length - 1 ? '' : 'disabled'}>${ico('down')}</button></span></div>`).join('')}</div><div class="actions"><button class="btn white" data-a="close">Hotovo</button></div>`); },
+  'w-mv': b => { const s = sesById(view.id); const i = +b.dataset.i, j = i + +b.dataset.v; if (j < 0 || j >= s.entries.length) return; [s.entries[i], s.entries[j]] = [s.entries[j], s.entries[i]]; if (s.open === i) s.open = j; else if (s.open === j) s.open = i; save(); render(); A['w-order'](); },
   rename: () => { const s = sesById(view.id); sheet(`<h2>Název tréninku</h2><div class="form"><input id="rn" class="inp" value="${esc(s.name)}"></div><div class="actions"><button class="btn" data-a="close">Zrušit</button><button class="btn white" data-a="rename-ok">Uložit</button></div>`); },
   'rename-ok': () => { const s = sesById(view.id); s.name = $('#rn').value.trim() || s.name; save(true); closeSheet(); render(); },
   discard: () => { $('#w-conf').innerHTML = `<div class="confirm">Opravdu zahodit dnešní trénink? Nejde to vrátit.<button class="btn danger" data-a="discard2">Zahodit</button></div>`; },
@@ -901,19 +910,19 @@ const A = {
     S.activities = S.activities.filter(a => a.sessionId !== s.id);
     if (s.cardio && s.cardio.mode === 'sep') { const c = s.cardio; S.activities.push({ id: uid(), type: 'bike', kind: c.kind, min: c.min, bpm: c.bpm, date: s.date, ts: Date.now(), sessionId: s.id }); s.cardio = null; }
     s.end = s.end || finEnd || Date.now(); finEnd = null;
-    s.entries.forEach(e => { const ex = exById(e.exId); if (ex) e.note = ex.note; });
+    s.entries.forEach(e => { const ex = exE(e); if (ex) e.note = ex.note; });
     if (S.active === s.id) S.active = null;
     save(true); go('summary', { id: s.id }); toast('Trénink uložen');
   },
-  'save-edit': () => { const s = sesById(view.id); s.entries.forEach(e => { const ex = exById(e.exId); if (ex) e.note = ex.note; }); save(true); go('summary', { id: s.id }); toast('Uloženo'); },
+  'save-edit': () => { const s = sesById(view.id); s.entries.forEach(e => { const ex = exE(e); if (ex) e.note = ex.note; }); save(true); go('summary', { id: s.id }); toast('Uloženo'); },
   'edit-ses': b => go('workout', { id: b.dataset.id }),
   'add-ex': () => { const s = sesById(view.id); pickExSheet(id => { addEntry(s, id); s.open = s.entries.length - 1; save(); closeSheet(); render(); const el = $(`.ex[data-idx="${s.open}"]`); el && el.scrollIntoView({ block: 'start' }); }); },
-  'story-ex': b => { const s = sesById(view.id); const e = s.entries[+b.closest('.ex').dataset.idx]; const ex = exById(e.exId); if (!e.sets.some(st => hasData(st, ex))) return toast('Nejdřív zapiš aspoň jednu sérii'); storyExercise(s, e); },
+  'story-ex': b => { const s = sesById(view.id); const e = s.entries[+b.closest('.ex').dataset.idx]; const ex = exE(e); if (!e.sets.some(st => hasData(st, ex))) return toast('Nejdřív zapiš aspoň jednu sérii'); storyExercise(s, e); },
   'story-ex2': b => { const s = sesById(view.id); storyExercise(s, s.entries[+b.dataset.i]); },
   'story-sum': () => storySummary(sesById(view.id)),
   'ex-menu': b => {
     const idx = +b.closest('.ex').dataset.idx; const s = sesById(view.id); const e = s.entries[idx];
-    sheet(`<h2>${esc(exById(e.exId).name)}</h2><div class="list" style="margin-top:16px">
+    sheet(`<h2>${esc(exE(e).name)}</h2><div class="list" style="margin-top:16px">
       <button class="li" data-a="ex-edit" data-id="${e.exId}"><div class="t"><b>Upravit cvik</b><small>Rozsahy, krok váhy, tempo, info</small></div></button>
       ${idx > 0 ? `<button class="li" data-a="en-mv" data-i="${idx}" data-v="-1"><div class="t"><b>Posunout výš</b></div></button>` : ''}
       ${idx < s.entries.length - 1 ? `<button class="li" data-a="en-mv" data-i="${idx}" data-v="1"><div class="t"><b>Posunout níž</b></div></button>` : ''}
@@ -954,7 +963,8 @@ const A = {
   'tpl-cancel': () => go('tpls'),
   'tpl-mv': b => { const i = S.templates.findIndex(t => t.id === b.dataset.id); if (i > 0) { [S.templates[i - 1], S.templates[i]] = [S.templates[i], S.templates[i - 1]]; save(); render(); } },
   'tx-add': () => { syncTpl(); pickExSheet(id => { if (!tplDraft.ex.includes(id)) { tplDraft.ex.push(id); toast('Přidáno'); } else toast('Už v tréninku je'); render(); }); },
-  'tx-mv': b => { syncTpl(); const i = +b.dataset.i; [tplDraft.ex[i], tplDraft.ex[i - 1]] = [tplDraft.ex[i - 1], tplDraft.ex[i]]; render(); },
+  'tx-mv': b => { syncTpl(); const i = +b.dataset.i, j = i + (+b.dataset.v || -1); if (j < 0 || j >= tplDraft.ex.length) return; [tplDraft.ex[i], tplDraft.ex[j]] = [tplDraft.ex[j], tplDraft.ex[i]]; render(); },
+  'tx-n': b => { syncTpl(); const id = b.dataset.id, ex = exById(id); tplDraft.n = tplDraft.n || {}; const cur = tplDraft.n[id] || ex.sets.length; tplDraft.n[id] = Math.max(1, Math.min(6, cur + +b.dataset.v)); render(); },
   'tx-rm': b => { syncTpl(); tplDraft.ex.splice(+b.dataset.i, 1); render(); },
   'tpl-save': () => {
     syncTpl(); const d = tplDraft; if (!d.name.trim()) return toast('Doplň název tréninku'); if (!d.ex.length) return toast('Přidej aspoň jeden cvik');

@@ -598,11 +598,21 @@ button.ck{background:none;border:0;padding:0;cursor:pointer}
 
 .agrid .at .ic svg.i{width:26px;height:26px}
 .li .ic svg.i{width:24px;height:24px}
+
+/* v2.5 editor tréninku */
+.tli{align-items:flex-start}
+.tli .t small{white-space:normal}
+.stp2{display:inline-flex;align-items:center;gap:8px;margin-top:8px}
+.stp2 button{width:30px;height:30px;border-radius:50%;background:var(--card3);font-size:18px;font-weight:700;display:grid;place-items:center}
+.stp2 b{font-size:14px;font-weight:600;min-width:56px;text-align:center}
+.mvs{display:flex;flex-direction:column;gap:6px}
+.mvs .round{width:36px;height:36px}
+.mvs .round[disabled]{opacity:.25}
 </style>
 </head>
 <body>
 <div id="app"></div><div id="sheet" hidden></div><div id="toast" role="status" aria-live="polite"></div>
-<script>const APP_VERSION = "2.4.0";
+<script>const APP_VERSION = "2.5.0";
 const MARK = "<svg aria-hidden=\"true\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 994 296\"><path fill=\"currentColor\" d=\"M612 5L611 4L571 4L570 5L567 5L566 4L561 4L560 5L448 5L447 6L442 6L441 5L439 6L438 5L435 5L434 6L430 6L429 5L426 5L425 6L414 6L413 5L409 5L408 6L385 5L378 11L366 27L355 39L352 44L335 63L323 79L316 86L312 92L282 127L274 138L267 145L263 151L233 186L233 187L219 203L219 204L210 213L210 214L202 222L202 223L192 232L186 236L171 243L169 243L162 246L155 247L154 248L149 248L148 249L140 249L139 250L85 250L84 251L78 251L77 250L37 250L29 258L29 259L24 264L19 271L13 277L13 278L4 288L0 294L1 295L48 295L49 296L51 295L58 295L59 296L94 296L95 295L97 295L98 296L100 296L101 295L154 295L155 294L184 294L185 293L202 293L203 292L232 291L233 290L241 290L242 289L253 289L254 288L263 288L264 287L271 287L272 286L281 286L282 285L288 285L289 284L294 284L295 283L301 283L302 282L313 281L314 280L328 278L332 276L336 276L337 275L352 272L358 269L361 269L362 268L367 267L369 265L379 262L393 255L408 245L433 221L436 216L448 203L456 192L477 168L485 157L492 150L494 146L506 133L506 132L521 115L525 109L544 88L548 82L560 69L563 64L570 57L570 56L578 48L578 47L589 35L594 28L602 20L604 16L611 9ZM994 1L993 0L974 0L973 1L967 1L966 0L964 0L963 1L866 1L865 2L860 2L859 1L842 2L840 1L839 2L804 2L794 7L792 7L786 11L784 11L777 15L775 15L760 23L758 23L749 28L747 28L734 35L732 35L717 43L715 43L706 48L704 48L696 53L694 53L689 56L685 57L683 59L681 59L670 65L668 65L658 70L656 72L647 76L645 78L636 82L634 84L629 86L624 90L619 92L614 96L606 100L586 115L579 119L575 123L559 135L554 140L553 140L537 155L536 155L502 190L502 193L509 191L512 189L529 184L532 182L538 181L549 176L555 175L558 173L566 171L569 169L586 164L589 162L597 160L606 168L606 169L620 185L632 201L655 228L663 239L677 255L680 260L686 266L694 277L704 288L749 288L750 287L755 287L756 288L760 288L761 287L914 287L916 286L916 284L896 264L895 264L827 199L826 199L797 171L796 171L776 151L775 151L766 142L765 142L757 133L749 127L736 113L736 109L742 104L747 103L757 98L762 97L767 94L777 91L782 88L784 88L787 86L789 86L792 84L794 84L797 82L802 81L807 78L809 78L812 76L814 76L817 74L824 72L829 69L831 69L844 63L849 62L854 59L856 59L861 56L863 56L866 54L873 52L878 49L880 49L883 47L885 47L898 41L903 40L910 36L912 36L920 32L925 31L937 25L939 25L942 23L944 23L947 21L949 21L952 19L954 19L957 17L959 17L962 15L969 13L974 10L976 10L979 8L981 8L984 6L993 3Z\"/></svg>";
 // ===== Výchozí knihovna cviků (informace jsou skryté pod „Info o cviku“) =====
 const R = (min, max, fail = true) => ({ min, max, fail });
@@ -821,6 +831,8 @@ function save(now) {
 try { navigator.storage && navigator.storage.persist && navigator.storage.persist(); } catch (e) { }
 
 const exById = id => S.exercises.find(e => e.id === id);
+const adjSets = (sets, n) => { if (!n || n === sets.length) return sets; if (n < sets.length) return sets.slice(0, n); const o = sets.slice(); while (o.length < n) o.push({ ...o[o.length - 1] }); return o; };
+const exE = e => { const ex = exById(e.exId); if (!ex || !e.n || e.n === ex.sets.length) return ex; return Object.assign(Object.create(ex), { sets: adjSets(ex.sets, e.n) }); };
 const tplById = id => S.templates.find(t => t.id === id);
 const sesById = id => S.sessions.find(s => s.id === id);
 const finished = () => S.sessions.filter(s => s.end).sort((a, b) => b.start - a.start);
@@ -860,7 +872,7 @@ const usedSets = (e, ex) => e.sets.slice(0, ex.sets.length);
 function stats(s) {
   let sets = 0, up = 0, down = 0, vol = 0;
   for (const e of s.entries) {
-    const ex = exById(e.exId); if (!ex) continue;
+    const ex = exE(e); if (!ex) continue;
     const prev = lastBefore(e.exId, s);
     usedSets(e, ex).forEach((st, i) => {
       if (!hasData(st, ex)) return; sets++;
@@ -868,12 +880,12 @@ function stats(s) {
       const c = cmp(st, prev && prev.e.sets[i], ex); if (c === 'up') up++; if (c === 'down') down++;
     });
   }
-  return { sets, up, down, vol, ex: s.entries.filter(e => { const ex = exById(e.exId); return ex && e.sets.some(st => hasData(st, ex)); }).length };
+  return { sets, up, down, vol, ex: s.entries.filter(e => { const ex = exE(e); return ex && e.sets.some(st => hasData(st, ex)); }).length };
 }
 function progItems(s) {
   const out = [];
   for (const e of s.entries) {
-    const ex = exById(e.exId); if (!ex) continue; const prev = lastBefore(e.exId, s); if (!prev) continue;
+    const ex = exE(e); if (!ex) continue; const prev = lastBefore(e.exId, s); if (!prev) continue;
     const c = [];
     usedSets(e, ex).forEach((st, i) => {
       const p = prev.e.sets[i]; if (!hasData(st, ex) || !hasData(p, ex)) return;
@@ -889,6 +901,7 @@ function progItems(s) {
 }
 function nextTemplate(after) {
   if (!S.templates.length) return null;
+  if (!after) { const dw = new Date().getDay(); const td = S.templates.find(t => t.dow === dw); if (td && !sessionOn(today())) return td; }
   const ref = after || finished().find(s => s.tid && tplById(s.tid))?.tid;
   if (!ref) return S.templates[0];
   const i = S.templates.findIndex(t => t.id === ref);
@@ -1007,13 +1020,14 @@ function newSession(name, tid) {
 }
 function startSession(tid) {
   const tp = tplById(tid); if (!tp) return;
-  const s = newSession(tp.name, tid); tp.ex.forEach(id => addEntry(s, id));
+  const s = newSession(tp.name, tid); tp.ex.forEach(id => addEntry(s, id, tp.n && tp.n[id]));
   save(true); closeSheet(); go('workout', { id: s.id });
 }
-function addEntry(s, exId) {
-  const ex = exById(exId); if (!ex) return;
+function addEntry(s, exId, n) {
+  const base = exById(exId); if (!base) return;
+  const e = { exId, n: n && n !== base.sets.length ? n : undefined, sets: [], note: '' }; const ex = exE(e);
   const last = lastBefore(exId, s);
-  s.entries.push({ exId, sets: ex.sets.map((c, i) => ({ w: target(ex, i, last).w, reps: null, l: null, r: null })), note: '' });
+  e.sets = ex.sets.map((c, i) => ({ w: target(ex, i, last).w, reps: null, l: null, r: null })); s.entries.push(e);
 }
 
 // ===================== WORKOUT =====================
@@ -1030,7 +1044,7 @@ function vWorkout() {
   <div class="dock"><button class="pill add" data-a="add-ex">${ico('plus')} Cvik</button>${live ? `<button class="pill fin" data-a="finish">${ico('check')} Dokončit</button>` : `<button class="pill fin" data-a="save-edit">${ico('check')} Uložit</button>`}</div>`;
 }
 function exCard(s, e, idx) {
-  const ex = exById(e.exId); if (!ex) return '';
+  const ex = exE(e); if (!ex) return '';
   while (e.sets.length < ex.sets.length) e.sets.push({ w: null, reps: null, l: null, r: null });
   const st = exState(e, ex); const open = s.open === idx;
   const dots = usedSets(e, ex).map(x => `<u class="${hasData(x, ex) ? 'ok' : ''}"></u>`).join('');
@@ -1088,7 +1102,7 @@ function nextLines(s, e, ex, last) {
   }).join('');
 }
 function updateCard(card, s, e) {
-  const ex = exById(e.exId); const last = lastBefore(e.exId, s); const best = bestBefore(e.exId, s);
+  const ex = exE(e); const last = lastBefore(e.exId, s); const best = bestBefore(e.exId, s);
   $$('.tr', card).forEach(row => {
     const i = +row.dataset.i, f = row.dataset.side, st = e.sets[i], prev = last && last.e.sets[i];
     const a = f ? cmpSide(st, prev, ex, f) : cmp(st, prev, ex);
@@ -1149,7 +1163,7 @@ function vFin() {
 }
 function exTables(s, withShare) {
   return s.entries.map((e, idx) => {
-    const ex = exById(e.exId); if (!ex || !e.sets.some(st => hasData(st, ex))) return '';
+    const ex = exE(e); if (!ex || !e.sets.some(st => hasData(st, ex))) return '';
     const prev = lastBefore(e.exId, s); const best = bestBefore(e.exId, s); const hasPR = usedSets(e, ex).some(st => isPR(st, ex, best));
     const rows = usedSets(e, ex).map((st, i) => { if (!hasData(st, ex)) return ''; const a = cmp(st, prev && prev.e.sets[i], ex);
       return `<div class="tr"><span>${i + 1}</span><span>${kg(num(st.w))}</span><span>${a === 'up' || a === 'down' ? `<b class="ar ${a}" style="position:static;transform:none">${ARROW[a]}</b>` : ''}${ex.uni ? `${st.l ?? '–'}/${st.r ?? '–'}` : st.reps}</span><span>${ex.sets[i].fail ? '<span class="fbadge">F</span>' : `${ex.sets[i].min}–${ex.sets[i].max}`}</span></div>`; }).join('');
@@ -1367,7 +1381,7 @@ function vTpls() {
   return `<div class="wrap">
     ${hdr(backBtn('gym'), '<h1>Moje tréninky</h1>', `<button class="round" data-a="tpl-new" aria-label="Nový trénink">${ico('plus')}</button>`)}
     <p class="mut" style="font-size:14px;margin:0 4px 14px">Pořadí = rotace. Na úvodu se ti vždy nabídne další trénink v pořadí.</p>
-    <div class="list">${S.templates.map((t, i) => `<div class="li"><div class="t" data-a="tpl-edit" data-id="${t.id}" style="cursor:pointer"><b>${esc(t.name)}</b><small>${t.ex.map(id => exById(id)?.name).filter(Boolean).join(', ') || 'bez cviků'}</small></div>
+    <div class="list">${S.templates.map((t, i) => `<div class="li"><div class="t" data-a="tpl-edit" data-id="${t.id}" style="cursor:pointer"><b>${esc(t.name)}${t.dow != null ? ` <span class="chip" style="margin-left:6px">${DOW[t.dow]}</span>` : ''}</b><small>${t.ex.map(id => exById(id)?.name).filter(Boolean).join(', ') || 'bez cviků'}</small></div>
       ${i ? `<button class="round" style="width:42px;height:42px" data-a="tpl-mv" data-id="${t.id}" aria-label="Posunout výš">${ico('up')}</button>` : ''}</div>`).join('') || '<div class="empty">Zatím žádný trénink.</div>'}</div>
   </div>${tabs()}`;
 }
@@ -1379,8 +1393,10 @@ function vTpl() {
     <div class="form" style="margin-top:0">
       <label class="f">Název<input id="t-name" value="${esc(d.name)}" placeholder="např. Upper A, Leg day"></label>
       <div><div class="lbl" style="margin-bottom:8px">Cviky v pořadí</div>
-        <div class="list">${d.ex.map((id, i) => { const ex = exById(id); return ex ? `<div class="li"><span class="lbl" style="width:16px">${i + 1}</span><div class="t"><b>${esc(ex.name)}</b><small>${ex.sets.map(c => `${c.min}–${c.max}`).join(' / ')} · +${kg(ex.inc)} kg</small></div>
-          ${i ? `<button class="round" style="width:40px;height:40px" data-a="tx-mv" data-i="${i}" aria-label="Nahoru">${ico('up')}</button>` : ''}<button class="round" style="width:40px;height:40px" data-a="tx-rm" data-i="${i}" aria-label="Odebrat">${ico('x')}</button></div>` : ''; }).join('')}</div>
+        <div class="list">${d.ex.map((id, i) => { const ex = exById(id); if (!ex) return ''; const n = (d.n && d.n[id]) || ex.sets.length; return `<div class="li tli"><span class="lbl" style="width:16px">${i + 1}</span><div class="t"><b>${esc(ex.name)}</b><small>${adjSets(ex.sets, n).map(c => `${c.min}–${c.max}`).join(' / ')} · +${kg(ex.inc)} kg</small>
+          <span class="stp2"><button data-a="tx-n" data-id="${id}" data-v="-1" aria-label="Méně sérií">−</button><b>${pl(n, 'série', 'série', 'sérií')}</b><button data-a="tx-n" data-id="${id}" data-v="1" aria-label="Víc sérií">+</button></span></div>
+          <span class="mvs"><button class="round" data-a="tx-mv" data-i="${i}" data-v="-1" aria-label="Nahoru" ${i ? '' : 'disabled'}>${ico('up')}</button><button class="round" data-a="tx-mv" data-i="${i}" data-v="1" aria-label="Dolů" ${i < d.ex.length - 1 ? '' : 'disabled'}>${ico('down')}</button></span>
+          <button class="round" style="width:36px;height:36px" data-a="tx-rm" data-i="${i}" aria-label="Odebrat">${ico('x')}</button></div>`; }).join('')}</div>
         <button class="btn block" style="margin-top:10px" data-a="tx-add">${ico('plus')} Přidat cvik</button></div>
       <label class="f">Doporučení na konec (ukáže se při dokončení)<textarea id="t-fin" placeholder="Rotoped 15 min, tep 120 bpm + statický strečink">${esc(d.finisher || '')}</textarea></label>
     </div>
@@ -1557,7 +1573,7 @@ async function storySummary(s) {
   showShot(c, `trenink-${s.date}.png`);
 }
 async function storyExercise(s, e) {
-  const ex = exById(e.exId); const prev = lastBefore(e.exId, s); const best = bestBefore(e.exId, s);
+  const ex = exE(e); const prev = lastBefore(e.exId, s); const best = bestBefore(e.exId, s);
   const rows = usedSets(e, ex).map((st, i) => ({ st, i })).filter(o => hasData(o.st, ex));
   const pr = rows.some(o => isPR(o.st, ex, best));
   const h = Math.max(500, 250 + rows.length * 86 + (prev ? 70 : 20) + 60);
@@ -1657,8 +1673,11 @@ const A = {
   'ex-tog': b => { const s = sesById(view.id); const i = +b.closest('.ex').dataset.idx; s.open = s.open === i ? -1 : i; save(); render(); const el = $(`.ex[data-idx="${i}"]`); if (el && s.open === i) el.scrollIntoView({ block: 'start', behavior: 'smooth' }); },
   'ex-info': b => infoSheet(b.dataset.id),
   'w-menu': () => { const s = sesById(view.id); sheet(`<h2>${esc(s.name)}</h2><div class="list" style="margin-top:16px">
+      <button class="li" data-a="w-order"><div class="t"><b>Pořadí cviků</b><small>Přesunout cviky nahoru a dolů</small></div></button>
       <button class="li" data-a="rename"><div class="t"><b>Přejmenovat trénink</b></div></button>
       ${!s.end ? `<button class="li" data-a="discard"><div class="t"><b style="color:var(--down)">Zahodit trénink</b><small>Smaže dnešní zápis</small></div></button>` : ''}</div><div id="w-conf"></div>`); },
+  'w-order': () => { const s = sesById(view.id); sheet(`<h2>Pořadí cviků</h2><div class="list" style="margin-top:16px">${s.entries.map((e, i) => `<div class="li"><span class="lbl" style="width:16px">${i + 1}</span><div class="t"><b>${esc(exById(e.exId)?.name || '')}</b></div><span class="mvs"><button class="round" data-a="w-mv" data-i="${i}" data-v="-1" aria-label="Nahoru" ${i ? '' : 'disabled'}>${ico('up')}</button><button class="round" data-a="w-mv" data-i="${i}" data-v="1" aria-label="Dolů" ${i < s.entries.length - 1 ? '' : 'disabled'}>${ico('down')}</button></span></div>`).join('')}</div><div class="actions"><button class="btn white" data-a="close">Hotovo</button></div>`); },
+  'w-mv': b => { const s = sesById(view.id); const i = +b.dataset.i, j = i + +b.dataset.v; if (j < 0 || j >= s.entries.length) return; [s.entries[i], s.entries[j]] = [s.entries[j], s.entries[i]]; if (s.open === i) s.open = j; else if (s.open === j) s.open = i; save(); render(); A['w-order'](); },
   rename: () => { const s = sesById(view.id); sheet(`<h2>Název tréninku</h2><div class="form"><input id="rn" class="inp" value="${esc(s.name)}"></div><div class="actions"><button class="btn" data-a="close">Zrušit</button><button class="btn white" data-a="rename-ok">Uložit</button></div>`); },
   'rename-ok': () => { const s = sesById(view.id); s.name = $('#rn').value.trim() || s.name; save(true); closeSheet(); render(); },
   discard: () => { $('#w-conf').innerHTML = `<div class="confirm">Opravdu zahodit dnešní trénink? Nejde to vrátit.<button class="btn danger" data-a="discard2">Zahodit</button></div>`; },
@@ -1674,19 +1693,19 @@ const A = {
     S.activities = S.activities.filter(a => a.sessionId !== s.id);
     if (s.cardio && s.cardio.mode === 'sep') { const c = s.cardio; S.activities.push({ id: uid(), type: 'bike', kind: c.kind, min: c.min, bpm: c.bpm, date: s.date, ts: Date.now(), sessionId: s.id }); s.cardio = null; }
     s.end = s.end || finEnd || Date.now(); finEnd = null;
-    s.entries.forEach(e => { const ex = exById(e.exId); if (ex) e.note = ex.note; });
+    s.entries.forEach(e => { const ex = exE(e); if (ex) e.note = ex.note; });
     if (S.active === s.id) S.active = null;
     save(true); go('summary', { id: s.id }); toast('Trénink uložen');
   },
-  'save-edit': () => { const s = sesById(view.id); s.entries.forEach(e => { const ex = exById(e.exId); if (ex) e.note = ex.note; }); save(true); go('summary', { id: s.id }); toast('Uloženo'); },
+  'save-edit': () => { const s = sesById(view.id); s.entries.forEach(e => { const ex = exE(e); if (ex) e.note = ex.note; }); save(true); go('summary', { id: s.id }); toast('Uloženo'); },
   'edit-ses': b => go('workout', { id: b.dataset.id }),
   'add-ex': () => { const s = sesById(view.id); pickExSheet(id => { addEntry(s, id); s.open = s.entries.length - 1; save(); closeSheet(); render(); const el = $(`.ex[data-idx="${s.open}"]`); el && el.scrollIntoView({ block: 'start' }); }); },
-  'story-ex': b => { const s = sesById(view.id); const e = s.entries[+b.closest('.ex').dataset.idx]; const ex = exById(e.exId); if (!e.sets.some(st => hasData(st, ex))) return toast('Nejdřív zapiš aspoň jednu sérii'); storyExercise(s, e); },
+  'story-ex': b => { const s = sesById(view.id); const e = s.entries[+b.closest('.ex').dataset.idx]; const ex = exE(e); if (!e.sets.some(st => hasData(st, ex))) return toast('Nejdřív zapiš aspoň jednu sérii'); storyExercise(s, e); },
   'story-ex2': b => { const s = sesById(view.id); storyExercise(s, s.entries[+b.dataset.i]); },
   'story-sum': () => storySummary(sesById(view.id)),
   'ex-menu': b => {
     const idx = +b.closest('.ex').dataset.idx; const s = sesById(view.id); const e = s.entries[idx];
-    sheet(`<h2>${esc(exById(e.exId).name)}</h2><div class="list" style="margin-top:16px">
+    sheet(`<h2>${esc(exE(e).name)}</h2><div class="list" style="margin-top:16px">
       <button class="li" data-a="ex-edit" data-id="${e.exId}"><div class="t"><b>Upravit cvik</b><small>Rozsahy, krok váhy, tempo, info</small></div></button>
       ${idx > 0 ? `<button class="li" data-a="en-mv" data-i="${idx}" data-v="-1"><div class="t"><b>Posunout výš</b></div></button>` : ''}
       ${idx < s.entries.length - 1 ? `<button class="li" data-a="en-mv" data-i="${idx}" data-v="1"><div class="t"><b>Posunout níž</b></div></button>` : ''}
@@ -1727,7 +1746,8 @@ const A = {
   'tpl-cancel': () => go('tpls'),
   'tpl-mv': b => { const i = S.templates.findIndex(t => t.id === b.dataset.id); if (i > 0) { [S.templates[i - 1], S.templates[i]] = [S.templates[i], S.templates[i - 1]]; save(); render(); } },
   'tx-add': () => { syncTpl(); pickExSheet(id => { if (!tplDraft.ex.includes(id)) { tplDraft.ex.push(id); toast('Přidáno'); } else toast('Už v tréninku je'); render(); }); },
-  'tx-mv': b => { syncTpl(); const i = +b.dataset.i; [tplDraft.ex[i], tplDraft.ex[i - 1]] = [tplDraft.ex[i - 1], tplDraft.ex[i]]; render(); },
+  'tx-mv': b => { syncTpl(); const i = +b.dataset.i, j = i + (+b.dataset.v || -1); if (j < 0 || j >= tplDraft.ex.length) return; [tplDraft.ex[i], tplDraft.ex[j]] = [tplDraft.ex[j], tplDraft.ex[i]]; render(); },
+  'tx-n': b => { syncTpl(); const id = b.dataset.id, ex = exById(id); tplDraft.n = tplDraft.n || {}; const cur = tplDraft.n[id] || ex.sets.length; tplDraft.n[id] = Math.max(1, Math.min(6, cur + +b.dataset.v)); render(); },
   'tx-rm': b => { syncTpl(); tplDraft.ex.splice(+b.dataset.i, 1); render(); },
   'tpl-save': () => {
     syncTpl(); const d = tplDraft; if (!d.name.trim()) return toast('Doplň název tréninku'); if (!d.ex.length) return toast('Přidej aspoň jeden cvik');
@@ -2078,7 +2098,7 @@ function isPR(st, ex, best) { if (!best || !hasData(st, ex)) return false; const
 function sessionPRs(s) {
   const out = [];
   for (const e of s.entries) {
-    const ex = exById(e.exId); if (!ex) continue; const best = bestBefore(e.exId, s); if (!best) continue;
+    const ex = exE(e); if (!ex) continue; const best = bestBefore(e.exId, s); if (!best) continue;
     let top = null; usedSets(e, ex).forEach(st => { if (isPR(st, ex, best)) { const w = num(st.w), r = repsOf(st, ex); if (!top || w > top.w || (w === top.w && r > top.r)) top = { w, r }; } });
     if (top) out.push({ ex, ...top, pw: best.w, pr: best.r });
   }
@@ -2155,7 +2175,7 @@ function weekSheet(monK) {
 }
 
 Object.assign(A, {
-  'cd-start': b => { const s = sesById(view.id); const e = s.entries[+b.closest('.ex').dataset.idx]; const ex = exById(e.exId); const sec = cdOf(ex); S.cd = { end: Date.now() + sec * 1000, total: sec, name: ex.name, done: false }; save(); armAudio(); cdPaint(); },
+  'cd-start': b => { const s = sesById(view.id); const e = s.entries[+b.closest('.ex').dataset.idx]; const ex = exE(e); const sec = cdOf(ex); S.cd = { end: Date.now() + sec * 1000, total: sec, name: ex.name, done: false }; save(); armAudio(); cdPaint(); },
   'cd-add': () => { if (!S.cd) return; S.cd.end += 30000; S.cd.total += 30; save(); cdPaint(); },
   'cd-stop': () => { S.cd = null; save(); cdPaint(); },
   'e-cd': b => { readExDraft(); exDraft.cd = +b.dataset.v || null; drawExEdit(); },
@@ -2303,7 +2323,7 @@ function compareBlock(s) {
 Object.assign(A, {
   'wk-open': b => { S.settings.wkSeen = b.dataset.k; save(true); render(); weekSheet(b.dataset.k); },
   'wk-share': b => { closeSheet(); storyWeek(b.dataset.k); },
-  plates: b => { const s = sesById(view.id); const e = s.entries[+b.closest('.ex').dataset.idx]; platesSheet(e.exId, e.sets.slice(0, exById(e.exId).sets.length).map(st => num(st.w))); },
+  plates: b => { const s = sesById(view.id); const e = s.entries[+b.closest('.ex').dataset.idx]; platesSheet(e.exId, e.sets.slice(0, exE(e).sets.length).map(st => num(st.w))); },
   'pl-pick': b => { const i = $('#pl-w'); i.value = kg(+b.dataset.v); $('#pl-out').innerHTML = plateResult(+b.dataset.v, num(i.dataset.bar)); },
   'e-plates': () => { readExDraft(); exDraft.plates = exDraft.plates ? null : { bar: 20 }; drawExEdit(); },
   'plate-tog': b => { const v = +b.dataset.v; let p = plateSet(); p = p.includes(v) ? p.filter(x => x !== v) : p.concat(v); S.settings.plates = p.sort((a, c) => c - a); save(true); render(); },
@@ -2375,7 +2395,9 @@ async function markTinted(col) {
   return new Promise(res => { const im = new Image(); im.onload = () => res(im); im.onerror = () => res(null); im.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(MARK.replace('currentColor', col)); });
 }
 async function drawShare(sp, style, on) {
-  const W = 900, L = 54, X = 270, col = sp.col;
+  const W = (typeof SHARE_W !== 'undefined' ? SHARE_W : 900), L = 54, X = 270;
+  const prOff = sp.prAlt && on.pr === false; if (prOff) sp = { ...sp, ...sp.prAlt };
+  const col = sp.col;
   const isOn = id => on[id] !== false;
   const stats = (sp.stats || []).filter(s => isOn(s.id));
   const lists = (sp.lists || []).filter(l => isOn(l.id) && l.items.length);
@@ -2384,7 +2406,7 @@ async function drawShare(sp, style, on) {
   const fg = colr ? '#0B0B0C' : '#F5F5F7', mut = colr ? 'rgba(11,11,12,.6)' : clear ? 'rgba(255,255,255,.82)' : '#9A9AA0', acc = colr ? '#0B0B0C' : col, faint = colr ? 'rgba(11,11,12,.12)' : clear ? 'rgba(255,255,255,.28)' : 'rgba(255,255,255,.08)';
   // rozvržení (měření předem)
   const m = document.createElement('canvas').getContext('2d');
-  const size = (() => { let s = 150; m.font = `italic 900 ${s}px ${CF}`; while (m.measureText(sp.big).width > 400 && s > 84) { s -= 8; m.font = `italic 900 ${s}px ${CF}`; } return s; })();
+  const size = (() => { let s = 150; m.font = `italic 900 ${s}px ${CF}`; while (m.measureText(sp.big).width > Math.min(400, W - X - 150) && s > 84) { s -= 8; m.font = `italic 900 ${s}px ${CF}`; } return s; })();
   const titleY = 138, bigY = titleY + 22 + Math.round(size * .86);
   // statistiky v řádcích (inline)
   const statLines = []; let cur = [], cw = 0, maxW = W - L - X;
@@ -2412,8 +2434,8 @@ async function drawShare(sp, style, on) {
   drawPicto(x, sp.picto, mx, my, 112, colr ? '#0B0B0C' : clear ? '#FFFFFF' : col);
   // datum + titulky
   x.fillStyle = mut; x.font = `600 26px ${CF}`; x.textAlign = 'right'; x.fillText(sp.date || sp.kicker || '', W - L, 92); x.textAlign = 'left';
-  if (sp.kicker && sp.date) { x.fillStyle = mut; x.font = `600 24px ${CF}`; spacedL(x, clip(x, sp.kicker.toUpperCase(), 330), X, 92, 5); }
-  x.fillStyle = acc; x.font = `italic 800 36px ${CF}`; spacedL(x, clip(x, sp.title.toUpperCase(), 540), X, titleY, 3);
+  if (sp.kicker && sp.date) { x.fillStyle = mut; x.font = `600 24px ${CF}`; spacedL(x, clip(x, sp.kicker.toUpperCase(), W - X - 230), X, 92, 5); }
+  x.fillStyle = acc; x.font = `italic 800 36px ${CF}`; spacedL(x, clip(x, sp.title.toUpperCase(), W - X - L - 10), X, titleY, 3);
   x.fillStyle = fg; x.font = `italic 900 ${size}px ${CF}`; x.fillText(sp.big, X - 6, bigY); const bw = x.measureText(sp.big).width;
   if (sp.unit) { x.fillStyle = mut; x.font = `italic 700 ${Math.round(size * .3)}px ${CF}`; x.fillText(sp.unit, X + bw + 12, bigY); }
   x.fillStyle = acc; slab(x, X, bigY + 20, 110, 9); x.fill(); x.globalAlpha = .45; slab(x, X + 126, bigY + 20, 34, 9); x.fill(); x.globalAlpha = 1;
@@ -2427,7 +2449,7 @@ async function drawShare(sp, style, on) {
     x.fillStyle = mut; x.font = `600 22px ${CF}`; spacedL(x, l.title.toUpperCase(), L, y + 30, 5); y += 50;
     l.items.forEach(([Lt, Rt, rc]) => {
       x.fillStyle = faint; x.fillRect(L, y, W - 2 * L, 2);
-      x.fillStyle = fg; x.font = `500 31px ${CF}`; x.fillText(clip(x, Lt, 480), L, y + 39);
+      x.fillStyle = fg; x.font = `500 31px ${CF}`; x.fillText(clip(x, Lt, W - 2 * L - 220), L, y + 39);
       x.textAlign = 'right'; x.fillStyle = rc && !colr ? rc : fg; x.font = `italic 800 32px ${CF}`; x.fillText(Rt, W - L, y + 40); x.textAlign = 'left';
       y += 54;
     });
@@ -2490,24 +2512,28 @@ const COLK = k => (CARD_COL[k] || CARD_COL.other)[0];
 function specWorkout(s) {
   const st = stats(s), prs = sessionPRs(s), p = prevSameSession(s), min = fmin((s.end || finEnd || Date.now()) - s.start);
   const extra = []; if (s.cardio && s.cardio.mode === 'join') extra.push([s.cardio.kind, [s.cardio.min ? s.cardio.min + ' min' : '', s.cardio.bpm ? s.cardio.bpm + ' bpm' : ''].filter(Boolean).join(' · ') || '✓']); if (s.stretch) extra.push(['Statický strečink', '✓']);
-  const tops = s.entries.map(e => { const ex = exById(e.exId); if (!ex) return null; const t = usedSets(e, ex).find(q => hasData(q, ex)); return t ? [ex.name, setTxt(t, ex)] : null; }).filter(Boolean);
+  const tops = s.entries.map(e => { const ex = exE(e); if (!ex) return null; const t = usedSets(e, ex).find(q => hasData(q, ex)); return t ? [ex.name, setTxt(t, ex)] : null; }).filter(Boolean);
   const cmpI = p ? (() => { const b = stats(p); return [['Objem', `${sg(st.vol - b.vol, 0)} kg`, st.vol >= b.vol ? '#35D0C9' : '#E5484D'], ['Zlepšení', `${st.up}`, null]]; })() : [];
   return {
-    picto: 'gym', col: prs.length ? '#F4C542' : COLK('gym'), kicker: prs.length ? 'Nový rekord' : 'Trénink', title: s.name, big: String(min), unit: 'min', date: fdate(s.date),
+    picto: 'gym', col: prs.length ? '#F4C542' : COLK('gym'), kicker: prs.length ? 'Nový rekord' : 'Trénink', prAlt: prs.length ? { col: COLK('gym'), kicker: 'Trénink' } : null, title: s.name, big: String(min), unit: 'min', date: fdate(s.date),
     stats: [{ id: 'vol', label: 'nazvedáno', value: `${thou(st.vol)} kg` }, { id: 'sets', label: pl(st.sets, 'série', 'série', 'sérií').split(' ')[1], value: String(st.sets) }, { id: 'ex', label: pl(st.ex, 'cvik', 'cviky', 'cviků').split(' ')[1], value: String(st.ex) }],
     lists: [{ id: 'pr', title: 'Rekordy', items: prs.map(q => [q.ex.name, `${kg(q.w)} × ${q.r}`, '#F4C542']) }, { id: 'extra', title: 'Navíc', items: extra }, { id: 'top', title: 'Nejlepší série', items: tops, def: false }, { id: 'cmp', title: p ? `Proti minule (${fday(p.date)})` : '', items: cmpI, def: false }],
   };
 }
 function specExercise(s, e) {
-  const ex = exById(e.exId), prev = lastBefore(e.exId, s), best = bestBefore(e.exId, s);
+  const ex = exE(e), prev = lastBefore(e.exId, s), best = bestBefore(e.exId, s);
   const rows = usedSets(e, ex).map((st, i) => ({ st, i })).filter(o => hasData(o.st, ex)); const pr = rows.some(o => isPR(o.st, ex, best));
   const top = rows[0]?.st;
-  return {
-    picto: 'dumbbell', col: pr ? '#F4C542' : COLK('gym'), kicker: pr ? 'Nový rekord' : s.name, title: ex.name, big: top ? kg(num(top.w)) : '–', unit: top ? `kg × ${ex.uni ? `${top.l ?? '–'}/${top.r ?? '–'}` : top.reps}` : '', date: fdate(s.date),
+  const setItems = wp => rows.map(({ st, i }) => { const a = cmp(st, prev && prev.e.sets[i], ex), P = wp && isPR(st, ex, best); return [`${i + 1}. série`, `${setTxt(st, ex)}${P ? '  PR' : a === 'up' ? '  ↑' : a === 'down' ? '  ↓' : ''}`, P ? '#F4C542' : a === 'up' ? '#35D0C9' : null]; });
+  const sp = {
+    picto: 'dumbbell', col: pr ? '#F4C542' : COLK('gym'), kicker: pr ? 'Nový rekord' : s.name, prAlt: pr ? { col: COLK('gym'), kicker: s.name, lists: null } : null, title: ex.name, big: top ? kg(num(top.w)) : '–', unit: top ? `kg × ${ex.uni ? `${top.l ?? '–'}/${top.r ?? '–'}` : top.reps}` : '', date: fdate(s.date),
     stats: [ex.tempo ? { id: 'tempo', label: 'tempo', value: ex.tempo } : null, { id: 'musc', label: 'partie', value: ex.muscle || '–', def: false }].filter(Boolean),
-    lists: [{ id: 'sets', title: 'Série', items: rows.map(({ st, i }) => { const a = cmp(st, prev && prev.e.sets[i], ex), P = isPR(st, ex, best); return [`${i + 1}. série`, `${setTxt(st, ex)}${P ? '  PR' : a === 'up' ? '  ↑' : a === 'down' ? '  ↓' : ''}`, P ? '#F4C542' : a === 'up' ? '#35D0C9' : null]; }) },
+    togglesExtra: pr ? [['pr', 'Rekord']] : [],
+    lists: [{ id: 'sets', title: 'Série', items: setItems(true) },
     { id: 'prev', title: 'Minule', items: prev ? [[fday(prev.s.date), usedSets(prev.e, ex).map(t => setTxt(t, ex)).join(' · ')]] : [], def: false }],
   };
+  if (sp.prAlt) sp.prAlt.lists = sp.lists.map(l => l.id === 'sets' ? { ...l, items: setItems(false) } : l);
+  return sp;
 }
 function specActivity(a) {
   const t = ACT_TYPES[a.type] || ACT_TYPES.other; const key = PICTO[a.type] ? a.type : 'other'; const col = COLK(key); const pic = a.type === 'bike' && a.kind === 'Rotoped' ? 'rotoped' : key;
@@ -2552,7 +2578,7 @@ function openStudio(kind, sp, name) {
   const on = {}; [...(sp.stats || []), ...(sp.lists || []), ...(sp.viz || [])].forEach(i => { on[i.id] = pref.on && i.id in pref.on ? pref.on[i.id] : i.def !== false; });
   STU = { kind, sp, name, style: pref.style || 'noc', on, canvas: null };
   const cap = t => t.charAt(0).toUpperCase() + t.slice(1);
-  const toggles = [...(sp.stats || []).map(s => [s.id, cap(s.label)]), ...(sp.lists || []).filter(l => l.items.length).map(l => [l.id, l.title.replace(/\s*\(.*\)/, '')]), ...(sp.viz || []).map(v => [v.id, v.label])];
+  const toggles = [...(sp.togglesExtra || []), ...(sp.stats || []).map(s => [s.id, cap(s.label)]), ...(sp.lists || []).filter(l => l.items.length).map(l => [l.id, l.title.replace(/\s*\(.*\)/, '')]), ...(sp.viz || []).map(v => [v.id, v.label])];
   sheet(`<div class="stu"><div class="stprev" id="st-prev"><div class="stload"></div></div>
     <div class="seg" style="margin-top:14px">${STYLES.map(([k, l]) => `<button data-a="st-style" data-v="${k}" class="${STU.style === k ? 'on' : ''}">${l}</button>`).join('')}</div>
     ${toggles.length ? `<div class="lbl" style="margin:16px 4px 8px">Co ukázat</div><div class="chips">${toggles.map(([id, l]) => `<button class="chip tg ${on[id] ? 'on' : ''}" data-a="st-tog" data-v="${id}">${esc(l)}</button>`).join('')}</div>` : ''}
@@ -2571,7 +2597,7 @@ async function stuShare() {
 }
 // přesměrování starých vstupů na studio
 async function storySummary(s) { openStudio('workout', specWorkout(s), `trenink-${s.date}.png`); }
-async function storyExercise(s, e) { openStudio('exercise', specExercise(s, e), `${exById(e.exId).name}.png`); }
+async function storyExercise(s, e) { openStudio('exercise', specExercise(s, e), `${exE(e).name}.png`); }
 async function storyActivity(a) { openStudio('act-' + a.type, specActivity(a), `${(ACT_TYPES[a.type] || {}).name || 'aktivita'}-${a.date}.png`); }
 async function storyWeek(monK) { openStudio('week', specWeek(monK), `tyden-${isoWeek(pdate(monK))}.png`); }
 function storyMonth(yy, mm) { openStudio('month', specMonth(yy, mm), `mesic-${yy}-${pad(mm + 1)}.png`); }
@@ -2584,6 +2610,141 @@ Object.assign(A, {
 });
 
 (function () { if (S.settings.plates && !S.settings.migP1) { if (!S.settings.plates.includes(1)) S.settings.plates.push(1); S.settings.plates.sort((a, b) => b - a); } S.settings.migP1 = 1; save(true); })();
+
+// ===================== plán uživatele (jednorázový import) =====================
+(function () {
+  if (S.settings.migPlan1) return;
+  const C = (a, b) => [{ min: a[0], max: a[1], fail: true }, { min: b[0], max: b[1], fail: true }];
+  const big = C([4, 8], [6, 9]), mid = C([6, 10], [8, 12]), sml = C([8, 12], [10, 15]);
+  const L = [
+    ['One leg leg press', 'Kvadricepsy', 'Hýždě', 1, 2.5, big, ['Začni slabší (levou) nohou', 'Bedra nesmí odlepit od opěry', 'Koleno ve směru špičky']],
+    ['Zákopy v sedě', 'Hamstringy', 'Lýtka', 0, 2.5, mid, ['Lehký předklon trupu = víc protažení', 'Kontrolovaný návrat']],
+    ['Předkopy', 'Kvadricepsy', '–', 0, 2.5, mid, ['Nahoře krátký stisk', 'Bez švihu']],
+    ['Lýtka ve stoji', 'Lýtka', '–', 0, 2.5, sml, ['Dole pauza v protažení', 'Nahoře maximálně na špičky']],
+    ['Seated hip adductions', 'Adduktory', '–', 0, 2.5, sml, ['Začni z maximálního protažení', 'Kontrola v obou fázích']],
+    ['Decline bench crunches', 'Břicho', '–', 0, 1, sml, ['Stáčej páteř, ne kyčle', 'Výdech při kontrakci']],
+    ['DB wrist curls', 'Předloktí (flexory)', '–', 0, 1, sml, ['Plný rozsah v zápěstí', 'Předloktí opřené']],
+    ['Triceps na kladce', 'Triceps', '–', 0, 1.25, mid, ['Lokty u těla', 'Plné propnutí dole']],
+    ['Incline preacher curls', 'Biceps', 'Brachialis', 0, 1.25, mid, ['Dole plné protažení', 'Lokty se nehýbou']],
+    ['Banded Smith shoulder press', 'Přední delty', 'Triceps, boční delty', 0, 2.5, big, ['Zpevněný trup, bez záklonu', 'Guma přidává odpor nahoře']],
+    ['Pronated lat pulldowns', 'Široký sval zádový', 'Horní záda, biceps', 0, 2.5, mid, ['Táhni lokty dolů k bokům', 'Nahoře nech lopatky vyjet']],
+    ['Pec deck flys', 'Hrudník', 'Přední delty', 0, 2.5, mid, ['Vzadu důraz na protažení', 'Lokty lehce pokrčené']],
+    ['T bar rows', 'Horní záda', 'Široký sval zádový, zadní delty', 0, 2.5, mid, ['Hrudník na opoře, bez švihu', 'Vzadu stisk lopatek']],
+    ['Rameno na kladce', 'Boční delty', 'Trapézy', 1, 0.5, sml, ['Začni z protažení přes tělo', 'Vede loket']],
+    ['Pendulum squats', 'Kvadricepsy', 'Hýždě', 0, 2.5, big, ['Jdi hluboko', 'Záda celou dobu u opěry']],
+    ['45° back extensions', 'Hýždě, hamstringy', 'Vzpřimovače', 0, 1, mid, ['Pohyb z kyčlí', 'Nahoře zpevni hýždě, bez prohnutí']],
+    ['Incline chest press', 'Horní hrudník', 'Přední delty, triceps', 0, 2.5, big, ['Lopatky stažené', 'Hluboké protažení']],
+    ['Machine lat pull over', 'Široký sval zádový', '–', 0, 2.5, mid, ['Ruce vedou lokty, ne dlaně', 'Nahoře plné protažení']],
+    ['Ramena s JČ', 'Boční delty', 'Trapézy', 0, 1, sml, ['Vede loket', 'Bez švihu']],
+    ['Reverse pec deck delt flys', 'Zadní delty', 'Horní záda', 0, 2.5, sml, ['Tah do stran, ne dozadu', 'Lopatky se nestahují']],
+    ['Alternating DB biceps curls', 'Biceps', 'Brachioradialis', 1, 1, mid, ['Začni levou', 'Supinace během zvedání']],
+    ['One hand triceps DB overhead extensions', 'Triceps (dlouhá hlava)', '–', 1, 1, mid, ['Loket míří nahoru', 'Hluboké protažení za hlavou']],
+    ['Smith bench press', 'Hrudník', 'Přední delty, triceps', 0, 2.5, big, ['Lopatky stažené a dolů', 'Osa ke spodní části hrudníku']],
+    ['Zákopy v leže', 'Hamstringy', 'Lýtka', 0, 2.5, mid, ['Boky přitisknuté', 'Kontrolovaný návrat']],
+  ];
+  const byName = n => S.exercises.find(e => e.name.toLowerCase() === n.toLowerCase());
+  L.forEach(([name, muscle, secondary, uni, inc, sets, cues]) => { if (!byName(name)) S.exercises.push({ id: uid(), name, muscle, secondary, uni: !!uni, inc, sets: JSON.parse(JSON.stringify(sets)), cues, tempo: '', partials: false, note: '' }); });
+  const T = [
+    ['LOWER', 1, [['One leg leg press', 2], ['Zákopy v sedě', 2], ['Předkopy', 1], ['Lýtka ve stoji', 2], ['Seated hip adductions', 2], ['Decline bench crunches', 2], ['DB wrist curls', 2]]],
+    ['UPPER', 2, [['Triceps na kladce', 2], ['Incline preacher curls', 2], ['Banded Smith shoulder press', 2], ['Pronated lat pulldowns', 2], ['Pec deck flys', 2], ['T bar rows', 2], ['Rameno na kladce', 1]]],
+    ['FULLBODY 1', 4, [['Pendulum squats', 2], ['45° back extensions', 1], ['Lýtka ve stoji', 2], ['Incline chest press', 1], ['Machine lat pull over', 1], ['Ramena s JČ', 1], ['Reverse pec deck delt flys', 1], ['Alternating DB biceps curls', 1], ['One hand triceps DB overhead extensions', 1], ['DB wrist curls', 2]]],
+    ['FULLBODY 2', 6, [['Pronated lat pulldowns', 2], ['Smith bench press', 1], ['T bar rows', 1], ['Rameno na kladce', 2], ['Triceps na kladce', 2], ['Incline preacher curls', 2], ['Zákopy v leže', 1], ['Předkopy', 1]]],
+  ];
+  // ukázka pryč, ať nemíchá statistiky
+  S.templates = S.templates.filter(t => !t.demo); S.sessions = S.sessions.filter(s => !s.demo); S.activities = S.activities.filter(a => !a.demo);
+  if (S.active && !sesById(S.active)) S.active = null;
+  const mine = [];
+  T.forEach(([name, dow, list]) => {
+    if (S.templates.some(t => t.name.toUpperCase() === name)) return;
+    const ex = [], n = {}; list.forEach(([nm, c]) => { const e = byName(nm); if (e) { ex.push(e.id); n[e.id] = c; } });
+    mine.push({ id: uid(), name, dow, ex, n, finisher: '' });
+  });
+  S.templates = mine.concat(S.templates);
+  S.settings.migPlan1 = 1; save(true);
+})();
+
+// ---------- karta „pruh“: nízký široký obdélník ----------
+async function drawShare(sp, style, on) {
+  const W = 1080, L = 48;
+  const isOn = id => on[id] !== false;
+  const prOff = sp.prAlt && on.pr === false; if (prOff) sp = { ...sp, ...sp.prAlt };
+  const col = sp.col;
+  const stats = (sp.stats || []).filter(s => isOn(s.id)).slice(0, 3);
+  const lists = (sp.lists || []).filter(l => isOn(l.id) && l.items.length);
+  const vizs = (sp.viz || []).filter(v => isOn(v.id));
+  const colr = style === 'barva', clear = style === 'cista';
+  const fg = colr ? '#0B0B0C' : '#F5F5F7', mut = colr ? 'rgba(11,11,12,.6)' : clear ? 'rgba(255,255,255,.82)' : '#9A9AA0', acc = colr ? '#0B0B0C' : col, faint = colr ? 'rgba(11,11,12,.12)' : clear ? 'rgba(255,255,255,.28)' : 'rgba(255,255,255,.08)';
+  const TB = 300, X = L + 192 + 34, SW = stats.length ? 250 : 0;
+  const m = document.createElement('canvas').getContext('2d');
+  const room = W - L - X - SW - 20;
+  const size = (() => { let s = 140; m.font = `italic 900 ${s}px ${CF}`; let u = sp.unit ? (m.font = `italic 700 ${Math.round(s * .3)}px ${CF}`, m.measureText(sp.unit).width + 14) : 0; m.font = `italic 900 ${s}px ${CF}`; while (m.measureText(sp.big).width + u > room && s > 70) { s -= 6; m.font = `italic 700 ${Math.round(s * .3)}px ${CF}`; u = sp.unit ? m.measureText(sp.unit).width + 14 : 0; m.font = `italic 900 ${s}px ${CF}`; } return s; })();
+  const listRows = lists.map(l => Math.ceil(l.items.length / 2));
+  const listH = lists.length ? lists.reduce((a, l, i) => a + 40 + listRows[i] * 46, 0) + 10 : 0;
+  const vizH = vizs.reduce((a, v) => a + v.hs + 20, 0);
+  const h = TB + (vizH ? vizH + 6 : 0) + (listH ? listH : 0) + (vizH || listH ? 26 : 0) + 52;
+  const c = document.createElement('canvas'); c.width = W; c.height = h; const x = c.getContext('2d');
+  if (!clear) {
+    rr(x, 0, 0, W, h, 50); x.save(); x.clip();
+    if (colr) { const g = x.createLinearGradient(0, 0, W, h); g.addColorStop(0, col); g.addColorStop(1, shade(col, .74)); x.fillStyle = g; x.fillRect(0, 0, W, h); }
+    else { const g = x.createLinearGradient(0, 0, W, h); g.addColorStop(0, '#1E1E21'); g.addColorStop(1, '#0D0D0F'); x.fillStyle = g; x.fillRect(0, 0, W, h); const rg = x.createRadialGradient(150, 150, 10, 150, 150, 420); rg.addColorStop(0, hexA(col, .17)); rg.addColorStop(1, hexA(col, 0)); x.fillStyle = rg; x.fillRect(0, 0, W, h); }
+    x.globalAlpha = colr ? .14 : .06; x.fillStyle = colr ? '#FFFFFF' : col; slab(x, W - 330, -10, 100, h + 20); x.globalAlpha = colr ? .08 : .035; slab(x, W - 200, -10, 40, h + 20); x.globalAlpha = 1;
+    x.restore();
+    if (!colr) { x.strokeStyle = 'rgba(255,255,255,.07)'; x.lineWidth = 2.5; rr(x, 1.25, 1.25, W - 2.5, h - 2.5, 49); x.stroke(); }
+  }
+  if (clear) { x.shadowColor = 'rgba(0,0,0,.6)'; x.shadowBlur = 24; x.shadowOffsetY = 2; }
+  // medailon + logo pod ním
+  const mx = L + 96, my = 150, R = 92;
+  x.beginPath(); x.arc(mx, my, R, 0, Math.PI * 2); x.fillStyle = colr ? 'rgba(11,11,12,.10)' : clear ? 'rgba(255,255,255,.12)' : hexA(col, .12); x.fill();
+  x.lineWidth = 3; x.strokeStyle = colr ? 'rgba(11,11,12,.35)' : clear ? 'rgba(255,255,255,.55)' : hexA(col, .45); x.stroke();
+  drawPicto(x, sp.picto, mx, my, 110, colr ? '#0B0B0C' : clear ? '#FFFFFF' : col);
+  const mk = await markTinted(colr ? '#0B0B0C' : '#FFFFFF');
+  // titulky
+  const kick = [sp.kicker, sp.date].filter(Boolean).join('  ·  ');
+  x.fillStyle = mut; x.font = `600 22px ${CF}`; spacedL(x, clip(x, kick.toUpperCase(), room + SW - 40), X, 70, 4);
+  x.fillStyle = acc; x.font = `italic 800 34px ${CF}`; spacedL(x, clip(x, sp.title.toUpperCase(), room), X, 112, 3);
+  const bigY = 112 + 18 + Math.round(size * .84);
+  x.fillStyle = fg; x.font = `italic 900 ${size}px ${CF}`; x.fillText(sp.big, X - 5, bigY); const bw = x.measureText(sp.big).width;
+  if (sp.unit) { x.fillStyle = mut; x.font = `italic 700 ${Math.round(size * .3)}px ${CF}`; x.fillText(sp.unit, X + bw + 12, bigY); }
+  x.fillStyle = acc; slab(x, X, bigY + 18, 100, 8); x.fill(); x.globalAlpha = .45; slab(x, X + 114, bigY + 18, 30, 8); x.fill(); x.globalAlpha = 1;
+  // statistiky vpravo pod sebou
+  if (stats.length) {
+    const sx = W - L, step = stats.length === 1 ? 0 : Math.min(78, 190 / (stats.length - 1)), y0 = stats.length === 1 ? 150 : 150 - step * (stats.length - 1) / 2;
+    x.fillStyle = faint; x.fillRect(sx - SW + 10, 66, 2, 172);
+    stats.forEach((s, i) => { const yy = y0 + i * step; x.textAlign = 'right'; x.fillStyle = fg; x.font = `italic 800 42px ${CF}`; x.fillText(clip(x, s.value, SW - 30), sx, yy + 4); x.fillStyle = mut; x.font = `600 19px ${CF}`; x.fillText(s.label.toUpperCase(), sx, yy + 30); x.textAlign = 'left'; });
+  }
+  let y = TB;
+  vizs.forEach(v => { v.drawS(x, L, y, W - 2 * L, { fg, mut, acc, faint, colr }); y += v.hs + 20; });
+  // seznamy ve dvou sloupcích
+  const cw = (W - 2 * L - 28) / 2;
+  lists.forEach((l, li) => {
+    x.fillStyle = mut; x.font = `600 20px ${CF}`; spacedL(x, l.title.toUpperCase(), L, y + 24, 4); y += 40;
+    l.items.forEach(([Lt, Rt, rc], k) => {
+      const cx = L + (k % 2) * (cw + 28), cy = y + Math.floor(k / 2) * 46;
+      x.fillStyle = faint; x.fillRect(cx, cy, cw, 2);
+      x.fillStyle = fg; x.font = `500 25px ${CF}`; x.fillText(clip(x, Lt, cw - 150), cx, cy + 32);
+      x.textAlign = 'right'; x.fillStyle = rc && !colr ? rc : fg; x.font = `italic 800 26px ${CF}`; x.fillText(Rt, cx + cw, cy + 33); x.textAlign = 'left';
+    });
+    y += listRows[li] * 46;
+  });
+  if (mk) { const lh = 28, lw = lh * (mk.naturalWidth || mk.width) / (mk.naturalHeight || mk.height); x.shadowBlur = 0; x.globalAlpha = .55; x.drawImage(mk, W - L - lw, h - 30 - lh, lw, lh); x.globalAlpha = 1; }
+  return c;
+}
+// kompaktní vizualizace do pruhu
+function vizStripDays(ks, label, id) {
+  return {
+    id, label, hs: 64, drawS: (x, X, Y, W, k) => {
+      const n = ks.length, gap = n > 10 ? 6 : 12, cw = (W - gap * (n - 1)) / n;
+      ks.forEach((kk, i) => { const s = sessionOn(kk), a = actsOn(kk), done = s && s.end, cx = X + i * (cw + gap);
+        if (done) { x.fillStyle = k.acc; slab(x, cx - 6, Y, cw - (n > 10 ? 4 : 10), 46); x.fill(); } else { x.fillStyle = k.faint; rr(x, cx, Y, cw, 46, n > 10 ? 6 : 12); x.fill(); }
+        if (a.length) { x.fillStyle = done ? (k.colr ? '#FFFFFF' : '#0B0B0C') : k.acc; x.beginPath(); x.arc(cx + cw / 2, Y + 23, n > 10 ? 4 : 6, 0, 6.28); x.fill(); }
+        if (n <= 10) { x.fillStyle = k.mut; x.font = `700 18px ${CF}`; x.textAlign = 'center'; x.fillText(DOW[pdate(kk).getDay()].toUpperCase(), cx + cw / 2, Y + 64); x.textAlign = 'left'; } });
+    }
+  };
+}
+const _vizMonth = vizMonth, _vizWeek = vizWeek, _vizWeight = vizWeight;
+vizMonth = (yy, mm) => { const days = new Date(yy, mm + 1, 0).getDate(); return vizStripDays([...Array(days)].map((_, i) => dkey(new Date(yy, mm, i + 1))), 'Kalendář', 'cal'); };
+vizWeek = mon => vizStripDays([...Array(7)].map((_, i) => dkey(addDays(mon, i))), 'Dny', 'days');
+vizWeight = ks => { const v = _vizWeight(ks); if (!v) return null; return { ...v, hs: 96, drawS: (x, X, Y, W, k) => v.draw(x, X, Y - 10, W, k) }; };
 
 render();
 </script>
