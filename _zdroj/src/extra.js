@@ -86,7 +86,7 @@ function weekSheet(monK) {
     ${Object.keys(ac).length ? `<div class="lbl" style="margin:20px 4px 8px">Aktivity</div><div class="chips">${Object.entries(ac).map(([n, c]) => `<span class="chip">${esc(n)} ${c}×</span>`).join('')}</div>` : ''}
     ${stag.length ? `<div class="lbl" style="margin:20px 4px 8px">Stagnuje</div><div class="chips">${stag.map(x => `<span class="chip down">${esc(x.ex.name)} · ${x.tr.t}</span>`).join('')}</div>` : ''}
     ${ses.length ? `<div class="lbl" style="margin:20px 4px 8px">Tréninky</div><div class="list">${ses.map(s => `<button class="li" data-a="open-sum" data-id="${s.id}"><div class="t"><b>${esc(s.name)}</b><small>${fday(s.date)} · ${fmin(s.end - s.start)} min${s.perf ? ` · výkon ${s.perf}/5` : ''}</small></div><span class="chev">${ico('chev')}</span></button>`).join('')}</div>` : ''}
-    <div class="actions"><button class="btn white" data-a="close">Zavřít</button></div>`);
+    <div class="actions"><button class="btn" data-a="wk-share" data-k="${monK}">${ico('share')} Sdílet</button><button class="btn white" data-a="close">Zavřít</button></div>`);
 }
 
 Object.assign(A, {
@@ -148,3 +148,100 @@ A.ck = b => {
   if (st[f] == null || st[f] === '') { const v = parseInt(ri.placeholder, 10); if (!isNaN(v)) { st[f] = v; ri.value = v; save(); updateCard(card, s, en); toast(`Zapsáno ${v} opak.`); } else ri.focus(); }
   else { ri.focus(); }
 };
+
+// ===================== v1.7: souhrn týdne v neděli · kotouče · porovnání =====================
+// ---------- nedělní souhrn ----------
+function weekPromo() {
+  const d = new Date(); const mon = monday(d); const mk = dkey(mon);
+  const sunday = d.getDay() === 0, monEarly = d.getDay() === 1 && d.getHours() < 12;
+  const showFor = sunday ? mk : monEarly ? dkey(addDays(mon, -7)) : null;
+  if (!showFor || S.settings.wkSeen === showFor) return '';
+  const ks = [...Array(7)].map((_, i) => dkey(addDays(pdate(showFor), i)));
+  const n = ks.map(sessionOn).filter(s => s && s.end).length;
+  return `<button class="wpromo" data-a="wk-open" data-k="${showFor}"><span class="hic">${pico('gym')}</span><span class="t"><small>${sunday ? 'Neděle' : 'Pondělí ráno'} · týden ${isoWeek(pdate(showFor))}</small><b>Souhrn týdne je připravený</b><em>${n}/${S.settings.weekGoal || 4} tréninků · klepni pro přehled</em></span><span class="chev">${ico('chev')}</span></button>`;
+}
+function weekData(monK) {
+  const mon = pdate(monK); const ks = [...Array(7)].map((_, i) => dkey(addDays(mon, i)));
+  const ses = ks.map(sessionOn).filter(s => s && s.end);
+  const mins = ses.reduce((a, s) => a + fmin(s.end - s.start), 0);
+  const prs = ses.flatMap(s => sessionPRs(s)); const acts = ks.flatMap(actsOn);
+  const bd = BD().days; const aw = avgOf(ks.map(k => bd[k]?.weight)), pw = avgOf(ks.map(k => bd[dkey(addDays(pdate(k), -7))]?.weight));
+  return { mon, ses, mins, prs, acts, ch: aw != null && pw != null ? aw - pw : null };
+}
+async function storyWeek(monK) {
+  const w = weekData(monK); const goal = S.settings.weekGoal || 4;
+  const sub = [`${kg(Math.round(w.mins / 6) / 10)} h v gymu`, w.prs.length ? pl(w.prs.length, 'rekord', 'rekordy', 'rekordů') : '', w.acts.length ? pl(w.acts.length, 'aktivita', 'aktivity', 'aktivit') : ''].filter(Boolean).join('  ·  ');
+  const sun = addDays(w.mon, 6);
+  const c = await miniCard(w.ch != null ? 556 : 500, 'gym', (x, col, X) => {
+    x.fillStyle = col; x.font = `700 30px ${CF}`; spacedL(x, `TÝDEN ${isoWeek(w.mon)}`, X, 150, 7);
+    bigNum(x, `${w.ses.length}/${goal}`, 'tréninků', X - 4, 300, 170);
+    x.fillStyle = '#C7C7CC'; x.font = `500 36px ${CF}`; x.fillText(clip(x, sub, 600), X, 372);
+    if (w.ch != null) { x.fillStyle = '#8E8E93'; x.font = `500 32px ${CF}`; x.fillText(`váha ${sg(w.ch, 2)} kg proti minulému týdnu`, X, 432); }
+  }, `${w.mon.getDate()}. ${w.mon.getMonth() + 1}. – ${sun.getDate()}. ${sun.getMonth() + 1}.`);
+  showShot(c, `tyden-${isoWeek(w.mon)}.png`);
+}
+
+// ---------- kalkulačka kotoučů ----------
+const PLATE_ALL = [25, 20, 15, 10, 5, 2.5, 1.25, 0.5, 0.25];
+const PLATE_DEF = [25, 20, 15, 10, 5, 2.5, 1.25];
+const PLATE_COL = { 25: '#E5484D', 20: '#3B82F6', 15: '#F4C542', 10: '#8BD43B', 5: '#F5F5F7', 2.5: '#C2403F', 1.25: '#A1A1A6', 0.5: '#8E8E93', 0.25: '#6C6C70' };
+const PLATE_H = { 25: 112, 20: 112, 15: 98, 10: 82, 5: 62, 2.5: 48, 1.25: 38, 0.5: 30, 0.25: 26 };
+const plateSet = () => (S.settings.plates && S.settings.plates.length ? S.settings.plates : PLATE_DEF).slice().sort((a, b) => b - a);
+function platesFor(total, bar) {
+  let side = r2((total - bar) / 2); if (side < -1e-9) return { err: `Méně než samotná osa (${kg(bar)} kg)` };
+  const out = []; for (const p of plateSet()) while (side >= p - 1e-9) { out.push(p); side = r2(side - p); }
+  return { out, rest: side };
+}
+function plateSVG(out) {
+  const W = 340, H = 130, cy = H / 2; let x = 70; let g = `<rect x="8" y="${cy - 5}" width="${W - 16}" height="10" rx="5" fill="#5C5C61"/><rect x="58" y="${cy - 14}" width="12" height="28" rx="3" fill="#8E8E93"/>`;
+  for (const p of out) { const h = PLATE_H[p], w = p >= 10 ? 16 : p >= 2.5 ? 12 : 9; g += `<rect x="${x}" y="${cy - h / 2}" width="${w}" height="${h}" rx="3" fill="${PLATE_COL[p]}"/>`; x += w + 3; if (x > W - 20) break; }
+  return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Kotouče na jedné straně osy">${g}</svg>`;
+}
+function plateResult(total, bar) {
+  if (total == null) return '<p class="mut">Zadej váhu.</p>';
+  const r = platesFor(total, bar); if (r.err) return `<p class="mut">${r.err}</p>`;
+  return `${plateSVG(r.out)}<p class="plt"><span class="mut">Na každou stranu</span><b>${r.out.length ? r.out.map(kg).join(' + ') : 'jen osa'}</b>${r.rest > 0 ? `<em>nejde přesně, chybí ${kg(r.rest * 2)} kg</em>` : ''}</p>`;
+}
+function platesSheet(exId, ws) {
+  const ex = exById(exId); const bar = ex.plates?.bar ?? 20; const first = ws.find(w => w != null) ?? null;
+  sheet(`<h2>Kotouče</h2><p class="mut" style="margin:4px 0 0">${esc(ex.name)} · osa ${kg(bar)} kg</p>
+    <div class="form"><label class="f">Celková váha (kg)<input id="pl-w" class="bigin" inputmode="decimal" value="${kg(first)}" data-bar="${bar}"></label></div>
+    <div id="pl-out" style="margin-top:10px">${plateResult(first, bar)}</div>
+    ${ws.filter(w => w != null).length > 1 ? `<div class="chips" style="margin-top:12px">${ws.map((w, i) => w == null ? '' : `<button class="chip" data-a="pl-pick" data-v="${w}">${i + 1}. série · ${kg(w)} kg</button>`).join('')}</div>` : ''}
+    <div class="actions"><button class="btn white" data-a="close">Hotovo</button></div>`);
+}
+
+// ---------- porovnání s minulým tréninkem stejného typu ----------
+function prevSameSession(s) { return finished().find(o => o.id !== s.id && o.start < s.start && (s.tid ? o.tid === s.tid : o.name === s.name)) || null; }
+function compareBlock(s) {
+  const p = prevSameSession(s); if (!p) return '';
+  const a = stats(s), b = stats(p); const ma = fmin((s.end || finEnd || Date.now()) - s.start), mb = fmin(p.end - p.start);
+  const pa = sessionPRs(s).length, pb = sessionPRs(p).length;
+  const row = (l, va, vb, fmt, better) => { const d = va - vb; const cl = d === 0 || better === 'none' ? '' : (better === 'up' ? d > 0 : d < 0) ? 'g' : 'b'; return `<div class="cmpr"><span>${l}</span><b>${fmt(va)}</b><span class="mut">${fmt(vb)}</span><i class="${cl}">${d === 0 ? '=' : (d > 0 ? '+' : '−') + fmt(Math.abs(d))}</i></div>`; };
+  return `<div class="cmp"><div class="cmph"><span>Proti minulému ${esc(p.name)}</span><span class="mut">${fday(p.date)}</span></div>
+    <div class="cmpr hd"><span></span><b>dnes</b><span>minule</span><i></i></div>
+    ${row('Čas', ma, mb, v => v + ' min', 'none')}
+    ${row('Série', a.sets, b.sets, v => String(v), 'up')}
+    ${row('Objem', a.vol, b.vol, v => thou(v) + ' kg', 'up')}
+    ${row('Zlepšení', a.up, b.up, v => String(v), 'up')}
+    ${row('Rekordy', pa, pb, v => String(v), 'up')}</div>`;
+}
+
+// jednorázové doplnění kalkulačky k osovým cvikům ve stávající knihovně
+(function () {
+  if (S.settings.migPlates) return;
+  const bar = ['Bench press', 'Dřep', 'Mrtvý tah', 'Rumunský mrtvý tah', 'Přítahy v předklonu', 'Tlak nad hlavu', 'Hip thrust'];
+  S.exercises.forEach(e => { if (bar.includes(e.name) && !e.plates) e.plates = { bar: 20 }; });
+  S.settings.migPlates = 1; save(true);
+})();
+
+Object.assign(A, {
+  'wk-open': b => { S.settings.wkSeen = b.dataset.k; save(true); render(); weekSheet(b.dataset.k); },
+  'wk-share': b => { closeSheet(); storyWeek(b.dataset.k); },
+  plates: b => { const s = sesById(view.id); const e = s.entries[+b.closest('.ex').dataset.idx]; platesSheet(e.exId, e.sets.slice(0, exById(e.exId).sets.length).map(st => num(st.w))); },
+  'pl-pick': b => { const i = $('#pl-w'); i.value = kg(+b.dataset.v); $('#pl-out').innerHTML = plateResult(+b.dataset.v, num(i.dataset.bar)); },
+  'e-plates': () => { readExDraft(); exDraft.plates = exDraft.plates ? null : { bar: 20 }; drawExEdit(); },
+  'plate-tog': b => { const v = +b.dataset.v; let p = plateSet(); p = p.includes(v) ? p.filter(x => x !== v) : p.concat(v); S.settings.plates = p.sort((a, c) => c - a); save(true); render(); },
+});
+document.addEventListener('input', e => { if (e.target.id === 'pl-w') $('#pl-out').innerHTML = plateResult(num(e.target.value), num(e.target.dataset.bar)); });
+(function () { try { const q = new URLSearchParams(location.search); if (q.get('open') === 'week') { history.replaceState(null, '', location.pathname); const mk = dkey(monday(new Date())); setTimeout(() => { S.settings.wkSeen = mk; save(); weekSheet(mk); }, 50); } } catch (e) { } })();

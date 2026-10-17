@@ -501,3 +501,22 @@ button.ck{background:none;border:0;padding:0;cursor:pointer}
 .agrid .at .ic svg.i{width:28px;height:28px;stroke-width:1.6}
 .at .ic{width:56px;height:56px}
 .mpair .mrow .ml2 small{display:none}
+
+/* v1.7 */
+.wpromo{display:flex;align-items:center;gap:14px;width:100%;margin-top:10px;padding:16px 18px;border-radius:24px;text-align:left;background:linear-gradient(120deg,rgba(139,212,59,.16),var(--card) 65%);border:1px solid rgba(139,212,59,.3)}
+.wpromo .hic{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:rgba(139,212,59,.14);color:var(--done);flex:none}
+.wpromo .t{flex:1;min-width:0;display:grid;gap:1px}
+.wpromo small{color:var(--done);font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.wpromo b{font-size:18px}
+.wpromo em{font-style:normal;color:var(--mut);font-size:14px}
+.plt{display:grid;gap:4px;margin:10px 2px 0;font-size:15px}
+.plt b{font-size:24px;font-variant-numeric:tabular-nums}
+.plt em{font-style:normal;color:var(--warn);font-size:14px}
+.cmp{margin-top:18px;background:var(--card);border-radius:22px;padding:6px 16px 10px;text-align:left}
+.cmph{display:flex;justify-content:space-between;gap:10px;padding:12px 2px 8px;font-size:14px;font-weight:600}
+.cmpr{display:grid;grid-template-columns:.9fr 1.05fr 1.05fr 92px;white-space:nowrap;align-items:center;gap:6px;padding:9px 2px;border-top:1px solid var(--line);font-size:14px;font-variant-numeric:tabular-nums}
+.cmpr.hd{border-top:0;padding-top:0;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--mut)}
+.cmpr.hd b{font-weight:600;color:var(--fg)}
+.cmpr span:first-child{color:var(--mut)}
+.cmpr i{font-style:normal;text-align:right;font-weight:600;color:var(--mut)}
+.cmpr i.g{color:var(--done)} .cmpr i.b{color:var(--down)}

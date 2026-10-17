@@ -517,11 +517,30 @@ button.ck{background:none;border:0;padding:0;cursor:pointer}
 .agrid .at .ic svg.i{width:28px;height:28px;stroke-width:1.6}
 .at .ic{width:56px;height:56px}
 .mpair .mrow .ml2 small{display:none}
+
+/* v1.7 */
+.wpromo{display:flex;align-items:center;gap:14px;width:100%;margin-top:10px;padding:16px 18px;border-radius:24px;text-align:left;background:linear-gradient(120deg,rgba(139,212,59,.16),var(--card) 65%);border:1px solid rgba(139,212,59,.3)}
+.wpromo .hic{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:rgba(139,212,59,.14);color:var(--done);flex:none}
+.wpromo .t{flex:1;min-width:0;display:grid;gap:1px}
+.wpromo small{color:var(--done);font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.wpromo b{font-size:18px}
+.wpromo em{font-style:normal;color:var(--mut);font-size:14px}
+.plt{display:grid;gap:4px;margin:10px 2px 0;font-size:15px}
+.plt b{font-size:24px;font-variant-numeric:tabular-nums}
+.plt em{font-style:normal;color:var(--warn);font-size:14px}
+.cmp{margin-top:18px;background:var(--card);border-radius:22px;padding:6px 16px 10px;text-align:left}
+.cmph{display:flex;justify-content:space-between;gap:10px;padding:12px 2px 8px;font-size:14px;font-weight:600}
+.cmpr{display:grid;grid-template-columns:.9fr 1.05fr 1.05fr 92px;white-space:nowrap;align-items:center;gap:6px;padding:9px 2px;border-top:1px solid var(--line);font-size:14px;font-variant-numeric:tabular-nums}
+.cmpr.hd{border-top:0;padding-top:0;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--mut)}
+.cmpr.hd b{font-weight:600;color:var(--fg)}
+.cmpr span:first-child{color:var(--mut)}
+.cmpr i{font-style:normal;text-align:right;font-weight:600;color:var(--mut)}
+.cmpr i.g{color:var(--done)} .cmpr i.b{color:var(--down)}
 </style>
 </head>
 <body>
 <div id="app"></div><div id="sheet" hidden></div><div id="toast" role="status" aria-live="polite"></div>
-<script>const APP_VERSION = "1.6.0";
+<script>const APP_VERSION = "1.7.0";
 const MARK = "<svg aria-hidden=\"true\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 994 296\"><path fill=\"currentColor\" d=\"M612 5L611 4L571 4L570 5L567 5L566 4L561 4L560 5L448 5L447 6L442 6L441 5L439 6L438 5L435 5L434 6L430 6L429 5L426 5L425 6L414 6L413 5L409 5L408 6L385 5L378 11L366 27L355 39L352 44L335 63L323 79L316 86L312 92L282 127L274 138L267 145L263 151L233 186L233 187L219 203L219 204L210 213L210 214L202 222L202 223L192 232L186 236L171 243L169 243L162 246L155 247L154 248L149 248L148 249L140 249L139 250L85 250L84 251L78 251L77 250L37 250L29 258L29 259L24 264L19 271L13 277L13 278L4 288L0 294L1 295L48 295L49 296L51 295L58 295L59 296L94 296L95 295L97 295L98 296L100 296L101 295L154 295L155 294L184 294L185 293L202 293L203 292L232 291L233 290L241 290L242 289L253 289L254 288L263 288L264 287L271 287L272 286L281 286L282 285L288 285L289 284L294 284L295 283L301 283L302 282L313 281L314 280L328 278L332 276L336 276L337 275L352 272L358 269L361 269L362 268L367 267L369 265L379 262L393 255L408 245L433 221L436 216L448 203L456 192L477 168L485 157L492 150L494 146L506 133L506 132L521 115L525 109L544 88L548 82L560 69L563 64L570 57L570 56L578 48L578 47L589 35L594 28L602 20L604 16L611 9ZM994 1L993 0L974 0L973 1L967 1L966 0L964 0L963 1L866 1L865 2L860 2L859 1L842 2L840 1L839 2L804 2L794 7L792 7L786 11L784 11L777 15L775 15L760 23L758 23L749 28L747 28L734 35L732 35L717 43L715 43L706 48L704 48L696 53L694 53L689 56L685 57L683 59L681 59L670 65L668 65L658 70L656 72L647 76L645 78L636 82L634 84L629 86L624 90L619 92L614 96L606 100L586 115L579 119L575 123L559 135L554 140L553 140L537 155L536 155L502 190L502 193L509 191L512 189L529 184L532 182L538 181L549 176L555 175L558 173L566 171L569 169L586 164L589 162L597 160L606 168L606 169L620 185L632 201L655 228L663 239L677 255L680 260L686 266L694 277L704 288L749 288L750 287L755 287L756 288L760 288L761 287L914 287L916 286L916 284L896 264L895 264L827 199L826 199L797 171L796 171L776 151L775 151L766 142L765 142L757 133L749 127L736 113L736 109L742 104L747 103L757 98L762 97L767 94L777 91L782 88L784 88L787 86L789 86L792 84L794 84L797 82L802 81L807 78L809 78L812 76L814 76L817 74L824 72L829 69L831 69L844 63L849 62L854 59L856 59L861 56L863 56L866 54L873 52L878 49L880 49L883 47L885 47L898 41L903 40L910 36L912 36L920 32L925 31L937 25L939 25L942 23L944 23L947 21L949 21L952 19L954 19L957 17L959 17L962 15L969 13L974 10L976 10L979 8L981 8L984 6L993 3Z\"/></svg>";
 // ===== Výchozí knihovna cviků (informace jsou skryté pod „Info o cviku“) =====
 const R = (min, max, fail = true) => ({ min, max, fail });
@@ -652,6 +671,7 @@ Object.assign(IC, {
   arm:'<path d="M5 20c-.5-5 1-10 3.5-13.5L11 7l-.5 3.5 2 .8c2.3-1.8 6.3-1.3 7.5 1.7.8 2.2-.4 5.2-3 7z"/>',
   pause:'<path d="M8 5v14M16 5v14"/>',
   chevd:'<path d="m6 9 6 6 6-6"/>',
+  plate:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.2"/><path d="M12 3v2.5M12 18.5V21"/>',
 });
 const FEEL = [
   ['Špatný', '<path d="M2 3.5h4v10H2zM8 3.5h9.6a2 2 0 0 1 2 1.6l1.4 7a2 2 0 0 1-2 2.4h-5.2l1 4.3a1.9 1.9 0 0 1-3.4 1.4L8 14z"/>'],
@@ -872,6 +892,7 @@ function vHome() {
     <header class="htop">${MARKHTML(24)}<button class="round ghost" data-a="tab" data-v="settings" aria-label="Nastavení">${ico('gear')}</button></header>
     <div class="hdate">${DOWL[d.getDay()]} ${d.getDate()}. ${MONG[d.getMonth()]}</div>
     ${gym}
+    ${typeof weekPromo === 'function' ? weekPromo() : ''}
     <div class="hgrid">${mTile}${aTile}</div>
     ${empty}
     ${lastS ? `<button class="hrow" data-a="open-sum" data-id="${lastS.id}"><span class="bar"></span><span class="t"><small>Poslední trénink · ${fday(lastS.date)}</small><b>${esc(lastS.name)}</b></span><span class="n">${fmin(lastS.end - lastS.start)} min${stats(lastS).up ? ` · <em>${stats(lastS).up} ↑</em>` : ''}</span></button>` : ''}
@@ -970,7 +991,7 @@ function exBody(s, e, ex) {
     }
   });
   return `<div class="exb">
-    <div class="tools"><div class="chips">${chips}</div><button class="tb cdb" data-a="cd-start" aria-label="Odpočet před pracovní sérií">${ico('timer')}<span>${fcd(cdOf(ex))}</span></button><button class="tb" data-a="prog-ex" data-id="${ex.id}" aria-label="Statistiky cviku">${ico('bars')}</button><button class="tb" data-a="story-ex" aria-label="Uložit na story">${ico('share')}</button><button class="tb" data-a="ex-menu" aria-label="Možnosti">${ico('more')}</button></div>
+    <div class="tools"><div class="chips">${chips}</div><button class="tb cdb" data-a="cd-start" aria-label="Odpočet před pracovní sérií">${ico('timer')}<span>${fcd(cdOf(ex))}</span></button>${ex.plates ? `<button class="tb" data-a="plates" aria-label="Kalkulačka kotoučů">${ico('plate')}</button>` : ''}<button class="tb" data-a="prog-ex" data-id="${ex.id}" aria-label="Statistiky cviku">${ico('bars')}</button><button class="tb" data-a="story-ex" aria-label="Uložit na story">${ico('share')}</button><button class="tb" data-a="ex-menu" aria-label="Možnosti">${ico('more')}</button></div>
     <div class="last">${last ? `Minule · ${fday(last.s.date)} — <b class="num">${usedSets(last.e, ex).map(x => setTxt(x, ex)).join(' · ')}</b>` : 'První záznam tohoto cviku'}</div>
     <div class="tbl"><div class="th"><span>#</span><span>Kg</span><span>Opak.</span><span>Rozsah</span><span>${ico('check')}</span></div>${rows}</div>
     <div class="nx" data-nx>${nextLines(s, e, ex, last)}</div>
@@ -1027,6 +1048,7 @@ function vFin() {
       <h1 style="font-size:44px">${prs.length ? 'Nový rekord!' : ups ? 'Gratulace' : 'Hotovo'}</h1><p style="font-size:19px;margin:12px 0 0">${ups ? 'Tvůj progres:' : items.length ? 'Tentokrát bez posunu. Příště to přijde.' : 'První zápis těchto cviků. Příště uvidíš posun.'}</p></div>
     ${prs.length ? `<div class="gl">${prs.map(p => `<div class="gi pr"><div class="t"><b>${esc(p.ex.name)}</b><small>Osobní rekord</small></div><div class="r"><div class="p"><span class="cir">${ico('medal')}</span><em>PR</em></div><div class="from">${kg(p.pw)} × ${p.pr} → <b>${kg(p.w)} × ${p.r}</b></div></div></div>`).join('')}</div>` : ''}
     <div class="gl">${items.filter(x => !prs.some(p => p.ex === x.ex)).map(x => `<div class="gi ${x.k}"><div class="t"><b>${esc(x.ex.name)}</b><small>${esc(x.ex.muscle || '')}</small></div><div class="r"><div class="p"><span class="cir">${ico(x.k === 'down' ? 'down' : 'up')}</span><em>${x.d}</em></div><div class="from">${x.from} → <b>${x.to}</b></div></div></div>`).join('')}</div>
+    ${compareBlock(s)}
     <div class="bottom-acts" style="margin-top:26px"><button class="pill white" data-a="fin-step" data-v="3">Pokračovat</button></div></div>`;
   }
   const tp = tplById(s.tid); const c = s.cardio || {}; const mode = c.mode || 'none';
@@ -1084,6 +1106,7 @@ function vSummary() {
       ${extra.length ? `<div class="row"><span class="k">Navíc:</span><span>${esc(extra.join(' + '))}</span></div>` : ''}</div>
     <div class="stat3" style="margin-top:14px"><div><span>Sérií</span><b>${st.sets}</b></div><div><span>Zlepšení</span><b class="up">${st.up}</b></div><div><span>Nazvedáno</span><b>${thou(st.vol)}</b></div></div>
     <div class="bottom-acts" style="margin-top:14px"><button class="pill white" data-a="story-sum">${ico('share')} Sdílet trénink</button></div>
+    ${compareBlock(s)}
     ${exTables(s, true)}
   </div>${tabs()}`;
 }
@@ -1245,6 +1268,8 @@ function drawExEdit() {
       <label class="f">Přidávat váhu po (kg)<input id="e-inc" inputmode="decimal" value="${kg(d.inc)}" placeholder="0,25"></label>
       <div class="seg">${[0.25, 0.5, 1, 1.25, 2.5].map(v => `<button data-a="inc-q" data-v="${v}" class="${d.inc === v ? 'on' : ''}">${kg(v)}</button>`).join('')}</div>
       <button class="sw ${d.uni ? 'on' : ''}" data-a="e-uni"><span>Jednostranný cvik<small>Zapisuje se 1L a 1R, začíná slabší levá</small></span><span class="k"></span></button>
+      <button class="sw ${d.plates ? 'on' : ''}" data-a="e-plates"><span>Nakládá se osa<small>U cviku se ukáže kalkulačka kotoučů</small></span><span class="k"></span></button>
+      ${d.plates ? `<label class="f">Váha osy / saní (kg)<input id="e-bar" inputmode="decimal" value="${kg(d.plates.bar)}" placeholder="20"></label>` : ''}
       <div class="two"><label class="f">Tempo<input id="e-tempo" value="${esc(d.tempo)}" placeholder="2-0-X-0"></label><label class="f">Polovičky<button class="sw ${d.partials ? 'on' : ''}" data-a="e-part" style="min-height:50px;padding:0 14px"><span>Po plném rozsahu</span><span class="k"></span></button></label></div>
       <div><div class="lbl" style="margin-bottom:8px">Odpočet před pracovní sérií</div><div class="seg">${[[0, 'Výchozí'], [90, '1:30'], [120, '2:00'], [180, '3:00'], [240, '4:00']].map(([v, l]) => `<button data-a="e-cd" data-v="${v}" class="${(d.cd || 0) === v ? 'on' : ''}">${l}</button>`).join('')}</div></div>
       <label class="f">Na co si dát pozor (každý bod na nový řádek)<textarea id="e-cues" placeholder="Lopatky stažené…">${esc((d.cues || []).join('\n'))}</textarea></label>
@@ -1256,6 +1281,7 @@ function drawExEdit() {
 function readExDraft() {
   const d = exDraft;
   d.name = $('#e-name').value.trim(); d.muscle = $('#e-muscle').value.trim(); d.secondary = $('#e-sec').value.trim();
+  if (d.plates && $('#e-bar')) d.plates.bar = num($('#e-bar').value) ?? 20;
   d.inc = num($('#e-inc').value) ?? d.inc; d.tempo = $('#e-tempo').value.trim(); d.note = $('#e-note').value;
   d.cues = $('#e-cues').value.split('\n').map(x => x.trim()).filter(Boolean);
   $$('#e-sets .setcfg').forEach(r => { const i = +r.dataset.i; d.sets[i].min = num($('[data-sf=min]', r).value) ?? d.sets[i].min; d.sets[i].max = num($('[data-sf=max]', r).value) ?? d.sets[i].max; });
@@ -1365,6 +1391,9 @@ function vSettings() {
       <div class="seg">${[90, 120, 150, 180, 240].map(v => `<button data-a="set-cd" data-v="${v}" class="${(S.settings.cd || 120) === v ? 'on' : ''}">${fcd(v)}</button>`).join('')}</div>
       <p class="mut" style="font-size:14px;margin:10px 6px">U každého cviku jde nastavit vlastní (Upravit cvik).</p>
       <button class="sw ${S.settings.cdSound === false ? '' : 'on'}" data-a="tog-sound"><span>Zvuk na konci odpočtu<small>Pípnutí, když máš jít na pracovní sérii</small></span><span class="k"></span></button></section>
+    <section class="sec"><div class="lbl" style="margin:0 6px 10px">Kotouče v tvém gymu</div>
+      <div class="chips">${PLATE_ALL.map(p => `<button class="chip ${plateSet().includes(p) ? 'prog' : ''}" data-a="plate-tog" data-v="${p}">${kg(p)} kg</button>`).join('')}</div>
+      <p class="mut" style="font-size:14px;margin:10px 6px">Kalkulačka počítá jen se zvýrazněnými kotouči.</p></section>
     <section class="sec"><div class="lbl" style="margin:0 6px 10px">Tréninků týdně (cíl)</div>
       <div class="seg">${[2, 3, 4, 5, 6].map(v => `<button data-a="goal" data-v="${v}" class="${(S.settings.weekGoal || 4) === v ? 'on' : ''}">${v}</button>`).join('')}</div></section>
     <section class="sec"><button class="li" data-a="tab" data-v="tpls"><span class="ic" style="color:var(--done)">${ico('dumbbell')}</span><div class="t"><b>Moje tréninky</b><small>${S.templates.length} sestav · rotace</small></div><span class="chev">${ico('chev')}</span></button></section>
@@ -2034,7 +2063,7 @@ function weekSheet(monK) {
     ${Object.keys(ac).length ? `<div class="lbl" style="margin:20px 4px 8px">Aktivity</div><div class="chips">${Object.entries(ac).map(([n, c]) => `<span class="chip">${esc(n)} ${c}×</span>`).join('')}</div>` : ''}
     ${stag.length ? `<div class="lbl" style="margin:20px 4px 8px">Stagnuje</div><div class="chips">${stag.map(x => `<span class="chip down">${esc(x.ex.name)} · ${x.tr.t}</span>`).join('')}</div>` : ''}
     ${ses.length ? `<div class="lbl" style="margin:20px 4px 8px">Tréninky</div><div class="list">${ses.map(s => `<button class="li" data-a="open-sum" data-id="${s.id}"><div class="t"><b>${esc(s.name)}</b><small>${fday(s.date)} · ${fmin(s.end - s.start)} min${s.perf ? ` · výkon ${s.perf}/5` : ''}</small></div><span class="chev">${ico('chev')}</span></button>`).join('')}</div>` : ''}
-    <div class="actions"><button class="btn white" data-a="close">Zavřít</button></div>`);
+    <div class="actions"><button class="btn" data-a="wk-share" data-k="${monK}">${ico('share')} Sdílet</button><button class="btn white" data-a="close">Zavřít</button></div>`);
 }
 
 Object.assign(A, {
@@ -2096,6 +2125,103 @@ A.ck = b => {
   if (st[f] == null || st[f] === '') { const v = parseInt(ri.placeholder, 10); if (!isNaN(v)) { st[f] = v; ri.value = v; save(); updateCard(card, s, en); toast(`Zapsáno ${v} opak.`); } else ri.focus(); }
   else { ri.focus(); }
 };
+
+// ===================== v1.7: souhrn týdne v neděli · kotouče · porovnání =====================
+// ---------- nedělní souhrn ----------
+function weekPromo() {
+  const d = new Date(); const mon = monday(d); const mk = dkey(mon);
+  const sunday = d.getDay() === 0, monEarly = d.getDay() === 1 && d.getHours() < 12;
+  const showFor = sunday ? mk : monEarly ? dkey(addDays(mon, -7)) : null;
+  if (!showFor || S.settings.wkSeen === showFor) return '';
+  const ks = [...Array(7)].map((_, i) => dkey(addDays(pdate(showFor), i)));
+  const n = ks.map(sessionOn).filter(s => s && s.end).length;
+  return `<button class="wpromo" data-a="wk-open" data-k="${showFor}"><span class="hic">${pico('gym')}</span><span class="t"><small>${sunday ? 'Neděle' : 'Pondělí ráno'} · týden ${isoWeek(pdate(showFor))}</small><b>Souhrn týdne je připravený</b><em>${n}/${S.settings.weekGoal || 4} tréninků · klepni pro přehled</em></span><span class="chev">${ico('chev')}</span></button>`;
+}
+function weekData(monK) {
+  const mon = pdate(monK); const ks = [...Array(7)].map((_, i) => dkey(addDays(mon, i)));
+  const ses = ks.map(sessionOn).filter(s => s && s.end);
+  const mins = ses.reduce((a, s) => a + fmin(s.end - s.start), 0);
+  const prs = ses.flatMap(s => sessionPRs(s)); const acts = ks.flatMap(actsOn);
+  const bd = BD().days; const aw = avgOf(ks.map(k => bd[k]?.weight)), pw = avgOf(ks.map(k => bd[dkey(addDays(pdate(k), -7))]?.weight));
+  return { mon, ses, mins, prs, acts, ch: aw != null && pw != null ? aw - pw : null };
+}
+async function storyWeek(monK) {
+  const w = weekData(monK); const goal = S.settings.weekGoal || 4;
+  const sub = [`${kg(Math.round(w.mins / 6) / 10)} h v gymu`, w.prs.length ? pl(w.prs.length, 'rekord', 'rekordy', 'rekordů') : '', w.acts.length ? pl(w.acts.length, 'aktivita', 'aktivity', 'aktivit') : ''].filter(Boolean).join('  ·  ');
+  const sun = addDays(w.mon, 6);
+  const c = await miniCard(w.ch != null ? 556 : 500, 'gym', (x, col, X) => {
+    x.fillStyle = col; x.font = `700 30px ${CF}`; spacedL(x, `TÝDEN ${isoWeek(w.mon)}`, X, 150, 7);
+    bigNum(x, `${w.ses.length}/${goal}`, 'tréninků', X - 4, 300, 170);
+    x.fillStyle = '#C7C7CC'; x.font = `500 36px ${CF}`; x.fillText(clip(x, sub, 600), X, 372);
+    if (w.ch != null) { x.fillStyle = '#8E8E93'; x.font = `500 32px ${CF}`; x.fillText(`váha ${sg(w.ch, 2)} kg proti minulému týdnu`, X, 432); }
+  }, `${w.mon.getDate()}. ${w.mon.getMonth() + 1}. – ${sun.getDate()}. ${sun.getMonth() + 1}.`);
+  showShot(c, `tyden-${isoWeek(w.mon)}.png`);
+}
+
+// ---------- kalkulačka kotoučů ----------
+const PLATE_ALL = [25, 20, 15, 10, 5, 2.5, 1.25, 0.5, 0.25];
+const PLATE_DEF = [25, 20, 15, 10, 5, 2.5, 1.25];
+const PLATE_COL = { 25: '#E5484D', 20: '#3B82F6', 15: '#F4C542', 10: '#8BD43B', 5: '#F5F5F7', 2.5: '#C2403F', 1.25: '#A1A1A6', 0.5: '#8E8E93', 0.25: '#6C6C70' };
+const PLATE_H = { 25: 112, 20: 112, 15: 98, 10: 82, 5: 62, 2.5: 48, 1.25: 38, 0.5: 30, 0.25: 26 };
+const plateSet = () => (S.settings.plates && S.settings.plates.length ? S.settings.plates : PLATE_DEF).slice().sort((a, b) => b - a);
+function platesFor(total, bar) {
+  let side = r2((total - bar) / 2); if (side < -1e-9) return { err: `Méně než samotná osa (${kg(bar)} kg)` };
+  const out = []; for (const p of plateSet()) while (side >= p - 1e-9) { out.push(p); side = r2(side - p); }
+  return { out, rest: side };
+}
+function plateSVG(out) {
+  const W = 340, H = 130, cy = H / 2; let x = 70; let g = `<rect x="8" y="${cy - 5}" width="${W - 16}" height="10" rx="5" fill="#5C5C61"/><rect x="58" y="${cy - 14}" width="12" height="28" rx="3" fill="#8E8E93"/>`;
+  for (const p of out) { const h = PLATE_H[p], w = p >= 10 ? 16 : p >= 2.5 ? 12 : 9; g += `<rect x="${x}" y="${cy - h / 2}" width="${w}" height="${h}" rx="3" fill="${PLATE_COL[p]}"/>`; x += w + 3; if (x > W - 20) break; }
+  return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Kotouče na jedné straně osy">${g}</svg>`;
+}
+function plateResult(total, bar) {
+  if (total == null) return '<p class="mut">Zadej váhu.</p>';
+  const r = platesFor(total, bar); if (r.err) return `<p class="mut">${r.err}</p>`;
+  return `${plateSVG(r.out)}<p class="plt"><span class="mut">Na každou stranu</span><b>${r.out.length ? r.out.map(kg).join(' + ') : 'jen osa'}</b>${r.rest > 0 ? `<em>nejde přesně, chybí ${kg(r.rest * 2)} kg</em>` : ''}</p>`;
+}
+function platesSheet(exId, ws) {
+  const ex = exById(exId); const bar = ex.plates?.bar ?? 20; const first = ws.find(w => w != null) ?? null;
+  sheet(`<h2>Kotouče</h2><p class="mut" style="margin:4px 0 0">${esc(ex.name)} · osa ${kg(bar)} kg</p>
+    <div class="form"><label class="f">Celková váha (kg)<input id="pl-w" class="bigin" inputmode="decimal" value="${kg(first)}" data-bar="${bar}"></label></div>
+    <div id="pl-out" style="margin-top:10px">${plateResult(first, bar)}</div>
+    ${ws.filter(w => w != null).length > 1 ? `<div class="chips" style="margin-top:12px">${ws.map((w, i) => w == null ? '' : `<button class="chip" data-a="pl-pick" data-v="${w}">${i + 1}. série · ${kg(w)} kg</button>`).join('')}</div>` : ''}
+    <div class="actions"><button class="btn white" data-a="close">Hotovo</button></div>`);
+}
+
+// ---------- porovnání s minulým tréninkem stejného typu ----------
+function prevSameSession(s) { return finished().find(o => o.id !== s.id && o.start < s.start && (s.tid ? o.tid === s.tid : o.name === s.name)) || null; }
+function compareBlock(s) {
+  const p = prevSameSession(s); if (!p) return '';
+  const a = stats(s), b = stats(p); const ma = fmin((s.end || finEnd || Date.now()) - s.start), mb = fmin(p.end - p.start);
+  const pa = sessionPRs(s).length, pb = sessionPRs(p).length;
+  const row = (l, va, vb, fmt, better) => { const d = va - vb; const cl = d === 0 || better === 'none' ? '' : (better === 'up' ? d > 0 : d < 0) ? 'g' : 'b'; return `<div class="cmpr"><span>${l}</span><b>${fmt(va)}</b><span class="mut">${fmt(vb)}</span><i class="${cl}">${d === 0 ? '=' : (d > 0 ? '+' : '−') + fmt(Math.abs(d))}</i></div>`; };
+  return `<div class="cmp"><div class="cmph"><span>Proti minulému ${esc(p.name)}</span><span class="mut">${fday(p.date)}</span></div>
+    <div class="cmpr hd"><span></span><b>dnes</b><span>minule</span><i></i></div>
+    ${row('Čas', ma, mb, v => v + ' min', 'none')}
+    ${row('Série', a.sets, b.sets, v => String(v), 'up')}
+    ${row('Objem', a.vol, b.vol, v => thou(v) + ' kg', 'up')}
+    ${row('Zlepšení', a.up, b.up, v => String(v), 'up')}
+    ${row('Rekordy', pa, pb, v => String(v), 'up')}</div>`;
+}
+
+// jednorázové doplnění kalkulačky k osovým cvikům ve stávající knihovně
+(function () {
+  if (S.settings.migPlates) return;
+  const bar = ['Bench press', 'Dřep', 'Mrtvý tah', 'Rumunský mrtvý tah', 'Přítahy v předklonu', 'Tlak nad hlavu', 'Hip thrust'];
+  S.exercises.forEach(e => { if (bar.includes(e.name) && !e.plates) e.plates = { bar: 20 }; });
+  S.settings.migPlates = 1; save(true);
+})();
+
+Object.assign(A, {
+  'wk-open': b => { S.settings.wkSeen = b.dataset.k; save(true); render(); weekSheet(b.dataset.k); },
+  'wk-share': b => { closeSheet(); storyWeek(b.dataset.k); },
+  plates: b => { const s = sesById(view.id); const e = s.entries[+b.closest('.ex').dataset.idx]; platesSheet(e.exId, e.sets.slice(0, exById(e.exId).sets.length).map(st => num(st.w))); },
+  'pl-pick': b => { const i = $('#pl-w'); i.value = kg(+b.dataset.v); $('#pl-out').innerHTML = plateResult(+b.dataset.v, num(i.dataset.bar)); },
+  'e-plates': () => { readExDraft(); exDraft.plates = exDraft.plates ? null : { bar: 20 }; drawExEdit(); },
+  'plate-tog': b => { const v = +b.dataset.v; let p = plateSet(); p = p.includes(v) ? p.filter(x => x !== v) : p.concat(v); S.settings.plates = p.sort((a, c) => c - a); save(true); render(); },
+});
+document.addEventListener('input', e => { if (e.target.id === 'pl-w') $('#pl-out').innerHTML = plateResult(num(e.target.value), num(e.target.dataset.bar)); });
+(function () { try { const q = new URLSearchParams(location.search); if (q.get('open') === 'week') { history.replaceState(null, '', location.pathname); const mk = dkey(monday(new Date())); setTimeout(() => { S.settings.wkSeen = mk; save(); weekSheet(mk); }, 50); } } catch (e) { } })();
 
 render();
 </script>

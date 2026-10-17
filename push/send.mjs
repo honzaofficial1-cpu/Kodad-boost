@@ -14,11 +14,17 @@ const off = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Prague', timeZo
 const plus = off.includes('+2') ? 2 : 1;
 let payload;
 if (ev === 'schedule') {
-  const utcH = +sched.trim().split(/\s+/)[1];
-  if ((utcH + plus) % 24 !== cfg.hour) { console.log(`Přeskakuji (${sched}, Praha ${off}).`); process.exit(0); }
-  payload = { title: 'Dobré ráno', body: 'Ranní zápis: váha nalačno, spánek a jak proběhl včerejšek.', url: './?open=den' };
+  const [mm, hh, , , dow] = sched.trim().split(/\s+/);
+  const local = (+hh + plus) % 24;
+  if (dow === '0') {
+    if (local !== (cfg.weekHour ?? 19)) { console.log(`Přeskakuji (${sched}, Praha ${off}).`); process.exit(0); }
+    payload = { title: 'Souhrn týdne', body: 'Tvůj týden je spočítaný – tréninky, rekordy a tempo nabírání.', url: './?open=week' };
+  } else {
+    if (local !== cfg.hour) { console.log(`Přeskakuji (${sched}, Praha ${off}).`); process.exit(0); }
+    payload = { title: 'Dobré ráno', body: 'Ranní zápis: váha nalačno, spánek a kroky za včerejšek.', url: './?open=den' };
+  }
 } else {
-  payload = { title: 'Kodad boost', body: 'Upozornění fungují. Ráno ti připomenu ranní zápis.', url: './' };
+  payload = { title: 'Kodad boost', body: 'Upozornění fungují.', url: './' };
 }
 webpush.setVapidDetails(cfg.subject, cfg.publicKey, priv);
 let ok = 0;

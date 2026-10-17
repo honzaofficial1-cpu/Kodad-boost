@@ -127,6 +127,7 @@ Object.assign(IC, {
   arm:'<path d="M5 20c-.5-5 1-10 3.5-13.5L11 7l-.5 3.5 2 .8c2.3-1.8 6.3-1.3 7.5 1.7.8 2.2-.4 5.2-3 7z"/>',
   pause:'<path d="M8 5v14M16 5v14"/>',
   chevd:'<path d="m6 9 6 6 6-6"/>',
+  plate:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.2"/><path d="M12 3v2.5M12 18.5V21"/>',
 });
 const FEEL = [
   ['Špatný', '<path d="M2 3.5h4v10H2zM8 3.5h9.6a2 2 0 0 1 2 1.6l1.4 7a2 2 0 0 1-2 2.4h-5.2l1 4.3a1.9 1.9 0 0 1-3.4 1.4L8 14z"/>'],

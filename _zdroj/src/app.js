@@ -194,6 +194,7 @@ function vHome() {
     <header class="htop">${MARKHTML(24)}<button class="round ghost" data-a="tab" data-v="settings" aria-label="Nastavení">${ico('gear')}</button></header>
     <div class="hdate">${DOWL[d.getDay()]} ${d.getDate()}. ${MONG[d.getMonth()]}</div>
     ${gym}
+    ${typeof weekPromo === 'function' ? weekPromo() : ''}
     <div class="hgrid">${mTile}${aTile}</div>
     ${empty}
     ${lastS ? `<button class="hrow" data-a="open-sum" data-id="${lastS.id}"><span class="bar"></span><span class="t"><small>Poslední trénink · ${fday(lastS.date)}</small><b>${esc(lastS.name)}</b></span><span class="n">${fmin(lastS.end - lastS.start)} min${stats(lastS).up ? ` · <em>${stats(lastS).up} ↑</em>` : ''}</span></button>` : ''}
@@ -292,7 +293,7 @@ function exBody(s, e, ex) {
     }
   });
   return `<div class="exb">
-    <div class="tools"><div class="chips">${chips}</div><button class="tb cdb" data-a="cd-start" aria-label="Odpočet před pracovní sérií">${ico('timer')}<span>${fcd(cdOf(ex))}</span></button><button class="tb" data-a="prog-ex" data-id="${ex.id}" aria-label="Statistiky cviku">${ico('bars')}</button><button class="tb" data-a="story-ex" aria-label="Uložit na story">${ico('share')}</button><button class="tb" data-a="ex-menu" aria-label="Možnosti">${ico('more')}</button></div>
+    <div class="tools"><div class="chips">${chips}</div><button class="tb cdb" data-a="cd-start" aria-label="Odpočet před pracovní sérií">${ico('timer')}<span>${fcd(cdOf(ex))}</span></button>${ex.plates ? `<button class="tb" data-a="plates" aria-label="Kalkulačka kotoučů">${ico('plate')}</button>` : ''}<button class="tb" data-a="prog-ex" data-id="${ex.id}" aria-label="Statistiky cviku">${ico('bars')}</button><button class="tb" data-a="story-ex" aria-label="Uložit na story">${ico('share')}</button><button class="tb" data-a="ex-menu" aria-label="Možnosti">${ico('more')}</button></div>
     <div class="last">${last ? `Minule · ${fday(last.s.date)} — <b class="num">${usedSets(last.e, ex).map(x => setTxt(x, ex)).join(' · ')}</b>` : 'První záznam tohoto cviku'}</div>
     <div class="tbl"><div class="th"><span>#</span><span>Kg</span><span>Opak.</span><span>Rozsah</span><span>${ico('check')}</span></div>${rows}</div>
     <div class="nx" data-nx>${nextLines(s, e, ex, last)}</div>
@@ -349,6 +350,7 @@ function vFin() {
       <h1 style="font-size:44px">${prs.length ? 'Nový rekord!' : ups ? 'Gratulace' : 'Hotovo'}</h1><p style="font-size:19px;margin:12px 0 0">${ups ? 'Tvůj progres:' : items.length ? 'Tentokrát bez posunu. Příště to přijde.' : 'První zápis těchto cviků. Příště uvidíš posun.'}</p></div>
     ${prs.length ? `<div class="gl">${prs.map(p => `<div class="gi pr"><div class="t"><b>${esc(p.ex.name)}</b><small>Osobní rekord</small></div><div class="r"><div class="p"><span class="cir">${ico('medal')}</span><em>PR</em></div><div class="from">${kg(p.pw)} × ${p.pr} → <b>${kg(p.w)} × ${p.r}</b></div></div></div>`).join('')}</div>` : ''}
     <div class="gl">${items.filter(x => !prs.some(p => p.ex === x.ex)).map(x => `<div class="gi ${x.k}"><div class="t"><b>${esc(x.ex.name)}</b><small>${esc(x.ex.muscle || '')}</small></div><div class="r"><div class="p"><span class="cir">${ico(x.k === 'down' ? 'down' : 'up')}</span><em>${x.d}</em></div><div class="from">${x.from} → <b>${x.to}</b></div></div></div>`).join('')}</div>
+    ${compareBlock(s)}
     <div class="bottom-acts" style="margin-top:26px"><button class="pill white" data-a="fin-step" data-v="3">Pokračovat</button></div></div>`;
   }
   const tp = tplById(s.tid); const c = s.cardio || {}; const mode = c.mode || 'none';
@@ -406,6 +408,7 @@ function vSummary() {
       ${extra.length ? `<div class="row"><span class="k">Navíc:</span><span>${esc(extra.join(' + '))}</span></div>` : ''}</div>
     <div class="stat3" style="margin-top:14px"><div><span>Sérií</span><b>${st.sets}</b></div><div><span>Zlepšení</span><b class="up">${st.up}</b></div><div><span>Nazvedáno</span><b>${thou(st.vol)}</b></div></div>
     <div class="bottom-acts" style="margin-top:14px"><button class="pill white" data-a="story-sum">${ico('share')} Sdílet trénink</button></div>
+    ${compareBlock(s)}
     ${exTables(s, true)}
   </div>${tabs()}`;
 }
@@ -567,6 +570,8 @@ function drawExEdit() {
       <label class="f">Přidávat váhu po (kg)<input id="e-inc" inputmode="decimal" value="${kg(d.inc)}" placeholder="0,25"></label>
       <div class="seg">${[0.25, 0.5, 1, 1.25, 2.5].map(v => `<button data-a="inc-q" data-v="${v}" class="${d.inc === v ? 'on' : ''}">${kg(v)}</button>`).join('')}</div>
       <button class="sw ${d.uni ? 'on' : ''}" data-a="e-uni"><span>Jednostranný cvik<small>Zapisuje se 1L a 1R, začíná slabší levá</small></span><span class="k"></span></button>
+      <button class="sw ${d.plates ? 'on' : ''}" data-a="e-plates"><span>Nakládá se osa<small>U cviku se ukáže kalkulačka kotoučů</small></span><span class="k"></span></button>
+      ${d.plates ? `<label class="f">Váha osy / saní (kg)<input id="e-bar" inputmode="decimal" value="${kg(d.plates.bar)}" placeholder="20"></label>` : ''}
       <div class="two"><label class="f">Tempo<input id="e-tempo" value="${esc(d.tempo)}" placeholder="2-0-X-0"></label><label class="f">Polovičky<button class="sw ${d.partials ? 'on' : ''}" data-a="e-part" style="min-height:50px;padding:0 14px"><span>Po plném rozsahu</span><span class="k"></span></button></label></div>
       <div><div class="lbl" style="margin-bottom:8px">Odpočet před pracovní sérií</div><div class="seg">${[[0, 'Výchozí'], [90, '1:30'], [120, '2:00'], [180, '3:00'], [240, '4:00']].map(([v, l]) => `<button data-a="e-cd" data-v="${v}" class="${(d.cd || 0) === v ? 'on' : ''}">${l}</button>`).join('')}</div></div>
       <label class="f">Na co si dát pozor (každý bod na nový řádek)<textarea id="e-cues" placeholder="Lopatky stažené…">${esc((d.cues || []).join('\n'))}</textarea></label>
@@ -578,6 +583,7 @@ function drawExEdit() {
 function readExDraft() {
   const d = exDraft;
   d.name = $('#e-name').value.trim(); d.muscle = $('#e-muscle').value.trim(); d.secondary = $('#e-sec').value.trim();
+  if (d.plates && $('#e-bar')) d.plates.bar = num($('#e-bar').value) ?? 20;
   d.inc = num($('#e-inc').value) ?? d.inc; d.tempo = $('#e-tempo').value.trim(); d.note = $('#e-note').value;
   d.cues = $('#e-cues').value.split('\n').map(x => x.trim()).filter(Boolean);
   $$('#e-sets .setcfg').forEach(r => { const i = +r.dataset.i; d.sets[i].min = num($('[data-sf=min]', r).value) ?? d.sets[i].min; d.sets[i].max = num($('[data-sf=max]', r).value) ?? d.sets[i].max; });
@@ -687,6 +693,9 @@ function vSettings() {
       <div class="seg">${[90, 120, 150, 180, 240].map(v => `<button data-a="set-cd" data-v="${v}" class="${(S.settings.cd || 120) === v ? 'on' : ''}">${fcd(v)}</button>`).join('')}</div>
       <p class="mut" style="font-size:14px;margin:10px 6px">U každého cviku jde nastavit vlastní (Upravit cvik).</p>
       <button class="sw ${S.settings.cdSound === false ? '' : 'on'}" data-a="tog-sound"><span>Zvuk na konci odpočtu<small>Pípnutí, když máš jít na pracovní sérii</small></span><span class="k"></span></button></section>
+    <section class="sec"><div class="lbl" style="margin:0 6px 10px">Kotouče v tvém gymu</div>
+      <div class="chips">${PLATE_ALL.map(p => `<button class="chip ${plateSet().includes(p) ? 'prog' : ''}" data-a="plate-tog" data-v="${p}">${kg(p)} kg</button>`).join('')}</div>
+      <p class="mut" style="font-size:14px;margin:10px 6px">Kalkulačka počítá jen se zvýrazněnými kotouči.</p></section>
     <section class="sec"><div class="lbl" style="margin:0 6px 10px">Tréninků týdně (cíl)</div>
       <div class="seg">${[2, 3, 4, 5, 6].map(v => `<button data-a="goal" data-v="${v}" class="${(S.settings.weekGoal || 4) === v ? 'on' : ''}">${v}</button>`).join('')}</div></section>
     <section class="sec"><button class="li" data-a="tab" data-v="tpls"><span class="ic" style="color:var(--done)">${ico('dumbbell')}</span><div class="t"><b>Moje tréninky</b><small>${S.templates.length} sestav · rotace</small></div><span class="chev">${ico('chev')}</span></button></section>
