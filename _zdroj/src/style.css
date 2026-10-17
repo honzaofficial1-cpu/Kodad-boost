@@ -579,3 +579,6 @@ button.ck{background:none;border:0;padding:0;cursor:pointer}
 .cd.gym .c{border-color:var(--hot);color:var(--hot)}
 .legend u[style*="--done"]{background:var(--hot)!important}
 .at.act[data-t=run] .ic{color:#8BD43B}
+
+.agrid .at .ic svg.i{width:26px;height:26px}
+.li .ic svg.i{width:24px;height:24px}

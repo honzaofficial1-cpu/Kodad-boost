@@ -732,6 +732,7 @@ function clip(x, t, maxW) { let n = t; while (x.measureText(n).width > maxW && n
 const CARD_COL = { gym: ['#FF6A2B', 'rgba(255,106,43,'], sauna: ['#F7A25C', 'rgba(247,162,92,'], cold: ['#9ACBF5', 'rgba(154,203,245,'], thai: ['#E5484D', 'rgba(229,72,77,'], climb: ['#E2A65A', 'rgba(226,166,90,'], xcski: ['#7FD1E8', 'rgba(127,209,232,'], sprint: ['#FF7A59', 'rgba(255,122,89,'], posing: ['#E07FA0', 'rgba(224,127,160,'], run: ['#8BD43B', 'rgba(139,212,59,'], swim: ['#4A9DFF', 'rgba(74,157,255,'], stretch: ['#B59CF0', 'rgba(181,156,240,'], yoga: ['#B59CF0', 'rgba(181,156,240,'], bike: ['#35D0C9', 'rgba(53,208,201,'], other: ['#35D0C9', 'rgba(53,208,201,'], pr: ['#F4C542', 'rgba(244,197,66,'] };
 function drawPicto(x, key, cx, cy, size, col) {
   const p = PICTO[key] || PICTO.other; const s = size / 24; x.save(); x.translate(cx - size / 2, cy - size / 2); x.scale(s, s);
+  if (p.d) { x.fillStyle = col; try { x.fill(new Path2D(p.d), 'evenodd'); } catch (e) { } x.restore(); return; }
   x.strokeStyle = col; x.fillStyle = col; x.lineCap = 'round'; x.lineJoin = 'round';
   try { p.s.forEach(([d, w]) => { x.lineWidth = w; x.stroke(new Path2D(d)); }); (p.f || []).forEach(d => x.fill(new Path2D(d))); [...p.c, ...(p.c2 || [])].forEach(([X, Y, r]) => { x.beginPath(); x.arc(X, Y, r, 0, Math.PI * 2); x.fill(); }); } catch (e) { }
   x.restore();

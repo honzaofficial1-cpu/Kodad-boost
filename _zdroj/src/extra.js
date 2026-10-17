@@ -438,20 +438,20 @@ function specExercise(s, e) {
   const rows = usedSets(e, ex).map((st, i) => ({ st, i })).filter(o => hasData(o.st, ex)); const pr = rows.some(o => isPR(o.st, ex, best));
   const top = rows[0]?.st;
   return {
-    picto: 'gym', col: pr ? '#F4C542' : COLK('gym'), kicker: pr ? 'Nový rekord' : s.name, title: ex.name, big: top ? kg(num(top.w)) : '–', unit: top ? `kg × ${ex.uni ? `${top.l ?? '–'}/${top.r ?? '–'}` : top.reps}` : '', date: fdate(s.date),
+    picto: 'dumbbell', col: pr ? '#F4C542' : COLK('gym'), kicker: pr ? 'Nový rekord' : s.name, title: ex.name, big: top ? kg(num(top.w)) : '–', unit: top ? `kg × ${ex.uni ? `${top.l ?? '–'}/${top.r ?? '–'}` : top.reps}` : '', date: fdate(s.date),
     stats: [ex.tempo ? { id: 'tempo', label: 'tempo', value: ex.tempo } : null, { id: 'musc', label: 'partie', value: ex.muscle || '–', def: false }].filter(Boolean),
     lists: [{ id: 'sets', title: 'Série', items: rows.map(({ st, i }) => { const a = cmp(st, prev && prev.e.sets[i], ex), P = isPR(st, ex, best); return [`${i + 1}. série`, `${setTxt(st, ex)}${P ? '  PR' : a === 'up' ? '  ↑' : a === 'down' ? '  ↓' : ''}`, P ? '#F4C542' : a === 'up' ? '#35D0C9' : null]; }) },
     { id: 'prev', title: 'Minule', items: prev ? [[fday(prev.s.date), usedSets(prev.e, ex).map(t => setTxt(t, ex)).join(' · ')]] : [], def: false }],
   };
 }
 function specActivity(a) {
-  const t = ACT_TYPES[a.type] || ACT_TYPES.other; const key = PICTO[a.type] ? a.type : 'other'; const col = COLK(key);
+  const t = ACT_TYPES[a.type] || ACT_TYPES.other; const key = PICTO[a.type] ? a.type : 'other'; const col = COLK(key); const pic = a.type === 'bike' && a.kind === 'Rotoped' ? 'rotoped' : key;
   const title = a.type === 'other' && a.label ? a.label : t.name; let big = '✓', unit = '', st = [], lists = [];
   if (a.type === 'sauna') { const T = saunaTotals(a); big = `${T.rounds}×`; unit = T.mins ? `${T.mins} min` : 'kol'; const mt = Math.max(0, ...T.it.map(i => i.temp || 0)); st = [{ id: 'kol', label: 'kol', value: String(T.rounds) }, { id: 'min', label: 'minut', value: String(T.mins || '–') }, mt ? { id: 'tep', label: 'max °C', value: `${mt}°` } : null].filter(Boolean); lists = [{ id: 'saunas', title: 'Sauny', items: T.it.map(i => [i.kind || 'Sauna', `${i.rounds || 1}× ${i.min ? i.min + ' min' : ''}${i.temp ? ' · ' + i.temp + '°' : ''}`.trim()]) }]; }
   else if (a.type === 'cold') { big = a.sec ? `${Math.floor(a.sec / 60)}:${pad(a.sec % 60)}` : '✓'; unit = a.sec ? 'min' : ''; st = [a.kind ? { id: 'kind', label: 'kde', value: a.kind } : null, a.temp != null ? { id: 'tep', label: 'voda', value: `${kg(a.temp)} °C` } : null].filter(Boolean); }
   else { big = a.min ? String(a.min) : '✓'; unit = a.min ? 'min' : ''; st = [a.kind ? { id: 'kind', label: 'typ', value: a.kind } : null, a.bpm ? { id: 'bpm', label: 'tep', value: `${a.bpm} bpm` } : null].filter(Boolean); }
   if (a.note) lists.push({ id: 'note', title: 'Poznámka', items: [[a.note, '']], def: false });
-  return { picto: key, col, kicker: '', title, big, unit, date: fdate(a.date), stats: st, lists };
+  return { picto: pic, col, kicker: '', title, big, unit, date: fdate(a.date), stats: st, lists };
 }
 function specWeek(monK) {
   const w = weekData(monK), goal = S.settings.weekGoal || 4, sun = addDays(w.mon, 6);
