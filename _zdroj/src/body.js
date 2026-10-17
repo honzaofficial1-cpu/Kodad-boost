@@ -120,6 +120,14 @@ function mDen() {
     <div class="bottom-acts" style="margin-top:18px"><button class="pill white" data-a="b-save-day">Uložit den</button>${BD().days[k] ? `<button class="btn danger block" data-a="b-del-day" data-k="${k}">Smazat záznam</button>` : ''}</div>
   </div>`;
 }
+const MGROUPS = [['shoulders'], ['chest'], ['bicepsL', 'biceps', 'Biceps'], ['forearmL', 'forearm', 'Předloktí'], ['waist'], ['thighL', 'thigh', 'Stehno'], ['calfL', 'calf', 'Lýtko'], ['neck']];
+const MDEF = Object.fromEntries(MEAS.map(([f, l, h]) => [f, { l, h }]));
+function mRow(f, label, val) { return `<label class="mrow"><span class="ml2"><b>${label}</b><small>${MDEF[f].h}</small></span><input id="m-${f}" inputmode="decimal" value="${kg(val)}" placeholder="–" aria-label="${MDEF[f].l} v cm"><i>cm</i></label>`; }
+function pairSum(m, a, b) { return m[a] != null || m[b] != null ? `L ${m[a] != null ? kg(m[a]) : '–'}  ·  P ${m[b] != null ? kg(m[b]) : '–'}` : 'levá a pravá strana'; }
+function mRows(m) {
+  return MGROUPS.map(g => g.length === 1 ? mRow(g[0], MDEF[g[0]].l, m[g[0]])
+    : `<details class="mpair"><summary><span class="ml2"><b>${g[2]}</b><small data-ps>${pairSum(m, g[0], g[1])}</small></span><span class="chev">${ico('chevd')}</span></summary>${mRow(g[0], 'Levá', m[g[0]])}${mRow(g[1], 'Pravá', m[g[1]])}</details>`).join('');
+}
 function mMiry() {
   const k = view.md || today(); const m = BD().meas[k] || {}; const s = BD().settings;
   if (!bf || bf.kind !== 'm' || bf.date !== k) bf = { kind: 'm', date: k, photos: m.photos ?? null };
@@ -128,7 +136,7 @@ function mMiry() {
     <p class="mut hint">1× týdně, stejný den ráno nalačno. Metr přiložit, nezařezávat. Končetiny měř na obou stranách.</p>
     <div class="form">
       <label class="f">Datum<input id="m-date" type="date" value="${k}"></label>
-      <div class="two">${MEAS.map(([f, l, h]) => `<label class="f">${l} (cm)<input id="m-${f}" inputmode="decimal" value="${kg(m[f])}"><small class="mut">${h}</small></label>`).join('')}</div>
+      <div class="mlist">${mRows(m)}</div>
       <div><div class="lbl ml">Fotky pořízené (každé 2 týdny)</div><div class="seg" data-bseg="photos">${['Ano', 'Ne'].map(o => `<button data-a="bseg" data-f="photos" data-v="${o}" class="${bf.photos === o ? 'on' : ''}">${o}</button>`).join('')}</div></div>
       <details class="dt" ${m.muscle != null || m.bf != null || m.bmi != null ? 'open' : ''}><summary>Měření u fyzia (InBody / DEXA)</summary>
         <div class="three" style="margin-top:12px"><label class="f">Svaly (kg)<input id="m-muscle" inputmode="decimal" value="${kg(m.muscle)}"></label><label class="f">Tuk (%)<input id="m-bf" inputmode="decimal" value="${kg(m.bf)}"></label><label class="f">BMI<input id="m-bmi" inputmode="decimal" value="${kg(m.bmi)}"></label></div></details>
@@ -234,6 +242,11 @@ Object.assign(A, {
   'b-open-day': b => { bf = null; go('mery', { t: 'den', d: b.dataset.k }); },
   'b-open-meas': b => { bf = null; go('mery', { t: 'miry', md: b.dataset.k }); },
   'b-copy': async () => { const txt = claudeSummary(); try { await navigator.clipboard.writeText(txt); toast('Zkopírováno – vlož to Claudovi'); } catch (e) { sheet(`<h2>Přehled pro Clauda</h2><p class="mut">Označ text a zkopíruj ho.</p><textarea class="inp" style="min-height:300px;font-size:13px" readonly>${esc(txt)}</textarea>`); } },
+});
+document.addEventListener('input', e => {
+  const p = e.target.closest && e.target.closest('.mpair'); if (!p) return;
+  const ins = p.querySelectorAll('input'); const v = [...ins].map(i => num(i.value));
+  p.querySelector('[data-ps]').textContent = v[0] != null || v[1] != null ? `L ${v[0] != null ? kg(v[0]) : '–'}  ·  P ${v[1] != null ? kg(v[1]) : '–'}` : 'levá a pravá strana';
 });
 document.addEventListener('change', e => {
   if (view.n !== 'mery') return;

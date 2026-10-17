@@ -461,11 +461,67 @@ nav.tabs button.on{background:#3A3A3D}
 .tw tr[data-a]{cursor:pointer}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 .hdate::first-letter{text-transform:uppercase}
+
+/* v1.6 – kompaktnější zápis */
+.timer{font-size:24px;padding:9px 26px;margin-bottom:12px}
+.timer svg.i{width:22px;height:22px}
+.ex{border-radius:22px;margin-top:10px}
+.exh{padding:14px 14px 14px 16px;gap:12px}
+.exh .bar{width:4px}
+.exh .nm{font-size:18px;gap:8px}
+.exh .nm .inf{width:26px;height:26px}
+.exh .nm .inf svg.i{width:18px;height:18px}
+.exh .sb{font-size:14px;margin-top:2px}
+.dots{gap:5px}.dots u{width:11px;height:11px;border-width:1.75px}
+.tools{padding:9px 12px;gap:6px}
+.tools .tb{width:40px;height:34px}
+.tools .tb.cdb{padding:0 10px;font-size:13px}
+.last{padding:10px 16px 0;font-size:13px}
+.th{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--mut);font-weight:600;padding:9px 6px 7px}
+.th,.tr{grid-template-columns:36px 1fr 1fr 64px 46px}
+.tr{min-height:54px;padding:0 6px}
+.tr .no{font-size:15px;color:var(--mut)}
+.tr input{height:42px;font-size:20px}
+.fbadge{min-width:34px;height:22px;font-size:11px;border-width:1.5px}
+.rg{font-size:11px}
+button.ck{background:none;border:0;padding:0;cursor:pointer}
+.ck span{width:36px;height:26px;border-width:1.75px}
+.ck span svg{width:15px;height:15px}
+.nx{padding:10px 16px 2px;font-size:13px;gap:3px}
+.notep{min-height:44px;margin:10px 12px 14px;width:calc(100% - 24px);padding:12px 18px;font-size:15px;border-radius:22px}
+.dock{padding:9px;border-radius:30px}
+.dock .pill{min-height:50px;font-size:17px}
+.cdbar{bottom:calc(84px + env(safe-area-inset-bottom,0px));padding:10px 10px 10px 18px}
+.cdbar .t b{font-size:26px}
+/* míry – seznam */
+.mlist{display:grid;background:var(--card2);border-radius:20px;overflow:hidden}
+.mrow{display:grid;grid-template-columns:1fr 92px 26px;align-items:center;gap:6px;padding:10px 14px;border-top:1px solid var(--line);min-height:58px}
+.mlist>.mrow:first-child{border-top:0}
+.ml2{display:grid;gap:1px;min-width:0}
+.ml2 b{font-size:16px;font-weight:600}
+.ml2 small{font-size:12px;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mrow input{min-height:42px!important;height:42px;padding:0 10px!important;text-align:right;font-size:19px!important;font-weight:600;border-radius:12px!important;background:var(--bg)!important;border:1px solid var(--line)}
+.mrow i{font-style:normal;font-size:12px;color:var(--mut)}
+.mpair{border-top:1px solid var(--line)}
+.mpair summary{list-style:none;display:flex;align-items:center;gap:10px;padding:12px 14px;min-height:58px;cursor:pointer}
+.mpair summary::-webkit-details-marker{display:none}
+.mpair summary .ml2{flex:1}
+.mpair summary small{color:var(--prog)}
+.mpair .chev{color:var(--mut);transition:transform .2s;display:grid}
+.mpair[open] .chev{transform:rotate(180deg)}
+.mpair .mrow{padding-left:30px;background:rgba(0,0,0,.18)}
+.mform .form{gap:12px}
+.mform h2{font-size:20px}
+.form input.bigin{font-size:24px;min-height:52px}
+/* aktivity – piktogramy */
+.agrid .at .ic svg.i{width:28px;height:28px;stroke-width:1.6}
+.at .ic{width:56px;height:56px}
+.mpair .mrow .ml2 small{display:none}
 </style>
 </head>
 <body>
 <div id="app"></div><div id="sheet" hidden></div><div id="toast" role="status" aria-live="polite"></div>
-<script>const APP_VERSION = "1.5.2";
+<script>const APP_VERSION = "1.6.0";
 const MARK = "<svg aria-hidden=\"true\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 994 296\"><path fill=\"currentColor\" d=\"M612 5L611 4L571 4L570 5L567 5L566 4L561 4L560 5L448 5L447 6L442 6L441 5L439 6L438 5L435 5L434 6L430 6L429 5L426 5L425 6L414 6L413 5L409 5L408 6L385 5L378 11L366 27L355 39L352 44L335 63L323 79L316 86L312 92L282 127L274 138L267 145L263 151L233 186L233 187L219 203L219 204L210 213L210 214L202 222L202 223L192 232L186 236L171 243L169 243L162 246L155 247L154 248L149 248L148 249L140 249L139 250L85 250L84 251L78 251L77 250L37 250L29 258L29 259L24 264L19 271L13 277L13 278L4 288L0 294L1 295L48 295L49 296L51 295L58 295L59 296L94 296L95 295L97 295L98 296L100 296L101 295L154 295L155 294L184 294L185 293L202 293L203 292L232 291L233 290L241 290L242 289L253 289L254 288L263 288L264 287L271 287L272 286L281 286L282 285L288 285L289 284L294 284L295 283L301 283L302 282L313 281L314 280L328 278L332 276L336 276L337 275L352 272L358 269L361 269L362 268L367 267L369 265L379 262L393 255L408 245L433 221L436 216L448 203L456 192L477 168L485 157L492 150L494 146L506 133L506 132L521 115L525 109L544 88L548 82L560 69L563 64L570 57L570 56L578 48L578 47L589 35L594 28L602 20L604 16L611 9ZM994 1L993 0L974 0L973 1L967 1L966 0L964 0L963 1L866 1L865 2L860 2L859 1L842 2L840 1L839 2L804 2L794 7L792 7L786 11L784 11L777 15L775 15L760 23L758 23L749 28L747 28L734 35L732 35L717 43L715 43L706 48L704 48L696 53L694 53L689 56L685 57L683 59L681 59L670 65L668 65L658 70L656 72L647 76L645 78L636 82L634 84L629 86L624 90L619 92L614 96L606 100L586 115L579 119L575 123L559 135L554 140L553 140L537 155L536 155L502 190L502 193L509 191L512 189L529 184L532 182L538 181L549 176L555 175L558 173L566 171L569 169L586 164L589 162L597 160L606 168L606 169L620 185L632 201L655 228L663 239L677 255L680 260L686 266L694 277L704 288L749 288L750 287L755 287L756 288L760 288L761 287L914 287L916 286L916 284L896 264L895 264L827 199L826 199L797 171L796 171L776 151L775 151L766 142L765 142L757 133L749 127L736 113L736 109L742 104L747 103L757 98L762 97L767 94L777 91L782 88L784 88L787 86L789 86L792 84L794 84L797 82L802 81L807 78L809 78L812 76L814 76L817 74L824 72L829 69L831 69L844 63L849 62L854 59L856 59L861 56L863 56L866 54L873 52L878 49L880 49L883 47L885 47L898 41L903 40L910 36L912 36L920 32L925 31L937 25L939 25L942 23L944 23L947 21L949 21L952 19L954 19L957 17L959 17L962 15L969 13L974 10L976 10L979 8L981 8L984 6L993 3Z\"/></svg>";
 // ===== Výchozí knihovna cviků (informace jsou skryté pod „Info o cviku“) =====
 const R = (min, max, fail = true) => ({ min, max, fail });
@@ -605,6 +661,21 @@ const FEEL = [
 ];
 const ico = (n, cls = 'i') => `<svg class="${cls}" viewBox="0 0 24 24" aria-hidden="true">${IC[n] || ''}</svg>`;
 
+// ---------- piktogramy sportů (čárová grafika 24×24, kreslí se do UI i do sdílecích karet) ----------
+const PICTO = {
+  gym: 'M12 2.6m-1.9 0a1.9 1.9 0 1 0 3.8 0a1.9 1.9 0 1 0 -3.8 0M3 6.5H21M4.5 4.8V8.2M19.5 4.8V8.2M6.4 5.4V7.6M17.6 5.4V7.6M8.5 6.5L10 10.5H14L15.5 6.5M10 10.5L12 11.5L14 10.5M12 11.5V15M12 15L9 21.5M12 15L15 21.5',
+  sauna: 'M8 6.2m-1.9 0a1.9 1.9 0 1 0 3.8 0a1.9 1.9 0 1 0 -3.8 0M8 8.4L9 14.4H14.5V20M9 10.5L12 12.6M3 14.4H19.5M5 14.4V20M17.5 14.4V20M15.5 2.5C14.6 3.6 16.4 4.5 15.5 5.8M18.5 2.5C17.6 3.6 19.4 4.5 18.5 5.8M21 4C20.4 4.8 21.6 5.4 21 6.3',
+  cold: 'M12 7.8m-2.1 0a2.1 2.1 0 1 0 4.2 0a2.1 2.1 0 1 0 -4.2 0M8.2 13.5C8.6 11.4 10.1 10.4 12 10.4S15.4 11.4 15.8 13.5M2.8 13.5H21.2V15.2A4.6 4.6 0 0 1 16.6 19.8H7.4A4.6 4.6 0 0 1 2.8 15.2ZM5 16.5C6 15.9 7 17.1 8 16.5S10 17.1 11 16.5M19.5 2.5V7.5M17.3 3.75L21.7 6.25M17.3 6.25L21.7 3.75',
+  thai: 'M7 11V7.2A5 5 0 0 1 17 7.2V12A6 6 0 0 1 11 18H9.2A2.2 2.2 0 0 1 7 15.8ZM7 11A2.5 2.5 0 0 1 7 16M7.4 18V21.5H15.6V18M12 7.2H17M19.5 9.5H22M19.5 12.5H21.5M2 9.5H4',
+  yoga: 'M12 3.3m-1.8 0a1.8 1.8 0 1 0 3.6 0a1.8 1.8 0 1 0 -3.6 0M12 5.5V14M12 8L8.5 4.5M12 8L15.5 4.5M12 14V21.5M12 14L15.5 16L12 17.6M8.5 21.5H15.5',
+  bike: 'M5.5 17m-3.5 0a3.5 3.5 0 1 0 7 0a3.5 3.5 0 1 0 -7 0M18.5 17m-3.5 0a3.5 3.5 0 1 0 7 0a3.5 3.5 0 1 0 -7 0M5.5 17L9.5 10.5H16L18.5 17M9.5 10.5L12.5 17L16 10.5M15.5 3.8m-1.7 0a1.7 1.7 0 1 0 3.4 0a1.7 1.7 0 1 0 -3.4 0M15 5.6L11.5 10.5M14.2 6.8L17.6 9.2M17.6 9.2L16 10.5',
+  other: 'M12 2.5L14.6 9H21.5L15.9 13.1L18 20L12 15.8L6 20L8.1 13.1L2.5 9H9.4Z',
+};
+const pico = (k, cls = 'i') => `<svg class="${cls}" viewBox="0 0 24 24" aria-hidden="true"><path d="${PICTO[k] || PICTO.other}"/></svg>`;
+
+for (const k in PICTO) IC['p_' + k] = `<path d="${PICTO[k]}"/>`;
+for (const k in ACT_TYPES) ACT_TYPES[k].icon = 'p_' + (PICTO[k] ? k : 'other');
+
 'use strict';
 // ===================== Kodad boost · JK =====================
 const KEY = 'kodadboost.v1';
@@ -628,6 +699,8 @@ const kg = n => n == null ? '' : String(Math.round(n * 100) / 100).replace('.', 
 const r2 = n => Math.round(n * 100) / 100;
 const thou = n => String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
 const fclock = sec => { sec = Math.max(0, Math.floor(sec)); const h = Math.floor(sec / 3600), m = Math.floor(sec % 3600 / 60), s = sec % 60; return `${pad(h)}:${pad(m)}:${pad(s)}`; };
+const pl = (n, a, b, c) => `${n} ${n === 1 ? a : n >= 2 && n <= 4 ? b : c}`;
+const SER = n => pl(n, 'série', 'série', 'sérií'), CVK = n => pl(n, 'cvik', 'cviky', 'cviků');
 const fmin = ms => Math.max(0, Math.round(ms / 60000));
 function isoWeek(d) { const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate())); const n = t.getUTCDay() || 7; t.setUTCDate(t.getUTCDate() + 4 - n); const y = new Date(Date.UTC(t.getUTCFullYear(), 0, 1)); return Math.ceil(((t - y) / 864e5 + 1) / 7); }
 const monday = d => { const m = new Date(d); m.setHours(0, 0, 0, 0); m.setDate(m.getDate() - ((m.getDay() + 6) % 7)); return m; };
@@ -775,7 +848,7 @@ function vHome() {
   let gym;
   if (act && !act.end) {
     gym = `<div class="gcard live" data-a="open-active"><div class="lbl">Probíhá trénink</div><h1>${esc(act.name)}</h1><div class="gtime" data-timer>${fclock((Date.now() - act.start) / 1000)}</div>
-      <div class="gfoot"><span class="mut">${stats(act).sets} sérií zapsáno</span><button class="gplay" data-a="open-active" aria-label="Pokračovat">${ico('arrow')}</button></div></div>`;
+      <div class="gfoot"><span class="mut">${SER(stats(act).sets)} zapsáno</span><button class="gplay" data-a="open-active" aria-label="Pokračovat">${ico('arrow')}</button></div></div>`;
   } else if (done && done.end) {
     const nt = nextTemplate(done.tid);
     gym = `<div class="gcard" data-a="open-sum" data-id="${done.id}"><div class="lbl">Trénink v gymu · dnes hotovo</div><h1>${esc(done.name)}</h1><p class="gsub">${fmin(done.end - done.start)} min · ${stats(done).sets} sérií · příště ${esc(nt?.name || '–')}</p>
@@ -783,7 +856,7 @@ function vHome() {
   } else {
     const nt = nextTemplate(); const last = nt && finished().find(s => s.tid === nt.id);
     gym = `<div class="gcard" data-a="gym-hub"><div class="lbl">Trénink v gymu</div><h1>${nt ? esc(nt.name) : 'Sestav si trénink'}</h1>
-      <p class="gsub">${nt ? `Na řadě · ${nt.ex.length} cviků${last ? ` · minule ${fday(last.date)}, ${fmin(last.end - last.start)} min` : ''}` : 'Vyber cviky z knihovny a nastav rozsahy'}</p>
+      <p class="gsub">${nt ? `Na řadě · ${CVK(nt.ex.length)}${last ? ` · minule ${fday(last.date)}, ${fmin(last.end - last.start)} min` : ''}` : 'Vyber cviky z knihovny a nastav rozsahy'}</p>
       <div class="wk7">${weekStrip(mon)}</div>
       <div class="gfoot"><span class="mut">${wc}/${goal} tento týden</span><button class="gplay" data-a="${nt ? 'start-next' : 'tpl-new'}" aria-label="${nt ? 'Začít trénink' : 'Sestavit trénink'}">${ico(nt ? 'play' : 'plus')}</button></div></div>`;
   }
@@ -810,7 +883,7 @@ function vGym() {
   return `<div class="wrap">
     ${hdr(backBtn('home'), '<h1>Trénink v gymu</h1>', '<span></span>')}
     ${ex ? `<div class="alert">Dnes už máš zapsaný trénink <b>${esc(ex.name)}</b>. Jeden den = jeden trénink.</div><div class="bottom-acts" style="margin-top:12px"><button class="pill white" data-a="${ex.end ? 'open-sum' : 'open-active'}" data-id="${ex.id}">Otevřít dnešní trénink</button></div>` : ''}
-    ${!ex ? `<div class="lbl" style="margin:6px 6px 10px">Vyber trénink</div><div class="list">${S.templates.map(tp => { const last = fs.find(s => s.tid === tp.id); return `<button class="li" data-a="start" data-id="${tp.id}"><span class="ic" style="color:${nt && nt.id === tp.id ? 'var(--done)' : 'var(--mut)'}">${ico('play')}</span><div class="t"><b>${esc(tp.name)}${nt && nt.id === tp.id ? ' <span class="chip prog" style="margin-left:6px">Na řadě</span>' : ''}</b><small>${tp.ex.length} cviků${last ? ` · naposledy ${fday(last.date)}` : ''}</small></div></button>`; }).join('') || '<div class="empty">Zatím žádný trénink.</div>'}
+    ${!ex ? `<div class="lbl" style="margin:6px 6px 10px">Vyber trénink</div><div class="list">${S.templates.map(tp => { const last = fs.find(s => s.tid === tp.id); return `<button class="li" data-a="start" data-id="${tp.id}"><span class="ic" style="color:${nt && nt.id === tp.id ? 'var(--done)' : 'var(--mut)'}">${ico('play')}</span><div class="t"><b>${esc(tp.name)}${nt && nt.id === tp.id ? ' <span class="chip prog" style="margin-left:6px">Na řadě</span>' : ''}</b><small>${CVK(tp.ex.length)}${last ? ` · naposledy ${fday(last.date)}` : ''}</small></div></button>`; }).join('') || '<div class="empty">Zatím žádný trénink.</div>'}
       <button class="li" data-a="free"><span class="ic">${ico('plus')}</span><div class="t"><b>Prázdný trénink</b><small>Cviky přidáváš za pochodu</small></div></button></div>` : ''}
     <div class="lbl" style="margin:26px 6px 10px">Přehled</div>
     <div class="list">
@@ -829,7 +902,7 @@ function pickTemplate() {
   const nt = nextTemplate();
   sheet(`<h2>Jaký trénink?</h2><div class="list" style="margin-top:16px">${S.templates.map(tp => {
     const last = finished().find(s => s.tid === tp.id);
-    return `<button class="li" data-a="start" data-id="${tp.id}"><div class="t"><b>${esc(tp.name)}${nt && nt.id === tp.id ? ' <span class="chip prog" style="margin-left:6px">Na řadě</span>' : ''}</b><small>${tp.ex.length} cviků${last ? ` · naposledy ${fday(last.date)}` : ''}</small></div><span class="chev">${ico('chev')}</span></button>`;
+    return `<button class="li" data-a="start" data-id="${tp.id}"><div class="t"><b>${esc(tp.name)}${nt && nt.id === tp.id ? ' <span class="chip prog" style="margin-left:6px">Na řadě</span>' : ''}</b><small>${CVK(tp.ex.length)}${last ? ` · naposledy ${fday(last.date)}` : ''}</small></div><span class="chev">${ico('chev')}</span></button>`;
   }).join('')}</div><div class="actions"><button class="btn" data-a="tpl-new">${ico('plus')} Nový trénink</button></div>`);
 }
 function newSession(name, tid) {
@@ -886,14 +959,14 @@ function exBody(s, e, ex) {
         rows += `<div class="tr" data-i="${i}" data-side="${f}"><span class="no">${i + 1}${f === 'l' ? 'L' : 'R'}</span>
           <span><input inputmode="decimal" data-f="w" value="${kg(num(st.w))}" placeholder="kg" aria-label="Váha"></span>
           <span class="rc"><input inputmode="numeric" data-f="${f}" value="${st[f] ?? ''}" placeholder="${ph}" aria-label="Opakování ${f === 'l' ? 'levá' : 'pravá'}">${arH(a, pr)}</span>
-          ${f === 'l' ? rg : '<span></span>'}<span class="ck ${ok ? 'ok' : ''}" data-ck><span>${ico('check')}</span></span></div>`;
+          ${f === 'l' ? rg : '<span></span>'}<button class="ck ${ok ? 'ok' : ''}" data-ck data-a="ck" aria-label="Potvrdit sérii"><span>${ico('check')}</span></button></div>`;
       }
     } else {
       const a = cmp(st, prev, ex); const pr = isPR(st, ex, best);
       rows += `<div class="tr" data-i="${i}"><span class="no">${i + 1}</span>
         <span><input inputmode="decimal" data-f="w" value="${kg(num(st.w))}" placeholder="kg" aria-label="Váha"></span>
         <span class="rc"><input inputmode="numeric" data-f="reps" value="${st.reps ?? ''}" placeholder="${ph}" aria-label="Opakování">${arH(a, pr)}</span>
-        ${rg}<span class="ck ${hasData(st, ex) ? 'ok' : ''}" data-ck><span>${ico('check')}</span></span></div>`;
+        ${rg}<button class="ck ${hasData(st, ex) ? 'ok' : ''}" data-ck data-a="ck" aria-label="Potvrdit sérii"><span>${ico('check')}</span></button></div>`;
     }
   });
   return `<div class="exb">
@@ -944,7 +1017,7 @@ function vFin() {
   const back = `<button class="round" data-a="fin-back" aria-label="Zpět">${ico('back')}</button>`;
   if (step === 1) return `<div class="wrap">${hdr(back, '<span></span>')}${bars}
     <div class="fl">${MARKHTML(36)}<div class="lbl">Odjeto</div><div class="huge">${min} <small>min</small></div><h2>${esc(s.name)}</h2>
-      <div class="chips"><span class="chip o">${st.sets} sérií</span><span class="chip o">${st.ex} cviků</span><span class="chip o">${thou(st.vol)} kg</span></div></div>
+      <div class="chips"><span class="chip o">${SER(st.sets)}</span><span class="chip o">${CVK(st.ex)}</span><span class="chip o">${thou(st.vol)} kg</span></div></div>
     <div class="bottom-acts"><button class="pill white" data-a="story-sum">Sdílet trénink</button><button class="pill dark" data-a="fin-step" data-v="2">Pokračovat</button></div></div>`;
   if (step === 2) {
     const items = progItems(s); const ups = items.filter(x => x.k !== 'down').length; const prs = sessionPRs(s);
@@ -1319,49 +1392,54 @@ function loadMark() {
   return new Promise(res => { const im = new Image(); im.onload = () => { markImg = im; res(im); }; im.onerror = () => res(null);
     im.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(MARK.replace('currentColor', '#FFFFFF')); });
 }
-// ---------- sdílecí karty (jen obdélník s průhledným okolím, ne celá stránka) ----------
+// ---------- sdílecí karty v2: malé, čisté, s grafikou sportu ----------
 function rr(x, X, Y, w, h, r) { x.beginPath(); x.moveTo(X + r, Y); x.arcTo(X + w, Y, X + w, Y + h, r); x.arcTo(X + w, Y + h, X, Y + h, r); x.arcTo(X, Y + h, X, Y, r); x.arcTo(X, Y, X + w, Y, r); x.closePath(); }
 function spacedL(x, t, X, Y, sp) { x.textAlign = 'left'; let cx = X; for (const ch of [...t]) { x.fillText(ch, cx, Y); cx += x.measureText(ch).width + sp; } return cx; }
-function fitFont(x, t, weight, size, maxW) { do { x.font = `${weight} ${size}px ${CF}`; size -= 4; } while (x.measureText(t).width > maxW && size > 36); }
-function chipsL(x, items, X, Y) {
-  x.font = `500 38px ${CF}`; const padX = 34, gap = 18, h = 88; let cx = X;
-  items.forEach(t => { const w = x.measureText(t).width + padX * 2; if (cx + w > 1000) return; x.strokeStyle = 'rgba(245,245,247,.85)'; x.lineWidth = 3.5; rr(x, cx, Y, w, h, h / 2); x.stroke(); x.fillStyle = '#F5F5F7'; x.textAlign = 'left'; x.fillText(t, cx + padX, Y + 58); cx += w + gap; });
+function fitFont(x, t, weight, size, maxW) { do { x.font = `${weight} ${size}px ${CF}`; size -= 3; } while (x.measureText(t).width > maxW && size > 28); }
+function clip(x, t, maxW) { let n = t; while (x.measureText(n).width > maxW && n.length > 3) n = n.slice(0, -2); return n === t ? t : n.trim() + '…'; }
+const CARD_COL = { gym: ['#8BD43B', 'rgba(139,212,59,'], sauna: ['#F28C4E', 'rgba(242,140,78,'], cold: ['#9ACBF5', 'rgba(154,203,245,'], thai: ['#E5484D', 'rgba(229,72,77,'], yoga: ['#B59CF0', 'rgba(181,156,240,'], bike: ['#35D0C9', 'rgba(53,208,201,'], other: ['#35D0C9', 'rgba(53,208,201,'], pr: ['#F4C542', 'rgba(244,197,66,'] };
+function drawPicto(x, key, cx, cy, size, col) {
+  const s = size / 24; x.save(); x.translate(cx - size / 2, cy - size / 2); x.scale(s, s);
+  x.strokeStyle = col; x.lineWidth = 1.5; x.lineCap = 'round'; x.lineJoin = 'round';
+  try { x.stroke(new Path2D(PICTO[key] || PICTO.other)); } catch (e) { }
+  x.restore();
 }
-async function shareCard(h, glow, draw, dateTxt) {
-  const mk = await loadMark();
-  const c = document.createElement('canvas'); c.width = 1080; c.height = h; const x = c.getContext('2d');
-  rr(x, 0, 0, 1080, h, 72); const g = x.createLinearGradient(0, 0, 0, h); g.addColorStop(0, '#242427'); g.addColorStop(1, '#101012'); x.fillStyle = g; x.fill();
-  x.save(); rr(x, 0, 0, 1080, h, 72); x.clip();
-  const rg = x.createRadialGradient(1000, 40, 10, 1000, 40, 620); rg.addColorStop(0, glow); rg.addColorStop(1, 'rgba(0,0,0,0)'); x.fillStyle = rg; x.fillRect(0, 0, 1080, h); x.restore();
-  x.strokeStyle = 'rgba(255,255,255,.09)'; x.lineWidth = 3; rr(x, 1.5, 1.5, 1077, h - 3, 70.5); x.stroke();
-  if (mk) { const lh = 52, lw = lh * (mk.naturalWidth || mk.width) / (mk.naturalHeight || mk.height); x.drawImage(mk, 80, 78, lw, lh); }
-  x.fillStyle = '#8E8E93'; x.font = `500 32px ${CF}`; x.textAlign = 'right'; x.fillText(dateTxt || fdate(today()), 1000, 118);
-  x.textAlign = 'left'; draw(x); return c;
+// kostra karty: kruh s piktogramem vlevo, obsah vpravo, logo dole
+async function miniCard(h, key, draw, dateTxt) {
+  const mk = await loadMark(); const [col, rgba] = CARD_COL[key] || CARD_COL.other;
+  const W = 1080, c = document.createElement('canvas'); c.width = W; c.height = h; const x = c.getContext('2d');
+  rr(x, 0, 0, W, h, 60); const g = x.createLinearGradient(0, 0, W, h); g.addColorStop(0, '#1F1F22'); g.addColorStop(1, '#0F0F11'); x.fillStyle = g; x.fill();
+  x.save(); rr(x, 0, 0, W, h, 60); x.clip();
+  const rg = x.createRadialGradient(200, h / 2, 10, 200, h / 2, 520); rg.addColorStop(0, rgba + '.20)'); rg.addColorStop(1, rgba + '0)'); x.fillStyle = rg; x.fillRect(0, 0, W, h);
+  x.restore();
+  x.strokeStyle = 'rgba(255,255,255,.08)'; x.lineWidth = 2.5; rr(x, 1.25, 1.25, W - 2.5, h - 2.5, 59); x.stroke();
+  // medailon
+  const cy = Math.min(h / 2, 250), R = 130;
+  x.beginPath(); x.arc(200, cy, R, 0, Math.PI * 2); x.fillStyle = rgba + '.12)'; x.fill();
+  x.lineWidth = 3; x.strokeStyle = rgba + '.45)'; x.stroke();
+  drawPicto(x, PICTO[key] ? key : 'gym', 200, cy, 170, col);
+  // datum + logo
+  x.textAlign = 'right'; x.fillStyle = '#6C6C70'; x.font = `500 28px ${CF}`; x.fillText(dateTxt, W - 64, 84);
+  if (mk) { const lh = 34, lw = lh * (mk.naturalWidth || mk.width) / (mk.naturalHeight || mk.height); x.globalAlpha = .55; x.drawImage(mk, W - 64 - lw, h - 64 - lh, lw, lh); x.globalAlpha = 1; }
+  x.textAlign = 'left'; draw(x, col, 400); return c;
+}
+function bigNum(x, big, unit, X, Y, size) {
+  x.fillStyle = '#F5F5F7'; x.font = `800 ${size}px ${CF}`; x.fillText(big, X, Y); const w = x.measureText(big).width;
+  if (unit) { x.fillStyle = '#8E8E93'; x.font = `700 ${Math.round(size * .36)}px ${CF}`; x.fillText(unit, X + w + 12, Y); }
 }
 async function storySummary(s) {
   const st = stats(s); const min = fmin((s.end || finEnd || Date.now()) - s.start);
-  const prs = sessionPRs(s);
-  const items = prs.map(p => ({ ex: p.ex, k: 'pr', d: `PR ${kg(p.w)} × ${p.r}` })).concat(progItems(s).filter(i => i.k !== 'down' && !prs.some(p => p.ex === i.ex))).slice(0, 4);
+  const prs = sessionPRs(s).slice(0, 2);
   const cardio = s.cardio && s.cardio.mode === 'join';
-  const h = 720 + (cardio ? 70 : 0) + (s.stretch ? 60 : 0) + (items.length ? 70 + items.length * 108 : 0) + 50;
-  const c = await shareCard(h, 'rgba(139,212,59,.20)', x => {
-    x.fillStyle = '#8BD43B'; x.font = `600 32px ${CF}`; spacedL(x, 'ODJETO', 80, 250, 10);
-    x.fillStyle = '#F5F5F7'; x.font = `800 210px ${CF}`; const w = x.measureText(String(min)).width; x.fillText(String(min), 70, 445);
-    x.font = `800 84px ${CF}`; x.fillStyle = '#8E8E93'; x.fillText(' min', 70 + w, 445);
-    x.fillStyle = '#F5F5F7'; fitFont(x, s.name.toUpperCase(), 800, 88, 920); x.fillText(s.name.toUpperCase(), 80, 548);
-    chipsL(x, [`${st.sets} sérií`, `${st.ex} cviků`, `${thou(st.vol)} kg`], 80, 594);
-    let y = 760;
-    if (cardio) { x.fillStyle = '#F5F5F7'; x.font = `600 42px ${CF}`; x.fillText(`+ ${s.cardio.kind} ${s.cardio.min ? s.cardio.min + ' min' : ''}${s.cardio.bpm ? ' · ' + s.cardio.bpm + ' bpm' : ''}`, 80, y); y += 70; }
-    if (s.stretch) { x.fillStyle = '#8E8E93'; x.font = `500 38px ${CF}`; x.fillText('+ statický strečink', 80, y); y += 60; }
-    if (items.length) {
-      y += 10; x.fillStyle = '#8E8E93'; x.font = `600 30px ${CF}`; spacedL(x, 'PROGRES', 80, y, 8); y += 34;
-      items.forEach(it => {
-        x.fillStyle = 'rgba(255,255,255,.06)'; rr(x, 60, y, 960, 92, 46); x.fill();
-        x.textAlign = 'left'; x.fillStyle = '#F5F5F7'; x.font = `500 38px ${CF}`;
-        let n = it.ex.name; while (x.measureText(n).width > 560 && n.length > 4) n = n.slice(0, -2); if (n !== it.ex.name) n = n.trim() + '…';
-        x.fillText(n, 100, y + 59); x.textAlign = 'right'; x.fillStyle = it.k === 'pr' ? '#F4C542' : it.k === 'kg' ? '#8BD43B' : '#35D0C9'; x.font = `700 40px ${CF}`; x.fillText(it.d, 980, y + 60); x.textAlign = 'left'; y += 108;
-      });
-    }
+  const extra = [cardio ? `+ ${s.cardio.kind} ${s.cardio.min ? s.cardio.min + ' min' : ''}`.trim() : '', s.stretch ? '+ strečink' : ''].filter(Boolean).join('   ');
+  const h = 500 + (extra ? 56 : 0) + prs.length * 62;
+  const c = await miniCard(h, prs.length ? 'gym' : 'gym', (x, col, X) => {
+    x.fillStyle = col; x.font = `700 30px ${CF}`; spacedL(x, clip(x, s.name.toUpperCase(), 520), X, 150, 7);
+    bigNum(x, String(min), 'min', X - 4, 300, 170);
+    x.fillStyle = '#C7C7CC'; x.font = `500 36px ${CF}`; x.fillText(`${CVK(st.ex)}  ·  ${SER(st.sets)}  ·  ${thou(st.vol)} kg`, X, 372);
+    let y = 432;
+    if (extra) { x.fillStyle = '#8E8E93'; x.font = `500 32px ${CF}`; x.fillText(extra, X, y); y += 56; }
+    prs.forEach(p => { x.fillStyle = '#F4C542'; x.font = `700 32px ${CF}`; x.fillText('PR', X, y); x.fillStyle = '#F5F5F7'; x.font = `500 32px ${CF}`; x.fillText(clip(x, `${p.ex.name}  ${kg(p.w)} × ${p.r}`, 560), X + 58, y); y += 62; });
   }, fdate(s.date));
   showShot(c, `trenink-${s.date}.png`);
 }
@@ -1369,50 +1447,38 @@ async function storyExercise(s, e) {
   const ex = exById(e.exId); const prev = lastBefore(e.exId, s); const best = bestBefore(e.exId, s);
   const rows = usedSets(e, ex).map((st, i) => ({ st, i })).filter(o => hasData(o.st, ex));
   const pr = rows.some(o => isPR(o.st, ex, best));
-  const ch = [ex.tempo && `Tempo ${ex.tempo}`, ex.partials && '+ polovičky', ex.uni && 'L / P'].filter(Boolean);
-  const tblH = 96 + rows.length * 108;
-  const h = 470 + tblH + (ch.length ? 130 : 30) + (prev ? 70 : 0) + 40;
-  const c = await shareCard(h, pr ? 'rgba(244,197,66,.22)' : 'rgba(53,208,201,.18)', x => {
-    x.fillStyle = '#8E8E93'; x.font = `600 30px ${CF}`; spacedL(x, s.name.toUpperCase(), 80, 245, 6);
-    if (pr) { x.fillStyle = '#F4C542'; x.font = `800 30px ${CF}`; x.textAlign = 'right'; x.fillText('NOVÝ REKORD', 1000, 245); x.textAlign = 'left'; }
-    x.fillStyle = '#F5F5F7'; fitFont(x, ex.name, 800, 92, 920); x.fillText(ex.name, 80, 345);
-    x.fillStyle = '#8E8E93'; x.font = `500 38px ${CF}`; x.fillText(ex.muscle || '', 80, 400);
-    let y = 450;
-    x.fillStyle = 'rgba(255,255,255,.06)'; rr(x, 60, y, 960, tblH, 44); x.fill();
-    const cols = [130, 400, 680, 900];
-    x.fillStyle = '#C7C7CC'; x.font = `700 34px ${CF}`; x.textAlign = 'center'; ['#', 'Kg', 'Opak.', ''].forEach((t, k) => x.fillText(t, cols[k], y + 62));
-    x.fillStyle = 'rgba(255,255,255,.08)'; x.fillRect(60, y + 94, 960, 2);
-    rows.forEach(({ st, i }, k) => {
-      const yy = y + 96 + k * 108 + 72; const a = cmp(st, prev && prev.e.sets[i], ex); const isP = isPR(st, ex, best);
-      x.fillStyle = '#F5F5F7'; x.font = `500 52px ${CF}`;
-      x.fillText(String(i + 1), cols[0], yy); x.fillText(kg(num(st.w)), cols[1], yy); x.fillText(ex.uni ? `${st.l ?? '–'}/${st.r ?? '–'}` : String(st.reps), cols[2], yy);
-      if (isP) { x.fillStyle = '#F4C542'; x.font = `800 34px ${CF}`; x.fillText('PR', cols[3] - 70, yy - 6); }
-      else if (a === 'up' || a === 'down') { x.fillStyle = a === 'up' ? '#35D0C9' : '#E5484D'; x.font = `800 52px ${CF}`; x.fillText(ARROW[a], cols[3] - 70, yy); }
-      if (ex.sets[i].fail) { x.strokeStyle = '#E5484D'; x.lineWidth = 4.5; rr(x, cols[3] - 10, yy - 44, 84, 56, 28); x.stroke(); x.fillStyle = '#F5F5F7'; x.font = `800 32px ${CF}`; x.fillText('F', cols[3] + 32, yy - 4); }
+  const h = Math.max(500, 250 + rows.length * 86 + (prev ? 70 : 20) + 60);
+  const c = await miniCard(h, pr ? 'pr' : 'gym', (x, col, X) => {
+    x.fillStyle = pr ? '#F4C542' : col; x.font = `700 28px ${CF}`; spacedL(x, pr ? 'NOVÝ REKORD' : clip(x, s.name.toUpperCase(), 480), X, 140, 7);
+    x.fillStyle = '#F5F5F7'; fitFont(x, ex.name, 800, 64, 600); x.fillText(ex.name, X, 215);
+    let y = 300;
+    rows.forEach(({ st, i }) => {
+      const a = cmp(st, prev && prev.e.sets[i], ex); const isP = isPR(st, ex, best);
+      x.fillStyle = '#6C6C70'; x.font = `600 30px ${CF}`; x.fillText(`${i + 1}.`, X, y);
+      x.fillStyle = '#F5F5F7'; x.font = `700 52px ${CF}`; const t = `${kg(num(st.w))} kg × ${ex.uni ? `${st.l ?? '–'}/${st.r ?? '–'}` : st.reps}`; x.fillText(t, X + 52, y + 2);
+      const w = x.measureText(t).width;
+      if (isP) { x.fillStyle = '#F4C542'; x.font = `800 30px ${CF}`; x.fillText('PR', X + 76 + w, y - 4); }
+      else if (a === 'up' || a === 'down') { x.fillStyle = a === 'up' ? '#35D0C9' : '#E5484D'; x.font = `800 44px ${CF}`; x.fillText(ARROW[a], X + 70 + w, y); }
+      y += 86;
     });
-    x.textAlign = 'left'; y += tblH + 30;
-    if (ch.length) { chipsL(x, ch, 80, y); y += 120; }
-    if (prev) { x.fillStyle = '#6C6C70'; x.font = `500 32px ${CF}`; x.fillText(`Minule: ${usedSets(prev.e, ex).map(t => setTxt(t, ex)).join('  ·  ')}`, 80, y + 40); }
+    const meta = [ex.tempo && `tempo ${ex.tempo}`, ex.partials && '+ polovičky', prev && `minule ${usedSets(prev.e, ex).map(t => setTxt(t, ex)).join(' · ')}`].filter(Boolean).join('   ');
+    if (meta) { x.fillStyle = '#6C6C70'; x.font = `500 28px ${CF}`; x.fillText(clip(x, meta, 600), X, y - 10); }
   }, fdate(s.date));
   showShot(c, `${ex.name}.png`);
 }
 async function storyActivity(a) {
-  const t = ACT_TYPES[a.type] || ACT_TYPES.other;
-  const col = { cold: '#9ACBF5', heat: '#F28C4E', act: '#35D0C9' }[t.cls];
-  const glow = { cold: 'rgba(154,203,245,.24)', heat: 'rgba(242,140,78,.26)', act: 'rgba(53,208,201,.2)' }[t.cls];
-  let big, small = '', sub = [];
-  if (a.type === 'sauna') { big = `${a.rounds || 1}×`; small = a.min ? ` ${a.min} min` : ''; if (a.temp) sub.push(`${a.temp} °C`); }
-  else if (a.type === 'cold') { big = a.sec ? `${Math.floor(a.sec / 60)}:${pad(a.sec % 60)}` : '✓'; small = a.sec ? ' min' : ''; if (a.kind) sub.push(a.kind); if (a.temp != null) sub.push(`${kg(a.temp)} °C`); }
-  else { big = a.min ? String(a.min) : '✓'; small = a.min ? ' min' : ''; if (a.kind) sub.push(a.kind); if (a.bpm) sub.push(`${a.bpm} bpm`); }
+  const t = ACT_TYPES[a.type] || ACT_TYPES.other; const key = PICTO[a.type] ? a.type : 'other';
+  let big, unit = '', sub = [];
+  if (a.type === 'sauna') { big = `${a.rounds || 1}×`; unit = a.min ? `${a.min} min` : ''; if (a.temp) sub.push(`${a.temp} °C`); }
+  else if (a.type === 'cold') { big = a.sec ? `${Math.floor(a.sec / 60)}:${pad(a.sec % 60)}` : '✓'; unit = a.sec ? 'min' : ''; if (a.kind) sub.push(a.kind); if (a.temp != null) sub.push(`voda ${kg(a.temp)} °C`); }
+  else { big = a.min ? String(a.min) : '✓'; unit = a.min ? 'min' : ''; if (a.kind) sub.push(a.kind); if (a.bpm) sub.push(`${a.bpm} bpm`); }
+  if (a.note) sub.push(a.note);
   const title = (a.type === 'other' && a.label ? a.label : t.name).toUpperCase();
-  const h = 700 + (a.note ? 60 : 0);
-  const c = await shareCard(h, glow, x => {
-    if (a.type === 'cold') { x.fillStyle = 'rgba(225,240,255,.5)'; for (let i = 0; i < 46; i++) { const px = (i * 197) % 1080, py = (i * 131) % h, r = 2 + (i % 4); x.beginPath(); x.arc(px, py, r, 0, 6.28); x.fill(); } }
-    x.fillStyle = col; x.font = `700 34px ${CF}`; spacedL(x, title, 80, 260, 10);
-    x.fillStyle = '#F5F5F7'; x.font = `800 220px ${CF}`; const w = x.measureText(big).width; x.fillText(big, 70, 470);
-    x.font = `800 84px ${CF}`; x.fillStyle = '#8E8E93'; x.fillText(small, 70 + w, 470);
-    if (sub.length) { x.fillStyle = col; x.font = `600 46px ${CF}`; x.fillText(sub.join('  ·  '), 80, 570); }
-    if (a.note) { x.fillStyle = '#8E8E93'; x.font = `500 36px ${CF}`; let n = a.note; while (x.measureText(n).width > 900 && n.length > 4) n = n.slice(0, -2); x.fillText(n, 80, 640); }
+  const c = await miniCard(500, key, (x, col, X) => {
+    if (a.type === 'cold') { x.fillStyle = 'rgba(225,240,255,.35)'; for (let i = 0; i < 30; i++) { const px = 420 + (i * 197) % 620, py = 40 + (i * 131) % 420; x.beginPath(); x.arc(px, py, 1.5 + (i % 3), 0, 6.28); x.fill(); } }
+    x.fillStyle = col; x.font = `700 30px ${CF}`; spacedL(x, clip(x, title, 480), X, 150, 7);
+    bigNum(x, big, unit, X - 4, 300, 170);
+    if (sub.length) { x.fillStyle = '#C7C7CC'; x.font = `500 36px ${CF}`; x.fillText(clip(x, sub.join('  ·  '), 600), X, 372); }
   }, fdate(a.date));
   showShot(c, `${t.name}-${a.date}.png`);
 }
@@ -1746,6 +1812,14 @@ function mDen() {
     <div class="bottom-acts" style="margin-top:18px"><button class="pill white" data-a="b-save-day">Uložit den</button>${BD().days[k] ? `<button class="btn danger block" data-a="b-del-day" data-k="${k}">Smazat záznam</button>` : ''}</div>
   </div>`;
 }
+const MGROUPS = [['shoulders'], ['chest'], ['bicepsL', 'biceps', 'Biceps'], ['forearmL', 'forearm', 'Předloktí'], ['waist'], ['thighL', 'thigh', 'Stehno'], ['calfL', 'calf', 'Lýtko'], ['neck']];
+const MDEF = Object.fromEntries(MEAS.map(([f, l, h]) => [f, { l, h }]));
+function mRow(f, label, val) { return `<label class="mrow"><span class="ml2"><b>${label}</b><small>${MDEF[f].h}</small></span><input id="m-${f}" inputmode="decimal" value="${kg(val)}" placeholder="–" aria-label="${MDEF[f].l} v cm"><i>cm</i></label>`; }
+function pairSum(m, a, b) { return m[a] != null || m[b] != null ? `L ${m[a] != null ? kg(m[a]) : '–'}  ·  P ${m[b] != null ? kg(m[b]) : '–'}` : 'levá a pravá strana'; }
+function mRows(m) {
+  return MGROUPS.map(g => g.length === 1 ? mRow(g[0], MDEF[g[0]].l, m[g[0]])
+    : `<details class="mpair"><summary><span class="ml2"><b>${g[2]}</b><small data-ps>${pairSum(m, g[0], g[1])}</small></span><span class="chev">${ico('chevd')}</span></summary>${mRow(g[0], 'Levá', m[g[0]])}${mRow(g[1], 'Pravá', m[g[1]])}</details>`).join('');
+}
 function mMiry() {
   const k = view.md || today(); const m = BD().meas[k] || {}; const s = BD().settings;
   if (!bf || bf.kind !== 'm' || bf.date !== k) bf = { kind: 'm', date: k, photos: m.photos ?? null };
@@ -1754,7 +1828,7 @@ function mMiry() {
     <p class="mut hint">1× týdně, stejný den ráno nalačno. Metr přiložit, nezařezávat. Končetiny měř na obou stranách.</p>
     <div class="form">
       <label class="f">Datum<input id="m-date" type="date" value="${k}"></label>
-      <div class="two">${MEAS.map(([f, l, h]) => `<label class="f">${l} (cm)<input id="m-${f}" inputmode="decimal" value="${kg(m[f])}"><small class="mut">${h}</small></label>`).join('')}</div>
+      <div class="mlist">${mRows(m)}</div>
       <div><div class="lbl ml">Fotky pořízené (každé 2 týdny)</div><div class="seg" data-bseg="photos">${['Ano', 'Ne'].map(o => `<button data-a="bseg" data-f="photos" data-v="${o}" class="${bf.photos === o ? 'on' : ''}">${o}</button>`).join('')}</div></div>
       <details class="dt" ${m.muscle != null || m.bf != null || m.bmi != null ? 'open' : ''}><summary>Měření u fyzia (InBody / DEXA)</summary>
         <div class="three" style="margin-top:12px"><label class="f">Svaly (kg)<input id="m-muscle" inputmode="decimal" value="${kg(m.muscle)}"></label><label class="f">Tuk (%)<input id="m-bf" inputmode="decimal" value="${kg(m.bf)}"></label><label class="f">BMI<input id="m-bmi" inputmode="decimal" value="${kg(m.bmi)}"></label></div></details>
@@ -1860,6 +1934,11 @@ Object.assign(A, {
   'b-open-day': b => { bf = null; go('mery', { t: 'den', d: b.dataset.k }); },
   'b-open-meas': b => { bf = null; go('mery', { t: 'miry', md: b.dataset.k }); },
   'b-copy': async () => { const txt = claudeSummary(); try { await navigator.clipboard.writeText(txt); toast('Zkopírováno – vlož to Claudovi'); } catch (e) { sheet(`<h2>Přehled pro Clauda</h2><p class="mut">Označ text a zkopíruj ho.</p><textarea class="inp" style="min-height:300px;font-size:13px" readonly>${esc(txt)}</textarea>`); } },
+});
+document.addEventListener('input', e => {
+  const p = e.target.closest && e.target.closest('.mpair'); if (!p) return;
+  const ins = p.querySelectorAll('input'); const v = [...ins].map(i => num(i.value));
+  p.querySelector('[data-ps]').textContent = v[0] != null || v[1] != null ? `L ${v[0] != null ? kg(v[0]) : '–'}  ·  P ${v[1] != null ? kg(v[1]) : '–'}` : 'levá a pravá strana';
 });
 document.addEventListener('change', e => {
   if (view.n !== 'mery') return;
@@ -2007,6 +2086,16 @@ Object.assign(A, {
   'push-copy': () => pushCopy(),
 });
 (function () { try { const q = new URLSearchParams(location.search); if (q.get('open') === 'den') { history.replaceState(null, '', location.pathname); setTimeout(() => go('mery', { t: 'den', d: today() }), 0); } } catch (e) { } })();
+
+// ✓ u série: když chybí opakování, doplní cílové (z placeholderu) – rychlé potvrzení
+A.ck = b => {
+  const row = b.closest('.tr'), card = b.closest('.ex'); const s = sesById(view.id); if (!s || !row) return;
+  const en = s.entries[+card.dataset.idx]; const i = +row.dataset.i; const f = row.dataset.side || 'reps'; const st = en.sets[i];
+  const wi = $('[data-f=w]', row), ri = $(`[data-f=${f}]`, row);
+  if (num(st.w) == null) { wi.focus(); return toast('Nejdřív váha'); }
+  if (st[f] == null || st[f] === '') { const v = parseInt(ri.placeholder, 10); if (!isNaN(v)) { st[f] = v; ri.value = v; save(); updateCard(card, s, en); toast(`Zapsáno ${v} opak.`); } else ri.focus(); }
+  else { ri.focus(); }
+};
 
 render();
 </script>

@@ -445,3 +445,59 @@ nav.tabs button.on{background:#3A3A3D}
 .tw tr[data-a]{cursor:pointer}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 .hdate::first-letter{text-transform:uppercase}
+
+/* v1.6 – kompaktnější zápis */
+.timer{font-size:24px;padding:9px 26px;margin-bottom:12px}
+.timer svg.i{width:22px;height:22px}
+.ex{border-radius:22px;margin-top:10px}
+.exh{padding:14px 14px 14px 16px;gap:12px}
+.exh .bar{width:4px}
+.exh .nm{font-size:18px;gap:8px}
+.exh .nm .inf{width:26px;height:26px}
+.exh .nm .inf svg.i{width:18px;height:18px}
+.exh .sb{font-size:14px;margin-top:2px}
+.dots{gap:5px}.dots u{width:11px;height:11px;border-width:1.75px}
+.tools{padding:9px 12px;gap:6px}
+.tools .tb{width:40px;height:34px}
+.tools .tb.cdb{padding:0 10px;font-size:13px}
+.last{padding:10px 16px 0;font-size:13px}
+.th{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--mut);font-weight:600;padding:9px 6px 7px}
+.th,.tr{grid-template-columns:36px 1fr 1fr 64px 46px}
+.tr{min-height:54px;padding:0 6px}
+.tr .no{font-size:15px;color:var(--mut)}
+.tr input{height:42px;font-size:20px}
+.fbadge{min-width:34px;height:22px;font-size:11px;border-width:1.5px}
+.rg{font-size:11px}
+button.ck{background:none;border:0;padding:0;cursor:pointer}
+.ck span{width:36px;height:26px;border-width:1.75px}
+.ck span svg{width:15px;height:15px}
+.nx{padding:10px 16px 2px;font-size:13px;gap:3px}
+.notep{min-height:44px;margin:10px 12px 14px;width:calc(100% - 24px);padding:12px 18px;font-size:15px;border-radius:22px}
+.dock{padding:9px;border-radius:30px}
+.dock .pill{min-height:50px;font-size:17px}
+.cdbar{bottom:calc(84px + env(safe-area-inset-bottom,0px));padding:10px 10px 10px 18px}
+.cdbar .t b{font-size:26px}
+/* míry – seznam */
+.mlist{display:grid;background:var(--card2);border-radius:20px;overflow:hidden}
+.mrow{display:grid;grid-template-columns:1fr 92px 26px;align-items:center;gap:6px;padding:10px 14px;border-top:1px solid var(--line);min-height:58px}
+.mlist>.mrow:first-child{border-top:0}
+.ml2{display:grid;gap:1px;min-width:0}
+.ml2 b{font-size:16px;font-weight:600}
+.ml2 small{font-size:12px;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mrow input{min-height:42px!important;height:42px;padding:0 10px!important;text-align:right;font-size:19px!important;font-weight:600;border-radius:12px!important;background:var(--bg)!important;border:1px solid var(--line)}
+.mrow i{font-style:normal;font-size:12px;color:var(--mut)}
+.mpair{border-top:1px solid var(--line)}
+.mpair summary{list-style:none;display:flex;align-items:center;gap:10px;padding:12px 14px;min-height:58px;cursor:pointer}
+.mpair summary::-webkit-details-marker{display:none}
+.mpair summary .ml2{flex:1}
+.mpair summary small{color:var(--prog)}
+.mpair .chev{color:var(--mut);transition:transform .2s;display:grid}
+.mpair[open] .chev{transform:rotate(180deg)}
+.mpair .mrow{padding-left:30px;background:rgba(0,0,0,.18)}
+.mform .form{gap:12px}
+.mform h2{font-size:20px}
+.form input.bigin{font-size:24px;min-height:52px}
+/* aktivity – piktogramy */
+.agrid .at .ic svg.i{width:28px;height:28px;stroke-width:1.6}
+.at .ic{width:56px;height:56px}
+.mpair .mrow .ml2 small{display:none}

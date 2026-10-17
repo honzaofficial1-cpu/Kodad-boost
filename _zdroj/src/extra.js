@@ -138,3 +138,13 @@ Object.assign(A, {
   'push-copy': () => pushCopy(),
 });
 (function () { try { const q = new URLSearchParams(location.search); if (q.get('open') === 'den') { history.replaceState(null, '', location.pathname); setTimeout(() => go('mery', { t: 'den', d: today() }), 0); } } catch (e) { } })();
+
+// ✓ u série: když chybí opakování, doplní cílové (z placeholderu) – rychlé potvrzení
+A.ck = b => {
+  const row = b.closest('.tr'), card = b.closest('.ex'); const s = sesById(view.id); if (!s || !row) return;
+  const en = s.entries[+card.dataset.idx]; const i = +row.dataset.i; const f = row.dataset.side || 'reps'; const st = en.sets[i];
+  const wi = $('[data-f=w]', row), ri = $(`[data-f=${f}]`, row);
+  if (num(st.w) == null) { wi.focus(); return toast('Nejdřív váha'); }
+  if (st[f] == null || st[f] === '') { const v = parseInt(ri.placeholder, 10); if (!isNaN(v)) { st[f] = v; ri.value = v; save(); updateCard(card, s, en); toast(`Zapsáno ${v} opak.`); } else ri.focus(); }
+  else { ri.focus(); }
+};

@@ -21,6 +21,8 @@ const kg = n => n == null ? '' : String(Math.round(n * 100) / 100).replace('.', 
 const r2 = n => Math.round(n * 100) / 100;
 const thou = n => String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
 const fclock = sec => { sec = Math.max(0, Math.floor(sec)); const h = Math.floor(sec / 3600), m = Math.floor(sec % 3600 / 60), s = sec % 60; return `${pad(h)}:${pad(m)}:${pad(s)}`; };
+const pl = (n, a, b, c) => `${n} ${n === 1 ? a : n >= 2 && n <= 4 ? b : c}`;
+const SER = n => pl(n, 'série', 'série', 'sérií'), CVK = n => pl(n, 'cvik', 'cviky', 'cviků');
 const fmin = ms => Math.max(0, Math.round(ms / 60000));
 function isoWeek(d) { const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate())); const n = t.getUTCDay() || 7; t.setUTCDate(t.getUTCDate() + 4 - n); const y = new Date(Date.UTC(t.getUTCFullYear(), 0, 1)); return Math.ceil(((t - y) / 864e5 + 1) / 7); }
 const monday = d => { const m = new Date(d); m.setHours(0, 0, 0, 0); m.setDate(m.getDate() - ((m.getDay() + 6) % 7)); return m; };
@@ -168,7 +170,7 @@ function vHome() {
   let gym;
   if (act && !act.end) {
     gym = `<div class="gcard live" data-a="open-active"><div class="lbl">Probíhá trénink</div><h1>${esc(act.name)}</h1><div class="gtime" data-timer>${fclock((Date.now() - act.start) / 1000)}</div>
-      <div class="gfoot"><span class="mut">${stats(act).sets} sérií zapsáno</span><button class="gplay" data-a="open-active" aria-label="Pokračovat">${ico('arrow')}</button></div></div>`;
+      <div class="gfoot"><span class="mut">${SER(stats(act).sets)} zapsáno</span><button class="gplay" data-a="open-active" aria-label="Pokračovat">${ico('arrow')}</button></div></div>`;
   } else if (done && done.end) {
     const nt = nextTemplate(done.tid);
     gym = `<div class="gcard" data-a="open-sum" data-id="${done.id}"><div class="lbl">Trénink v gymu · dnes hotovo</div><h1>${esc(done.name)}</h1><p class="gsub">${fmin(done.end - done.start)} min · ${stats(done).sets} sérií · příště ${esc(nt?.name || '–')}</p>
@@ -176,7 +178,7 @@ function vHome() {
   } else {
     const nt = nextTemplate(); const last = nt && finished().find(s => s.tid === nt.id);
     gym = `<div class="gcard" data-a="gym-hub"><div class="lbl">Trénink v gymu</div><h1>${nt ? esc(nt.name) : 'Sestav si trénink'}</h1>
-      <p class="gsub">${nt ? `Na řadě · ${nt.ex.length} cviků${last ? ` · minule ${fday(last.date)}, ${fmin(last.end - last.start)} min` : ''}` : 'Vyber cviky z knihovny a nastav rozsahy'}</p>
+      <p class="gsub">${nt ? `Na řadě · ${CVK(nt.ex.length)}${last ? ` · minule ${fday(last.date)}, ${fmin(last.end - last.start)} min` : ''}` : 'Vyber cviky z knihovny a nastav rozsahy'}</p>
       <div class="wk7">${weekStrip(mon)}</div>
       <div class="gfoot"><span class="mut">${wc}/${goal} tento týden</span><button class="gplay" data-a="${nt ? 'start-next' : 'tpl-new'}" aria-label="${nt ? 'Začít trénink' : 'Sestavit trénink'}">${ico(nt ? 'play' : 'plus')}</button></div></div>`;
   }
@@ -203,7 +205,7 @@ function vGym() {
   return `<div class="wrap">
     ${hdr(backBtn('home'), '<h1>Trénink v gymu</h1>', '<span></span>')}
     ${ex ? `<div class="alert">Dnes už máš zapsaný trénink <b>${esc(ex.name)}</b>. Jeden den = jeden trénink.</div><div class="bottom-acts" style="margin-top:12px"><button class="pill white" data-a="${ex.end ? 'open-sum' : 'open-active'}" data-id="${ex.id}">Otevřít dnešní trénink</button></div>` : ''}
-    ${!ex ? `<div class="lbl" style="margin:6px 6px 10px">Vyber trénink</div><div class="list">${S.templates.map(tp => { const last = fs.find(s => s.tid === tp.id); return `<button class="li" data-a="start" data-id="${tp.id}"><span class="ic" style="color:${nt && nt.id === tp.id ? 'var(--done)' : 'var(--mut)'}">${ico('play')}</span><div class="t"><b>${esc(tp.name)}${nt && nt.id === tp.id ? ' <span class="chip prog" style="margin-left:6px">Na řadě</span>' : ''}</b><small>${tp.ex.length} cviků${last ? ` · naposledy ${fday(last.date)}` : ''}</small></div></button>`; }).join('') || '<div class="empty">Zatím žádný trénink.</div>'}
+    ${!ex ? `<div class="lbl" style="margin:6px 6px 10px">Vyber trénink</div><div class="list">${S.templates.map(tp => { const last = fs.find(s => s.tid === tp.id); return `<button class="li" data-a="start" data-id="${tp.id}"><span class="ic" style="color:${nt && nt.id === tp.id ? 'var(--done)' : 'var(--mut)'}">${ico('play')}</span><div class="t"><b>${esc(tp.name)}${nt && nt.id === tp.id ? ' <span class="chip prog" style="margin-left:6px">Na řadě</span>' : ''}</b><small>${CVK(tp.ex.length)}${last ? ` · naposledy ${fday(last.date)}` : ''}</small></div></button>`; }).join('') || '<div class="empty">Zatím žádný trénink.</div>'}
       <button class="li" data-a="free"><span class="ic">${ico('plus')}</span><div class="t"><b>Prázdný trénink</b><small>Cviky přidáváš za pochodu</small></div></button></div>` : ''}
     <div class="lbl" style="margin:26px 6px 10px">Přehled</div>
     <div class="list">
@@ -222,7 +224,7 @@ function pickTemplate() {
   const nt = nextTemplate();
   sheet(`<h2>Jaký trénink?</h2><div class="list" style="margin-top:16px">${S.templates.map(tp => {
     const last = finished().find(s => s.tid === tp.id);
-    return `<button class="li" data-a="start" data-id="${tp.id}"><div class="t"><b>${esc(tp.name)}${nt && nt.id === tp.id ? ' <span class="chip prog" style="margin-left:6px">Na řadě</span>' : ''}</b><small>${tp.ex.length} cviků${last ? ` · naposledy ${fday(last.date)}` : ''}</small></div><span class="chev">${ico('chev')}</span></button>`;
+    return `<button class="li" data-a="start" data-id="${tp.id}"><div class="t"><b>${esc(tp.name)}${nt && nt.id === tp.id ? ' <span class="chip prog" style="margin-left:6px">Na řadě</span>' : ''}</b><small>${CVK(tp.ex.length)}${last ? ` · naposledy ${fday(last.date)}` : ''}</small></div><span class="chev">${ico('chev')}</span></button>`;
   }).join('')}</div><div class="actions"><button class="btn" data-a="tpl-new">${ico('plus')} Nový trénink</button></div>`);
 }
 function newSession(name, tid) {
@@ -279,14 +281,14 @@ function exBody(s, e, ex) {
         rows += `<div class="tr" data-i="${i}" data-side="${f}"><span class="no">${i + 1}${f === 'l' ? 'L' : 'R'}</span>
           <span><input inputmode="decimal" data-f="w" value="${kg(num(st.w))}" placeholder="kg" aria-label="Váha"></span>
           <span class="rc"><input inputmode="numeric" data-f="${f}" value="${st[f] ?? ''}" placeholder="${ph}" aria-label="Opakování ${f === 'l' ? 'levá' : 'pravá'}">${arH(a, pr)}</span>
-          ${f === 'l' ? rg : '<span></span>'}<span class="ck ${ok ? 'ok' : ''}" data-ck><span>${ico('check')}</span></span></div>`;
+          ${f === 'l' ? rg : '<span></span>'}<button class="ck ${ok ? 'ok' : ''}" data-ck data-a="ck" aria-label="Potvrdit sérii"><span>${ico('check')}</span></button></div>`;
       }
     } else {
       const a = cmp(st, prev, ex); const pr = isPR(st, ex, best);
       rows += `<div class="tr" data-i="${i}"><span class="no">${i + 1}</span>
         <span><input inputmode="decimal" data-f="w" value="${kg(num(st.w))}" placeholder="kg" aria-label="Váha"></span>
         <span class="rc"><input inputmode="numeric" data-f="reps" value="${st.reps ?? ''}" placeholder="${ph}" aria-label="Opakování">${arH(a, pr)}</span>
-        ${rg}<span class="ck ${hasData(st, ex) ? 'ok' : ''}" data-ck><span>${ico('check')}</span></span></div>`;
+        ${rg}<button class="ck ${hasData(st, ex) ? 'ok' : ''}" data-ck data-a="ck" aria-label="Potvrdit sérii"><span>${ico('check')}</span></button></div>`;
     }
   });
   return `<div class="exb">
@@ -337,7 +339,7 @@ function vFin() {
   const back = `<button class="round" data-a="fin-back" aria-label="Zpět">${ico('back')}</button>`;
   if (step === 1) return `<div class="wrap">${hdr(back, '<span></span>')}${bars}
     <div class="fl">${MARKHTML(36)}<div class="lbl">Odjeto</div><div class="huge">${min} <small>min</small></div><h2>${esc(s.name)}</h2>
-      <div class="chips"><span class="chip o">${st.sets} sérií</span><span class="chip o">${st.ex} cviků</span><span class="chip o">${thou(st.vol)} kg</span></div></div>
+      <div class="chips"><span class="chip o">${SER(st.sets)}</span><span class="chip o">${CVK(st.ex)}</span><span class="chip o">${thou(st.vol)} kg</span></div></div>
     <div class="bottom-acts"><button class="pill white" data-a="story-sum">Sdílet trénink</button><button class="pill dark" data-a="fin-step" data-v="2">Pokračovat</button></div></div>`;
   if (step === 2) {
     const items = progItems(s); const ups = items.filter(x => x.k !== 'down').length; const prs = sessionPRs(s);
@@ -712,49 +714,54 @@ function loadMark() {
   return new Promise(res => { const im = new Image(); im.onload = () => { markImg = im; res(im); }; im.onerror = () => res(null);
     im.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(MARK.replace('currentColor', '#FFFFFF')); });
 }
-// ---------- sdílecí karty (jen obdélník s průhledným okolím, ne celá stránka) ----------
+// ---------- sdílecí karty v2: malé, čisté, s grafikou sportu ----------
 function rr(x, X, Y, w, h, r) { x.beginPath(); x.moveTo(X + r, Y); x.arcTo(X + w, Y, X + w, Y + h, r); x.arcTo(X + w, Y + h, X, Y + h, r); x.arcTo(X, Y + h, X, Y, r); x.arcTo(X, Y, X + w, Y, r); x.closePath(); }
 function spacedL(x, t, X, Y, sp) { x.textAlign = 'left'; let cx = X; for (const ch of [...t]) { x.fillText(ch, cx, Y); cx += x.measureText(ch).width + sp; } return cx; }
-function fitFont(x, t, weight, size, maxW) { do { x.font = `${weight} ${size}px ${CF}`; size -= 4; } while (x.measureText(t).width > maxW && size > 36); }
-function chipsL(x, items, X, Y) {
-  x.font = `500 38px ${CF}`; const padX = 34, gap = 18, h = 88; let cx = X;
-  items.forEach(t => { const w = x.measureText(t).width + padX * 2; if (cx + w > 1000) return; x.strokeStyle = 'rgba(245,245,247,.85)'; x.lineWidth = 3.5; rr(x, cx, Y, w, h, h / 2); x.stroke(); x.fillStyle = '#F5F5F7'; x.textAlign = 'left'; x.fillText(t, cx + padX, Y + 58); cx += w + gap; });
+function fitFont(x, t, weight, size, maxW) { do { x.font = `${weight} ${size}px ${CF}`; size -= 3; } while (x.measureText(t).width > maxW && size > 28); }
+function clip(x, t, maxW) { let n = t; while (x.measureText(n).width > maxW && n.length > 3) n = n.slice(0, -2); return n === t ? t : n.trim() + '…'; }
+const CARD_COL = { gym: ['#8BD43B', 'rgba(139,212,59,'], sauna: ['#F28C4E', 'rgba(242,140,78,'], cold: ['#9ACBF5', 'rgba(154,203,245,'], thai: ['#E5484D', 'rgba(229,72,77,'], yoga: ['#B59CF0', 'rgba(181,156,240,'], bike: ['#35D0C9', 'rgba(53,208,201,'], other: ['#35D0C9', 'rgba(53,208,201,'], pr: ['#F4C542', 'rgba(244,197,66,'] };
+function drawPicto(x, key, cx, cy, size, col) {
+  const s = size / 24; x.save(); x.translate(cx - size / 2, cy - size / 2); x.scale(s, s);
+  x.strokeStyle = col; x.lineWidth = 1.5; x.lineCap = 'round'; x.lineJoin = 'round';
+  try { x.stroke(new Path2D(PICTO[key] || PICTO.other)); } catch (e) { }
+  x.restore();
 }
-async function shareCard(h, glow, draw, dateTxt) {
-  const mk = await loadMark();
-  const c = document.createElement('canvas'); c.width = 1080; c.height = h; const x = c.getContext('2d');
-  rr(x, 0, 0, 1080, h, 72); const g = x.createLinearGradient(0, 0, 0, h); g.addColorStop(0, '#242427'); g.addColorStop(1, '#101012'); x.fillStyle = g; x.fill();
-  x.save(); rr(x, 0, 0, 1080, h, 72); x.clip();
-  const rg = x.createRadialGradient(1000, 40, 10, 1000, 40, 620); rg.addColorStop(0, glow); rg.addColorStop(1, 'rgba(0,0,0,0)'); x.fillStyle = rg; x.fillRect(0, 0, 1080, h); x.restore();
-  x.strokeStyle = 'rgba(255,255,255,.09)'; x.lineWidth = 3; rr(x, 1.5, 1.5, 1077, h - 3, 70.5); x.stroke();
-  if (mk) { const lh = 52, lw = lh * (mk.naturalWidth || mk.width) / (mk.naturalHeight || mk.height); x.drawImage(mk, 80, 78, lw, lh); }
-  x.fillStyle = '#8E8E93'; x.font = `500 32px ${CF}`; x.textAlign = 'right'; x.fillText(dateTxt || fdate(today()), 1000, 118);
-  x.textAlign = 'left'; draw(x); return c;
+// kostra karty: kruh s piktogramem vlevo, obsah vpravo, logo dole
+async function miniCard(h, key, draw, dateTxt) {
+  const mk = await loadMark(); const [col, rgba] = CARD_COL[key] || CARD_COL.other;
+  const W = 1080, c = document.createElement('canvas'); c.width = W; c.height = h; const x = c.getContext('2d');
+  rr(x, 0, 0, W, h, 60); const g = x.createLinearGradient(0, 0, W, h); g.addColorStop(0, '#1F1F22'); g.addColorStop(1, '#0F0F11'); x.fillStyle = g; x.fill();
+  x.save(); rr(x, 0, 0, W, h, 60); x.clip();
+  const rg = x.createRadialGradient(200, h / 2, 10, 200, h / 2, 520); rg.addColorStop(0, rgba + '.20)'); rg.addColorStop(1, rgba + '0)'); x.fillStyle = rg; x.fillRect(0, 0, W, h);
+  x.restore();
+  x.strokeStyle = 'rgba(255,255,255,.08)'; x.lineWidth = 2.5; rr(x, 1.25, 1.25, W - 2.5, h - 2.5, 59); x.stroke();
+  // medailon
+  const cy = Math.min(h / 2, 250), R = 130;
+  x.beginPath(); x.arc(200, cy, R, 0, Math.PI * 2); x.fillStyle = rgba + '.12)'; x.fill();
+  x.lineWidth = 3; x.strokeStyle = rgba + '.45)'; x.stroke();
+  drawPicto(x, PICTO[key] ? key : 'gym', 200, cy, 170, col);
+  // datum + logo
+  x.textAlign = 'right'; x.fillStyle = '#6C6C70'; x.font = `500 28px ${CF}`; x.fillText(dateTxt, W - 64, 84);
+  if (mk) { const lh = 34, lw = lh * (mk.naturalWidth || mk.width) / (mk.naturalHeight || mk.height); x.globalAlpha = .55; x.drawImage(mk, W - 64 - lw, h - 64 - lh, lw, lh); x.globalAlpha = 1; }
+  x.textAlign = 'left'; draw(x, col, 400); return c;
+}
+function bigNum(x, big, unit, X, Y, size) {
+  x.fillStyle = '#F5F5F7'; x.font = `800 ${size}px ${CF}`; x.fillText(big, X, Y); const w = x.measureText(big).width;
+  if (unit) { x.fillStyle = '#8E8E93'; x.font = `700 ${Math.round(size * .36)}px ${CF}`; x.fillText(unit, X + w + 12, Y); }
 }
 async function storySummary(s) {
   const st = stats(s); const min = fmin((s.end || finEnd || Date.now()) - s.start);
-  const prs = sessionPRs(s);
-  const items = prs.map(p => ({ ex: p.ex, k: 'pr', d: `PR ${kg(p.w)} × ${p.r}` })).concat(progItems(s).filter(i => i.k !== 'down' && !prs.some(p => p.ex === i.ex))).slice(0, 4);
+  const prs = sessionPRs(s).slice(0, 2);
   const cardio = s.cardio && s.cardio.mode === 'join';
-  const h = 720 + (cardio ? 70 : 0) + (s.stretch ? 60 : 0) + (items.length ? 70 + items.length * 108 : 0) + 50;
-  const c = await shareCard(h, 'rgba(139,212,59,.20)', x => {
-    x.fillStyle = '#8BD43B'; x.font = `600 32px ${CF}`; spacedL(x, 'ODJETO', 80, 250, 10);
-    x.fillStyle = '#F5F5F7'; x.font = `800 210px ${CF}`; const w = x.measureText(String(min)).width; x.fillText(String(min), 70, 445);
-    x.font = `800 84px ${CF}`; x.fillStyle = '#8E8E93'; x.fillText(' min', 70 + w, 445);
-    x.fillStyle = '#F5F5F7'; fitFont(x, s.name.toUpperCase(), 800, 88, 920); x.fillText(s.name.toUpperCase(), 80, 548);
-    chipsL(x, [`${st.sets} sérií`, `${st.ex} cviků`, `${thou(st.vol)} kg`], 80, 594);
-    let y = 760;
-    if (cardio) { x.fillStyle = '#F5F5F7'; x.font = `600 42px ${CF}`; x.fillText(`+ ${s.cardio.kind} ${s.cardio.min ? s.cardio.min + ' min' : ''}${s.cardio.bpm ? ' · ' + s.cardio.bpm + ' bpm' : ''}`, 80, y); y += 70; }
-    if (s.stretch) { x.fillStyle = '#8E8E93'; x.font = `500 38px ${CF}`; x.fillText('+ statický strečink', 80, y); y += 60; }
-    if (items.length) {
-      y += 10; x.fillStyle = '#8E8E93'; x.font = `600 30px ${CF}`; spacedL(x, 'PROGRES', 80, y, 8); y += 34;
-      items.forEach(it => {
-        x.fillStyle = 'rgba(255,255,255,.06)'; rr(x, 60, y, 960, 92, 46); x.fill();
-        x.textAlign = 'left'; x.fillStyle = '#F5F5F7'; x.font = `500 38px ${CF}`;
-        let n = it.ex.name; while (x.measureText(n).width > 560 && n.length > 4) n = n.slice(0, -2); if (n !== it.ex.name) n = n.trim() + '…';
-        x.fillText(n, 100, y + 59); x.textAlign = 'right'; x.fillStyle = it.k === 'pr' ? '#F4C542' : it.k === 'kg' ? '#8BD43B' : '#35D0C9'; x.font = `700 40px ${CF}`; x.fillText(it.d, 980, y + 60); x.textAlign = 'left'; y += 108;
-      });
-    }
+  const extra = [cardio ? `+ ${s.cardio.kind} ${s.cardio.min ? s.cardio.min + ' min' : ''}`.trim() : '', s.stretch ? '+ strečink' : ''].filter(Boolean).join('   ');
+  const h = 500 + (extra ? 56 : 0) + prs.length * 62;
+  const c = await miniCard(h, prs.length ? 'gym' : 'gym', (x, col, X) => {
+    x.fillStyle = col; x.font = `700 30px ${CF}`; spacedL(x, clip(x, s.name.toUpperCase(), 520), X, 150, 7);
+    bigNum(x, String(min), 'min', X - 4, 300, 170);
+    x.fillStyle = '#C7C7CC'; x.font = `500 36px ${CF}`; x.fillText(`${CVK(st.ex)}  ·  ${SER(st.sets)}  ·  ${thou(st.vol)} kg`, X, 372);
+    let y = 432;
+    if (extra) { x.fillStyle = '#8E8E93'; x.font = `500 32px ${CF}`; x.fillText(extra, X, y); y += 56; }
+    prs.forEach(p => { x.fillStyle = '#F4C542'; x.font = `700 32px ${CF}`; x.fillText('PR', X, y); x.fillStyle = '#F5F5F7'; x.font = `500 32px ${CF}`; x.fillText(clip(x, `${p.ex.name}  ${kg(p.w)} × ${p.r}`, 560), X + 58, y); y += 62; });
   }, fdate(s.date));
   showShot(c, `trenink-${s.date}.png`);
 }
@@ -762,50 +769,38 @@ async function storyExercise(s, e) {
   const ex = exById(e.exId); const prev = lastBefore(e.exId, s); const best = bestBefore(e.exId, s);
   const rows = usedSets(e, ex).map((st, i) => ({ st, i })).filter(o => hasData(o.st, ex));
   const pr = rows.some(o => isPR(o.st, ex, best));
-  const ch = [ex.tempo && `Tempo ${ex.tempo}`, ex.partials && '+ polovičky', ex.uni && 'L / P'].filter(Boolean);
-  const tblH = 96 + rows.length * 108;
-  const h = 470 + tblH + (ch.length ? 130 : 30) + (prev ? 70 : 0) + 40;
-  const c = await shareCard(h, pr ? 'rgba(244,197,66,.22)' : 'rgba(53,208,201,.18)', x => {
-    x.fillStyle = '#8E8E93'; x.font = `600 30px ${CF}`; spacedL(x, s.name.toUpperCase(), 80, 245, 6);
-    if (pr) { x.fillStyle = '#F4C542'; x.font = `800 30px ${CF}`; x.textAlign = 'right'; x.fillText('NOVÝ REKORD', 1000, 245); x.textAlign = 'left'; }
-    x.fillStyle = '#F5F5F7'; fitFont(x, ex.name, 800, 92, 920); x.fillText(ex.name, 80, 345);
-    x.fillStyle = '#8E8E93'; x.font = `500 38px ${CF}`; x.fillText(ex.muscle || '', 80, 400);
-    let y = 450;
-    x.fillStyle = 'rgba(255,255,255,.06)'; rr(x, 60, y, 960, tblH, 44); x.fill();
-    const cols = [130, 400, 680, 900];
-    x.fillStyle = '#C7C7CC'; x.font = `700 34px ${CF}`; x.textAlign = 'center'; ['#', 'Kg', 'Opak.', ''].forEach((t, k) => x.fillText(t, cols[k], y + 62));
-    x.fillStyle = 'rgba(255,255,255,.08)'; x.fillRect(60, y + 94, 960, 2);
-    rows.forEach(({ st, i }, k) => {
-      const yy = y + 96 + k * 108 + 72; const a = cmp(st, prev && prev.e.sets[i], ex); const isP = isPR(st, ex, best);
-      x.fillStyle = '#F5F5F7'; x.font = `500 52px ${CF}`;
-      x.fillText(String(i + 1), cols[0], yy); x.fillText(kg(num(st.w)), cols[1], yy); x.fillText(ex.uni ? `${st.l ?? '–'}/${st.r ?? '–'}` : String(st.reps), cols[2], yy);
-      if (isP) { x.fillStyle = '#F4C542'; x.font = `800 34px ${CF}`; x.fillText('PR', cols[3] - 70, yy - 6); }
-      else if (a === 'up' || a === 'down') { x.fillStyle = a === 'up' ? '#35D0C9' : '#E5484D'; x.font = `800 52px ${CF}`; x.fillText(ARROW[a], cols[3] - 70, yy); }
-      if (ex.sets[i].fail) { x.strokeStyle = '#E5484D'; x.lineWidth = 4.5; rr(x, cols[3] - 10, yy - 44, 84, 56, 28); x.stroke(); x.fillStyle = '#F5F5F7'; x.font = `800 32px ${CF}`; x.fillText('F', cols[3] + 32, yy - 4); }
+  const h = Math.max(500, 250 + rows.length * 86 + (prev ? 70 : 20) + 60);
+  const c = await miniCard(h, pr ? 'pr' : 'gym', (x, col, X) => {
+    x.fillStyle = pr ? '#F4C542' : col; x.font = `700 28px ${CF}`; spacedL(x, pr ? 'NOVÝ REKORD' : clip(x, s.name.toUpperCase(), 480), X, 140, 7);
+    x.fillStyle = '#F5F5F7'; fitFont(x, ex.name, 800, 64, 600); x.fillText(ex.name, X, 215);
+    let y = 300;
+    rows.forEach(({ st, i }) => {
+      const a = cmp(st, prev && prev.e.sets[i], ex); const isP = isPR(st, ex, best);
+      x.fillStyle = '#6C6C70'; x.font = `600 30px ${CF}`; x.fillText(`${i + 1}.`, X, y);
+      x.fillStyle = '#F5F5F7'; x.font = `700 52px ${CF}`; const t = `${kg(num(st.w))} kg × ${ex.uni ? `${st.l ?? '–'}/${st.r ?? '–'}` : st.reps}`; x.fillText(t, X + 52, y + 2);
+      const w = x.measureText(t).width;
+      if (isP) { x.fillStyle = '#F4C542'; x.font = `800 30px ${CF}`; x.fillText('PR', X + 76 + w, y - 4); }
+      else if (a === 'up' || a === 'down') { x.fillStyle = a === 'up' ? '#35D0C9' : '#E5484D'; x.font = `800 44px ${CF}`; x.fillText(ARROW[a], X + 70 + w, y); }
+      y += 86;
     });
-    x.textAlign = 'left'; y += tblH + 30;
-    if (ch.length) { chipsL(x, ch, 80, y); y += 120; }
-    if (prev) { x.fillStyle = '#6C6C70'; x.font = `500 32px ${CF}`; x.fillText(`Minule: ${usedSets(prev.e, ex).map(t => setTxt(t, ex)).join('  ·  ')}`, 80, y + 40); }
+    const meta = [ex.tempo && `tempo ${ex.tempo}`, ex.partials && '+ polovičky', prev && `minule ${usedSets(prev.e, ex).map(t => setTxt(t, ex)).join(' · ')}`].filter(Boolean).join('   ');
+    if (meta) { x.fillStyle = '#6C6C70'; x.font = `500 28px ${CF}`; x.fillText(clip(x, meta, 600), X, y - 10); }
   }, fdate(s.date));
   showShot(c, `${ex.name}.png`);
 }
 async function storyActivity(a) {
-  const t = ACT_TYPES[a.type] || ACT_TYPES.other;
-  const col = { cold: '#9ACBF5', heat: '#F28C4E', act: '#35D0C9' }[t.cls];
-  const glow = { cold: 'rgba(154,203,245,.24)', heat: 'rgba(242,140,78,.26)', act: 'rgba(53,208,201,.2)' }[t.cls];
-  let big, small = '', sub = [];
-  if (a.type === 'sauna') { big = `${a.rounds || 1}×`; small = a.min ? ` ${a.min} min` : ''; if (a.temp) sub.push(`${a.temp} °C`); }
-  else if (a.type === 'cold') { big = a.sec ? `${Math.floor(a.sec / 60)}:${pad(a.sec % 60)}` : '✓'; small = a.sec ? ' min' : ''; if (a.kind) sub.push(a.kind); if (a.temp != null) sub.push(`${kg(a.temp)} °C`); }
-  else { big = a.min ? String(a.min) : '✓'; small = a.min ? ' min' : ''; if (a.kind) sub.push(a.kind); if (a.bpm) sub.push(`${a.bpm} bpm`); }
+  const t = ACT_TYPES[a.type] || ACT_TYPES.other; const key = PICTO[a.type] ? a.type : 'other';
+  let big, unit = '', sub = [];
+  if (a.type === 'sauna') { big = `${a.rounds || 1}×`; unit = a.min ? `${a.min} min` : ''; if (a.temp) sub.push(`${a.temp} °C`); }
+  else if (a.type === 'cold') { big = a.sec ? `${Math.floor(a.sec / 60)}:${pad(a.sec % 60)}` : '✓'; unit = a.sec ? 'min' : ''; if (a.kind) sub.push(a.kind); if (a.temp != null) sub.push(`voda ${kg(a.temp)} °C`); }
+  else { big = a.min ? String(a.min) : '✓'; unit = a.min ? 'min' : ''; if (a.kind) sub.push(a.kind); if (a.bpm) sub.push(`${a.bpm} bpm`); }
+  if (a.note) sub.push(a.note);
   const title = (a.type === 'other' && a.label ? a.label : t.name).toUpperCase();
-  const h = 700 + (a.note ? 60 : 0);
-  const c = await shareCard(h, glow, x => {
-    if (a.type === 'cold') { x.fillStyle = 'rgba(225,240,255,.5)'; for (let i = 0; i < 46; i++) { const px = (i * 197) % 1080, py = (i * 131) % h, r = 2 + (i % 4); x.beginPath(); x.arc(px, py, r, 0, 6.28); x.fill(); } }
-    x.fillStyle = col; x.font = `700 34px ${CF}`; spacedL(x, title, 80, 260, 10);
-    x.fillStyle = '#F5F5F7'; x.font = `800 220px ${CF}`; const w = x.measureText(big).width; x.fillText(big, 70, 470);
-    x.font = `800 84px ${CF}`; x.fillStyle = '#8E8E93'; x.fillText(small, 70 + w, 470);
-    if (sub.length) { x.fillStyle = col; x.font = `600 46px ${CF}`; x.fillText(sub.join('  ·  '), 80, 570); }
-    if (a.note) { x.fillStyle = '#8E8E93'; x.font = `500 36px ${CF}`; let n = a.note; while (x.measureText(n).width > 900 && n.length > 4) n = n.slice(0, -2); x.fillText(n, 80, 640); }
+  const c = await miniCard(500, key, (x, col, X) => {
+    if (a.type === 'cold') { x.fillStyle = 'rgba(225,240,255,.35)'; for (let i = 0; i < 30; i++) { const px = 420 + (i * 197) % 620, py = 40 + (i * 131) % 420; x.beginPath(); x.arc(px, py, 1.5 + (i % 3), 0, 6.28); x.fill(); } }
+    x.fillStyle = col; x.font = `700 30px ${CF}`; spacedL(x, clip(x, title, 480), X, 150, 7);
+    bigNum(x, big, unit, X - 4, 300, 170);
+    if (sub.length) { x.fillStyle = '#C7C7CC'; x.font = `500 36px ${CF}`; x.fillText(clip(x, sub.join('  ·  '), 600), X, 372); }
   }, fdate(a.date));
   showShot(c, `${t.name}-${a.date}.png`);
 }
