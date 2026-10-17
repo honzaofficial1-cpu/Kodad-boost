@@ -184,7 +184,7 @@ function vHome() {
   }
   const bdays = Object.entries(BD().days).filter(([, x]) => x.weight != null).sort((a, c) => a[0] < c[0] ? 1 : -1);
   const v = bVerdict();
-  const mTile = `<button class="hcard" data-a="measures"><span class="hic">${ico('ruler')}</span><b>Míry</b>${bdays.length ? `<span class="big">${nf(bdays[0][1].weight, 1)}<small> kg</small></span><i class="stp ${v.st[0]}">${v.ch == null ? 'zapiš váhu' : sg(v.ch, 2) + ' kg/týd.'}</i>` : `<small>Ranní váha, obvody, pocity</small>`}</button>`;
+  const mTile = `<button class="hcard" data-a="measures"><span class="hic">${ico('ruler')}</span><b>Míry</b>${bdays.length ? `<span class="big">${nf(bdays[0][1].weight, 1)}<small> kg</small></span><i class="stp ${S.settings.paceEval ? v.st[0] : 'idle'}">${v.ch == null ? 'zapiš váhu' : sg(v.ch, 2) + ' kg/týd.'}</i>` : `<small>Ranní váha, obvody, pocity</small>`}</button>`;
   const lastA = [...S.activities].sort((a, c) => c.date.localeCompare(a.date) || c.ts - a.ts)[0];
   const aw = S.activities.filter(a => toU(a.date) >= toU(dkey(mon))).length;
   const aTile = `<button class="hcard" data-a="tab" data-v="acts"><span class="hic" style="color:var(--heat)">${ico('flame')}</span><b>Aktivity</b>${lastA ? `<span class="big">${aw}<small> tento týden</small></span><i class="stp idle">${esc((ACT_TYPES[lastA.type] || {}).name || '')} · ${fday(lastA.date)}</i>` : '<small>Sauna, otužování, kolo, thai box</small>'}</button>`;
@@ -431,7 +431,7 @@ function vCal() {
     <div class="card"><div class="cal-h"><button class="round" style="width:44px;height:44px" data-a="cal-m" data-v="-1" aria-label="Předchozí měsíc">${ico('back')}</button><h2>${MON[m]} ${y}</h2><button class="round" style="width:44px;height:44px" data-a="cal-m" data-v="1" aria-label="Další měsíc">${ico('chev')}</button></div>
       <div class="cal">${cells}</div>
       <div class="legend"><span><u style="background:var(--done)"></u>Gym</span><span><u style="background:var(--heat)"></u>Sauna</span><span><u style="background:var(--ice)"></u>Otužování</span><span><u style="background:var(--prog)"></u>Aktivita</span><span><u style="background:var(--sick)"></u>Nemoc</span></div></div>
-    <div class="bottom-acts" style="margin-top:12px"><button class="pill dark" data-a="week-sum">${ico('bars')} Souhrn týdne</button></div>
+    <div class="bottom-acts" style="margin-top:12px"><button class="pill dark" data-a="week-sum">${ico('bars')} Souhrn týdne</button><button class="pill dark" data-a="month-share">${ico('share')} Měsíc na story</button></div>
     <div class="stat3" style="margin-top:12px"><div><span>Tréninků</span><b>${tr}</b></div><div><span>Hodin v gymu</span><b>${kg(Math.round(mins / 6) / 10)}</b></div><div><span>Aktivit</span><b>${act}</b></div></div>
     ${sick ? `<p class="mut" style="text-align:center">Nemoc tento měsíc: ${sick} ${sick === 1 ? 'den' : sick < 5 ? 'dny' : 'dní'}</p>` : ''}
   </div>${tabs()}`;
@@ -696,6 +696,7 @@ function vSettings() {
     <section class="sec"><div class="lbl" style="margin:0 6px 10px">Kotouče v tvém gymu</div>
       <div class="chips">${PLATE_ALL.map(p => `<button class="chip ${plateSet().includes(p) ? 'prog' : ''}" data-a="plate-tog" data-v="${p}">${kg(p)} kg</button>`).join('')}</div>
       <p class="mut" style="font-size:14px;margin:10px 6px">Kalkulačka počítá jen se zvýrazněnými kotouči.</p></section>
+    <section class="sec"><button class="sw ${S.settings.paceEval ? 'on' : ''}" data-a="tog-pace"><span>Hodnotit tempo nabírání<small>Hlášky typu „pod cílem“ a cílový pás v grafu. Vypnuto = jen čísla.</small></span><span class="k"></span></button></section>
     <section class="sec"><div class="lbl" style="margin:0 6px 10px">Tréninků týdně (cíl)</div>
       <div class="seg">${[2, 3, 4, 5, 6].map(v => `<button data-a="goal" data-v="${v}" class="${(S.settings.weekGoal || 4) === v ? 'on' : ''}">${v}</button>`).join('')}</div></section>
     <section class="sec"><button class="li" data-a="tab" data-v="tpls"><span class="ic" style="color:var(--done)">${ico('dumbbell')}</span><div class="t"><b>Moje tréninky</b><small>${S.templates.length} sestav · rotace</small></div><span class="chev">${ico('chev')}</span></button></section>

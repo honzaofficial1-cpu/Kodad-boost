@@ -541,3 +541,13 @@ button.ck{background:none;border:0;padding:0;cursor:pointer}
 .at.more .ic{color:var(--mut)}
 .at.more.on{background:var(--card2)}
 .at.act[data-t=climb] .ic{color:#E2A65A} .at.act[data-t=xcski] .ic{color:#7FD1E8} .at.act[data-t=sprint] .ic{color:#FF7A59} .at.act[data-t=posing] .ic{color:#E07FA0}
+
+/* v2.0 studio */
+.stprev{border-radius:26px;overflow:hidden;display:grid;place-items:center;min-height:240px;background:var(--card)}
+.stprev.cista{background:repeating-conic-gradient(#2A2A2E 0 25%,#1E1E21 0 50%) 0 0/22px 22px}
+.stprev img{display:block;width:100%;height:auto;max-height:56vh;object-fit:contain}
+.stload{width:28px;height:28px;border-radius:50%;border:3px solid var(--card3);border-top-color:var(--fg);animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.chip.tg{padding:8px 14px;font-size:14px;background:var(--card);border:1.5px solid var(--card3);color:var(--mut)}
+.chip.tg.on{background:var(--fg);color:var(--ink);border-color:var(--fg)}
+.cal-h~.bottom-acts,.bottom-acts:has([data-a=month-share]){grid-template-columns:1fr 1fr}

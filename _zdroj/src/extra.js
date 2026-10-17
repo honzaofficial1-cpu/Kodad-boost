@@ -42,7 +42,7 @@ function cdPaint() {
     if (cdMode !== 'go') { cdMode = 'go'; el.className = 'cdbar go'; el.innerHTML = `<div class="t"><small>${esc(S.cd.name)}</small><b>Pracovní série – jdi na to</b></div><button class="cx" data-a="cd-stop" aria-label="Hotovo">${ico('check')}</button>`; }
     return;
   }
-  if (cdMode !== 'run') { cdMode = 'run'; el.className = 'cdbar'; el.innerHTML = `<div class="pg"></div><div class="t"><small>Pracovní série za · ${esc(S.cd.name)}</small><b data-cd></b></div><button class="ad" data-a="cd-add">+30 s</button><button class="cx" data-a="cd-stop" aria-label="Zrušit odpočet">${ico('x')}</button>`; }
+  if (cdMode !== 'run') { cdMode = 'run'; el.className = 'cdbar'; el.innerHTML = `<div class="pg"></div><div class="t"><small>Pracovní série za · ${esc(S.cd.name)}</small><b data-cd></b></div><button class="cx" data-a="cd-stop" aria-label="Zrušit odpočet">${ico('x')}</button>`; }
   $('[data-cd]', el).textContent = fcd(rem);
   $('.pg', el).style.width = `${Math.min(100, (1 - rem / S.cd.total) * 100)}%`;
 }
@@ -77,7 +77,7 @@ function weekSheet(monK) {
     ${prs.length ? `<div class="lbl" style="margin:20px 4px 8px">Rekordy</div><div class="list">${prs.map(p => `<div class="li prli"><span class="ic">${ico('medal')}</span><div class="t"><b>${esc(p.ex.name)}</b><small>${kg(p.pw)} × ${p.pr} → <b>${kg(p.w)} × ${p.r}</b></small></div></div>`).join('')}</div>` : ''}
     <div class="lbl" style="margin:20px 4px 8px">Tělo</div><div class="card wcard">
       ${row('Ø ranní váha', aw == null ? '–' : `${nf(aw, 1)} kg`)}
-      ${row('Změna proti minulému týdnu', ch == null ? '–' : `${sg(ch, 2)} kg ${tp ? `<i class="stp ${tp[0]}">${tp[1]}</i>` : ''}`)}
+      ${row('Změna proti minulému týdnu', ch == null ? '–' : `${sg(ch, 2)} kg ${tp && S.settings.paceEval ? `<i class="stp ${tp[0]}">${tp[1]}</i>` : ''}`)}
       ${row('Jídelníček dodržen', adh == null ? '–' : Math.round(adh * 100) + ' %')}
       ${row('Ø spánek', sl == null ? '–' : nf(sl, 1) + ' h')}
       ${row('Ø výkon v tréninku', perf == null ? '–' : nf(perf, 1) + ' / 5')}
@@ -298,4 +298,217 @@ Object.assign(A, {
     sDraft = null; save(true); closeSheet(); render();
     storyActivity(a);
   },
+});
+
+// ===================== v2.0: SDÍLECÍ STUDIO – vlastní vizuál JK =====================
+// Jazyk karet vychází z loga: šikmé tahy (jako „JK“), kurzíva, šikmá podtrhávací lišta, velká silueta sportu.
+const STYLES = [['noc', 'Tmavá'], ['barva', 'Barevná'], ['cista', 'Bez pozadí']];
+const SLANT = 0.42; // sklon jako v logu
+function slab(x, X, Y, w, h) { const k = h * SLANT; x.beginPath(); x.moveTo(X + k, Y); x.lineTo(X + w + k, Y); x.lineTo(X + w, Y + h); x.lineTo(X, Y + h); x.closePath(); }
+function shade(hex, f) { const n = parseInt(hex.slice(1), 16); let r = n >> 16, g = (n >> 8) & 255, b = n & 255; r = Math.round(r * f); g = Math.round(g * f); b = Math.round(b * f); return `rgb(${r},${g},${b})`; }
+async function markTinted(col) {
+  return new Promise(res => { const im = new Image(); im.onload = () => res(im); im.onerror = () => res(null); im.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(MARK.replace('currentColor', col)); });
+}
+async function drawShare(sp, style, on) {
+  const W = 1080, X = 84, col = sp.col;
+  const isOn = id => on[id] !== false;
+  const stats = (sp.stats || []).filter(s => isOn(s.id));
+  const lists = (sp.lists || []).filter(l => isOn(l.id) && l.items.length);
+  const vizs = (sp.viz || []).filter(v => isOn(v.id));
+  let h = 560 + (stats.length ? 150 : 0) + lists.reduce((a, l) => a + 70 + l.items.length * 64, 0) + vizs.reduce((a, v) => a + v.h + 40, 0) + 60;
+  const c = document.createElement('canvas'); c.width = W; c.height = h; const x = c.getContext('2d');
+  const colr = style === 'barva', clear = style === 'cista';
+  const fg = colr ? '#0B0B0C' : '#F5F5F7', mut = colr ? 'rgba(11,11,12,.6)' : clear ? 'rgba(255,255,255,.82)' : '#9A9AA0', acc = colr ? '#0B0B0C' : col, faint = colr ? 'rgba(11,11,12,.12)' : clear ? 'rgba(255,255,255,.28)' : 'rgba(255,255,255,.08)';
+  // pozadí
+  if (!clear) {
+    rr(x, 0, 0, W, h, 64); x.save(); x.clip();
+    if (colr) { const g = x.createLinearGradient(0, 0, W, h); g.addColorStop(0, col); g.addColorStop(1, shade(col, .72)); x.fillStyle = g; x.fillRect(0, 0, W, h); }
+    else { const g = x.createLinearGradient(0, 0, 0, h); g.addColorStop(0, '#1D1D20'); g.addColorStop(1, '#0C0C0E'); x.fillStyle = g; x.fillRect(0, 0, W, h); }
+    // šikmé tahy
+    x.globalAlpha = colr ? .16 : .09; x.fillStyle = colr ? '#FFFFFF' : col; slab(x, W - 520, -10, 150, h + 20);
+    x.globalAlpha = colr ? .10 : .05; slab(x, W - 330, -10, 70, h + 20); x.globalAlpha = 1;
+    x.restore();
+    if (!colr) { x.strokeStyle = 'rgba(255,255,255,.07)'; x.lineWidth = 2.5; rr(x, 1.25, 1.25, W - 2.5, h - 2.5, 63); x.stroke(); }
+  }
+  if (clear) { x.shadowColor = 'rgba(0,0,0,.6)'; x.shadowBlur = 26; x.shadowOffsetY = 2; }
+  // silueta
+  x.globalAlpha = colr ? .9 : 1; drawPicto(x, sp.picto, W - 230, 330, 330, colr ? '#0B0B0C' : clear ? '#FFFFFF' : col); x.globalAlpha = 1;
+  // hlavička
+  const mk = await markTinted(colr ? '#0B0B0C' : '#FFFFFF');
+  if (mk) { const lh = 46, lw = lh * (mk.naturalWidth || mk.width) / (mk.naturalHeight || mk.height); x.globalAlpha = colr ? .85 : .9; x.drawImage(mk, X, 78, lw, lh); x.globalAlpha = 1; }
+  x.fillStyle = mut; x.font = `600 28px ${CF}`; x.textAlign = 'right'; x.fillText(sp.date || '', W - 84, 112); x.textAlign = 'left';
+  // titulky
+  let y = 230;
+  if (sp.kicker) { x.fillStyle = mut; x.font = `600 26px ${CF}`; spacedL(x, clip(x, sp.kicker.toUpperCase(), 560), X, y, 6); y += 50; }
+  x.fillStyle = acc; x.font = `italic 800 40px ${CF}`; spacedL(x, clip(x, sp.title.toUpperCase(), 600), X, y, 3);
+  // velké číslo
+  x.fillStyle = fg; let size = 220; x.font = `italic 900 ${size}px ${CF}`; while (x.measureText(sp.big).width > 560 && size > 120) { size -= 10; x.font = `italic 900 ${size}px ${CF}`; }
+  x.fillText(sp.big, X - 6, y + size * .9); const bw = x.measureText(sp.big).width;
+  if (sp.unit) { x.fillStyle = mut; x.font = `italic 700 ${Math.round(size * .32)}px ${CF}`; x.fillText(sp.unit, X + bw + 16, y + size * .9); }
+  y += size * .9 + 34;
+  // podpis: šikmá lišta
+  x.fillStyle = acc; slab(x, X, y, 150, 12); x.fill(); x.globalAlpha = .45; slab(x, X + 172, y, 46, 12); x.fill(); x.globalAlpha = 1;
+  y += 60;
+  // statistiky
+  if (stats.length) {
+    const n = stats.length, cw = (W - 2 * X) / n, fs = n >= 4 ? 46 : n === 3 ? 54 : 62;
+    stats.forEach((s, i) => { const sx = X + i * cw; x.fillStyle = fg; x.font = `italic 800 ${fs}px ${CF}`; x.fillText(clip(x, s.value, cw - 20), sx, y + 58); x.fillStyle = mut; x.font = `600 24px ${CF}`; spacedL(x, s.label.toUpperCase(), sx, y + 100, 3); if (i) { x.fillStyle = faint; x.fillRect(sx - 18, y + 10, 2, 96); } });
+    y += 150;
+  }
+  // grafika
+  vizs.forEach(v => { v.draw(x, X, y + 10, W - 2 * X, { fg, mut, acc, faint, colr }); y += v.h + 40; });
+  // seznamy
+  lists.forEach(l => {
+    x.fillStyle = mut; x.font = `600 24px ${CF}`; spacedL(x, l.title.toUpperCase(), X, y + 34, 5); y += 56;
+    l.items.forEach(([L, R, rc]) => {
+      x.fillStyle = faint; x.fillRect(X, y, W - 2 * X, 2);
+      x.fillStyle = fg; x.font = `500 36px ${CF}`; x.fillText(clip(x, L, 560), X, y + 46);
+      x.textAlign = 'right'; x.fillStyle = rc && !colr ? rc : fg; x.font = `italic 800 38px ${CF}`; x.fillText(R, W - X, y + 47); x.textAlign = 'left';
+      y += 64;
+    });
+    y += 14;
+  });
+  return c;
+}
+// ---------- vizualizace ----------
+function vizMonth(yy, mm) {
+  const first = new Date(yy, mm, 1), off = (first.getDay() + 6) % 7, days = new Date(yy, mm + 1, 0).getDate(), rows = Math.ceil((off + days) / 7);
+  const cell = 96, gap = 14;
+  return {
+    id: 'cal', label: 'Kalendář', h: 50 + rows * (cell + gap), draw: (x, X, Y, W, k) => {
+      const tw = 7 * cell + 6 * gap, sx = X + (W - tw) / 2;
+      ['po', 'út', 'st', 'čt', 'pá', 'so', 'ne'].forEach((d, i) => { x.fillStyle = k.mut; x.font = `600 24px ${CF}`; x.textAlign = 'center'; x.fillText(d.toUpperCase(), sx + i * (cell + gap) + cell / 2, Y + 26); });
+      for (let d = 1; d <= days; d++) {
+        const p = off + d - 1, r = Math.floor(p / 7), cI = p % 7, cx = sx + cI * (cell + gap), cy = Y + 50 + r * (cell + gap); const kk = dkey(new Date(yy, mm, d));
+        const s = sessionOn(kk), a = actsOn(kk);
+        x.globalAlpha = 1;
+        if (s && s.end) { x.fillStyle = k.acc; slab(x, cx - 8, cy, cell - 12, cell); x.fill(); }
+        else { x.fillStyle = k.faint; rr(x, cx, cy, cell, cell, 18); x.fill(); }
+        if (a.length) { x.fillStyle = s && s.end ? (k.colr ? '#FFFFFF' : '#0B0B0C') : k.acc; x.beginPath(); x.arc(cx + cell - 20, cy + 20, 8, 0, 6.28); x.fill(); }
+        x.fillStyle = s && s.end ? (k.colr ? '#FFFFFF' : '#0B0B0C') : k.mut; x.font = `700 26px ${CF}`; x.fillText(String(d), cx + cell / 2, cy + cell / 2 + 10);
+      }
+      x.textAlign = 'left';
+    }
+  };
+}
+function vizWeek(mon) {
+  return {
+    id: 'days', label: 'Dny', h: 170, draw: (x, X, Y, W, k) => {
+      const cw = (W - 6 * 16) / 7;
+      for (let i = 0; i < 7; i++) {
+        const kk = dkey(addDays(mon, i)); const s = sessionOn(kk), a = actsOn(kk); const cx = X + i * (cw + 16);
+        if (s && s.end) { x.fillStyle = k.acc; slab(x, cx - 10, Y, cw - 18, 110); x.fill(); } else { x.fillStyle = k.faint; rr(x, cx, Y, cw, 110, 18); x.fill(); }
+        if (a.length) { x.fillStyle = s && s.end ? (k.colr ? '#FFFFFF' : '#0B0B0C') : k.acc; x.beginPath(); x.arc(cx + cw / 2, Y + 55, 9, 0, 6.28); x.fill(); }
+        x.fillStyle = k.mut; x.font = `700 24px ${CF}`; x.textAlign = 'center'; x.fillText(DOW[addDays(mon, i).getDay()].toUpperCase(), cx + cw / 2, Y + 152);
+      }
+      x.textAlign = 'left';
+    }
+  };
+}
+function vizWeight(ks) {
+  const pts = ks.map(k => ({ k, w: BD().days[k]?.weight })).filter(p => p.w != null);
+  if (pts.length < 2) return null;
+  return {
+    id: 'vaha', label: 'Křivka váhy', h: 170, def: false, draw: (x, X, Y, W, k) => {
+      const mn = Math.min(...pts.map(p => p.w)), mx = Math.max(...pts.map(p => p.w)), sp = Math.max(mx - mn, .6);
+      const px = i => X + (W - 220) * i / (pts.length - 1), py = v => Y + 130 - (v - mn) / sp * 110;
+      x.strokeStyle = k.acc; x.lineWidth = 7; x.lineJoin = 'round'; x.lineCap = 'round'; x.beginPath(); pts.forEach((p, i) => i ? x.lineTo(px(i), py(p.w)) : x.moveTo(px(i), py(p.w))); x.stroke();
+      const l = pts[pts.length - 1]; x.fillStyle = k.acc; x.beginPath(); x.arc(px(pts.length - 1), py(l.w), 12, 0, 6.28); x.fill();
+      const d = l.w - pts[0].w; x.fillStyle = k.fg; x.font = `italic 800 52px ${CF}`; x.textAlign = 'right'; x.fillText(`${d >= 0 ? '+' : '−'}${kg(Math.abs(r2(d)))} kg`, X + W, Y + 80); x.textAlign = 'left';
+    }
+  };
+}
+// ---------- specifikace karet ----------
+const COLK = k => (CARD_COL[k] || CARD_COL.other)[0];
+function specWorkout(s) {
+  const st = stats(s), prs = sessionPRs(s), p = prevSameSession(s), min = fmin((s.end || finEnd || Date.now()) - s.start);
+  const extra = []; if (s.cardio && s.cardio.mode === 'join') extra.push([s.cardio.kind, [s.cardio.min ? s.cardio.min + ' min' : '', s.cardio.bpm ? s.cardio.bpm + ' bpm' : ''].filter(Boolean).join(' · ') || '✓']); if (s.stretch) extra.push(['Statický strečink', '✓']);
+  const tops = s.entries.map(e => { const ex = exById(e.exId); if (!ex) return null; const t = usedSets(e, ex).find(q => hasData(q, ex)); return t ? [ex.name, setTxt(t, ex)] : null; }).filter(Boolean);
+  const cmpI = p ? (() => { const b = stats(p); return [['Objem', `${sg(st.vol - b.vol, 0)} kg`, st.vol >= b.vol ? '#8BD43B' : '#E5484D'], ['Zlepšení', `${st.up}`, null]]; })() : [];
+  return {
+    picto: 'gym', col: prs.length ? '#F4C542' : COLK('gym'), kicker: prs.length ? 'Nový rekord' : 'Trénink', title: s.name, big: String(min), unit: 'min', date: fdate(s.date),
+    stats: [{ id: 'vol', label: 'nazvedáno', value: `${thou(st.vol)} kg` }, { id: 'sets', label: 'série', value: String(st.sets) }, { id: 'ex', label: 'cviky', value: String(st.ex) }],
+    lists: [{ id: 'pr', title: 'Rekordy', items: prs.map(q => [q.ex.name, `${kg(q.w)} × ${q.r}`, '#F4C542']) }, { id: 'extra', title: 'Navíc', items: extra }, { id: 'top', title: 'Nejlepší série', items: tops, def: false }, { id: 'cmp', title: p ? `Proti minule (${fday(p.date)})` : '', items: cmpI, def: false }],
+  };
+}
+function specExercise(s, e) {
+  const ex = exById(e.exId), prev = lastBefore(e.exId, s), best = bestBefore(e.exId, s);
+  const rows = usedSets(e, ex).map((st, i) => ({ st, i })).filter(o => hasData(o.st, ex)); const pr = rows.some(o => isPR(o.st, ex, best));
+  const top = rows[0]?.st;
+  return {
+    picto: 'gym', col: pr ? '#F4C542' : COLK('gym'), kicker: pr ? 'Nový rekord' : s.name, title: ex.name, big: top ? kg(num(top.w)) : '–', unit: top ? `kg × ${ex.uni ? `${top.l ?? '–'}/${top.r ?? '–'}` : top.reps}` : '', date: fdate(s.date),
+    stats: [ex.tempo ? { id: 'tempo', label: 'tempo', value: ex.tempo } : null, { id: 'musc', label: 'partie', value: ex.muscle || '–', def: false }].filter(Boolean),
+    lists: [{ id: 'sets', title: 'Série', items: rows.map(({ st, i }) => { const a = cmp(st, prev && prev.e.sets[i], ex), P = isPR(st, ex, best); return [`${i + 1}. série`, `${setTxt(st, ex)}${P ? '  PR' : a === 'up' ? '  ↑' : a === 'down' ? '  ↓' : ''}`, P ? '#F4C542' : a === 'up' ? '#35D0C9' : null]; }) },
+    { id: 'prev', title: 'Minule', items: prev ? [[fday(prev.s.date), usedSets(prev.e, ex).map(t => setTxt(t, ex)).join(' · ')]] : [], def: false }],
+  };
+}
+function specActivity(a) {
+  const t = ACT_TYPES[a.type] || ACT_TYPES.other; const key = PICTO[a.type] ? a.type : 'other'; const col = COLK(key);
+  const title = a.type === 'other' && a.label ? a.label : t.name; let big = '✓', unit = '', st = [], lists = [];
+  if (a.type === 'sauna') { const T = saunaTotals(a); big = `${T.rounds}×`; unit = T.mins ? `${T.mins} min` : 'kol'; const mt = Math.max(0, ...T.it.map(i => i.temp || 0)); st = [{ id: 'kol', label: 'kol', value: String(T.rounds) }, { id: 'min', label: 'minut', value: String(T.mins || '–') }, mt ? { id: 'tep', label: 'max °C', value: `${mt}°` } : null].filter(Boolean); lists = [{ id: 'saunas', title: 'Sauny', items: T.it.map(i => [i.kind || 'Sauna', `${i.rounds || 1}× ${i.min ? i.min + ' min' : ''}${i.temp ? ' · ' + i.temp + '°' : ''}`.trim()]) }]; }
+  else if (a.type === 'cold') { big = a.sec ? `${Math.floor(a.sec / 60)}:${pad(a.sec % 60)}` : '✓'; unit = a.sec ? 'min' : ''; st = [a.kind ? { id: 'kind', label: 'kde', value: a.kind } : null, a.temp != null ? { id: 'tep', label: 'voda', value: `${kg(a.temp)} °C` } : null].filter(Boolean); }
+  else { big = a.min ? String(a.min) : '✓'; unit = a.min ? 'min' : ''; st = [a.kind ? { id: 'kind', label: 'typ', value: a.kind } : null, a.bpm ? { id: 'bpm', label: 'tep', value: `${a.bpm} bpm` } : null].filter(Boolean); }
+  if (a.note) lists.push({ id: 'note', title: 'Poznámka', items: [[a.note, '']], def: false });
+  return { picto: key, col, kicker: '', title, big, unit, date: fdate(a.date), stats: st, lists };
+}
+function specWeek(monK) {
+  const w = weekData(monK), goal = S.settings.weekGoal || 4, sun = addDays(w.mon, 6);
+  const ac = {}; w.acts.forEach(a => { const n = a.type === 'other' ? (a.label || 'Jiné') : ACT_TYPES[a.type]?.name || a.type; ac[n] = (ac[n] || 0) + 1; });
+  const ks = [...Array(7)].map((_, i) => dkey(addDays(w.mon, i)));
+  return {
+    picto: 'gym', col: COLK('gym'), kicker: `${w.mon.getDate()}. ${w.mon.getMonth() + 1}. – ${sun.getDate()}. ${sun.getMonth() + 1}.`, title: `Týden ${isoWeek(w.mon)}`, big: `${w.ses.length}/${goal}`, unit: 'tréninků', date: '',
+    stats: [{ id: 'h', label: 'hodin v gymu', value: kg(Math.round(w.mins / 6) / 10) }, { id: 'pr', label: 'rekordy', value: String(w.prs.length) }, { id: 'act', label: 'aktivity', value: String(w.acts.length) }],
+    viz: [vizWeek(w.mon), vizWeight(ks)].filter(Boolean),
+    lists: [{ id: 'prl', title: 'Rekordy', items: w.prs.slice(0, 5).map(q => [q.ex.name, `${kg(q.w)} × ${q.r}`, '#F4C542']), def: false }, { id: 'acl', title: 'Aktivity', items: Object.entries(ac).map(([n, c]) => [n, `${c}×`]), def: false }],
+  };
+}
+function specMonth(yy, mm) {
+  const days = new Date(yy, mm + 1, 0).getDate(); const ks = [...Array(days)].map((_, i) => dkey(new Date(yy, mm, i + 1)));
+  const ses = ks.map(sessionOn).filter(s => s && s.end); const mins = ses.reduce((a, s) => a + fmin(s.end - s.start), 0);
+  const prs = ses.flatMap(s => sessionPRs(s)); const acts = ks.flatMap(actsOn);
+  const best = {}; prs.forEach(p => { const b = best[p.ex.name]; if (!b || p.w > b.w || (p.w === b.w && p.r > b.r)) best[p.ex.name] = p; });
+  const ac = {}; acts.forEach(a => { const n = a.type === 'other' ? (a.label || 'Jiné') : ACT_TYPES[a.type]?.name || a.type; ac[n] = (ac[n] || 0) + 1; });
+  return {
+    picto: 'gym', col: COLK('gym'), kicker: String(yy), title: MON[mm], big: String(ses.length), unit: pl(ses.length, 'trénink', 'tréninky', 'tréninků').split(' ')[1], date: '',
+    stats: [{ id: 'h', label: 'hodin v gymu', value: kg(Math.round(mins / 6) / 10) }, { id: 'pr', label: 'rekordy', value: String(prs.length) }, { id: 'act', label: 'aktivity', value: String(acts.length) }],
+    viz: [vizMonth(yy, mm), vizWeight(ks)].filter(Boolean),
+    lists: [{ id: 'prl', title: 'Nejlepší rekordy', items: Object.values(best).slice(0, 5).map(q => [q.ex.name, `${kg(q.w)} × ${q.r}`, '#F4C542']) }, { id: 'acl', title: 'Aktivity', items: Object.entries(ac).map(([n, c]) => [n, `${c}×`]), def: false }],
+  };
+}
+// ---------- studio (výběr stylu a obsahu) ----------
+let STU = null;
+function openStudio(kind, sp, name) {
+  const pref = (S.settings.share = S.settings.share || {})[kind] || {};
+  const on = {}; [...(sp.stats || []), ...(sp.lists || []), ...(sp.viz || [])].forEach(i => { on[i.id] = pref.on && i.id in pref.on ? pref.on[i.id] : i.def !== false; });
+  STU = { kind, sp, name, style: pref.style || 'noc', on, canvas: null };
+  const cap = t => t.charAt(0).toUpperCase() + t.slice(1);
+  const toggles = [...(sp.stats || []).map(s => [s.id, cap(s.label)]), ...(sp.lists || []).filter(l => l.items.length).map(l => [l.id, l.title.replace(/\s*\(.*\)/, '')]), ...(sp.viz || []).map(v => [v.id, v.label])];
+  sheet(`<div class="stu"><div class="stprev" id="st-prev"><div class="stload"></div></div>
+    <div class="seg" style="margin-top:14px">${STYLES.map(([k, l]) => `<button data-a="st-style" data-v="${k}" class="${STU.style === k ? 'on' : ''}">${l}</button>`).join('')}</div>
+    ${toggles.length ? `<div class="lbl" style="margin:16px 4px 8px">Co ukázat</div><div class="chips">${toggles.map(([id, l]) => `<button class="chip tg ${on[id] ? 'on' : ''}" data-a="st-tog" data-v="${id}">${esc(l)}</button>`).join('')}</div>` : ''}
+    <div class="bottom-acts" style="margin-top:18px"><button class="pill white" data-a="st-share">${ico('share')} Uložit / sdílet</button></div>
+    <p class="mut" style="font-size:13px;text-align:center;margin:10px 0 0">„Bez pozadí“ = jen text a silueta. Na story ji dáš přes vlastní fotku.</p></div>`, () => stuRender());
+}
+async function stuRender() {
+  if (!STU) return; const c = await drawShare(STU.sp, STU.style, STU.on); STU.canvas = c;
+  const box = $('#st-prev'); if (!box) return; box.className = 'stprev ' + STU.style; box.innerHTML = `<img src="${c.toDataURL('image/png')}" alt="Náhled karty">`;
+  (S.settings.share[STU.kind] = { style: STU.style, on: STU.on }); save();
+}
+async function stuShare() {
+  const c = STU && STU.canvas; if (!c) return;
+  try { const blob = await new Promise(r => c.toBlob(r, 'image/png')); const file = new File([blob], STU.name.replace(/[\\/:*?"<>|]/g, ''), { type: 'image/png' }); if (navigator.canShare && navigator.canShare({ files: [file] })) await navigator.share({ files: [file] }); else { closeSheet(); showShot(c, STU.name); } }
+  catch (e) { if (e.name !== 'AbortError') { closeSheet(); showShot(c, STU.name); } }
+}
+// přesměrování starých vstupů na studio
+async function storySummary(s) { openStudio('workout', specWorkout(s), `trenink-${s.date}.png`); }
+async function storyExercise(s, e) { openStudio('exercise', specExercise(s, e), `${exById(e.exId).name}.png`); }
+async function storyActivity(a) { openStudio('act-' + a.type, specActivity(a), `${(ACT_TYPES[a.type] || {}).name || 'aktivita'}-${a.date}.png`); }
+async function storyWeek(monK) { openStudio('week', specWeek(monK), `tyden-${isoWeek(pdate(monK))}.png`); }
+function storyMonth(yy, mm) { openStudio('month', specMonth(yy, mm), `mesic-${yy}-${pad(mm + 1)}.png`); }
+Object.assign(A, {
+  'st-style': b => { STU.style = b.dataset.v; $$('[data-a=st-style]').forEach(x => x.classList.toggle('on', x === b)); stuRender(); },
+  'st-tog': b => { const id = b.dataset.v; STU.on[id] = !STU.on[id]; b.classList.toggle('on', STU.on[id]); stuRender(); },
+  'st-share': () => stuShare(),
+  'month-share': () => storyMonth(calM.y, calM.m),
+  'tog-pace': () => { S.settings.paceEval = !S.settings.paceEval; save(true); render(); },
 });

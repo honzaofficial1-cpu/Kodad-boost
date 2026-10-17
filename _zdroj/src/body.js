@@ -82,7 +82,7 @@ function vMery() {
   const tabsH = `<div class="seg mtabs">${[['den', 'Den'], ['miry', 'Míry'], ['grafy', 'Grafy'], ['hist', 'Historie']].map(([k, l]) => `<button data-a="mtab" data-v="${k}" class="${t === k ? 'on' : ''}">${l}</button>`).join('')}</div>`;
   const body = t === 'den' ? mDen() : t === 'miry' ? mMiry() : t === 'grafy' ? mGrafy() : mHist();
   return `<div class="wrap">${hdr(backBtn('home'), '<h1>Míry</h1>', `<span></span>`)}
-    ${mTiles()}${bAlerts().map(([c, x]) => `<div class="alert ${c}">${esc(x)}</div>`).join('')}
+    ${mTiles()}${(S.settings.paceEval ? bAlerts() : []).map(([c, x]) => `<div class="alert ${c}">${esc(x)}</div>`).join('')}
     ${tabsH}${body}</div>${tabs()}`;
 }
 function mTiles() {
@@ -95,8 +95,8 @@ function mTiles() {
   const tile = (k, val, u, n) => `<div class="mtile"><span>${k}</span><b>${val}${u ? `<small>${u}</small>` : ''}</b><em>${n}</em></div>`;
   return `<div class="mtiles">
     ${tile('Průměr 7 dní', a7 == null ? '–' : nf(a7, 1), ' kg', last7.length ? `${last7.length} vážení` : 'zatím bez vážení')}
-    ${tile('Změna za týden', v.ch == null ? '–' : sg(v.ch, 2), ' kg', `<i class="stp ${v.st[0]}">${v.st[1]}</i>`)}
-    ${tile('Pas od startu', wd == null ? '–' : sg(wd, 1), ' cm', wd != null && wd >= 4 ? '<i class="stp bad">Zvaž udržovačku</i>' : lc ? `${lc.src === 'měření' ? 'tuk' : 'odhad tuku'} ${nf(lc.bf * 100, 1)} %` : 'po 2 měřeních')}
+    ${tile('Změna za týden', v.ch == null ? '–' : sg(v.ch, 2), ' kg', S.settings.paceEval ? `<i class="stp ${v.st[0]}">${v.st[1]}</i>` : 'průměr proti minulému týdnu')}
+    ${tile('Pas od startu', wd == null ? '–' : sg(wd, 1), ' cm', S.settings.paceEval && wd != null && wd >= 4 ? '<i class="stp bad">Zvaž udržovačku</i>' : lc ? `${lc.src === 'měření' ? 'tuk' : 'odhad tuku'} ${nf(lc.bf * 100, 1)} %` : 'po 2 měřeních')}
     ${tile('Dodržení 7 dní', ad7.length ? Math.round(avgOf(ad7) * 100) : '–', ad7.length ? ' %' : '', st ? `týden ${weekNo(today(), st)} od startu` : 'start = první záznam')}
   </div>`;
 }
@@ -175,7 +175,7 @@ function mGrafy() {
   const pts = days.map(([k, d]) => ({ x: toU(k), y: d.weight }));
   const roll = pts.map(p => ({ x: p.x, y: avgOf(pts.filter(q => q.x <= p.x && q.x > p.x - 7 * DMS).map(q => q.y)) }));
   let band = null;
-  if (st && pts.length) { const s0 = toU(st); const w2 = roll.filter(p => p.x >= s0 + 7 * DMS && p.x < s0 + 14 * DMS); if (w2.length) { const base = w2[w2.length - 1]; band = []; let lo = base.y, hi = base.y; const xEnd = Math.max(pts[pts.length - 1].x, s0 + 21 * DMS); for (let x = s0 + 14 * DMS, i = 0; x <= xEnd + 1; x += 7 * DMS, i++) { band.push({ x, lo, hi }); const t = pace(3 + i) || [0, 0]; lo += t[0]; hi += t[1]; } } }
+  if (S.settings.paceEval && st && pts.length) { const s0 = toU(st); const w2 = roll.filter(p => p.x >= s0 + 7 * DMS && p.x < s0 + 14 * DMS); if (w2.length) { const base = w2[w2.length - 1]; band = []; let lo = base.y, hi = base.y; const xEnd = Math.max(pts[pts.length - 1].x, s0 + 21 * DMS); for (let x = s0 + 14 * DMS, i = 0; x <= xEnd + 1; x += 7 * DMS, i++) { band.push({ x, lo, hi }); const t = pace(3 + i) || [0, 0]; lo += t[0]; hi += t[1]; } } }
   const card = (t, hint, html) => `<div class="card mchart"><h2>${t}</h2><p class="mut hint">${hint}</p>${html}</div>`;
   const C = bComp(); const M = Object.entries(b.meas).sort((a, c) => a[0] < c[0] ? -1 : 1);
   const comp = C.length >= 2 ? (() => { const c0 = C[0]; const ser = [{ pts: C.map(c => ({ x: c.x, y: c.lean - c0.lean })), line: true, dots: true, c: 'var(--done)', name: 'Beztuková hmota' }, { pts: C.map(c => ({ x: c.x, y: c.fat - c0.fat })), line: true, dots: true, c: 'var(--heat)', name: 'Tuk' }]; const mu = C.filter(c => c.muscle != null); if (mu.length >= 2) ser.push({ pts: mu.map(c => ({ x: c.x, y: c.muscle - mu[0].muscle })), line: true, dots: true, dash: true, c: 'var(--ice)', name: 'Svaly InBody' }); const l = C[C.length - 1]; return lineChart({ label: 'Složení přírůstku', series: ser, fmtY: v => (v > .04 ? '+' : '') + nf(v, 1) }) + `<p class="mut" style="font-size:13px;margin:8px 0 0">Poslední ${l.src}: ${nf(l.bf * 100, 1)} % tuku, beztuková hmota ${nf(l.lean, 1)} kg.</p>`; })() : '<p class="mut">Ukáže se po dvou měřeních s krkem a pasem (a vážením kolem stejného dne).</p>';
@@ -184,7 +184,7 @@ function mGrafy() {
   const ds = []; MEAS.forEach(([f, l], i) => { const a = M.filter(([, m]) => m[f] != null); if (a.length >= 2) { const b0 = a[0][1][f]; ds.push({ pts: a.map(([k, m]) => ({ x: toU(k), y: m[f] - b0 })), line: true, dots: true, c: cols[i], name: l }); } });
   const W = bWeeks().filter(w => w.energy != null || w.adherence != null);
   const feel = W.length >= 2 ? (() => { const x = w => toU(w.from) + 3 * DMS; const fs = [['energy', 'Energie', 'var(--done)'], ['mood', 'Psychika', '#AE95E0'], ['sleepQ', 'Spánek', 'var(--ice)'], ['hunger', 'Hlad', 'var(--heat)']].map(([k, n, c]) => ({ pts: W.filter(w => w[k] != null).map(w => ({ x: x(w), y: w[k] })), line: true, dots: true, c, name: n })); fs.push({ pts: W.filter(w => w.adherence != null).map(w => ({ x: x(w), y: 1 + 4 * w.adherence })), line: true, dash: true, c: '#8E8E93', name: 'Dodržení (100 % = 5)', w: 2 }); return lineChart({ label: 'Týdenní pocity', series: fs, y0: 1, y1: 5 }); })() : '<p class="mut">Ukáže se po dvou týdnech záznamů.</p>';
-  return card('Váha', 'Body = jednotlivá vážení, čára = 7denní průměr. Zelený pás = cílové tempo od 3. týdne.', pts.length >= 2 ? lineChart({ label: 'Ranní váha', series: [{ pts, dots: true, c: 'var(--prog)', op: .35, r: 2.6 }, { pts: roll, line: true, c: 'var(--prog)', name: '7denní průměr (kg)' }], band }) : '<p class="mut">Graf se ukáže po dvou váženích.</p>')
+  return card('Váha', S.settings.paceEval ? 'Body = jednotlivá vážení, čára = 7denní průměr. Zelený pás = cílové tempo od 3. týdne.' : 'Body = jednotlivá vážení, čára = 7denní průměr.', pts.length >= 2 ? lineChart({ label: 'Ranní váha', series: [{ pts, dots: true, c: 'var(--prog)', op: .35, r: 2.6 }, { pts: roll, line: true, c: 'var(--prog)', name: '7denní průměr (kg)' }], band }) : '<p class="mut">Graf se ukáže po dvou váženích.</p>')
     + card('Z čeho je přírůstek', 'Odhad US Navy z krku, pasu a výšky (±3–4 % tuku) – sleduj trend. InBody/DEXA má přednost.', comp)
     + card('Pas a ramena', 'Ramena rostou rychleji než pas = kvalitní nabírání. Pas +4–5 cm od startu = udržovačka.', wp.length + sp.length >= 2 ? lineChart({ label: 'Pas a ramena', series: [{ pts: sp, line: true, dots: true, c: 'var(--heat)', name: 'Ramena (cm)' }, { pts: wp, line: true, dots: true, c: 'var(--prog)', name: 'Pas (cm)' }] }) : '<p class="mut">Ukáže se po dvou měřeních.</p>')
     + card('Obvody – změna od startu', 'Centimetry navíc proti prvnímu měření.', ds.length ? lineChart({ label: 'Změna obvodů', series: ds, fmtY: v => (v > .04 ? '+' : '') + nf(v, 1) }) : '<p class="mut">Ukáže se po dvou měřeních.</p>')
