@@ -592,3 +592,18 @@ button.ck{background:none;border:0;padding:0;cursor:pointer}
 .mvs{display:flex;flex-direction:column;gap:6px}
 .mvs .round{width:36px;height:36px}
 .mvs .round[disabled]{opacity:.25}
+
+/* v2.6 mapa svalů + podržení */
+.mmap{display:grid;gap:8px}
+.mm2{display:grid;grid-template-columns:1fr 1fr;gap:10px;background:var(--card);border-radius:18px;padding:14px 10px 8px}
+#sheet .mm2{background:var(--card)}
+.card .mm2{background:var(--card2);--card:var(--card2)}
+.mm2>div{display:grid;justify-items:center;gap:4px}
+.mm2 svg.body{width:100%;max-width:120px;height:auto}
+.mm2 span{font-size:11px;color:var(--mut);letter-spacing:.1em;text-transform:uppercase;font-weight:600}
+.mleg{display:flex;gap:16px;justify-content:center;font-size:13px;color:var(--mut)}
+.mleg span{display:flex;align-items:center;gap:6px}
+.mleg u{width:10px;height:10px;border-radius:3px;background:var(--hot)}
+.mleg u.s{opacity:.55}
+.li,.hrow,.gcard{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.confirm .two{margin-top:4px}
