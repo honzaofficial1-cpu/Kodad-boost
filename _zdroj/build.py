@@ -4,8 +4,8 @@ from PIL import Image, ImageDraw, ImageFont
 B = os.path.dirname(os.path.abspath(__file__))
 src = lambda f: open(os.path.join(B, 'src', f), encoding='utf-8').read()
 mark = open(os.path.join(B,'assets','mark.svg'),encoding='utf-8').read().replace('<svg ','<svg aria-hidden="true" ')
-VERSION = '2.6.0'
-css, js = src('style.css'), 'const APP_VERSION = ' + json.dumps(VERSION) + ';\nconst MARK = ' + json.dumps(mark) + ';\n' + src('data.js') + '\n' + src('app.js') + '\n' + src('body.js') + '\n' + src('extra.js') + '\n' + src('strip.js') + '\n' + src('muscles.js') + '\nrender();\n'
+VERSION = '2.7.0'
+css, js = src('style.css'), 'const APP_VERSION = ' + json.dumps(VERSION) + ';\nconst MARK = ' + json.dumps(mark) + ';\n' + src('data.js') + '\n' + src('app.js') + '\n' + src('body.js') + '\n' + src('extra.js') + '\n' + src('strip.js') + '\n' + src('muscles.js') + '\n' + src('styles2.js') + '\nrender();\n'
 FONTS_OLD = '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">'
 FONTS = ''
 BODY = '<div id="app"></div><div id="sheet" hidden></div><div id="toast" role="status" aria-live="polite"></div>'
