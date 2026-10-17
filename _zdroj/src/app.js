@@ -629,7 +629,7 @@ function vActs() {
   const recent = [...S.activities].sort((a, b) => b.date.localeCompare(a.date) || b.ts - a.ts).slice(0, 40);
   return `<div class="wrap">
     ${hdr(backBtn('home'), '<h1>Aktivity</h1>', '<span></span>')}
-    <div class="agrid">${Object.entries(ACT_TYPES).map(([k, t]) => `<button class="at ${t.cls}" data-a="act-new" data-t="${k}"><span class="ic">${ico(t.icon)}</span>${t.name}</button>`).join('')}</div>
+    ${actGrid()}
     <section class="sec"><div class="sec-h"><h2>Poslední záznamy</h2></div><div class="list">${recent.map(actRow).join('') || '<div class="empty">Zatím nic. Klepni na aktivitu nahoře.</div>'}</div></section>
   </div>${tabs()}`;
 }
@@ -645,7 +645,7 @@ function actRow(a) {
   return `<button class="li" data-a="act-edit" data-id="${a.id}"><span class="ic ${t.cls}">${ico(t.icon)}</span><div class="t"><b>${esc(a.label || t.name)}</b><small>${fday(a.date)} · ${esc(actDesc(a))}${a.note ? ' · ' + esc(a.note) : ''}</small></div></button>`;
 }
 function actSheet(type, k, id) {
-  if (!type && !id) return sheet(`<h2>Přidat aktivitu</h2><p class="mut" style="margin:4px 0 0">${flong(k || today())}</p><div class="agrid" style="margin-top:16px">${Object.entries(ACT_TYPES).map(([t, x]) => `<button class="at ${x.cls}" data-a="act-new" data-t="${t}" data-k="${k || today()}"><span class="ic">${ico(x.icon)}</span>${x.name}</button>`).join('')}</div>`);
+  if (!type && !id) return sheet(`<h2>Přidat aktivitu</h2><p class="mut" style="margin:4px 0 0">${flong(k || today())}</p><div style="margin-top:16px">${actGrid(`data-k="${k || today()}"`)}</div>`);
   const a = id ? S.activities.find(x => x.id === id) : { type, date: k || today() };
   type = a.type; const t = ACT_TYPES[type];
   let f = '';
@@ -728,7 +728,7 @@ function rr(x, X, Y, w, h, r) { x.beginPath(); x.moveTo(X + r, Y); x.arcTo(X + w
 function spacedL(x, t, X, Y, sp) { x.textAlign = 'left'; let cx = X; for (const ch of [...t]) { x.fillText(ch, cx, Y); cx += x.measureText(ch).width + sp; } return cx; }
 function fitFont(x, t, weight, size, maxW) { do { x.font = `${weight} ${size}px ${CF}`; size -= 3; } while (x.measureText(t).width > maxW && size > 28); }
 function clip(x, t, maxW) { let n = t; while (x.measureText(n).width > maxW && n.length > 3) n = n.slice(0, -2); return n === t ? t : n.trim() + '…'; }
-const CARD_COL = { gym: ['#8BD43B', 'rgba(139,212,59,'], sauna: ['#F28C4E', 'rgba(242,140,78,'], cold: ['#9ACBF5', 'rgba(154,203,245,'], thai: ['#E5484D', 'rgba(229,72,77,'], run: ['#8BD43B', 'rgba(139,212,59,'], swim: ['#4A9DFF', 'rgba(74,157,255,'], stretch: ['#B59CF0', 'rgba(181,156,240,'], yoga: ['#B59CF0', 'rgba(181,156,240,'], bike: ['#35D0C9', 'rgba(53,208,201,'], other: ['#35D0C9', 'rgba(53,208,201,'], pr: ['#F4C542', 'rgba(244,197,66,'] };
+const CARD_COL = { gym: ['#8BD43B', 'rgba(139,212,59,'], sauna: ['#F28C4E', 'rgba(242,140,78,'], cold: ['#9ACBF5', 'rgba(154,203,245,'], thai: ['#E5484D', 'rgba(229,72,77,'], climb: ['#E2A65A', 'rgba(226,166,90,'], xcski: ['#7FD1E8', 'rgba(127,209,232,'], sprint: ['#FF7A59', 'rgba(255,122,89,'], posing: ['#E07FA0', 'rgba(224,127,160,'], run: ['#8BD43B', 'rgba(139,212,59,'], swim: ['#4A9DFF', 'rgba(74,157,255,'], stretch: ['#B59CF0', 'rgba(181,156,240,'], yoga: ['#B59CF0', 'rgba(181,156,240,'], bike: ['#35D0C9', 'rgba(53,208,201,'], other: ['#35D0C9', 'rgba(53,208,201,'], pr: ['#F4C542', 'rgba(244,197,66,'] };
 function drawPicto(x, key, cx, cy, size, col) {
   const p = PICTO[key] || PICTO.other; const s = size / 24; x.save(); x.translate(cx - size / 2, cy - size / 2); x.scale(s, s);
   x.strokeStyle = col; x.fillStyle = col; x.lineCap = 'round'; x.lineJoin = 'round';
@@ -955,6 +955,7 @@ const A = {
   'tpl-del': () => { $('#t-conf').innerHTML = `<div class="confirm">Smazat trénink „${esc(tplDraft.name)}“? Odjeté tréninky v historii zůstanou.<button class="btn danger" data-a="tpl-del2">Smazat</button></div>`; },
   'tpl-del2': () => { S.templates = S.templates.filter(t => t.id !== tplDraft.id); save(true); go('tpls'); },
   // activities
+  'act-more': b => { const m = b.closest('.agrid').nextElementSibling; m.hidden = !m.hidden; b.setAttribute('aria-expanded', String(!m.hidden)); b.classList.toggle('on', !m.hidden); },
   'act-new': b => actSheet(b.dataset.t || null, b.dataset.k, null),
   'act-edit': b => actSheet(null, null, b.dataset.id),
   seg: b => { b.parentElement.querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b)); },

@@ -88,7 +88,11 @@ const ACT_TYPES = {
   bike:   { name: 'Kolo / rotoped', cls: 'act', icon: 'bike' },
   run:    { name: 'Běh',        cls: 'act',  icon: 'plus' },
   swim:   { name: 'Plavání',    cls: 'act',  icon: 'plus' },
-  other:  { name: 'Jiné',       cls: 'act',  icon: 'plus' },
+  climb:  { name: 'Lezení',     cls: 'act',  icon: 'plus', extra: 1 },
+  xcski:  { name: 'Běžkování',  cls: 'act',  icon: 'plus', extra: 1 },
+  sprint: { name: 'Sprint',     cls: 'act',  icon: 'plus', extra: 1 },
+  posing: { name: 'Posing',     cls: 'act',  icon: 'plus', extra: 1 },
+  other:  { name: 'Jiné',       cls: 'act',  icon: 'plus', extra: 1 },
 };
 
 const IC = {
@@ -152,6 +156,10 @@ const PICTO = {
   run: { c: [[14.6, 3.6, 1.9]], f: [], s: [['M14 6.2L11.4 12.4', 3.2], ['M13.6 7.6L17 9.6L19.2 8.2M13 7.6L10 9.4L7.8 8.6', 1.9], ['M11.4 12.4L15.4 15.4L15 20.6M11.4 12.4L9 16.4L4.6 17.6', 2.5]] },
   swim: { c: [[5.8, 8.4, 1.9]], f: [], s: [['M8.4 10.2L16.4 11.2', 3.2], ['M9.2 9.6L12.4 5.6L16.6 6.2', 1.9], ['M16.4 11.2L21.4 10.4', 2.4], ['M2 15.6c1.7-1.2 3.3 1.2 5 0s3.3 1.2 5 0 3.3 1.2 5 0 3.3 1.2 5 0M2 19.6c1.7-1.2 3.3 1.2 5 0s3.3 1.2 5 0 3.3 1.2 5 0 3.3 1.2 5 0', 1.3]] },
   stretch: { c: [[15, 4.6, 1.9]], f: [], s: [['M12 13L13.9 7.2', 3.2], ['M13.6 7.8L10.6 4.6L7.4 3.4', 1.9], ['M13 9.2L15.6 10.9L13.3 12.5', 1.9], ['M12 13L9.6 21.6M12 13L15 21.6', 2.5]] },
+  climb: { c: [[11, 6.2, 1.9], [16.2, 2.2, 1.1], [7.2, 7.4, 1.1], [15.8, 20.8, 1], [19.6, 11.2, 1], [4.6, 15.2, 1]], f: [], s: [['M11.4 8.6L12.4 14', 3.2], ['M11.6 9L14.6 6L15.8 2.8', 1.9], ['M11.2 9.4L8.4 11L7.6 7.9', 1.9], ['M12.4 14L15.6 16L15.2 20.4M12.4 14L9.6 17.4L10.4 21.6', 2.5]] },
+  xcski: { c: [[14.6, 4, 1.9]], f: [], s: [['M13.6 6.6L10.6 12.4', 3.2], ['M13.2 7.6L16.4 10M12.6 7.8L9.4 8.6L7.2 7.6', 1.9], ['M16.4 10L14.8 20.2M7.2 7.6L4.4 19', 1.1], ['M10.6 12.4L14.4 15.6L15 20.2M10.6 12.4L8.4 16.4L5.6 19.2', 2.5], ['M1.8 20.4H11M10.2 21.4H21.8', 1.4]] },
+  sprint: { c: [[16.4, 4.4, 1.9]], f: [], s: [['M15.2 6.8L11.4 11.8', 3.2], ['M14.8 8L18.2 9.2L20 7M14.2 8.2L11 9.6L8.6 8', 1.9], ['M11.4 11.8L15.6 14.6L17.2 19.4M11.4 11.8L8.4 15L4.2 15.4', 2.5], ['M1.4 6H5.4M1 9.4H4.4M2 12.6H5', 1.2]] },
+  posing: { c: [[12, 4, 2], [6.4, 3.9, 1.5], [17.6, 3.9, 1.5]], f: [], s: [['M12 6.6V13.6', 3.8], ['M12 7.6L7.4 8L6.4 4.4M12 7.6L16.6 8L17.6 4.4', 2.4], ['M12 13.6L9.4 17.6L9.6 22M12 13.6L14.6 17.6L14.4 22', 2.6]] },
   other: { c: [], f: ['M12 2.2l2.9 6.2 6.8.8-5 4.6 1.4 6.7L12 17.1 5.9 20.5l1.4-6.7-5-4.6 6.8-.8z'], s: [] },
 };
 function pmarkup(k) {
@@ -163,3 +171,10 @@ const pico = (k, cls = 'i') => `<svg class="${cls}" viewBox="0 0 24 24" aria-hid
 
 for (const k in PICTO) IC['p_' + k] = pmarkup(k);
 for (const k in ACT_TYPES) ACT_TYPES[k].icon = 'p_' + (PICTO[k] ? k : 'other');
+
+function actGrid(attrs = '') {
+  const tile = ([k, t]) => `<button class="at ${t.cls}" data-a="act-new" data-t="${k}" ${attrs}><span class="ic">${ico(t.icon)}</span>${t.name}</button>`;
+  const E = Object.entries(ACT_TYPES), main = E.filter(([, t]) => !t.extra), more = E.filter(([, t]) => t.extra);
+  return `<div class="agrid">${main.map(tile).join('')}<button class="at more" data-a="act-more" aria-expanded="false"><span class="ic">${ico('more')}</span>Další</button></div>
+    <div class="agrid amore" hidden>${more.map(tile).join('')}</div>`;
+}

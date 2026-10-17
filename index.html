@@ -552,11 +552,16 @@ button.ck{background:none;border:0;padding:0;cursor:pointer}
 .agrid .at.heat .ic{color:var(--heat)} .agrid .at.cold .ic{color:var(--ice)}
 .li .ic svg.i{width:24px;height:24px}
 .at.act[data-t=thai] .ic{color:#E5484D} .at.act[data-t=yoga] .ic,.at.act[data-t=stretch] .ic{color:#B59CF0} .at.act[data-t=bike] .ic{color:var(--prog)} .at.act[data-t=run] .ic{color:var(--done)} .at.act[data-t=swim] .ic{color:#4A9DFF}
+
+.amore{margin-top:10px}
+.at.more .ic{color:var(--mut)}
+.at.more.on{background:var(--card2)}
+.at.act[data-t=climb] .ic{color:#E2A65A} .at.act[data-t=xcski] .ic{color:#7FD1E8} .at.act[data-t=sprint] .ic{color:#FF7A59} .at.act[data-t=posing] .ic{color:#E07FA0}
 </style>
 </head>
 <body>
 <div id="app"></div><div id="sheet" hidden></div><div id="toast" role="status" aria-live="polite"></div>
-<script>const APP_VERSION = "1.9.0";
+<script>const APP_VERSION = "1.9.1";
 const MARK = "<svg aria-hidden=\"true\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 994 296\"><path fill=\"currentColor\" d=\"M612 5L611 4L571 4L570 5L567 5L566 4L561 4L560 5L448 5L447 6L442 6L441 5L439 6L438 5L435 5L434 6L430 6L429 5L426 5L425 6L414 6L413 5L409 5L408 6L385 5L378 11L366 27L355 39L352 44L335 63L323 79L316 86L312 92L282 127L274 138L267 145L263 151L233 186L233 187L219 203L219 204L210 213L210 214L202 222L202 223L192 232L186 236L171 243L169 243L162 246L155 247L154 248L149 248L148 249L140 249L139 250L85 250L84 251L78 251L77 250L37 250L29 258L29 259L24 264L19 271L13 277L13 278L4 288L0 294L1 295L48 295L49 296L51 295L58 295L59 296L94 296L95 295L97 295L98 296L100 296L101 295L154 295L155 294L184 294L185 293L202 293L203 292L232 291L233 290L241 290L242 289L253 289L254 288L263 288L264 287L271 287L272 286L281 286L282 285L288 285L289 284L294 284L295 283L301 283L302 282L313 281L314 280L328 278L332 276L336 276L337 275L352 272L358 269L361 269L362 268L367 267L369 265L379 262L393 255L408 245L433 221L436 216L448 203L456 192L477 168L485 157L492 150L494 146L506 133L506 132L521 115L525 109L544 88L548 82L560 69L563 64L570 57L570 56L578 48L578 47L589 35L594 28L602 20L604 16L611 9ZM994 1L993 0L974 0L973 1L967 1L966 0L964 0L963 1L866 1L865 2L860 2L859 1L842 2L840 1L839 2L804 2L794 7L792 7L786 11L784 11L777 15L775 15L760 23L758 23L749 28L747 28L734 35L732 35L717 43L715 43L706 48L704 48L696 53L694 53L689 56L685 57L683 59L681 59L670 65L668 65L658 70L656 72L647 76L645 78L636 82L634 84L629 86L624 90L619 92L614 96L606 100L586 115L579 119L575 123L559 135L554 140L553 140L537 155L536 155L502 190L502 193L509 191L512 189L529 184L532 182L538 181L549 176L555 175L558 173L566 171L569 169L586 164L589 162L597 160L606 168L606 169L620 185L632 201L655 228L663 239L677 255L680 260L686 266L694 277L704 288L749 288L750 287L755 287L756 288L760 288L761 287L914 287L916 286L916 284L896 264L895 264L827 199L826 199L797 171L796 171L776 151L775 151L766 142L765 142L757 133L749 127L736 113L736 109L742 104L747 103L757 98L762 97L767 94L777 91L782 88L784 88L787 86L789 86L792 84L794 84L797 82L802 81L807 78L809 78L812 76L814 76L817 74L824 72L829 69L831 69L844 63L849 62L854 59L856 59L861 56L863 56L866 54L873 52L878 49L880 49L883 47L885 47L898 41L903 40L910 36L912 36L920 32L925 31L937 25L939 25L942 23L944 23L947 21L949 21L952 19L954 19L957 17L959 17L962 15L969 13L974 10L976 10L979 8L981 8L984 6L993 3Z\"/></svg>";
 // ===== Výchozí knihovna cviků (informace jsou skryté pod „Info o cviku“) =====
 const R = (min, max, fail = true) => ({ min, max, fail });
@@ -648,7 +653,11 @@ const ACT_TYPES = {
   bike:   { name: 'Kolo / rotoped', cls: 'act', icon: 'bike' },
   run:    { name: 'Běh',        cls: 'act',  icon: 'plus' },
   swim:   { name: 'Plavání',    cls: 'act',  icon: 'plus' },
-  other:  { name: 'Jiné',       cls: 'act',  icon: 'plus' },
+  climb:  { name: 'Lezení',     cls: 'act',  icon: 'plus', extra: 1 },
+  xcski:  { name: 'Běžkování',  cls: 'act',  icon: 'plus', extra: 1 },
+  sprint: { name: 'Sprint',     cls: 'act',  icon: 'plus', extra: 1 },
+  posing: { name: 'Posing',     cls: 'act',  icon: 'plus', extra: 1 },
+  other:  { name: 'Jiné',       cls: 'act',  icon: 'plus', extra: 1 },
 };
 
 const IC = {
@@ -712,6 +721,10 @@ const PICTO = {
   run: { c: [[14.6, 3.6, 1.9]], f: [], s: [['M14 6.2L11.4 12.4', 3.2], ['M13.6 7.6L17 9.6L19.2 8.2M13 7.6L10 9.4L7.8 8.6', 1.9], ['M11.4 12.4L15.4 15.4L15 20.6M11.4 12.4L9 16.4L4.6 17.6', 2.5]] },
   swim: { c: [[5.8, 8.4, 1.9]], f: [], s: [['M8.4 10.2L16.4 11.2', 3.2], ['M9.2 9.6L12.4 5.6L16.6 6.2', 1.9], ['M16.4 11.2L21.4 10.4', 2.4], ['M2 15.6c1.7-1.2 3.3 1.2 5 0s3.3 1.2 5 0 3.3 1.2 5 0 3.3 1.2 5 0M2 19.6c1.7-1.2 3.3 1.2 5 0s3.3 1.2 5 0 3.3 1.2 5 0 3.3 1.2 5 0', 1.3]] },
   stretch: { c: [[15, 4.6, 1.9]], f: [], s: [['M12 13L13.9 7.2', 3.2], ['M13.6 7.8L10.6 4.6L7.4 3.4', 1.9], ['M13 9.2L15.6 10.9L13.3 12.5', 1.9], ['M12 13L9.6 21.6M12 13L15 21.6', 2.5]] },
+  climb: { c: [[11, 6.2, 1.9], [16.2, 2.2, 1.1], [7.2, 7.4, 1.1], [15.8, 20.8, 1], [19.6, 11.2, 1], [4.6, 15.2, 1]], f: [], s: [['M11.4 8.6L12.4 14', 3.2], ['M11.6 9L14.6 6L15.8 2.8', 1.9], ['M11.2 9.4L8.4 11L7.6 7.9', 1.9], ['M12.4 14L15.6 16L15.2 20.4M12.4 14L9.6 17.4L10.4 21.6', 2.5]] },
+  xcski: { c: [[14.6, 4, 1.9]], f: [], s: [['M13.6 6.6L10.6 12.4', 3.2], ['M13.2 7.6L16.4 10M12.6 7.8L9.4 8.6L7.2 7.6', 1.9], ['M16.4 10L14.8 20.2M7.2 7.6L4.4 19', 1.1], ['M10.6 12.4L14.4 15.6L15 20.2M10.6 12.4L8.4 16.4L5.6 19.2', 2.5], ['M1.8 20.4H11M10.2 21.4H21.8', 1.4]] },
+  sprint: { c: [[16.4, 4.4, 1.9]], f: [], s: [['M15.2 6.8L11.4 11.8', 3.2], ['M14.8 8L18.2 9.2L20 7M14.2 8.2L11 9.6L8.6 8', 1.9], ['M11.4 11.8L15.6 14.6L17.2 19.4M11.4 11.8L8.4 15L4.2 15.4', 2.5], ['M1.4 6H5.4M1 9.4H4.4M2 12.6H5', 1.2]] },
+  posing: { c: [[12, 4, 2], [6.4, 3.9, 1.5], [17.6, 3.9, 1.5]], f: [], s: [['M12 6.6V13.6', 3.8], ['M12 7.6L7.4 8L6.4 4.4M12 7.6L16.6 8L17.6 4.4', 2.4], ['M12 13.6L9.4 17.6L9.6 22M12 13.6L14.6 17.6L14.4 22', 2.6]] },
   other: { c: [], f: ['M12 2.2l2.9 6.2 6.8.8-5 4.6 1.4 6.7L12 17.1 5.9 20.5l1.4-6.7-5-4.6 6.8-.8z'], s: [] },
 };
 function pmarkup(k) {
@@ -723,6 +736,13 @@ const pico = (k, cls = 'i') => `<svg class="${cls}" viewBox="0 0 24 24" aria-hid
 
 for (const k in PICTO) IC['p_' + k] = pmarkup(k);
 for (const k in ACT_TYPES) ACT_TYPES[k].icon = 'p_' + (PICTO[k] ? k : 'other');
+
+function actGrid(attrs = '') {
+  const tile = ([k, t]) => `<button class="at ${t.cls}" data-a="act-new" data-t="${k}" ${attrs}><span class="ic">${ico(t.icon)}</span>${t.name}</button>`;
+  const E = Object.entries(ACT_TYPES), main = E.filter(([, t]) => !t.extra), more = E.filter(([, t]) => t.extra);
+  return `<div class="agrid">${main.map(tile).join('')}<button class="at more" data-a="act-more" aria-expanded="false"><span class="ic">${ico('more')}</span>Další</button></div>
+    <div class="agrid amore" hidden>${more.map(tile).join('')}</div>`;
+}
 
 'use strict';
 // ===================== Kodad boost · JK =====================
@@ -1355,7 +1375,7 @@ function vActs() {
   const recent = [...S.activities].sort((a, b) => b.date.localeCompare(a.date) || b.ts - a.ts).slice(0, 40);
   return `<div class="wrap">
     ${hdr(backBtn('home'), '<h1>Aktivity</h1>', '<span></span>')}
-    <div class="agrid">${Object.entries(ACT_TYPES).map(([k, t]) => `<button class="at ${t.cls}" data-a="act-new" data-t="${k}"><span class="ic">${ico(t.icon)}</span>${t.name}</button>`).join('')}</div>
+    ${actGrid()}
     <section class="sec"><div class="sec-h"><h2>Poslední záznamy</h2></div><div class="list">${recent.map(actRow).join('') || '<div class="empty">Zatím nic. Klepni na aktivitu nahoře.</div>'}</div></section>
   </div>${tabs()}`;
 }
@@ -1371,7 +1391,7 @@ function actRow(a) {
   return `<button class="li" data-a="act-edit" data-id="${a.id}"><span class="ic ${t.cls}">${ico(t.icon)}</span><div class="t"><b>${esc(a.label || t.name)}</b><small>${fday(a.date)} · ${esc(actDesc(a))}${a.note ? ' · ' + esc(a.note) : ''}</small></div></button>`;
 }
 function actSheet(type, k, id) {
-  if (!type && !id) return sheet(`<h2>Přidat aktivitu</h2><p class="mut" style="margin:4px 0 0">${flong(k || today())}</p><div class="agrid" style="margin-top:16px">${Object.entries(ACT_TYPES).map(([t, x]) => `<button class="at ${x.cls}" data-a="act-new" data-t="${t}" data-k="${k || today()}"><span class="ic">${ico(x.icon)}</span>${x.name}</button>`).join('')}</div>`);
+  if (!type && !id) return sheet(`<h2>Přidat aktivitu</h2><p class="mut" style="margin:4px 0 0">${flong(k || today())}</p><div style="margin-top:16px">${actGrid(`data-k="${k || today()}"`)}</div>`);
   const a = id ? S.activities.find(x => x.id === id) : { type, date: k || today() };
   type = a.type; const t = ACT_TYPES[type];
   let f = '';
@@ -1454,7 +1474,7 @@ function rr(x, X, Y, w, h, r) { x.beginPath(); x.moveTo(X + r, Y); x.arcTo(X + w
 function spacedL(x, t, X, Y, sp) { x.textAlign = 'left'; let cx = X; for (const ch of [...t]) { x.fillText(ch, cx, Y); cx += x.measureText(ch).width + sp; } return cx; }
 function fitFont(x, t, weight, size, maxW) { do { x.font = `${weight} ${size}px ${CF}`; size -= 3; } while (x.measureText(t).width > maxW && size > 28); }
 function clip(x, t, maxW) { let n = t; while (x.measureText(n).width > maxW && n.length > 3) n = n.slice(0, -2); return n === t ? t : n.trim() + '…'; }
-const CARD_COL = { gym: ['#8BD43B', 'rgba(139,212,59,'], sauna: ['#F28C4E', 'rgba(242,140,78,'], cold: ['#9ACBF5', 'rgba(154,203,245,'], thai: ['#E5484D', 'rgba(229,72,77,'], run: ['#8BD43B', 'rgba(139,212,59,'], swim: ['#4A9DFF', 'rgba(74,157,255,'], stretch: ['#B59CF0', 'rgba(181,156,240,'], yoga: ['#B59CF0', 'rgba(181,156,240,'], bike: ['#35D0C9', 'rgba(53,208,201,'], other: ['#35D0C9', 'rgba(53,208,201,'], pr: ['#F4C542', 'rgba(244,197,66,'] };
+const CARD_COL = { gym: ['#8BD43B', 'rgba(139,212,59,'], sauna: ['#F28C4E', 'rgba(242,140,78,'], cold: ['#9ACBF5', 'rgba(154,203,245,'], thai: ['#E5484D', 'rgba(229,72,77,'], climb: ['#E2A65A', 'rgba(226,166,90,'], xcski: ['#7FD1E8', 'rgba(127,209,232,'], sprint: ['#FF7A59', 'rgba(255,122,89,'], posing: ['#E07FA0', 'rgba(224,127,160,'], run: ['#8BD43B', 'rgba(139,212,59,'], swim: ['#4A9DFF', 'rgba(74,157,255,'], stretch: ['#B59CF0', 'rgba(181,156,240,'], yoga: ['#B59CF0', 'rgba(181,156,240,'], bike: ['#35D0C9', 'rgba(53,208,201,'], other: ['#35D0C9', 'rgba(53,208,201,'], pr: ['#F4C542', 'rgba(244,197,66,'] };
 function drawPicto(x, key, cx, cy, size, col) {
   const p = PICTO[key] || PICTO.other; const s = size / 24; x.save(); x.translate(cx - size / 2, cy - size / 2); x.scale(s, s);
   x.strokeStyle = col; x.fillStyle = col; x.lineCap = 'round'; x.lineJoin = 'round';
@@ -1681,6 +1701,7 @@ const A = {
   'tpl-del': () => { $('#t-conf').innerHTML = `<div class="confirm">Smazat trénink „${esc(tplDraft.name)}“? Odjeté tréninky v historii zůstanou.<button class="btn danger" data-a="tpl-del2">Smazat</button></div>`; },
   'tpl-del2': () => { S.templates = S.templates.filter(t => t.id !== tplDraft.id); save(true); go('tpls'); },
   // activities
+  'act-more': b => { const m = b.closest('.agrid').nextElementSibling; m.hidden = !m.hidden; b.setAttribute('aria-expanded', String(!m.hidden)); b.classList.toggle('on', !m.hidden); },
   'act-new': b => actSheet(b.dataset.t || null, b.dataset.k, null),
   'act-edit': b => actSheet(null, null, b.dataset.id),
   seg: b => { b.parentElement.querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b)); },
