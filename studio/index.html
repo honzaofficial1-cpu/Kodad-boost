@@ -151,12 +151,55 @@ h2 .sp{flex:1}
 .slot.ph small{font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--tx3)}
 .slot.ph p{margin:2px 0 6px;font-size:13px;color:var(--tx2)}
 .slot.ph .btn{padding:0 4px;margin-left:-4px}
-body.wide .wrap{max-width:1500px}
+body.wide .wrap{max-width:1100px}
 @media (min-width:900px){
   .cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px;margin-top:8px}
   .cal .day{margin-top:0}
   .tasks{max-width:620px}
 }
+.mgrid{background:var(--card);border-radius:18px;padding:8px;box-shadow:var(--sh);margin-top:10px}
+.mhead,.mcells{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.mhead span{text-align:center;font-size:11.5px;font-weight:700;color:var(--tx3);padding:2px 0 4px}
+.mc{min-height:64px;border-radius:11px;background:var(--card2);padding:4px 2px;display:flex;flex-direction:column;align-items:center;gap:3px;min-width:0}
+.mc.out{opacity:.35}
+.mc.past:not(.sel) .dnum{color:var(--tx3)}
+.mc.today .dnum{background:var(--acc);color:var(--acc-tx)}
+.mc.sel{box-shadow:inset 0 0 0 2px var(--acc-d);background:var(--acc-soft)}
+.dnum{font-size:13px;font-weight:750;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;flex:none}
+.dots{display:flex;flex-wrap:wrap;justify-content:center;gap:2px}
+.dots i{font-style:normal;font-size:13px;line-height:1;width:22px;height:22px;border-radius:7px;display:grid;place-items:center;background:color-mix(in srgb,var(--fc) 20%,var(--bg2));box-shadow:inset 0 -3px 0 var(--sc)}
+.dots i.ph{background:none;box-shadow:none;outline:1.5px dashed color-mix(in srgb,var(--tx3) 45%,transparent);outline-offset:-1.5px;opacity:.55;font-size:11px}
+.dots i.more{background:none;box-shadow:none;font-size:10px;color:var(--tx3);width:auto;font-weight:700}
+.ttl1{display:none}
+@media (min-width:700px){
+  .mc{min-height:100px;align-items:stretch;padding:6px}
+  .dnum{align-self:flex-start}
+  .dots{justify-content:flex-start}
+  .ttl1{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:11.5px;font-weight:650;text-align:left;color:var(--tx2);line-height:1.25}
+}
+.modal .mc{min-height:48px}
+.modal .ttl1{display:none}
+.daypanel{margin-top:16px}
+.dph{display:flex;align-items:center;gap:8px;margin:0 2px 2px}
+.dph b{font-size:20px;letter-spacing:-.02em}
+.theme{font-size:13px;font-weight:700;color:var(--fc,var(--tx2));padding:2px 2px 10px;display:inline-flex;gap:6px;align-items:center}
+.theme span{color:var(--tx3);font-weight:500}
+.dact{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.slot .hk{margin:0;font-size:14px;color:var(--tx2);font-style:italic}
+.pbar{display:inline-flex;gap:2px;vertical-align:middle}
+.pbar i{width:9px;height:5px;border-radius:3px;background:color-mix(in srgb,var(--tx3) 25%,transparent)}
+.pbar i.on{background:var(--sc)}
+.slot .pbar i{width:auto;flex:1;height:6px}
+.slot .pbar{display:flex;width:100%}
+.btn.assign{background:var(--acc-soft);color:var(--acc-d)}
+.datebtn{width:100%;min-height:43px;text-align:left;padding:9px 10px;font-size:15px;border-radius:12px;background:var(--bg2);box-shadow:var(--sh);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.proc{display:flex;gap:4px}
+.proc button{flex:1;display:flex;flex-direction:column;gap:5px;align-items:center;font-size:11.5px;font-weight:700;color:var(--tx3);padding:4px 0}
+.proc button i{display:block;height:7px;width:100%;border-radius:4px;background:var(--card2)}
+.proc button.on i{background:var(--sc)}
+.proc button.cur{color:var(--tx)}
+.nextst{margin-top:8px;width:100%;background:var(--acc-soft);color:var(--acc-d)}
+.bodybox textarea{min-height:150px}
 .mini{display:flex;align-items:center;gap:8px;padding:8px 10px;margin-top:6px;background:var(--card2);border-radius:10px;width:100%;text-align:left;border-left:4px solid var(--fc,var(--line))}
 .mini .t{flex:1;font-weight:650;font-size:14.5px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .mini .s{width:9px;height:9px;border-radius:50%;flex:none}
@@ -396,6 +439,9 @@ function norm(d) {
     const n = { ...newIdea(''), ...i, steps: { ...(i.steps || {}) }, macros: { kcal: '', p: '', c: '', f: '', ...(i.macros || {}) } };
     if (!F[n.format]) n.format = 'jine';
     if (!PLAT[n.platform]) n.platform = 'reels';
+    // starší scénáře po částech převedeme do jednoho těla
+    if (!n.body && n.blocks.length) n.body = n.blocks.map(b => [b.shot && b.shot.trim() ? '[' + b.shot.trim() + ']' : '', (b.text || '').trim()].filter(Boolean).join(' ')).filter(Boolean).join('\n\n');
+    if (!n.link && n.ref) n.link = n.ref;
     return n;
   });
   return o;
@@ -434,7 +480,7 @@ const fmt = k => F[k] || F.jine;
 function newIdea(title, format) {
   const t = Date.now(), f = format || 'jine';
   return { id: uid(), title, note: '', format: f, platform: fmt(f).plat, series: '', status: 'idea', fav: false, date: '',
-    hook: '', blocks: [], cta: '', music: '', ingr: '', macros: { kcal: '', p: '', c: '', f: '' }, ref: '',
+    hook: '', body: '', cta: '', link: '', blocks: [], music: '', ingr: '', macros: { kcal: '', p: '', c: '', f: '' }, ref: '',
     caption: '', hashtags: '', cover: '', shots: [], steps: {}, camera: '', links: '', created: t, updated: t };
 }
 db = load();
@@ -442,7 +488,7 @@ db = load();
 function scriptText(i, withLabels) {
   const parts = [];
   if (i.hook.trim()) parts.push([withLabels ? 'Hook' : '', i.hook.trim()]);
-  i.blocks.forEach((b, n) => { if (b.text.trim()) parts.push([withLabels ? (b.shot.trim() || 'Část ' + (n + 1)) : '', b.text.trim()]); });
+  if (i.body.trim()) parts.push([withLabels ? 'Tělo' : '', i.body.trim()]);
   if (i.cta.trim()) parts.push([withLabels ? 'CTA' : '', i.cta.trim()]);
   return parts;
 }
@@ -506,7 +552,7 @@ const closeModal = () => { $('#modal').hidden = true; $('#modal').innerHTML = ''
 let view = 'ideas';
 const ui = { q: '', fs: 'active', ff: 'all', fi: 'all', addF: 'recept', mode: 'list', week: '' };
 try { Object.assign(ui, JSON.parse(localStorage.getItem('studio.ui')) || {}); } catch (e) {}
-ui.q = ''; ui.week = monday(today());
+ui.q = ''; ui.sel = ''; ui.month = '';
 const keepUi = () => { try { localStorage.setItem('studio.ui', JSON.stringify(ui)); } catch (e) {} };
 const TITLES = { ideas: 'Nápady', week: 'Kalendář', insp: 'Inspirace', hooks: 'Hooky', more: 'Více' };
 
@@ -527,13 +573,13 @@ function badgeHTML(i) {
   const late = i.date && i.date < today() && i.status !== 'done';
   const sd = stepsDone(i);
   return `<span class="badge" style="color:${fmt(i.format).c}">${fmt(i.format).e} ${fmt(i.format).n}</span>
-    <span class="badge"><span class="dot" style="background:var(--s-${i.status})"></span>${STATUS[i.status]}</span>
+    <span class="badge"><span class="dot" style="background:var(--s-${i.status})"></span>${STATUS[i.status]} ${pbarHTML(i)}</span>
     ${sd ? `<span class="badge plain">☑ ${sd}/${STEPS.length}</span>` : ''}
-    ${i.date ? `<span class="badge plain ${late ? 'late' : ''}">📅 ${relDate(i.date)}</span>` : ''}
+    ${i.date ? `<span class="badge plain ${late ? 'late' : ''}">📅 ${relDate(i.date)}</span>` : i.status !== 'done' ? `<button class="btn xs assign" data-assign="${i.id}">📅 Na den</button>` : ''}
     ${i.series ? `<span class="badge plain">· ${esc(i.series)}</span>` : ''}`;
 }
 function cardHTML(i, extra = '') {
-  const snippet = i.hook || i.note || (i.blocks[0] && i.blocks[0].text) || '';
+  const snippet = i.hook || i.note || i.body || '';
   return `<div class="card" style="--fc:${fmt(i.format).c}" data-open="${i.id}" role="button" tabindex="0">
     ${i.fav ? '<span class="star">★</span>' : ''}
     <div class="t">${esc(i.title || 'Bez názvu')}</div>
@@ -546,6 +592,7 @@ function miniHTML(i) {
 }
 document.addEventListener('click', e => {
   if (e.target.closest('[data-mv]')) return;
+  const a = e.target.closest('[data-assign]'); if (a) { e.stopPropagation(); assignDay(a.dataset.assign); return; }
   const c = e.target.closest('[data-open]'); if (c) { closeModal(); openEditor(c.dataset.open); }
 });
 const chip = (k, v, label) => `<button class="chip ${ui[k] === v ? 'on' : ''}" data-chip="${k}" data-val="${v}">${label}</button>`;
@@ -569,16 +616,16 @@ function renderIdeas() {
   const counts = Object.fromEntries(SKEYS.map(s => [s, db.ideas.filter(i => i.status === s).length]));
   const q = ui.q.toLowerCase();
   const list = db.ideas.filter(i =>
-    (ui.mode === 'board' || ui.fs === 'all' || (ui.fs === 'active' ? i.status !== 'done' : ui.fs === 'fav' ? i.fav : i.status === ui.fs)) &&
+    (ui.mode === 'board' || ui.fs === 'all' || (ui.fs === 'active' ? i.status !== 'done' : ui.fs === 'pool' ? !i.date && i.status !== 'done' : ui.fs === 'fav' ? i.fav : i.status === ui.fs)) &&
     (ui.ff === 'all' || i.format === ui.ff) &&
-    (!q || [i.title, i.note, i.hook, i.cta, i.caption, i.hashtags, i.series, i.ingr, ...i.blocks.map(b => b.text + ' ' + b.shot)].join(' ').toLowerCase().includes(q)))
+    (!q || [i.title, i.note, i.hook, i.cta, i.caption, i.hashtags, i.series, i.ingr, i.body, i.link].join(' ').toLowerCase().includes(q)))
     .sort((a, b) => (b.fav - a.fav) || (b.updated - a.updated));
 
   let html = `
     <form class="panel quick" id="qf">
       <textarea id="qt" rows="1" placeholder="Co tě napadlo? Stačí pár slov…"></textarea>
       <div class="chips" id="addfc">${FK.map(k => chip('addF', k, fmt(k).e + ' ' + fmt(k).n)).join('')}</div>
-      <div class="row"><span class="grow muted">Scénář dopíšeš potom</span><button class="btn pri sm" type="submit">Uložit nápad</button></div>
+      <div class="row"><span class="grow muted">Jde do zásobníku – na den ho dáš potom</span><button class="btn pri sm" type="submit">Uložit nápad</button></div>
     </form>`;
   if (!db.ideas.length) {
     html += '<div class="empty"><b>Zatím žádné nápady</b>Napiš první nahoru – stačí pár slov.</div>';
@@ -587,7 +634,7 @@ function renderIdeas() {
     html += `<div class="search"><input id="q" type="search" placeholder="Hledat v nápadech a scénářích" value="${esc(ui.q)}"></div>
       <div class="chips filters" id="fff">${chip('ff', 'all', 'Všechny formáty')}${FK.filter(k => db.ideas.some(i => i.format === k)).map(k => chip('ff', k, fmt(k).e + ' ' + fmt(k).n)).join('')}</div>`;
     if (ui.mode === 'list') {
-      html += `<div class="chips filters" id="ffs">${chip('fs', 'active', 'Rozpracované')}${chip('fs', 'fav', '★ Oblíbené')}${SKEYS.map(s => chip('fs', s, STATUS[s])).join('')}${chip('fs', 'all', 'Vše')}</div>
+      html += `<div class="chips filters" id="ffs">${chip('fs', 'active', 'Rozpracované')}${chip('fs', 'pool', '📥 Zásobník (' + db.ideas.filter(i => !i.date && i.status !== 'done').length + ')')}${chip('fs', 'fav', '★ Oblíbené')}${SKEYS.map(s => chip('fs', s, STATUS[s])).join('')}${chip('fs', 'all', 'Vše')}</div>
         <div class="list">${list.map(i => cardHTML(i)).join('') || '<div class="empty"><b>Nic tu není</b>Zkus jiný filtr.</div>'}</div>`;
     } else {
       html += `<div class="board">${SKEYS.map((s, si) => {
@@ -631,59 +678,99 @@ function setStatus(i, s) {
 }
 
 // ---------- KALENDÁŘ ----------
-const wide = () => matchMedia('(min-width: 900px)').matches;
+const MONTHS = ['Leden', 'Únor', 'Březen', 'Duben', 'Květen', 'Červen', 'Červenec', 'Srpen', 'Září', 'Říjen', 'Listopad', 'Prosinec'];
+const videos = n => n + (n === 1 ? ' video' : n >= 2 && n <= 4 ? ' videa' : ' videí');
+const monthStart = d => d.slice(0, 8) + '01';
+const addMonths = (m, n) => { const d = new Date(m + 'T12:00'); d.setDate(1); d.setMonth(d.getMonth() + n); return ds(d); };
+const monthLabel = m => MONTHS[+m.slice(5, 7) - 1] + ' ' + m.slice(0, 4);
+const wdOf = d => (new Date(d + 'T12:00').getDay() + 6) % 7;
+const themeOf = d => F[db.days[wdOf(d)]] ? db.days[wdOf(d)] : '';
+function monthGridHTML(m, sel, attr) {
+  const t = today(), next = addMonths(m, 1), last = addDays(monday(addDays(next, -1)), 6);
+  let h = `<div class="mgrid"><div class="mhead">${['Po', 'Út', 'St', 'Čt', 'Pá', 'So', 'Ne'].map(x => `<span>${x}</span>`).join('')}</div><div class="mcells">`;
+  for (let d = monday(m); d <= last; d = addDays(d, 1)) {
+    const items = db.ideas.filter(i => i.date === d), th = themeOf(d);
+    h += `<button type="button" class="mc ${d < m || d >= next ? 'out' : ''} ${d === t ? 'today' : ''} ${d === sel ? 'sel' : ''} ${d < t ? 'past' : ''}" ${attr}="${d}">
+      <span class="dnum">${+d.slice(8)}</span>
+      <span class="dots">${items.length
+        ? items.slice(0, 3).map(i => `<i style="--fc:${fmt(i.format).c};--sc:var(--s-${i.status})">${fmt(i.format).e}</i>`).join('') + (items.length > 3 ? `<i class="more">+${items.length - 3}</i>` : '')
+        : th ? `<i class="ph">${fmt(th).e}</i>` : ''}</span>
+      ${items.length ? `<span class="ttl1">${esc(items[0].title)}</span>` : ''}</button>`;
+  }
+  return h + '</div></div>';
+}
 function renderWeek() {
-  const t = today(), nW = wide() ? 3 : 1, ws = ui.week, we = addDays(ws, 7 * nW - 1);
-  const inRange = db.ideas.filter(i => i.date >= ws && i.date <= we);
-  // cíle se počítají za první zobrazený týden
-  const w1 = inRange.filter(i => i.date <= addDays(ws, 6));
+  const t = today();
+  if (!ui.sel) ui.sel = t;
+  if (!ui.month) ui.month = monthStart(ui.sel);
+  const m = ui.month, sel = ui.sel;
+  const inMonth = db.ideas.filter(i => i.date.slice(0, 7) === m.slice(0, 7));
+  const poolN = db.ideas.filter(i => !i.date && i.status !== 'done').length;
+  const items = db.ideas.filter(i => i.date === sel), th = themeOf(sel), wd = wdOf(sel);
+  const ws = monday(sel), we = addDays(ws, 6), wk = db.ideas.filter(i => i.date >= ws && i.date <= we);
   const goals = Object.entries(db.goals).filter(([, n]) => n > 0);
-  const got = k => w1.filter(i => i.format === k).length;
+  const got = k => wk.filter(i => i.format === k).length;
   const totalGoal = goals.reduce((a, [, n]) => a + n, 0);
   const totalGot = goals.reduce((a, [k, n]) => a + Math.min(n, got(k)), 0);
-  const late = ws <= t && t <= we ? db.ideas.filter(i => i.date && i.date < ws && i.status !== 'done') : [];
-  const s = new Date(ws + 'T12:00'), e = new Date(we + 'T12:00');
-  const label = s.getMonth() === e.getMonth() ? `${s.getDate()}.–${e.getDate()}. ${e.getMonth() + 1}.` : `${fmtDate(ws)} – ${fmtDate(we)}`;
+  const late = db.ideas.filter(i => i.date && i.date < t && i.status !== 'done');
+  const dl = new Date(sel + 'T12:00').toLocaleDateString('cs-CZ', { weekday: 'long', day: 'numeric', month: 'long' }), dlabel = dl[0].toUpperCase() + dl.slice(1);
 
   let html = `
-    <div class="wknav"><button class="ico" id="wprev">${I.l}</button><b>${label}</b>
-      ${ws === monday(t) ? '' : '<button class="btn xs" id="wnow">Dnes</button>'}<button class="ico" id="wnext">${I.r}</button></div>
-    ${goals.length ? `<div class="gbar"><i style="width:${totalGoal ? totalGot / totalGoal * 100 : 0}%"></i></div>
-      <p class="muted" style="margin:4px 2px 10px">${nW > 1 ? 'První týden: n' : 'N'}aplánováno ${totalGot}/${totalGoal} podle cílů · venku ${w1.filter(i => i.status === 'done').length}</p>
-      <div class="goals">${goals.map(([k, n]) => `<span class="goal ${got(k) >= n ? 'ok' : ''}">${fmt(k).e} ${fmt(k).n} <i>${got(k)}/${n}</i></span>`).join('')}</div>` : ''}
+    <div class="wknav"><button class="ico" id="mprev">${I.l}</button><b>${monthLabel(m)}</b>
+      ${m !== monthStart(t) || sel !== t ? '<button class="btn xs" id="mnow">Dnes</button>' : ''}<button class="ico" id="mnext">${I.r}</button></div>
+    <p class="muted" style="margin:0 2px;text-align:center">${videos(inMonth.length)} v měsíci · ${inMonth.filter(i => i.status === 'done').length} venku · ${poolN} v zásobníku</p>
+    ${monthGridHTML(m, sel, 'data-cd')}
+    <div class="daypanel">
+      <div class="dph"><b>${dlabel}</b>${sel === t ? '<span class="badge" style="background:var(--acc-soft);color:var(--acc-d)">dnes</span>' : ''}</div>
+      <button class="theme" data-theme="${wd}" style="${th ? '--fc:' + fmt(th).c : ''}">Plán na ${DAYN[wd].toLowerCase()}: ${th ? fmt(th).e + ' ' + fmt(th).n : '☕ volný slot'} <span>✎</span></button>
+      ${items.map(slotHTML).join('')}
+      ${items.length
+        ? `<div class="dact"><button class="btn sm" data-create="${sel}" data-k="${th || 'jine'}">+ Další video</button><button class="btn sm" data-plan="${sel}" data-th="${th}">📥 Ze zásobníku</button></div>`
+        : th
+          ? `<div class="slot ph" style="--fc:${fmt(th).c}"><div class="big">${fmt(th).e}</div><small>Plánovaný formát</small><b>${fmt(th).n}</b><p>Doplň konkrétní nápad a scénář.</p>
+              <div class="dact"><button class="btn sm pri" data-create="${sel}" data-k="${th}">+ Napsat scénář</button><button class="btn sm" data-plan="${sel}" data-th="${th}">📥 Ze zásobníku</button></div></div>`
+          : `<div class="slot ph free"><div class="big">☕</div><small>Volný den</small><b>Pauza / volný slot</b><p>Na dotočení, improvizaci nebo den volna.</p>
+              <div class="dact"><button class="btn sm" data-create="${sel}" data-k="jine">+ Nové video</button><button class="btn sm" data-plan="${sel}" data-th="">📥 Ze zásobníku</button></div></div>`}
+    </div>
     ${late.length ? `<h2 style="color:var(--bad)">Po termínu (${late.length})</h2>${late.map(miniHTML).join('')}` : ''}
-    <div class="cal">`;
-  for (let d = 0; d < 7 * nW; d++) {
-    const date = addDays(ws, d), wd = d % 7, items = inRange.filter(i => i.date === date), th = F[db.days[wd]] ? db.days[wd] : '';
-    const dt = new Date(date + 'T12:00');
-    html += `<div class="day ${date === t ? 'today' : ''} ${date < t ? 'past' : ''}">
-      <div class="dh"><span class="dn">${dt.toLocaleDateString('cs-CZ', { weekday: 'short' })}</span><b>${dt.getDate()}</b>${dt.getDate() === 1 || d === 0 ? `<span class="dn">${dt.toLocaleDateString('cs-CZ', { month: 'short' })}</span>` : ''}${date === t ? '<span class="dn" style="color:var(--acc-d)">dnes</span>' : ''}<span class="sp"></span>
-        <button class="ico" data-plan="${date}" data-th="${th}" title="Přidat">${I.plus}</button></div>
-      <button class="theme" data-theme="${wd}" style="${th ? '--fc:' + fmt(th).c : ''}">${th ? fmt(th).e + ' ' + fmt(th).n : '☕ Volný slot'} <span>✎</span></button>
-      ${items.map(slotHTML).join('') || (th
-        ? `<div class="slot ph" style="--fc:${fmt(th).c}"><div class="big">${fmt(th).e}</div><small>Plánovaný formát</small><b>${fmt(th).n}</b><p>Doplň konkrétní nápad a scénář.</p>
-            <button class="btn sm ghost" data-create="${date}" data-k="${th}">+ Vytvořit scénář</button></div>`
-        : `<div class="slot ph free"><div class="big">☕</div><small>Volný den</small><b>Pauza / volný slot</b><p>Na dotočení, improvizaci nebo den volna.</p>
-            <button class="btn sm ghost" data-plan="${date}" data-th="">+ Využít volný slot</button></div>`)}
-    </div>`;
-  }
-  html += '</div>';
+    ${goals.length ? `<h2>Cíle na týden ${fmtDate(ws)} – ${fmtDate(we)}</h2>
+      <div class="gbar" style="margin-top:0"><i style="width:${totalGoal ? totalGot / totalGoal * 100 : 0}%"></i></div>
+      <p class="muted" style="margin:4px 2px 10px">Naplánováno ${totalGot}/${totalGoal} · venku ${wk.filter(i => i.status === 'done').length}</p>
+      <div class="goals">${goals.map(([k, n]) => `<span class="goal ${got(k) >= n ? 'ok' : ''}">${fmt(k).e} ${fmt(k).n} <i>${got(k)}/${n}</i></span>`).join('')}</div>` : ''}`;
   const open = db.tasks.filter(x => !x.done).length;
   html += `<div class="tasks"><h2>Úkoly${open ? ` (${open})` : ''}<span class="sp"></span>${db.tasks.some(x => x.done) ? '<button class="btn xs ghost" id="tclr">Smazat hotové</button>' : ''}</h2>
     ${db.tasks.map(x => `<div class="task ${x.done ? 'done' : ''}" data-t="${x.id}"><input type="checkbox" ${x.done ? 'checked' : ''}><input type="text" value="${esc(x.text)}"><button class="ico" data-tx>${I.x}</button></div>`).join('')}
     <form id="tf" style="display:flex;gap:8px;margin-top:8px"><input id="tnew" placeholder="Nový úkol – např. předělat profil" style="background:var(--bg2);box-shadow:var(--sh)"><button class="btn">Přidat</button></form></div>`;
   $('#view').innerHTML = html;
 
-  $('#wprev').onclick = () => { ui.week = addDays(ui.week, -7); render(); };
-  $('#wnext').onclick = () => { ui.week = addDays(ui.week, 7); render(); };
-  const wn = $('#wnow'); if (wn) wn.onclick = () => { ui.week = monday(t); render(); };
+  const goMonth = n => {
+    ui.month = addMonths(ui.month, n);
+    if (monthStart(ui.sel) !== ui.month) ui.sel = monthStart(t) === ui.month ? t : ui.month;
+    render();
+  };
+  $('#mprev').onclick = () => goMonth(-1);
+  $('#mnext').onclick = () => goMonth(1);
+  const mn = $('#mnow'); if (mn) mn.onclick = () => { ui.sel = t; ui.month = monthStart(t); render(); };
+  // přejetí prstem po kalendáři = další / předchozí měsíc
+  const g = $('.mgrid'); let sx = null, sy = 0;
+  g.addEventListener('touchstart', e => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
+  g.addEventListener('touchend', e => {
+    if (sx === null) return;
+    const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy; sx = null;
+    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) goMonth(dx < 0 ? 1 : -1);
+  });
+  $$('[data-cd]').forEach(b => b.onclick = () => {
+    const d = b.dataset.cd; ui.sel = d; if (monthStart(d) !== ui.month) ui.month = monthStart(d);
+    render();
+    const dp = $('.daypanel'), r = dp.getBoundingClientRect();
+    if (r.top > innerHeight - 220) scrollTo({ top: scrollY + r.top - 70, behavior: 'smooth' });
+  });
   $$('[data-plan]').forEach(b => b.onclick = () => planDay(b.dataset.plan, b.dataset.th));
   $$('[data-create]').forEach(b => b.onclick = () => {
     const it = newIdea('', b.dataset.k); it.date = b.dataset.create;
     db.ideas.unshift(it); save(true); openEditor(it.id, 'script'); $('#editor [data-f=title]').focus();
   });
   $$('[data-theme]').forEach(b => b.onclick = () => pickTheme(+b.dataset.theme));
-  $$('[data-sst]').forEach(sel => sel.onchange = () => { setStatus(byId(sel.dataset.sst), sel.value); render(); });
   $$('[data-mv]').forEach(b => b.onclick = e => {
     e.stopPropagation();
     const i = byId(b.dataset.mv), n = SKEYS.indexOf(i.status) + +b.dataset.d;
@@ -698,14 +785,19 @@ function renderWeek() {
   });
   const tc = $('#tclr'); if (tc) tc.onclick = () => { gone(...db.tasks.filter(x => x.done).map(x => x.id)); db.tasks = db.tasks.filter(x => !x.done); save(true); render(); };
 }
+function pbarHTML(i) {
+  const si = SKEYS.indexOf(i.status);
+  return `<span class="pbar" style="--sc:var(--s-${i.status})" title="${STATUS[i.status]}">${SKEYS.map((k, n) => `<i class="${n <= si ? 'on' : ''}"></i>`).join('')}</span>`;
+}
 function slotHTML(i) {
   const si = SKEYS.indexOf(i.status), f = fmt(i.format);
   return `<div class="slot" style="--fc:${f.c}">
-    <div class="tag">${f.e} ${f.n}<span class="sp"></span>${stepsDone(i) ? `<small>☑ ${stepsDone(i)}/${STEPS.length}</small>` : ''}</div>
+    <div class="tag">${f.e} ${f.n}<span class="sp"></span><span class="badge"><span class="dot" style="background:var(--s-${i.status})"></span>${STATUS[i.status]}</span></div>
     <b>${esc(i.title || 'Bez názvu')}</b>
-    <select data-sst="${i.id}" class="sst" style="--sc:var(--s-${i.status})">${SKEYS.map(k => `<option value="${k}" ${i.status === k ? 'selected' : ''}>${STATUS[k]}</option>`).join('')}</select>
-    <button class="btn sm open" data-open="${i.id}">${i.blocks.length || i.hook ? 'Otevřít scénář' : 'Napsat scénář'} <span>→</span></button>
-    <div class="mv"><button data-mv="${i.id}" data-d="-1" ${si === 0 ? 'disabled' : ''}>← Zpět</button><button data-mv="${i.id}" data-d="1" ${si === SKEYS.length - 1 ? 'disabled' : ''}>${STATUS[SKEYS[si + 1]] || ''} →</button></div>
+    ${i.hook ? `<p class="hk">„${esc(i.hook)}“</p>` : ''}
+    ${pbarHTML(i)}
+    <button class="btn sm open" data-open="${i.id}">${i.hook || i.body ? 'Otevřít scénář' : 'Napsat scénář'} <span>→</span></button>
+    <div class="mv"><button data-mv="${i.id}" data-d="-1" ${si === 0 ? 'disabled' : ''}>← Zpět</button><button data-mv="${i.id}" data-d="1" ${si === SKEYS.length - 1 ? 'disabled' : ''}>Další: ${STATUS[SKEYS[si + 1]] || ''} →</button></div>
   </div>`;
 }
 function pickTheme(wd) {
@@ -715,21 +807,40 @@ function pickTheme(wd) {
   m => $$('[data-k]', m).forEach(b => b.onclick = () => { db.days[wd] = b.dataset.k; stampSet(); save(true); closeModal(); render(); }));
 }
 function planDay(date, th) {
-  const pool = db.ideas.filter(i => i.status !== 'done' && i.date !== date)
-    .sort((a, b) => ((b.format === th) - (a.format === th)) || (!!a.date - !!b.date) || (SKEYS.indexOf(b.status) - SKEYS.indexOf(a.status)));
+  const rank = (a, b) => ((b.format === th) - (a.format === th)) || (SKEYS.indexOf(b.status) - SKEYS.indexOf(a.status)) || (b.updated - a.updated);
+  const pool = db.ideas.filter(i => !i.date && i.status !== 'done').sort(rank);
+  const other = db.ideas.filter(i => i.date && i.date !== date && i.status !== 'done').sort(rank);
+  const opt = i => `<button class="opt" style="--fc:${fmt(i.format).c}" data-pick="${i.id}">${esc(i.title)}<small>${fmt(i.format).e} ${fmt(i.format).n} · ${STATUS[i.status]}${i.date ? ' · teď ' + relDate(i.date) : ''}</small></button>`;
   const dn = new Date(date + 'T12:00').toLocaleDateString('cs-CZ', { weekday: 'long', day: 'numeric', month: 'numeric' });
   openModal(`<h3>Na ${dn}</h3>
-    <form id="pnf" style="display:flex;gap:8px;margin-bottom:6px"><input id="pnt" placeholder="Nový nápad na tento den…"><button class="btn pri">Přidat</button></form>
-    <div class="chips" id="pnc" style="margin-bottom:14px">${FK.map(k => `<button type="button" class="chip ${k === (th || 'recept') ? 'on' : ''}" data-k="${k}">${fmt(k).e} ${fmt(k).n}</button>`).join('')}</div>
-    ${pool.length ? `<label class="l">Nebo vyber rozpracovaný</label>${pool.map(i => `<button class="opt" style="--fc:${fmt(i.format).c}" data-pick="${i.id}">${esc(i.title)}<small>${fmt(i.format).e} ${fmt(i.format).n} · ${STATUS[i.status]}${i.date ? ' · teď ' + relDate(i.date) : ''}</small></button>`).join('')}` : ''}`,
+    <label class="l">📥 Zásobník nápadů</label>
+    ${pool.map(opt).join('') || '<p class="muted" style="margin:0 2px 12px">Zásobník je prázdný – nápady bez data se objeví tady.</p>'}
+    ${other.length ? `<label class="l" style="margin-top:14px">Přesunout z jiného dne</label>${other.map(opt).join('')}` : ''}
+    <label class="l" style="margin-top:14px">Nebo rovnou nový</label>
+    <form id="pnf" style="display:flex;gap:8px;margin-bottom:6px"><input id="pnt" placeholder="Název videa…"><button class="btn pri">Přidat</button></form>
+    <div class="chips" id="pnc" style="margin-bottom:10px">${FK.map(k => `<button type="button" class="chip ${k === (th || 'jine') ? 'on' : ''}" data-k="${k}">${fmt(k).e} ${fmt(k).n}</button>`).join('')}</div>`,
   m => {
-    let k = th || 'recept';
+    let k = th || 'jine';
     $$('#pnc .chip', m).forEach(c => c.onclick = () => { k = c.dataset.k; $$('#pnc .chip', m).forEach(x => x.classList.toggle('on', x === c)); });
     $('#pnf', m).onsubmit = e => {
       e.preventDefault(); const v = $('#pnt', m).value.trim(); if (!v) return;
       const it = newIdea(v, k); it.date = date; db.ideas.unshift(it); save(true); closeModal(); render(); toast('Naplánováno ✓');
     };
     $$('[data-pick]', m).forEach(b => b.onclick = e => { e.stopPropagation(); const i = byId(b.dataset.pick); i.date = date; i.updated = Date.now(); save(true); closeModal(); render(); toast('Naplánováno ✓'); });
+  });
+}
+// přiřazení nápadu ke dni přes malý kalendář
+function assignDay(id, month, after) {
+  const i = byId(id); if (!i) return;
+  const m = month || monthStart(i.date || today());
+  const done = msg => { i.updated = Date.now(); save(true); closeModal(); toast(msg); (after || render)(); };
+  openModal(`<h3>Na který den?</h3><p class="muted" style="margin:-6px 0 4px">${esc(i.title || 'Bez názvu')}</p>
+    <div class="wknav"><button class="ico" data-am="-1">${I.l}</button><b>${monthLabel(m)}</b><button class="ico" data-am="1">${I.r}</button></div>
+    ${monthGridHTML(m, i.date, 'data-aday')}
+    ${i.date ? '<button class="btn full ghost" data-aclear style="margin-top:10px">📥 Vrátit do zásobníku</button>' : ''}`, box => {
+    $$('[data-am]', box).forEach(b => b.onclick = e => { e.stopPropagation(); assignDay(id, addMonths(m, +b.dataset.am), after); });
+    $$('[data-aday]', box).forEach(b => b.onclick = () => { i.date = b.dataset.aday; done('Naplánováno na ' + relDate(i.date) + ' ✓'); });
+    const c = $('[data-aclear]', box); if (c) c.onclick = () => { i.date = ''; done('Vráceno do zásobníku'); };
   });
 }
 
@@ -775,7 +886,7 @@ function renderInsp() {
   $$('[data-i2i]').forEach(b => b.onclick = () => {
     const x = db.insp.find(y => y.id === b.dataset.i2i);
     const it = newIdea(x.note ? x.note.split('\n')[0].slice(0, 80) : 'Nápad z inspirace', x.format || 'jine');
-    it.links = x.url; it.note = x.note; if (fmt(it.format).x.includes('ref')) it.ref = x.url;
+    it.links = x.url; it.note = x.note; it.link = x.url;
     db.ideas.unshift(it); x.used = it.id; x.updated = Date.now(); save(true); render(); openEditor(it.id);
   });
   bindChips();
@@ -862,7 +973,8 @@ function ideaText(i) {
   if (sc.length) s.push('', '## Scénář', ...sc.map(([l, t]) => `[${l}]\n${t}`));
   if (i.shots.length) s.push('', '## Záběry', ...i.shots.map(x => (x.done ? '[x] ' : '[ ] ') + x.text));
   if (i.caption.trim() || i.hashtags.trim()) s.push('', '## Popisek', i.caption.trim(), i.hashtags.trim());
-  if (i.links.trim()) s.push('', '## Odkazy', i.links.trim());
+  if (i.link.trim()) s.push('', '## Odkaz', i.link.trim());
+  if (i.links.trim()) s.push('', '## Inspirace', i.links.trim());
   return s.join('\n');
 }
 
@@ -975,7 +1087,7 @@ function setSyncState() { const b = $('#syncbox'); if (b && !(b.contains(documen
 let cur = null, etab = 'script', skipPop = false;
 function openEditor(id, tab) {
   cur = byId(id); if (!cur) return;
-  etab = tab || ((cur.status === 'idea' && !cur.hook && !cur.blocks.length) ? 'note' : 'script');
+  etab = tab || 'script';
   const ed = $('#editor'); ed.hidden = false; document.body.style.overflow = 'hidden';
   ed.scrollTop = 0; renderEditor();
   if (!(history.state && history.state.ed)) history.pushState({ ed: id }, '');
@@ -999,7 +1111,7 @@ function flashSaved() { const s = $('#saved'); if (s) { s.textContent = 'Uložen
 
 function renderEditor() {
   const i = cur, f = fmt(i.format);
-  const tabs = { script: f.v ? 'Scénář' : 'Plán videa', film: 'Natáčení', post: 'Popisek', note: 'Poznámky' };
+  const tabs = { script: 'Scénář', film: 'Natáčení', post: 'Popisek', note: 'Poznámky' };
   const ed = $('#editor'), keepY = ed.scrollTop;
   ed.innerHTML = `
     <div class="bar"><div class="wrap">
@@ -1014,11 +1126,11 @@ function renderEditor() {
       <div class="meta">
         <div><label class="l">Formát</label><select data-f="format">${FK.map(k => `<option value="${k}" ${i.format === k ? 'selected' : ''}>${fmt(k).e} ${fmt(k).n}</option>`).join('')}</select></div>
         <div><label class="l">Kam</label><select data-f="platform">${Object.entries(PLAT).map(([k, v]) => `<option value="${k}" ${i.platform === k ? 'selected' : ''}>${v}</option>`).join('')}</select></div>
-        <div><label class="l">Stav</label><select data-f="status">${SKEYS.map(k => `<option value="${k}" ${i.status === k ? 'selected' : ''}>${STATUS[k]}</option>`).join('')}</select></div>
-        <div><label class="l">Datum</label><input type="date" data-f="date" value="${esc(i.date)}"></div>
-        <div class="w2"><label class="l">Série</label><input data-f="series" list="serl" placeholder="Např. Cesta na stage" value="${esc(i.series)}">
+        <div><label class="l">Den</label><button class="datebtn" id="edate">${i.date ? '📅 ' + relDate(i.date) : '📥 Zásobník'}</button></div>
+        <div><label class="l">Série</label><input data-f="series" list="serl" placeholder="Např. Cesta na stage" value="${esc(i.series)}">
           <datalist id="serl">${[...new Set([...SERIES, ...db.ideas.map(x => x.series).filter(Boolean)])].map(s => `<option value="${esc(s)}">`).join('')}</datalist></div>
       </div>
+      ${procHTML(i)}
       <div class="stabs">${Object.entries(tabs).map(([k, v]) => `<button data-et="${k}" class="${etab === k ? 'on' : ''}">${v}${k === 'film' && stepsDone(i) ? ` <small style="color:var(--tx3)">${stepsDone(i)}/${STEPS.length}</small>` : ''}</button>`).join('')}</div>
       <div id="etab">${({ script: tabScript, film: tabFilm, post: tabPost, note: tabNote })[etab](i)}</div>
     </div>`;
@@ -1028,10 +1140,18 @@ function renderEditor() {
   ed.scrollTop = keepY;
 }
 
+function procHTML(i) {
+  const si = SKEYS.indexOf(i.status);
+  return `<div id="proc"><label class="l" style="margin-top:14px">Proces</label>
+    <div class="proc">${SKEYS.map((k, n) => `<button data-st="${k}" class="${n <= si ? 'on' : ''} ${n === si ? 'cur' : ''}" style="--sc:var(--s-${i.status})"><i></i>${STATUS[k]}</button>`).join('')}</div>
+    ${si < SKEYS.length - 1 ? `<button class="btn sm nextst" id="nextst">Další krok: ${STATUS[SKEYS[si + 1]]} →</button>` : '<p class="muted" style="margin:8px 2px 0">🎉 Video je venku</p>'}</div>`;
+}
+function bindProc() {
+  $$('#proc [data-st]').forEach(b => b.onclick = () => { setStatus(cur, b.dataset.st); renderEditor(); });
+  const n = $('#nextst'); if (n) n.onclick = () => { setStatus(cur, SKEYS[SKEYS.indexOf(cur.status) + 1]); renderEditor(); };
+}
 function extraFields(i) {
   const f = fmt(i.format); let h = '';
-  if (f.x.includes('ref')) h += `<div class="fld"><label class="l">🔗 Odkaz na originál / trend</label><input data-f="ref" inputmode="url" placeholder="https://…" value="${esc(i.ref)}">
-    ${/^https?:/.test(i.ref) ? `<p class="hint"><a href="${esc(i.ref)}" target="_blank" rel="noopener">Otevřít originál ↗</a></p>` : ''}</div>`;
   if (f.x.includes('ingr')) h += `<div class="fld"><label class="l">🥕 Ingredience</label><textarea data-f="ingr" rows="3" placeholder="200 g kuřecích prsou&#10;100 g rýže…">${esc(i.ingr)}</textarea></div>`;
   if (f.x.includes('macros')) h += `<div class="fld"><label class="l">📊 Makra na porci</label><div class="macros">
     ${[['kcal', 'kcal'], ['p', 'bílkoviny g'], ['c', 'sacharidy g'], ['f', 'tuky g']].map(([k, l]) => `<div><input data-m="${k}" inputmode="decimal" value="${esc(i.macros[k])}"><span>${l}</span></div>`).join('')}</div></div>`;
@@ -1039,26 +1159,19 @@ function extraFields(i) {
 }
 function tabScript(i) {
   const f = fmt(i.format);
-  if (!i.hook && !i.blocks.length && !i.cta) return `${extraFields(i)}
-    <p style="color:var(--tx2);margin:18px 2px 0">Začni šablonou, ať nemáš prázdnou stránku:</p>
-    <div class="tpl"><button data-tpl="${i.format}" style="--fc:${f.c}"><b>${f.e} ${f.n}</b><span>${f.desc}</span></button></div>
-    <div class="chips wrapc" style="margin-top:12px">${FK.filter(k => k !== i.format).map(k => `<button class="chip" data-tpl="${k}">${fmt(k).e} ${fmt(k).n}</button>`).join('')}<button class="chip" data-tpl="">Prázdný</button></div>`;
-  const txtL = f.v ? '🗣️ Co říkám…' : '📝 Text na obrazovce (nepovinné)';
-  return `${extraFields(i)}
+  const bodyPh = f.b.map(([a, b]) => [a, b].filter(x => x && x !== '…').join(' – ')).filter(Boolean).join('\n') || 'Hlavní obsah videa…';
+  return `
     <div class="fld hookbox"><div class="lbl-row"><label>🎣 Hook · první 1–3 s</label>
       <button class="btn xs ghost" id="hpick">Z banky</button><button class="btn xs ghost" id="hsave">Uložit</button></div>
       <textarea data-f="hook" rows="1" placeholder="${esc(f.hook || 'Věta, která diváka zastaví…')}">${esc(i.hook)}</textarea></div>
-    ${i.blocks.map((b, n) => `<div class="block" data-b="${b.id}">
-      <div class="bh"><b>${i.format === 'karusel' ? 'Slide ' + (n + 2) : 'Část ' + (n + 1)}</b>
-        <button class="ico" data-bu="${n}" ${n === 0 ? 'disabled style="opacity:.3"' : ''}>${I.up}</button>
-        <button class="ico" data-bd="${n}" ${n === i.blocks.length - 1 ? 'disabled style="opacity:.3"' : ''}>${I.down}</button>
-        <button class="ico" data-bx="${n}">${I.x}</button></div>
-      <input data-bf="shot" placeholder="🎬 Záběr – co je vidět" value="${esc(b.shot)}">
-      <textarea data-bf="text" rows="${f.v ? 2 : 1}" placeholder="${esc(b.ph ? (f.v ? '🗣️ ' : '📝 ') + b.ph : txtL)}">${esc(b.text)}</textarea>
-    </div>`).join('')}
-    <button class="btn sm" id="badd" style="margin-top:10px">+ Přidat ${i.format === 'karusel' ? 'slide' : 'část'}</button>
+    <div class="fld bodybox"><label class="l">📝 Tělo · ${f.v ? 'co říkám a ukazuju' : 'záběry a text na obrazovce'}</label>
+      <textarea data-f="body" rows="7" placeholder="${esc(bodyPh)}">${esc(i.body)}</textarea></div>
     <div class="fld ctabox"><label class="l">📣 CTA · výzva na konci</label>
-      <textarea data-f="cta" rows="1" placeholder="Ulož / sleduj / napiš do komentářů…">${esc(i.cta)}</textarea></div>
+      <textarea data-f="cta" rows="1" placeholder="${esc(f.cta || 'Ulož / sleduj / napiš do komentářů…')}">${esc(i.cta)}</textarea></div>
+    <div class="fld"><label class="l">🔗 Odkaz · nepovinné</label>
+      <input data-f="link" inputmode="url" autocomplete="off" placeholder="Originál, trend, produkt, odkaz do popisku…" value="${esc(i.link)}">
+      ${/^https?:/.test(i.link) ? `<p class="hint"><a href="${esc(i.link)}" target="_blank" rel="noopener">Otevřít odkaz ↗</a></p>` : ''}</div>
+    ${extraFields(i)}
     <div class="foot">
       <div class="info" id="stats"></div>
       <button class="btn sm" id="scopy" title="Kopírovat">${I.copy.replace('<svg', '<svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"')}</button>
@@ -1079,7 +1192,6 @@ function tabFilm(i) {
       <input type="checkbox" ${s.done ? 'checked' : ''} data-sc><input type="text" value="${esc(s.text)}" data-st placeholder="Záběr…"><button class="ico" data-sx>${I.x}</button></div>`).join('')}
     <form id="sf" style="display:flex;gap:8px;margin-top:8px"><input id="snew" placeholder="Nový záběr – co natočit" style="background:var(--bg2);box-shadow:var(--sh)"><button class="btn">Přidat</button></form>
     <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
-      ${i.blocks.some(b => b.shot.trim()) ? '<button class="btn sm" id="sfrom">Převzít záběry ze scénáře</button>' : ''}
       ${done ? '<button class="btn sm ghost" id="sclear">Smazat odškrtnuté</button>' : ''}
     </div>
     ${i.ingr.trim() ? `<h2>Nákup</h2><div class="set" style="white-space:pre-wrap;font-size:15px">${esc(i.ingr)}</div>` : ''}`;
@@ -1106,14 +1218,14 @@ function tabNote(i) {
     <div class="fld"><label class="l">Inspirace a odkazy</label>
       <textarea data-f="links" rows="2" placeholder="Odkazy na videa, zvuky, reference…">${esc(i.links)}</textarea>
       ${links.map(u => `<div class="linkrow"><span class="badge" style="background:${linkPlat(u)[1]};color:#fff">${esc(linkPlat(u)[0])}</span><a href="${esc(u)}" target="_blank" rel="noopener">${esc(u.replace(/^https?:\/\/(www\.)?/, ''))}</a></div>`).join('')}</div>
-    ${!i.hook && !i.blocks.length ? `<button class="btn pri full" style="margin-top:18px" data-et="script">Napsat scénář →</button>` : ''}
+    ${!i.hook && !i.body ? `<button class="btn pri full" style="margin-top:18px" data-et="script">Napsat scénář →</button>` : ''}
     <p class="hint" style="margin-top:18px">Vytvořeno ${new Date(i.created).toLocaleString('cs-CZ')}</p>`;
 }
 
 function touch() { cur.updated = Date.now(); save(); }
 function updStats() {
   const el = $('#stats'); if (!el) return;
-  if (!fmt(cur.format).v) { el.innerHTML = `<b>${cur.blocks.length} ${cur.format === 'karusel' ? 'slidů' : 'záběrů'}</b> · bez mluvení`; return; }
+  if (!fmt(cur.format).v) { el.innerHTML = '<b>Bez mluvení</b> · hudba + text'; return; }
   const w = words(cur), sec = w / WPS, lim = PLIMIT[cur.platform];
   el.innerHTML = `<b>~${fmtDur(sec)}</b> · ${w} slov${lim && sec > lim ? `<br><span class="warn">Na ${PLAT[cur.platform]} dlouhé (max ~${lim} s)</span>` : ''}`;
 }
@@ -1128,17 +1240,18 @@ function bindEditor() {
     closeEditor(); toast('Smazáno');
   };
   $('#edup').onclick = () => {
-    const c = JSON.parse(JSON.stringify(i)); c.id = uid(); c.title = i.title + ' (kopie)'; c.status = i.blocks.length ? 'script' : 'idea'; c.date = ''; c.steps = {}; c.created = c.updated = Date.now();
-    c.blocks.forEach(b => b.id = uid()); c.shots.forEach(s => { s.id = uid(); s.done = false; });
+    const c = JSON.parse(JSON.stringify(i)); c.id = uid(); c.title = i.title + ' (kopie)'; c.status = i.hook || i.body ? 'script' : 'idea'; c.date = ''; c.steps = {}; c.created = c.updated = Date.now();
+    c.blocks = []; c.shots.forEach(s => { s.id = uid(); s.done = false; });
     db.ideas.unshift(c); save(true); cur = c; renderEditor(); toast('Kopie – teď upravuješ kopii');
   };
   $$('[data-et]', ed).forEach(b => b.onclick = () => { etab = b.dataset.et; renderEditor(); });
   $$('[data-f]', ed).forEach(el => {
     const fld = el.dataset.f;
     el.addEventListener(el.tagName === 'SELECT' || el.type === 'date' ? 'change' : 'input', () => {
-      if (fld === 'status') { setStatus(i, el.value); return; }
       i[fld] = el.value; touch();
-      if (fld === 'format') { if (!i.blocks.length && !i.hook) i.platform = fmt(i.format).plat; renderEditor(); return; }
+      // jakmile začneš psát scénář, posune se nápad do fáze Scénář
+      if (['hook', 'body', 'cta'].includes(fld) && i.status === 'idea' && el.value.trim()) { i.status = 'script'; $('#proc').outerHTML = procHTML(i); bindProc(); }
+      if (fld === 'format') { if (!i.hook && !i.body) i.platform = fmt(i.format).plat; renderEditor(); return; }
       if (fld === 'platform') { renderEditor(); return; }
       if (fld === 'caption') $('#capn').textContent = el.value.length + ' znaků';
       if (fld === 'hashtags') $('#tagn').textContent = (el.value.match(/#[^\s#]+/g) || []).length + ' hashtagů';
@@ -1146,33 +1259,11 @@ function bindEditor() {
     });
   });
   $$('[data-m]', ed).forEach(el => el.oninput = () => { i.macros[el.dataset.m] = el.value; touch(); });
-  // šablony
-  $$('[data-tpl]', ed).forEach(b => b.onclick = () => {
-    const t = F[b.dataset.tpl];
-    if (t) {
-      i.blocks = t.b.map(([shot, ph]) => ({ id: uid(), shot, text: '', ph }));
-      i.cta = t.cta;
-      if (i.format === 'jine') i.format = b.dataset.tpl;
-    } else i.blocks = [{ id: uid(), shot: '', text: '' }];
-    if (i.status === 'idea') i.status = 'script';
-    touch(); renderEditor(); const h = $('[data-f=hook]', ed); h && h.focus();
-  });
-  // bloky
-  $$('.block', ed).forEach(el => {
-    const b = i.blocks.find(x => x.id === el.dataset.b);
-    $$('[data-bf]', el).forEach(inp => inp.addEventListener('input', () => { b[inp.dataset.bf] = inp.value; touch(); updStats(); }));
-  });
-  const mvB = (n, d) => { const a = i.blocks; [a[n], a[n + d]] = [a[n + d], a[n]]; touch(); renderEditor(); };
-  $$('[data-bu]', ed).forEach(b => b.onclick = () => mvB(+b.dataset.bu, -1));
-  $$('[data-bd]', ed).forEach(b => b.onclick = () => mvB(+b.dataset.bd, 1));
-  $$('[data-bx]', ed).forEach(b => b.onclick = () => {
-    const bl = i.blocks[+b.dataset.bx]; if ((bl.text.trim() || bl.shot.trim()) && !confirm('Smazat tuhle část?')) return;
-    i.blocks.splice(+b.dataset.bx, 1); touch(); renderEditor();
-  });
-  const badd = $('#badd'); if (badd) badd.onclick = () => { i.blocks.push({ id: uid(), shot: '', text: '' }); touch(); renderEditor(); const all = $$('[data-bf=shot]', ed); all[all.length - 1].focus(); };
+  bindProc();
+  $('#edate').onclick = () => assignDay(i.id, null, renderEditor);
   const hs = $('#hsave'); if (hs) hs.onclick = () => { const t = i.hook.trim(); if (!t) return toast('Nejdřív napiš hook'); if (db.hooks.some(h => h.text === t)) return toast('Už ho máš v hookách'); db.hooks.unshift({ id: uid(), text: t, updated: Date.now() }); save(true); toast('Uloženo do hooků ✓'); };
   const hp = $('#hpick'); if (hp) hp.onclick = pickHook;
-  const sc = $('#scopy'); if (sc) sc.onclick = () => copy(scriptText(i, true).map(([l, t]) => `[${l}]\n${t}`).join('\n\n') || i.blocks.map(b => b.shot).filter(Boolean).join('\n'), 'Scénář zkopírován');
+  const sc = $('#scopy'); if (sc) sc.onclick = () => copy(scriptText(i, true).map(([l, t]) => `[${l}]\n${t}`).join('\n\n') + (i.link.trim() ? '\n\n[Odkaz]\n' + i.link.trim() : ''), 'Scénář zkopírován');
   const pr = $('#prompt'); if (pr) pr.onclick = openPrompter;
   // natáčení
   $$('[data-step]', ed).forEach(c => c.onchange = () => {
@@ -1193,11 +1284,6 @@ function bindEditor() {
       $('[data-st]', el).oninput = e => { s.text = e.target.value; touch(); };
       $('[data-sx]', el).onclick = () => { i.shots = i.shots.filter(x => x !== s); touch(); renderEditor(); };
     });
-    const from = $('#sfrom'); if (from) from.onclick = () => {
-      const have = new Set(i.shots.map(s => s.text.trim()));
-      let n = 0; i.blocks.forEach(b => { const t = b.shot.trim(); if (t && !have.has(t)) { i.shots.push({ id: uid(), text: t, done: false }); have.add(t); n++; } });
-      touch(); renderEditor(); toast(n ? `Přidáno ${n} záběrů` : 'Všechny už tam jsou');
-    };
     const cl = $('#sclear'); if (cl) cl.onclick = () => { i.shots = i.shots.filter(s => !s.done); touch(); renderEditor(); };
   }
   // popisek
