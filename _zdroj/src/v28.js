@@ -115,7 +115,7 @@ daySheet = function (k) {
 };
 A['lp-open'] = b => lpMenu(b.dataset.k === 'ses' ? 'ses' : 'act', b.dataset.id);
 const _8vSummary2 = vSummary;
-vSummary = function () { return _8vSummary2().replace(`data-a="edit-ses" data-id="${view.id}" aria-label="Upravit"`, `data-a="lp-open" data-k="ses" data-id="${view.id}" aria-label="Možnosti"`); };
+vSummary = function () { return _8vSummary2().replace('class="stat3" style="margin-top:14px"', 'class="stat3 sx" style="margin-top:14px"').replace(`data-a="edit-ses" data-id="${view.id}" aria-label="Upravit"`, `data-a="lp-open" data-k="ses" data-id="${view.id}" aria-label="Možnosti"`); };
 
 // ===================== TRÉNINKOVÝ PLÁN =====================
 const WEEK_ORDER = [1, 2, 3, 4, 5, 6, 0];
@@ -192,7 +192,7 @@ vHome = function () {
 };
 function markPlanCells(h, cls) {
   const re = new RegExp(`class="${cls} ([^"]*)" data-a="day" data-k="(\\d{4}-\\d\\d-\\d\\d)"`, 'g');
-  return h.replace(re, (m, c, k) => { const st = planState(k); const add = st === 'plan' || st === 'today' ? ' plan' : st === 'miss' ? ' miss' : ''; return `class="${cls} ${c}${add}" data-a="day" data-k="${k}"`; });
+  return h.replace(re, (m, c, k) => { const st = planState(k); const add = st === 'plan' || st === 'today' ? ' pl-on' : st === 'miss' ? ' pl-miss' : ''; return `class="${cls} ${c}${add}" data-a="day" data-k="${k}"`; });
 }
 const _8vCal2 = vCal;
 vCal = function () { let h = markPlanCells(_8vCal2(), 'cd'); if (prog()) h = h.replace('<span><u style="background:var(--sick)"></u>Nemoc</span>', '<span><u style="background:var(--sick)"></u>Nemoc</span><span><u class="o"></u>Plán</span>'); return h; };

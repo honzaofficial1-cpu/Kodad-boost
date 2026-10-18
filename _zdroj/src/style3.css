@@ -1,0 +1,148 @@
+
+/* ===================== v2.9 – vlastní vzhled (pravidla: 1 barva, 2 fonty, žádná záře, méně krabic, šikmý motiv) ===================== */
+:root{
+  --fd:'BC',"SF Pro Display",system-ui,sans-serif;
+  --bg:#0A0A0A; --card:#141416; --card2:#1E1E21; --card3:#2A2A2D; --line:#222225;
+  --prog:var(--hot); --done:#F2F2F2; --r:20px;
+}
+body{background:var(--bg)}
+/* typografie: úzký italic na čísla a nadpisy, systémový font na text */
+h1,h2,.gcard h1,.plhero h2{font-family:var(--fd);font-style:italic;font-weight:800;letter-spacing:.005em;text-transform:uppercase}
+.hdr h1{font-family:var(--fd);font-style:italic;font-weight:800;font-size:24px;text-transform:uppercase;letter-spacing:.02em}
+.lbl{font-size:11px;font-weight:600;letter-spacing:.16em}
+.num,.big,.stat3 b,.gtime,.ovc .row .v,.extbl .tr span:nth-child(2),.extbl .tr span:nth-child(3){font-family:var(--fd);font-weight:700;font-variant-numeric:tabular-nums}
+/* šikmý motiv */
+.slab{display:inline-block;height:6px;width:64px;background:var(--hot);transform:skewX(-24deg);border-radius:1px}
+.slab+.slab{width:18px;opacity:.45;margin-left:6px}
+
+/* ---------- domů ---------- */
+.hdate{font-family:var(--fd);font-weight:600;font-size:17px;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);margin:6px 2px 14px}
+.gcard,.gcard.live{background:var(--card);border:0;border-radius:24px;padding:22px 20px 18px}
+.gcard::after{display:none}
+.gcard .lbl{color:var(--mut)}
+.gcard.live .lbl{color:var(--hot)}
+.gcard h1{font-size:68px;line-height:.86;margin-top:12px;letter-spacing:0}
+.gcard h1::after{content:"";display:block;width:72px;height:7px;margin-top:14px;background:var(--hot);transform:skewX(-24deg);transform-origin:left}
+.gsub{font-size:15px;color:#B9B9BE;margin-top:14px}
+.gtime{font-size:56px;font-style:italic;font-weight:800;color:var(--hot);margin-top:8px}
+.gplay,.gplay.ok{box-shadow:none}
+.gplay{width:60px;height:60px;border-radius:18px;transform:skewX(-10deg)}
+.gplay svg.i{transform:skewX(10deg)}
+.gplay.ok{background:var(--card3);color:var(--fg)}
+/* týden: šikmé dílky */
+.wk7{gap:5px;margin-top:20px}
+.w7{font-family:var(--fd);font-weight:600;font-size:13px;letter-spacing:.06em}
+.w7 i{height:26px;border-radius:7px;background:#232326}
+.w7.done i{background:var(--done)}
+.w7.live i{background:var(--hot)}
+.w7.today span{color:var(--hot)}
+.w7.today i{box-shadow:inset 0 0 0 2px var(--hot)}
+.w7.pl-on i{outline:0;background:#232326;box-shadow:inset 0 -3px 0 var(--hot)}
+.w7.today.pl-on i{box-shadow:inset 0 0 0 2px var(--hot)}
+.w7.pl-miss i{outline:0;background:#232326;box-shadow:inset 0 -3px 0 rgba(229,72,77,.7)}
+.w7 u.on{background:var(--mut)}
+.gfoot .mut{font-family:var(--fd);font-weight:600;font-size:16px;letter-spacing:.04em}
+
+/* plán + zmeškaný den: řádky bez krabic */
+.plcard{background:none;border-radius:0;padding:16px 2px;margin-top:6px;border-bottom:1px solid var(--line)}
+.plring i{font-family:var(--fd);font-style:italic;font-size:16px}
+.plmiss{background:none;border:0;border-left:4px solid var(--down);border-radius:0;padding:4px 0 4px 14px;margin:14px 0 4px}
+.plmiss .btn{border-radius:14px}
+/* týdenní souhrn */
+.wpromo,.wpromo{background:none;border:0;border-bottom:1px solid var(--line);border-radius:0;padding:16px 2px;margin-top:0}
+.wpromo .hic{background:none;width:auto;height:auto}
+/* dlaždice Míry/Aktivity → dva řádky s velkým číslem vpravo */
+.hgrid{display:block;margin-top:0}
+.hcard{flex-direction:row;align-items:center;gap:14px;min-height:0;padding:16px 2px;border-radius:0;background:none;border-bottom:1px solid var(--line);width:100%}
+.hcard .hic{margin:0;background:none;width:28px;height:28px;color:var(--mut)!important}
+.hcard>b{font-size:17px;font-weight:600;flex:1}
+.hcard>small{flex:1;text-align:right}
+.hcard .big{font-size:30px;font-style:italic;font-weight:800;order:3}
+.hcard .big small{font-family:var(--f);font-style:normal;font-size:12px;color:var(--mut);margin-left:2px}
+.hcard .stp{display:none}
+.hrow{background:none;border-radius:0;padding:16px 2px;margin-top:0;border-bottom:1px solid var(--line)}
+.hrow .bar{display:none}
+.hrow .t b{font-family:var(--fd);font-style:italic;font-weight:800;font-size:22px}
+.hrow .n{font-family:var(--fd);font-weight:600;font-size:17px}
+.hrow em{color:var(--hot)}
+
+/* ---------- shrnutí tréninku ---------- */
+.ovc{background:none;border-radius:0}
+.ovc .row{padding:14px 2px;border-top:1px solid var(--line)}
+.ovc .row:first-child{border-top:0;padding-top:4px}
+.ovc .ttl{font-family:var(--fd);font-style:italic;font-weight:800;font-size:46px;line-height:.9}
+.ovc .ttl i{display:none}
+.ovc .row .k{font-size:11px;letter-spacing:.16em;color:var(--mut);width:92px}
+.ovc .row .v{color:var(--fg);font-size:22px}
+/* čísla: jedno velké vlevo, dvě menší vpravo */
+
+.stat3{background:none;border-radius:0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.stat3.sx{grid-template-columns:1.25fr 1fr;grid-template-rows:auto auto;border-radius:0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.stat3>div{justify-items:start;text-align:left;padding:14px 2px;gap:2px}
+.stat3>div+div{border-left:0}
+.stat3.sx>div:nth-child(3){grid-column:1;grid-row:1/3;order:-1;align-content:center;border-right:1px solid var(--line);padding-right:12px}
+.stat3.sx>div:nth-child(1){border-bottom:1px solid var(--line)}
+.stat3.sx>div:nth-child(1),.stat3.sx>div:nth-child(2){padding-left:16px}
+.stat3 span{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--mut);font-weight:600}
+.stat3 b{font-size:34px;font-style:italic;font-weight:800;line-height:1}
+.stat3.sx>div:nth-child(3) b{font-size:58px;white-space:nowrap}
+.stat3.sx>div:nth-child(3) b::after{content:" kg";font-size:20px;color:var(--mut);font-style:normal}
+.stat3 b.up{color:var(--hot)}
+.card:has(.mmap){background:none;padding:6px 0 0!important;border-radius:0}
+.mm2,.card .mm2{background:none;padding:6px 0 0}
+.cmp{background:none;border-radius:0;padding:4px 2px 6px;border-top:1px solid var(--line)}
+.cmpr i.g{color:var(--hot)}
+.extbl{background:var(--card);border-radius:20px}
+.extbl .eh i{width:5px;height:34px;background:var(--hot);transform:skewX(-16deg);border-radius:1px}
+.extbl .eh b{font-family:var(--fd);font-style:italic;font-weight:800;font-size:24px;text-transform:uppercase}
+.extbl .th{background:none}
+.extbl .tr{font-size:21px}
+.badge-best{background:none!important;color:#F4C542}
+
+/* ---------- obecné ---------- */
+.li{border-radius:18px;background:var(--card)}
+.li .ic{background:none;width:32px}
+.chip{border-radius:8px}
+.card{border-radius:22px}
+.pill{border-radius:18px;font-size:18px}
+.pill.dark{background:var(--card2);border:0}
+.btn{border-radius:16px}
+.alert{border-radius:16px}
+.tabs{background:rgba(14,14,16,.96);border:1px solid #232326;box-shadow:none}
+.plhero{background:none;border:0;border-radius:0;padding:4px 2px 18px;border-bottom:1px solid var(--line)}
+.plhero h2{font-size:48px;line-height:.9}
+.plhero .chip{border-radius:8px}
+.plring.big i{font-size:30px}
+.plbar{height:7px;border-radius:1px;transform:skewX(-24deg);background:#232326}.plbar i{border-radius:1px}
+.pst{border-radius:8px}
+.pst.done,.pst.moved{background:rgba(242,242,242,.1);color:var(--fg)}
+.bdg{border-radius:18px}
+.bbar,.bbar i{border-radius:1px}
+.gi.pr{background:var(--card)}
+
+/* kalendář: klidný – číslo, hotovo = bílý kroužek, dnes = oranžové číslo, plán = čárka pod číslem */
+.cal-h h2{font-family:var(--fd);font-style:italic;font-weight:800;font-size:28px}
+.cd .c{border:0;font-weight:500}
+.cd.gym .c,.cd.gym .c{background:var(--done);color:var(--ink);border:0;font-weight:700}
+.cd.today .c{border:0;color:var(--hot);font-weight:800}
+.cd.today.gym .c{background:var(--hot);color:var(--ink)}
+.cd.pl-on .c,.cd.pl-miss .c{box-shadow:none;opacity:1}
+.cd .c{position:relative}
+.cd.pl-on .c::after,.cd.pl-miss .c::after{content:"";position:absolute;left:50%;bottom:3px;width:14px;height:2.5px;margin-left:-7px;border-radius:2px;background:var(--hot)}
+.cd.pl-miss .c::after{background:var(--down)}
+.cd.sick .c{border:0;color:var(--sick)}
+.legend u.o{box-shadow:none;background:var(--hot)!important;height:3px!important;border-radius:2px!important;width:12px!important}
+/* štítky „roste / na řadě / uloženo“ do oranžové */
+:root{--prog-soft:rgba(255,106,43,.14)}
+/* odznaky: řádky místo mřížky */
+.bgrid{display:flex;flex-direction:column;gap:0}
+.bgrid .bdg{display:grid;grid-template-columns:64px 1fr auto;grid-template-rows:auto auto;align-items:center;column-gap:14px;row-gap:2px;padding:12px 2px;border-radius:0;background:none;border-bottom:1px solid var(--line);text-align:left}
+.bgrid .bdg svg{grid-row:1/3;width:64px;height:64px}
+.bgrid .bdg b{font-size:17px;font-weight:600;align-self:end}
+.bgrid .bdg small{grid-column:2;align-self:start;font-size:13px}
+.bgrid .bdg .bbar{grid-column:3;grid-row:1;width:90px;align-self:end;margin:0}
+.bgrid .bdg em{grid-column:3;grid-row:2;text-align:right;font-family:var(--fd);font-weight:600;font-size:15px;align-self:start}
+.bgrid.sm{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.bgrid.sm .bdg{display:flex;border:0;padding:4px;text-align:center}
+.bgrid.sm .bdg svg{width:64px;height:64px}
+.legend u[style*="--done"]{background:var(--done)!important}
