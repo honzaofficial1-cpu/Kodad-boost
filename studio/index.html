@@ -1,0 +1,775 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Studio</title>
+<meta name="theme-color" content="#0E0E12">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Studio">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" href="icons/icon-192.png">
+<style>
+:root{
+  --bg:#0E0E12;--bg2:#16161C;--card:#1C1C24;--card2:#24242E;--line:#2E2E3A;
+  --tx:#F2F2F5;--tx2:#A6A6B4;--tx3:#6E6E7E;
+  --acc:#FF4D6A;--acc2:#FF7A59;--ok:#3DD68C;
+  --s-idea:#8B95A7;--s-script:#A78BFA;--s-film:#F5B544;--s-edit:#38BDF8;--s-done:#3DD68C;
+  --r:14px;--safe-b:env(safe-area-inset-bottom,0px);--safe-t:env(safe-area-inset-top,0px);
+  color-scheme:dark;
+}
+@media (prefers-color-scheme:light){
+  :root:not([data-theme="dark"]){
+    --bg:#F5F5F8;--bg2:#FFFFFF;--card:#FFFFFF;--card2:#F0F0F4;--line:#E2E2EA;
+    --tx:#15151B;--tx2:#55556A;--tx3:#8E8EA0;color-scheme:light;
+  }
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
+html,body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,sans-serif}
+body{min-height:100dvh;padding-top:var(--safe-t)}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none;padding:0}
+input,select,textarea{background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:10px 12px;width:100%;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--acc)}
+textarea{resize:none;min-height:44px;overflow:hidden;line-height:1.5}
+input[type=date]{min-height:44px}
+.wrap{max-width:860px;margin:0 auto;padding:0 16px}
+
+/* top */
+.top{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.top .wrap{display:flex;align-items:center;gap:10px;height:56px}
+.logo{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--acc),var(--acc2));display:grid;place-items:center}
+.logo svg{width:14px;height:14px;fill:#fff;margin-left:2px}
+.top h1{font-size:20px;margin:0;font-weight:750;letter-spacing:-.02em;flex:1}
+
+main{padding-bottom:calc(90px + var(--safe-b))}
+h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--tx3);margin:22px 0 10px;font-weight:650}
+
+/* bottom tabs */
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:6;background:color-mix(in srgb,var(--bg2) 92%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--line);padding-bottom:var(--safe-b)}
+.tabs .wrap{display:flex}
+.tabs button{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 0 8px;font-size:11px;color:var(--tx3);font-weight:600}
+.tabs button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tabs button.on{color:var(--acc)}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:42px;padding:0 16px;border-radius:11px;background:var(--card2);border:1px solid var(--line);font-weight:600;font-size:15px;white-space:nowrap}
+.btn.pri{background:linear-gradient(135deg,var(--acc),var(--acc2));border:0;color:#fff}
+.btn.sm{min-height:34px;padding:0 12px;font-size:13.5px;border-radius:9px}
+.btn.ghost{background:none;border-color:transparent;color:var(--tx2)}
+.btn.danger{color:#FF6B7D}
+.ico{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;color:var(--tx2);flex:none}
+.ico:active{background:var(--card2)}
+.ico svg{width:21px;height:21px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.ico.on svg{fill:#F5B544;stroke:#F5B544}
+
+/* quick add */
+.quick{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:12px;margin-top:6px}
+.quick textarea{background:none;border:0;padding:4px 2px;font-size:17px}
+.quick .row{display:flex;gap:8px;align-items:center;margin-top:8px;flex-wrap:wrap}
+.chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:2px 0}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;padding:6px 12px;border-radius:99px;background:var(--card2);border:1px solid var(--line);font-size:13.5px;font-weight:600;color:var(--tx2)}
+.chip.on{background:var(--tx);color:var(--bg);border-color:var(--tx)}
+.grow{flex:1}
+
+.search{display:flex;gap:8px;margin-top:16px}
+.search input{padding-left:38px;background:var(--card2) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236E6E7E' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.5-3.5'/%3E%3C/svg%3E") no-repeat 11px 50%/18px}
+.filters{margin-top:10px}
+
+/* idea cards */
+.list{display:grid;gap:10px;margin-top:14px}
+@media (min-width:700px){.list{grid-template-columns:1fr 1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:13px 14px;text-align:left;width:100%;display:block;position:relative}
+.card:active{transform:scale(.99)}
+.card .t{font-weight:650;font-size:16px;line-height:1.3;padding-right:24px;word-break:break-word}
+.card .n{color:var(--tx2);font-size:14px;margin-top:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.card .m{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;align-items:center}
+.card .star{position:absolute;top:12px;right:12px;color:#F5B544;font-size:15px}
+.badge{font-size:12px;font-weight:650;padding:3px 8px;border-radius:7px;background:var(--card2);color:var(--tx2);display:inline-flex;align-items:center;gap:5px}
+.badge .dot{width:7px;height:7px;border-radius:50%}
+.badge.date{background:none;padding-left:0;color:var(--tx3)}
+.badge.late{color:#FF6B7D}
+.empty{text-align:center;color:var(--tx3);padding:50px 20px}
+.empty b{display:block;color:var(--tx2);font-size:17px;margin-bottom:6px}
+
+/* stats strip */
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:16px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:9px 6px;text-align:center}
+.stat b{display:block;font-size:20px;line-height:1.1}
+.stat span{font-size:11px;color:var(--tx3);font-weight:600}
+
+/* board */
+.board{display:flex;gap:12px;overflow-x:auto;padding:4px 16px 16px;margin:0 -16px;scroll-snap-type:x mandatory}
+.col{flex:0 0 min(82vw,290px);scroll-snap-align:start;background:var(--bg2);border:1px solid var(--line);border-radius:var(--r);padding:10px;align-self:flex-start}
+.col h3{margin:2px 4px 10px;font-size:14px;display:flex;align-items:center;gap:8px}
+.col h3 .dot{width:9px;height:9px;border-radius:50%}
+.col h3 span{color:var(--tx3);font-weight:600;margin-left:auto}
+.col .card{padding:11px 12px;margin-bottom:8px}
+.col .mv{display:flex;justify-content:space-between;margin-top:8px}
+.col .mv button{font-size:12.5px;color:var(--tx3);font-weight:650;padding:4px 6px;border-radius:7px;background:var(--card2)}
+.col .mv button:disabled{visibility:hidden}
+
+/* hooks */
+.hook{display:flex;gap:8px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 6px 10px 14px;margin-bottom:8px}
+.hook p{margin:9px 0;flex:1;word-break:break-word}
+.formula{background:var(--card);border:1px dashed var(--line);border-radius:12px;padding:10px 14px;margin-bottom:8px;color:var(--tx2);font-size:15px;display:flex;gap:8px;align-items:center}
+.formula span{flex:1}
+
+/* editor sheet */
+.sheet{position:fixed;inset:0;z-index:20;background:var(--bg);overflow-y:auto;-webkit-overflow-scrolling:touch;padding-top:var(--safe-t);animation:up .22s ease}
+@keyframes up{from{transform:translateY(24px);opacity:0}}
+.sheet .bar{position:sticky;top:0;z-index:2;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.sheet .bar .wrap{display:flex;align-items:center;gap:4px;height:56px}
+.sheet .saved{font-size:12px;color:var(--tx3);margin-right:auto;margin-left:4px}
+.ttl{font-size:24px;font-weight:750;letter-spacing:-.02em;background:none;border:0;padding:6px 0;line-height:1.25}
+.meta{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:6px}
+.meta label,.fld>label{display:block;font-size:12px;font-weight:650;color:var(--tx3);margin:0 0 5px 2px;text-transform:uppercase;letter-spacing:.05em}
+.meta select,.meta input{padding:9px 10px;font-size:14.5px}
+.stabs{display:flex;gap:4px;margin:18px 0 6px;background:var(--card2);padding:4px;border-radius:12px}
+.stabs button{flex:1;padding:8px 4px;border-radius:9px;font-size:14px;font-weight:650;color:var(--tx2)}
+.stabs button.on{background:var(--card);color:var(--tx);box-shadow:0 1px 3px #0003}
+.fld{margin-top:16px}
+.fld .hint{font-size:12.5px;color:var(--tx3);margin:5px 2px 0}
+.lbl-row{display:flex;align-items:center;gap:6px;margin-bottom:5px}
+.lbl-row label{margin:0 0 0 2px;flex:1;font-size:12px;font-weight:650;color:var(--tx3);text-transform:uppercase;letter-spacing:.05em}
+.lbl-row .btn.sm{min-height:28px;padding:0 9px;font-size:12.5px}
+
+.block{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:10px;margin-top:10px}
+.block .bh{display:flex;align-items:center;gap:2px;margin-bottom:6px}
+.block .bh b{font-size:13px;color:var(--tx3);flex:1;margin-left:4px}
+.block .bh .ico{width:32px;height:32px}
+.block .bh .ico svg{width:17px;height:17px}
+.block input{font-size:14.5px;margin-bottom:6px;color:var(--tx2)}
+.block textarea{font-size:16px}
+.hookbox textarea{font-size:17px;font-weight:600;border-color:color-mix(in srgb,var(--acc) 45%,var(--line))}
+.ctabox textarea{border-color:color-mix(in srgb,var(--ok) 40%,var(--line))}
+
+.tpl{display:grid;gap:8px;margin-top:12px}
+.tpl button{text-align:left;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px}
+.tpl button b{display:block}
+.tpl button span{font-size:13.5px;color:var(--tx2)}
+
+.foot{position:sticky;bottom:0;margin:22px -16px 0;padding:10px 16px calc(10px + var(--safe-b));background:color-mix(in srgb,var(--bg2) 94%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--line);display:flex;gap:8px;align-items:center}
+.foot .info{flex:1;font-size:13px;color:var(--tx2);line-height:1.3}
+.foot .info b{color:var(--tx);font-size:15px}
+.warn{color:#F5B544}
+
+.shot{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:4px 4px 4px 12px;margin-top:8px}
+.shot input[type=checkbox]{width:22px;height:22px;flex:none;accent-color:var(--ok);margin:0}
+.shot input[type=text]{border:0;background:none;padding:8px 4px}
+.shot.done input[type=text]{text-decoration:line-through;color:var(--tx3)}
+.progress{height:6px;background:var(--card2);border-radius:9px;overflow:hidden;margin-top:12px}
+.progress i{display:block;height:100%;background:var(--ok);border-radius:9px;transition:width .2s}
+
+/* pick hook modal */
+.modal{position:fixed;inset:0;z-index:40;background:#0009;display:flex;align-items:flex-end;justify-content:center}
+.modal .box{background:var(--bg2);width:100%;max-width:560px;max-height:75dvh;overflow-y:auto;border-radius:18px 18px 0 0;padding:16px 16px calc(16px + var(--safe-b))}
+.modal .box h3{margin:0 0 12px}
+.modal .opt{display:block;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:11px 13px;margin-bottom:8px}
+
+/* teleprompter */
+#prompter{position:fixed;inset:0;z-index:50;background:#000;color:#fff}
+#prompter .scroll{position:absolute;inset:0;overflow-y:auto;scrollbar-width:none}
+#prompter .scroll::-webkit-scrollbar{display:none}
+#prompter .txt{padding:45vh 7vw 80vh;font-weight:650;line-height:1.45;white-space:pre-wrap;word-break:break-word}
+#prompter .txt .sec{color:#FF7A59;font-size:.45em;letter-spacing:.1em;text-transform:uppercase;display:block;margin:1.4em 0 .3em;font-weight:700}
+#prompter.mirror .txt{transform:scaleX(-1)}
+#prompter .guide{position:absolute;left:0;right:0;top:38vh;height:2px;background:#FF4D6A55;pointer-events:none}
+#prompter .ctl{position:absolute;left:0;right:0;bottom:0;padding:12px 14px calc(12px + var(--safe-b));background:linear-gradient(transparent,#000c 30%);display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:center;transition:opacity .3s}
+#prompter.playing .ctl{opacity:.12}
+#prompter .ctl .btn{background:#222;border-color:#333;color:#fff}
+#prompter .ctl .btn.pri{background:linear-gradient(135deg,var(--acc),var(--acc2))}
+#prompter .ctl label{font-size:12px;color:#aaa;display:flex;align-items:center;gap:6px}
+#prompter .ctl input[type=range]{width:110px;padding:0;accent-color:var(--acc);background:none;border:0}
+#prompter .close{position:absolute;top:calc(10px + var(--safe-t));right:12px;z-index:2;color:#fff;background:#222;border-radius:50%}
+
+#toast{position:fixed;left:50%;bottom:calc(96px + var(--safe-b));transform:translateX(-50%) translateY(20px);background:var(--tx);color:var(--bg);padding:10px 16px;border-radius:12px;font-weight:600;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:60;max-width:90vw;text-align:center}
+#toast.show{opacity:1;transform:translateX(-50%)}
+
+.card-set{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px;margin-bottom:10px}
+.card-set p{margin:0 0 12px;color:var(--tx2);font-size:14.5px}
+.card-set .row{display:flex;gap:8px;flex-wrap:wrap}
+</style>
+</head>
+<body>
+
+<header class="top"><div class="wrap">
+  <div class="logo"><svg viewBox="0 0 10 12"><path d="M0 0v12l10-6z"/></svg></div>
+  <h1 id="vtitle">Nápady</h1>
+</div></header>
+
+<main class="wrap" id="view"></main>
+
+<nav class="tabs"><div class="wrap">
+  <button data-v="ideas" class="on"><svg viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg>Nápady</button>
+  <button data-v="board"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="5" height="16" rx="1.5"/><rect x="10" y="4" width="5" height="11" rx="1.5"/><rect x="17" y="4" width="4" height="7" rx="1.5"/></svg>Nástěnka</button>
+  <button data-v="plan"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Plán</button>
+  <button data-v="hooks"><svg viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>Hooky</button>
+  <button data-v="more"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Záloha</button>
+</div></nav>
+
+<section id="editor" class="sheet" hidden></section>
+<div id="prompter" hidden></div>
+<div id="modal" class="modal" hidden></div>
+<div id="toast"></div>
+
+<script>
+'use strict';
+const KEY = 'studio.v1';
+const STATUS = { idea: 'Nápad', script: 'Scénář', film: 'Natáčení', edit: 'Střih', done: 'Hotovo' };
+const SKEYS = Object.keys(STATUS);
+const PLAT = { reels: 'Reels', tiktok: 'TikTok', shorts: 'Shorts', youtube: 'YouTube' };
+const PLIMIT = { reels: 90, tiktok: 180, shorts: 60 };
+const WPS = 2.3; // slov za sekundu při mluvení (~140 / min)
+
+const FORMULAS = [
+  'Přestaň dělat [X], jestli chceš [Y].',
+  '3 věci, které bych chtěl vědět, než jsem začal s [X].',
+  'Tohle je důvod, proč ti nejde [X].',
+  'Zkoušel jsem [X] 30 dní. Tady je výsledek.',
+  'Nikdo ti neřekne tohle o [X].',
+  'Největší chyba, kterou dělá 90 % lidí při [X].',
+  'Jak jsem [výsledek] za [čas] bez [překážka].',
+  'Pokud děláš [X], musíš vidět tohle.',
+  '[X] vs. [Y] – co je doopravdy lepší?',
+  'Tohle jsem dělal špatně celé roky.'
+];
+
+const TEMPLATES = {
+  reels: { name: 'Reels / TikTok / Shorts (15–60 s)', desc: 'Hook → problém → hodnota → CTA', blocks: [
+    ['Detail / reakce do kamery', 'Problém: proč to lidi řeší…'],
+    ['B-roll / ukázka', 'Bod 1…'],
+    ['Ukázka', 'Bod 2…'],
+    ['Výsledek', 'Bod 3 / pointa…']
+  ], cta: 'Ulož si to, ať to nezapomeneš. Sleduj pro víc.' },
+  story: { name: 'Příběh (30–90 s)', desc: 'Hook → situace → zlom → ponaučení', blocks: [
+    ['Do kamery', 'Kde jsem byl / jak to začalo…'],
+    ['B-roll', 'Co se pokazilo / zlom…'],
+    ['Do kamery', 'Co jsem zjistil…'],
+    ['Výsledek', 'Ponaučení pro diváka…']
+  ], cta: 'Napiš do komentářů, jestli jsi to taky zažil.' },
+  youtube: { name: 'YouTube video (8–15 min)', desc: 'Hook → intro → kapitoly → shrnutí → outro', blocks: [
+    ['Intro', 'O čem video je a proč to dívák potřebuje vidět až do konce…'],
+    ['Kapitola 1', '…'],
+    ['Kapitola 2', '…'],
+    ['Kapitola 3', '…'],
+    ['Shrnutí', 'Nejdůležitější body…']
+  ], cta: 'Jestli to pomohlo, dej odběr a koukni na tohle video…' }
+};
+
+// ---------- data ----------
+let db = load();
+function load() {
+  try { const d = JSON.parse(localStorage.getItem(KEY)); if (d && Array.isArray(d.ideas)) return { hooks: [], ...d }; } catch (e) {}
+  return { ideas: [], hooks: [] };
+}
+let saveT;
+function save(now) {
+  clearTimeout(saveT);
+  const go = () => { try { localStorage.setItem(KEY, JSON.stringify(db)); flashSaved(); } catch (e) { toast('Nepodařilo se uložit!'); } };
+  if (now) go(); else saveT = setTimeout(go, 300);
+}
+addEventListener('pagehide', () => save(true));
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') save(true); });
+try { navigator.storage && navigator.storage.persist && navigator.storage.persist(); } catch (e) {}
+
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+const $ = (s, el = document) => el.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const byId = id => db.ideas.find(i => i.id === id);
+const today = () => new Date().toISOString().slice(0, 10);
+
+function newIdea(title, platform) {
+  const t = Date.now();
+  return { id: uid(), title, note: '', platform: platform || 'reels', status: 'idea', fav: false, date: '',
+    hook: '', blocks: [], cta: '', caption: '', hashtags: '', cover: '', shots: [], links: '', created: t, updated: t };
+}
+
+function scriptText(i, withLabels) {
+  const parts = [];
+  if (i.hook.trim()) parts.push([withLabels ? 'Hook' : '', i.hook.trim()]);
+  i.blocks.forEach((b, n) => { if (b.text.trim()) parts.push([withLabels ? (b.shot.trim() || 'Část ' + (n + 1)) : '', b.text.trim()]); });
+  if (i.cta.trim()) parts.push([withLabels ? 'CTA' : '', i.cta.trim()]);
+  return parts;
+}
+function words(i) { return scriptText(i).map(p => p[1]).join(' ').split(/\s+/).filter(Boolean).length; }
+function fmtDur(sec) { sec = Math.round(sec); return sec < 60 ? sec + ' s' : Math.floor(sec / 60) + ' min ' + String(sec % 60).padStart(2, '0') + ' s'; }
+function fmtDate(d) { if (!d) return ''; const [y, m, dd] = d.split('-'); return +dd + '. ' + +m + '.' + (y != new Date().getFullYear() ? ' ' + y : ''); }
+
+// ---------- ikony ----------
+const I = {
+  back: '<svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>',
+  star: '<svg viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></svg>',
+  trash: '<svg viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M5 7l1 13h12l1-13M9 7V4h6v3"/></svg>',
+  up: '<svg viewBox="0 0 24 24"><path d="m6 15 6-6 6 6"/></svg>',
+  down: '<svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>',
+  x: '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg>',
+  copy: '<svg viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></svg>',
+  dup: '<svg viewBox="0 0 24 24"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M4 16V4h12M14.5 11.5v6M11.5 14.5h6"/></svg>'
+};
+
+// ---------- toast ----------
+let toastT;
+function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 1800); }
+async function copy(text, msg) {
+  try { await navigator.clipboard.writeText(text); }
+  catch (e) { const ta = document.createElement('textarea'); ta.value = text; document.body.append(ta); ta.select(); document.execCommand('copy'); ta.remove(); }
+  toast(msg || 'Zkopírováno');
+}
+
+// ---------- autosize textarea ----------
+function grow(el) { el.style.height = 'auto'; el.style.height = el.scrollHeight + 2 + 'px'; }
+document.addEventListener('input', e => { if (e.target.tagName === 'TEXTAREA') grow(e.target); });
+function growAll(root) { root.querySelectorAll('textarea').forEach(grow); }
+
+// ---------- views ----------
+let view = 'ideas';
+const ui = { q: '', fs: 'active', fp: 'all', addPlat: 'reels' };
+const TITLES = { ideas: 'Nápady', board: 'Nástěnka', plan: 'Plán', hooks: 'Hooky', more: 'Záloha' };
+
+document.querySelectorAll('.tabs button').forEach(b => b.onclick = () => go(b.dataset.v));
+function go(v) {
+  view = v;
+  document.querySelectorAll('.tabs button').forEach(b => b.classList.toggle('on', b.dataset.v === v));
+  $('#vtitle').textContent = TITLES[v];
+  render(); scrollTo(0, 0);
+}
+function render() { ({ ideas: renderIdeas, board: renderBoard, plan: renderPlan, hooks: renderHooks, more: renderMore })[view](); }
+
+function badgeHTML(i) {
+  const late = i.date && i.date < today() && i.status !== 'done';
+  return `<span class="badge"><span class="dot" style="background:var(--s-${i.status})"></span>${STATUS[i.status]}</span>
+    <span class="badge">${PLAT[i.platform]}</span>
+    ${i.date ? `<span class="badge date ${late ? 'late' : ''}">📅 ${fmtDate(i.date)}</span>` : ''}`;
+}
+function cardHTML(i, extra = '') {
+  const snippet = i.note || i.hook || (i.blocks[0] && i.blocks[0].text) || '';
+  return `<div class="card" data-open="${i.id}" role="button" tabindex="0">
+    ${i.fav ? '<span class="star">★</span>' : ''}
+    <div class="t">${esc(i.title || 'Bez názvu')}</div>
+    ${snippet ? `<div class="n">${esc(snippet)}</div>` : ''}
+    <div class="m">${badgeHTML(i)}</div>${extra}</div>`;
+}
+document.addEventListener('click', e => {
+  if (e.target.closest('[data-mv]')) return;
+  const c = e.target.closest('[data-open]'); if (c) openEditor(c.dataset.open);
+});
+
+function renderIdeas() {
+  const counts = Object.fromEntries(SKEYS.map(s => [s, db.ideas.filter(i => i.status === s).length]));
+  const q = ui.q.toLowerCase();
+  let list = db.ideas.filter(i =>
+    (ui.fs === 'all' || (ui.fs === 'active' ? i.status !== 'done' : ui.fs === 'fav' ? i.fav : i.status === ui.fs)) &&
+    (ui.fp === 'all' || i.platform === ui.fp) &&
+    (!q || [i.title, i.note, i.hook, i.cta, i.caption, i.hashtags, ...i.blocks.map(b => b.text + ' ' + b.shot)].join(' ').toLowerCase().includes(q)));
+  list.sort((a, b) => (b.fav - a.fav) || (b.updated - a.updated));
+
+  const chip = (k, v, label) => `<button class="chip ${ui[k] === v ? 'on' : ''}" data-chip="${k}" data-val="${v}">${label}</button>`;
+  $('#view').innerHTML = `
+    <form class="quick" id="qf">
+      <textarea id="qt" rows="1" placeholder="Co tě napadlo? Napiš to sem…"></textarea>
+      <div class="row">
+        <div class="chips grow">${Object.entries(PLAT).map(([k, v]) => chip('addPlat', k, v)).join('')}</div>
+        <button class="btn pri sm" type="submit">Uložit nápad</button>
+      </div>
+    </form>
+    ${db.ideas.length ? `<div class="stats">${SKEYS.map(s => `<div class="stat"><b style="color:var(--s-${s})">${counts[s]}</b><span>${STATUS[s]}</span></div>`).join('')}</div>` : ''}
+    ${db.ideas.length ? `<div class="search"><input id="q" type="search" placeholder="Hledat v nápadech a scénářích" value="${esc(ui.q)}"></div>
+    <div class="chips filters">${chip('fs', 'active', 'Rozpracované')}${chip('fs', 'fav', '★ Oblíbené')}${SKEYS.map(s => chip('fs', s, STATUS[s])).join('')}${chip('fs', 'all', 'Vše')}</div>
+    <div class="chips filters">${chip('fp', 'all', 'Všechny platformy')}${Object.entries(PLAT).map(([k, v]) => chip('fp', k, v)).join('')}</div>` : ''}
+    <div class="list">${list.map(i => cardHTML(i)).join('') || (db.ideas.length
+      ? '<div class="empty"><b>Nic tu není</b>Zkus jiný filtr.</div>'
+      : '<div class="empty"><b>Zatím žádné nápady</b>Napiš první nahoru – stačí pár slov. Scénář dopíšeš potom.</div>')}</div>`;
+
+  const qt = $('#qt');
+  $('#qf').onsubmit = e => {
+    e.preventDefault();
+    const v = qt.value.trim(); if (!v) { qt.focus(); return; }
+    const lines = v.split('\n'); const it = newIdea(lines[0].slice(0, 140), ui.addPlat);
+    it.note = (lines[0].length > 140 ? lines[0].slice(140) + '\n' : '') + lines.slice(1).join('\n');
+    db.ideas.unshift(it); save(true); toast('Nápad uložen ✓'); render(); $('#qt').focus();
+  };
+  qt.onkeydown = e => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) $('#qf').requestSubmit(); };
+  const qi = $('#q');
+  if (qi) qi.oninput = () => { ui.q = qi.value; const pos = qi.selectionStart; renderIdeas(); const n = $('#q'); n.focus(); n.setSelectionRange(pos, pos); };
+  bindChips();
+}
+function bindChips() {
+  document.querySelectorAll('#view [data-chip]').forEach(b => b.onclick = e => {
+    e.preventDefault();
+    const keep = $('#qt') ? $('#qt').value : '';
+    ui[b.dataset.chip] = b.dataset.val; render();
+    if ($('#qt')) { $('#qt').value = keep; grow($('#qt')); }
+  });
+}
+
+function renderBoard() {
+  if (!db.ideas.length) { $('#view').innerHTML = '<div class="empty"><b>Nástěnka je prázdná</b>Přidej nápad v záložce Nápady.</div>'; return; }
+  $('#view').innerHTML = `<div class="board">${SKEYS.map((s, si) => {
+    const items = db.ideas.filter(i => i.status === s).sort((a, b) => (a.date || '9') < (b.date || '9') ? -1 : 1);
+    return `<div class="col"><h3><span class="dot" style="background:var(--s-${s})"></span>${STATUS[s]}<span>${items.length}</span></h3>
+      ${items.map(i => cardHTML(i, `<div class="mv"><button data-mv="${i.id}" data-d="-1" ${si === 0 ? 'disabled' : ''}>← ${STATUS[SKEYS[si - 1]] || ''}</button><button data-mv="${i.id}" data-d="1" ${si === SKEYS.length - 1 ? 'disabled' : ''}>${STATUS[SKEYS[si + 1]] || ''} →</button></div>`)).join('')}
+    </div>`;
+  }).join('')}</div>`;
+  const sl = window._boardScroll; if (sl) $('.board').scrollLeft = sl;
+  $('.board').onscroll = e => window._boardScroll = e.target.scrollLeft;
+  document.querySelectorAll('[data-mv]').forEach(b => b.onclick = e => {
+    e.stopPropagation();
+    const i = byId(b.dataset.mv); const n = SKEYS.indexOf(i.status) + +b.dataset.d;
+    if (n < 0 || n >= SKEYS.length) return;
+    i.status = SKEYS[n]; i.updated = Date.now(); save(true); renderBoard();
+    if (i.status === 'done') toast('Hotovo! 🎉');
+  });
+}
+
+function renderPlan() {
+  const dated = db.ideas.filter(i => i.date).sort((a, b) => a.date < b.date ? -1 : 1);
+  const t = today();
+  const late = dated.filter(i => i.date < t && i.status !== 'done');
+  const upcoming = dated.filter(i => i.date >= t);
+  const undated = db.ideas.filter(i => !i.date && i.status !== 'done' && i.status !== 'idea');
+  const groups = {};
+  upcoming.forEach(i => { const d = new Date(i.date + 'T12:00'); const k = d.toLocaleDateString('cs-CZ', { weekday: 'long', day: 'numeric', month: 'long' }); (groups[k] = groups[k] || []).push(i); });
+  $('#view').innerHTML = `
+    ${late.length ? `<h2 style="color:#FF6B7D">Po termínu</h2><div class="list">${late.map(i => cardHTML(i)).join('')}</div>` : ''}
+    ${Object.keys(groups).length ? Object.entries(groups).map(([k, v]) => `<h2>${k}${v[0].date === t ? ' · dnes' : ''}</h2><div class="list">${v.map(i => cardHTML(i)).join('')}</div>`).join('')
+      : '<div class="empty"><b>Nic naplánovaného</b>V detailu nápadu nastav datum publikace a objeví se tady.</div>'}
+    ${undated.length ? `<h2>Rozpracované bez data</h2><div class="list">${undated.map(i => cardHTML(i)).join('')}</div>` : ''}`;
+}
+
+function renderHooks() {
+  $('#view').innerHTML = `
+    <form class="quick" id="hf"><textarea id="ht" rows="1" placeholder="Dobrý hook, první věta videa…"></textarea>
+      <div class="row"><span class="grow" style="font-size:13px;color:var(--tx3)">Prvních 1–3 s rozhoduje, jestli lidi zůstanou.</span><button class="btn pri sm">Uložit hook</button></div></form>
+    <h2>Moje hooky (${db.hooks.length})</h2>
+    ${db.hooks.map(h => `<div class="hook"><p>${esc(h.text)}</p><button class="ico" data-hc="${h.id}" title="Kopírovat">${I.copy}</button><button class="ico" data-hd="${h.id}" title="Smazat">${I.trash}</button></div>`).join('') || '<p style="color:var(--tx3)">Zatím žádné. Ukládej si sem věty, které tě zaujaly – u sebe i u ostatních.</p>'}
+    <h2>Osvědčené vzorce</h2>
+    ${FORMULAS.map((f, n) => `<div class="formula"><span>${esc(f)}</span><button class="btn sm ghost" data-fu="${n}">+ Do mých</button></div>`).join('')}`;
+  const ht = $('#ht');
+  $('#hf').onsubmit = e => { e.preventDefault(); const v = ht.value.trim(); if (!v) return; db.hooks.unshift({ id: uid(), text: v }); save(true); renderHooks(); toast('Hook uložen ✓'); };
+  document.querySelectorAll('[data-hc]').forEach(b => b.onclick = () => copy(db.hooks.find(h => h.id === b.dataset.hc).text));
+  document.querySelectorAll('[data-hd]').forEach(b => b.onclick = () => { if (!confirm('Smazat hook?')) return; db.hooks = db.hooks.filter(h => h.id !== b.dataset.hd); save(true); renderHooks(); });
+  document.querySelectorAll('[data-fu]').forEach(b => b.onclick = () => { $('#ht').value = FORMULAS[b.dataset.fu]; grow($('#ht')); $('#ht').focus(); scrollTo(0, 0); });
+}
+
+function renderMore() {
+  const size = new Blob([localStorage.getItem(KEY) || '']).size;
+  $('#view').innerHTML = `
+    <h2>Záloha</h2>
+    <div class="card-set"><p>Všechno se ukládá jen v tomhle prohlížeči na tomhle zařízení. Občas si stáhni zálohu, ať o nic nepřijdeš – a přes ni si data přeneseš i do jiného zařízení.</p>
+      <div class="row"><button class="btn pri" id="exp">Stáhnout zálohu</button><button class="btn" id="imp">Nahrát zálohu</button><input type="file" id="impf" accept=".json,application/json" hidden></div></div>
+    <div class="card-set"><p>Celý obsah jako text (třeba do Poznámek nebo pro AI).</p><button class="btn" id="expt">Kopírovat vše jako text</button></div>
+    <h2>Přehled</h2>
+    <div class="card-set"><p style="margin:0">${db.ideas.length} nápadů · ${db.ideas.filter(i => i.status === 'done').length} hotových videí · ${db.hooks.length} hooků · ${(size / 1024).toFixed(1)} kB</p></div>
+    <h2>Nebezpečná zóna</h2>
+    <div class="card-set"><button class="btn danger" id="wipe">Smazat všechna data</button></div>
+    <p style="color:var(--tx3);font-size:13px;text-align:center;margin-top:24px">Tip: v Safari dej Sdílet → Přidat na plochu a máš to jako appku.</p>`;
+  $('#exp').onclick = () => {
+    const blob = new Blob([JSON.stringify({ app: 'studio', exported: new Date().toISOString(), ...db }, null, 1)], { type: 'application/json' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'studio-zaloha-' + today() + '.json'; a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  };
+  $('#imp').onclick = () => $('#impf').click();
+  $('#impf').onchange = async e => {
+    const f = e.target.files[0]; if (!f) return;
+    try {
+      const d = JSON.parse(await f.text());
+      if (!Array.isArray(d.ideas)) throw 0;
+      const merge = db.ideas.length && confirm(`Záloha má ${d.ideas.length} nápadů.\n\nOK = přidat k současným (stejné nahradit)\nZrušit = vybrat, jestli vše přepsat`);
+      if (merge) {
+        const m = new Map(db.ideas.map(i => [i.id, i])); d.ideas.forEach(i => m.set(i.id, i));
+        const hm = new Map(db.hooks.map(h => [h.id, h])); (d.hooks || []).forEach(h => hm.set(h.id, h));
+        db = { ideas: [...m.values()].sort((a, b) => b.updated - a.updated), hooks: [...hm.values()] };
+      } else {
+        if (db.ideas.length && !confirm('Opravdu přepsat všechna současná data zálohou?')) return;
+        db = { ideas: d.ideas, hooks: d.hooks || [] };
+      }
+      db.ideas = db.ideas.map(i => ({ ...newIdea(''), ...i }));
+      save(true); toast('Záloha nahrána ✓'); renderMore();
+    } catch (err) { toast('Tohle není platná záloha'); }
+  };
+  $('#expt').onclick = () => copy(db.ideas.map(ideaText).join('\n\n==========\n\n'), 'Zkopírováno ' + db.ideas.length + ' nápadů');
+  $('#wipe').onclick = () => { if (confirm('Smazat VŠECHNO? Tohle nejde vrátit.') && confirm('Fakt? Stáhl sis zálohu?')) { db = { ideas: [], hooks: [] }; save(true); renderMore(); } };
+}
+
+function ideaText(i) {
+  const s = [`# ${i.title}`, `${PLAT[i.platform]} · ${STATUS[i.status]}${i.date ? ' · ' + fmtDate(i.date) : ''}`];
+  if (i.note.trim()) s.push('', i.note.trim());
+  const sc = scriptText(i, true);
+  if (sc.length) s.push('', '## Scénář', ...sc.map(([l, t]) => `[${l}]\n${t}`));
+  if (i.shots.length) s.push('', '## Záběry', ...i.shots.map(x => (x.done ? '[x] ' : '[ ] ') + x.text));
+  if (i.caption.trim() || i.hashtags.trim()) s.push('', '## Popisek', i.caption.trim(), i.hashtags.trim());
+  return s.join('\n');
+}
+
+// ---------- editor ----------
+let cur = null, etab = 'script';
+function openEditor(id) {
+  cur = byId(id); if (!cur) return;
+  etab = (cur.status === 'idea' && !cur.hook && !cur.blocks.length) ? 'note' : 'script';
+  const ed = $('#editor'); ed.hidden = false; document.body.style.overflow = 'hidden';
+  renderEditor(); ed.scrollTop = 0;
+  history.pushState({ ed: id }, '');
+}
+function closeEditor(fromPop) {
+  if (!cur) return;
+  if (!cur.title.trim()) cur.title = 'Bez názvu';
+  save(true); cur = null;
+  $('#editor').hidden = true; document.body.style.overflow = '';
+  render();
+  if (!fromPop && history.state && history.state.ed) history.back();
+}
+let skipPop = false;
+addEventListener('popstate', () => { if (skipPop) { skipPop = false; return; } if (!$('#prompter').hidden) { closePrompter(); return; } if (!$('#modal').hidden) { $('#modal').hidden = true; } if (cur) closeEditor(true); });
+
+function flashSaved() { const s = $('#saved'); if (s) { s.textContent = 'Uloženo ✓'; clearTimeout(s._t); s._t = setTimeout(() => s.textContent = '', 1400); } }
+
+function renderEditor() {
+  const i = cur;
+  const tabs = { script: 'Scénář', shots: 'Záběry', post: 'Popisek', note: 'Poznámky' };
+  $('#editor').innerHTML = `
+    <div class="bar"><div class="wrap">
+      <button class="ico" id="eback" title="Zpět">${I.back}</button>
+      <span class="saved" id="saved"></span>
+      <button class="ico ${i.fav ? 'on' : ''}" id="efav" title="Oblíbené">${I.star}</button>
+      <button class="ico" id="edup" title="Duplikovat">${I.dup}</button>
+      <button class="ico" id="edel" title="Smazat">${I.trash}</button>
+    </div></div>
+    <div class="wrap">
+      <textarea class="ttl" data-f="title" rows="1" placeholder="Název videa">${esc(i.title)}</textarea>
+      <div class="meta">
+        <div><label>Platforma</label><select data-f="platform">${Object.entries(PLAT).map(([k, v]) => `<option value="${k}" ${i.platform === k ? 'selected' : ''}>${v}</option>`).join('')}</select></div>
+        <div><label>Stav</label><select data-f="status">${SKEYS.map(k => `<option value="${k}" ${i.status === k ? 'selected' : ''}>${STATUS[k]}</option>`).join('')}</select></div>
+        <div><label>Publikace</label><input type="date" data-f="date" value="${esc(i.date)}"></div>
+      </div>
+      <div class="stabs">${Object.entries(tabs).map(([k, v]) => `<button data-et="${k}" class="${etab === k ? 'on' : ''}">${v}${k === 'shots' && i.shots.length ? ` <small style="color:var(--tx3)">${i.shots.filter(s => s.done).length}/${i.shots.length}</small>` : ''}</button>`).join('')}</div>
+      <div id="etab">${({ script: tabScript, shots: tabShots, post: tabPost, note: tabNote })[etab](i)}</div>
+    </div>`;
+  growAll($('#editor'));
+  bindEditor();
+  updStats();
+}
+
+function tabScript(i) {
+  const empty = !i.hook && !i.blocks.length && !i.cta;
+  const tpl = empty ? `<div class="tpl">${Object.entries(TEMPLATES).map(([k, t]) => `<button data-tpl="${k}"><b>${t.name}</b><span>${t.desc}</span></button>`).join('')}
+    <button data-tpl=""><b>Prázdný scénář</b><span>Začnu od nuly</span></button></div>` : '';
+  if (empty) return `<p style="color:var(--tx2);margin:16px 2px 0">Vyber šablonu, ať nezačínáš s prázdnou stránkou:</p>${tpl}`;
+  return `
+    <div class="fld hookbox"><div class="lbl-row"><label>🎣 Hook · první 1–3 s</label>
+      <button class="btn sm ghost" id="hpick">Z banky</button><button class="btn sm ghost" id="hsave">Uložit do banky</button></div>
+      <textarea data-f="hook" rows="1" placeholder="Věta, která diváka zastaví…">${esc(i.hook)}</textarea></div>
+    ${i.blocks.map((b, n) => `<div class="block" data-b="${b.id}">
+      <div class="bh"><b>Část ${n + 1}</b>
+        <button class="ico" data-bu="${n}" ${n === 0 ? 'disabled style="opacity:.3"' : ''}>${I.up}</button>
+        <button class="ico" data-bd="${n}" ${n === i.blocks.length - 1 ? 'disabled style="opacity:.3"' : ''}>${I.down}</button>
+        <button class="ico" data-bx="${n}">${I.x}</button></div>
+      <input data-bf="shot" placeholder="🎬 Záběr – co je vidět (do kamery, B-roll, text na obrazovce…)" value="${esc(b.shot)}">
+      <textarea data-bf="text" rows="2" placeholder="🗣️ Co říkám…">${esc(b.text)}</textarea>
+    </div>`).join('')}
+    <div style="display:flex;gap:8px;margin-top:10px"><button class="btn sm" id="badd">+ Přidat část</button></div>
+    <div class="fld ctabox"><label>📣 CTA · výzva na konci</label>
+      <textarea data-f="cta" rows="1" placeholder="Sleduj / ulož / napiš do komentářů…">${esc(i.cta)}</textarea></div>
+    <div class="foot">
+      <div class="info" id="stats"></div>
+      <button class="btn sm" id="scopy">${I.copy.replace('<svg', '<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"')}</button>
+      <button class="btn pri sm" id="prompt">▶ Čtečka</button>
+    </div>`;
+}
+function tabShots(i) {
+  const done = i.shots.filter(s => s.done).length;
+  return `
+    ${i.shots.length ? `<div class="progress"><i style="width:${i.shots.length ? done / i.shots.length * 100 : 0}%"></i></div>` : ''}
+    <div id="shots">${i.shots.map(s => `<div class="shot ${s.done ? 'done' : ''}" data-s="${s.id}">
+      <input type="checkbox" ${s.done ? 'checked' : ''} data-sc>
+      <input type="text" value="${esc(s.text)}" data-st placeholder="Záběr…">
+      <button class="ico" data-sx>${I.x}</button></div>`).join('')}</div>
+    <form id="sf" style="display:flex;gap:8px;margin-top:10px"><input id="snew" placeholder="Nový záběr (Enter)"><button class="btn">Přidat</button></form>
+    <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+      ${i.blocks.some(b => b.shot.trim()) ? '<button class="btn sm" id="sfrom">Převzít záběry ze scénáře</button>' : ''}
+      ${done ? '<button class="btn sm ghost" id="sclear">Smazat odškrtnuté</button>' : ''}
+    </div>
+    <p class="hint" style="color:var(--tx3);font-size:13px;margin-top:14px">Seznam na natáčení – co všechno potřebuješ nafotit/natočit, rekvizity, místa.</p>`;
+}
+function tabPost(i) {
+  const tagCount = (i.hashtags.match(/#[^\s#]+/g) || []).length;
+  return `
+    <div class="fld"><div class="lbl-row"><label>Popisek</label><button class="btn sm ghost" id="pcopy">Kopírovat s hashtagy</button></div>
+      <textarea data-f="caption" rows="4" placeholder="Text pod video…">${esc(i.caption)}</textarea>
+      <p class="hint" id="capn">${i.caption.length} znaků</p></div>
+    <div class="fld"><label>Hashtagy</label>
+      <textarea data-f="hashtags" rows="1" placeholder="#reels #tipy …">${esc(i.hashtags)}</textarea>
+      <p class="hint" id="tagn">${tagCount} hashtagů</p></div>
+    <div class="fld"><label>${i.platform === 'youtube' ? 'Thumbnail – text a nápad' : 'Cover / text na úvodní obrazovce'}</label>
+      <textarea data-f="cover" rows="2" placeholder="${i.platform === 'youtube' ? 'Velký text, výraz obličeje, co bude na obrázku…' : 'Krátký text přes první frame…'}">${esc(i.cover)}</textarea></div>`;
+}
+function tabNote(i) {
+  return `
+    <div class="fld"><label>Poznámky k nápadu</label>
+      <textarea data-f="note" rows="5" placeholder="Rozepiš myšlenku, proč to bude fungovat, pro koho to je…">${esc(i.note)}</textarea></div>
+    <div class="fld"><label>Inspirace a odkazy</label>
+      <textarea data-f="links" rows="3" placeholder="Odkazy na videa, která se ti líbí, zvuky, reference…">${esc(i.links)}</textarea></div>
+    ${!i.hook && !i.blocks.length ? `<button class="btn pri" style="margin-top:16px;width:100%" data-et="script">Napsat scénář →</button>` : ''}
+    <p class="hint" style="color:var(--tx3);font-size:12.5px;margin-top:18px">Vytvořeno ${new Date(i.created).toLocaleString('cs-CZ')}</p>`;
+}
+
+function touch() { cur.updated = Date.now(); save(); }
+
+function updStats() {
+  const el = $('#stats'); if (!el) return;
+  const w = words(cur), sec = w / WPS, lim = PLIMIT[cur.platform];
+  el.innerHTML = `<b>~${fmtDur(sec)}</b> · ${w} slov${lim && sec > lim ? `<br><span class="warn">Na ${PLAT[cur.platform]} je to dlouhé (max ~${lim} s)</span>` : ''}`;
+}
+
+function bindEditor() {
+  const ed = $('#editor'), i = cur;
+  $('#eback').onclick = () => closeEditor();
+  $('#efav').onclick = e => { i.fav = !i.fav; e.currentTarget.classList.toggle('on', i.fav); touch(); };
+  $('#edel').onclick = () => { if (!confirm('Smazat „' + (i.title || 'Bez názvu') + '“?')) return; db.ideas = db.ideas.filter(x => x !== i); cur.title = 'x'; closeEditor(); toast('Smazáno'); };
+  $('#edup').onclick = () => {
+    const c = JSON.parse(JSON.stringify(i)); c.id = uid(); c.title = i.title + ' (kopie)'; c.status = i.status === 'done' ? 'script' : i.status; c.date = ''; c.created = c.updated = Date.now();
+    c.blocks.forEach(b => b.id = uid()); c.shots.forEach(s => { s.id = uid(); s.done = false; });
+    db.ideas.unshift(c); save(true); cur = c; renderEditor(); toast('Zkopírováno – upravuješ kopii');
+  };
+  ed.querySelectorAll('[data-et]').forEach(b => b.onclick = () => { etab = b.dataset.et; renderEditor(); });
+  ed.querySelectorAll('[data-f]').forEach(el => {
+    const f = el.dataset.f;
+    el.addEventListener(el.tagName === 'SELECT' || el.type === 'date' ? 'change' : 'input', () => {
+      i[f] = el.value; touch();
+      if (f === 'platform') renderEditor();
+      else if (f === 'status' && el.value === 'done') toast('Hotovo! 🎉');
+      if (f === 'caption') $('#capn').textContent = el.value.length + ' znaků';
+      if (f === 'hashtags') $('#tagn').textContent = (el.value.match(/#[^\s#]+/g) || []).length + ' hashtagů';
+      updStats();
+    });
+  });
+  // šablony
+  ed.querySelectorAll('[data-tpl]').forEach(b => b.onclick = () => {
+    const t = TEMPLATES[b.dataset.tpl];
+    if (t) { i.blocks = t.blocks.map(([shot, text]) => ({ id: uid(), shot, text: '' , ph: text })); i.cta = t.cta; }
+    else i.blocks = [{ id: uid(), shot: '', text: '' }];
+    if (i.status === 'idea') i.status = 'script';
+    touch(); renderEditor(); const h = ed.querySelector('[data-f=hook]'); h && h.focus();
+  });
+  // bloky
+  ed.querySelectorAll('.block').forEach(el => {
+    const b = i.blocks.find(x => x.id === el.dataset.b);
+    if (b.ph) el.querySelector('[data-bf=text]').placeholder = '🗣️ ' + b.ph;
+    el.querySelectorAll('[data-bf]').forEach(inp => inp.addEventListener('input', () => { b[inp.dataset.bf] = inp.value; touch(); updStats(); }));
+  });
+  const mvB = (n, d) => { const a = i.blocks; [a[n], a[n + d]] = [a[n + d], a[n]]; touch(); renderEditor(); };
+  ed.querySelectorAll('[data-bu]').forEach(b => b.onclick = () => mvB(+b.dataset.bu, -1));
+  ed.querySelectorAll('[data-bd]').forEach(b => b.onclick = () => mvB(+b.dataset.bd, 1));
+  ed.querySelectorAll('[data-bx]').forEach(b => b.onclick = () => {
+    const bl = i.blocks[+b.dataset.bx]; if ((bl.text.trim() || bl.shot.trim()) && !confirm('Smazat tuhle část?')) return;
+    i.blocks.splice(+b.dataset.bx, 1); touch(); renderEditor();
+  });
+  const badd = $('#badd'); if (badd) badd.onclick = () => { i.blocks.push({ id: uid(), shot: '', text: '' }); touch(); renderEditor(); const all = ed.querySelectorAll('[data-bf=text]'); all[all.length - 1].focus(); };
+  const hs = $('#hsave'); if (hs) hs.onclick = () => { const t = i.hook.trim(); if (!t) return toast('Nejdřív napiš hook'); if (db.hooks.some(h => h.text === t)) return toast('Už ho máš v bance'); db.hooks.unshift({ id: uid(), text: t }); save(true); toast('Uloženo do banky ✓'); };
+  const hp = $('#hpick'); if (hp) hp.onclick = pickHook;
+  const sc = $('#scopy'); if (sc) sc.onclick = () => copy(scriptText(i, true).map(([l, t]) => `[${l}]\n${t}`).join('\n\n'), 'Scénář zkopírován');
+  const pr = $('#prompt'); if (pr) pr.onclick = openPrompter;
+  // záběry
+  const sf = $('#sf');
+  if (sf) {
+    sf.onsubmit = e => { e.preventDefault(); const v = $('#snew').value.trim(); if (!v) return; i.shots.push({ id: uid(), text: v, done: false }); touch(); renderEditor(); $('#snew').focus(); };
+    ed.querySelectorAll('.shot').forEach(el => {
+      const s = i.shots.find(x => x.id === el.dataset.s);
+      el.querySelector('[data-sc]').onchange = e => { s.done = e.target.checked; touch(); renderEditor(); };
+      el.querySelector('[data-st]').oninput = e => { s.text = e.target.value; touch(); };
+      el.querySelector('[data-sx]').onclick = () => { i.shots = i.shots.filter(x => x !== s); touch(); renderEditor(); };
+    });
+    const from = $('#sfrom'); if (from) from.onclick = () => {
+      const have = new Set(i.shots.map(s => s.text.trim()));
+      let n = 0; i.blocks.forEach(b => { const t = b.shot.trim(); if (t && !have.has(t)) { i.shots.push({ id: uid(), text: t, done: false }); have.add(t); n++; } });
+      touch(); renderEditor(); toast(n ? `Přidáno ${n} záběrů` : 'Všechny už tam jsou');
+    };
+    const cl = $('#sclear'); if (cl) cl.onclick = () => { i.shots = i.shots.filter(s => !s.done); touch(); renderEditor(); };
+  }
+  const pc = $('#pcopy'); if (pc) pc.onclick = () => copy([i.caption.trim(), i.hashtags.trim()].filter(Boolean).join('\n\n'), 'Popisek zkopírován');
+}
+
+function pickHook() {
+  const m = $('#modal');
+  const all = [...db.hooks.map(h => h.text), ...FORMULAS.filter(f => !db.hooks.some(h => h.text === f))];
+  m.innerHTML = `<div class="box"><h3>Vyber hook</h3>${all.map((t, n) => `<button class="opt" data-n="${n}">${esc(t)}</button>`).join('')}<button class="btn" style="width:100%" id="mcl">Zavřít</button></div>`;
+  m.hidden = false;
+  const close = () => { m.hidden = true; };
+  m.onclick = e => { if (e.target === m) close(); };
+  $('#mcl').onclick = close;
+  m.querySelectorAll('[data-n]').forEach(b => b.onclick = () => {
+    cur.hook = all[+b.dataset.n]; touch(); close(); renderEditor();
+    const h = $('#editor [data-f=hook]'); h.focus(); const p = h.value.indexOf('['); if (p >= 0) h.setSelectionRange(p, h.value.indexOf(']', p) + 1);
+  });
+}
+
+// ---------- teleprompter ----------
+const pset = (() => { try { return { speed: 3, size: 44, mirror: false, ...JSON.parse(localStorage.getItem('studio.prompter')) }; } catch (e) { return { speed: 3, size: 44, mirror: false }; } })();
+let praf = null, playing = false, wakeLock = null;
+function openPrompter() {
+  const parts = scriptText(cur, true);
+  if (!parts.length) return toast('Scénář je prázdný');
+  const p = $('#prompter');
+  p.innerHTML = `
+    <button class="ico close" id="pcl">${I.x}</button>
+    <div class="scroll" id="psc"><div class="txt" id="ptxt" style="font-size:${pset.size}px">${parts.map(([l, t]) => `<span class="sec">${esc(l)}</span>${esc(t)}`).join('\n')}</div></div>
+    <div class="guide"></div>
+    <div class="ctl">
+      <button class="btn pri" id="pplay">▶ Start</button>
+      <button class="btn" id="prst">⟲</button>
+      <label>Rychlost <input type="range" id="pspd" min="1" max="10" step="0.5" value="${pset.speed}"></label>
+      <button class="btn" id="pminus">A−</button><button class="btn" id="pplus">A+</button>
+      <button class="btn" id="pmir">Zrcadlit</button>
+    </div>`;
+  p.hidden = false; p.classList.toggle('mirror', pset.mirror);
+  history.pushState({ pr: 1 }, '');
+  const sc = $('#psc'), txt = $('#ptxt');
+  const persist = () => { try { localStorage.setItem('studio.prompter', JSON.stringify(pset)); } catch (e) {} };
+  let acc = 0, last = 0;
+  const step = ts => {
+    if (!playing) return;
+    if (last) { acc += (ts - last) / 1000 * pset.speed * 14; const px = Math.floor(acc); if (px) { sc.scrollTop += px; acc -= px; } }
+    last = ts;
+    if (sc.scrollTop + sc.clientHeight >= sc.scrollHeight - 2) { toggle(false); return; }
+    praf = requestAnimationFrame(step);
+  };
+  const toggle = on => {
+    playing = on ?? !playing; last = 0;
+    p.classList.toggle('playing', playing);
+    $('#pplay').textContent = playing ? '❚❚ Pauza' : '▶ Start';
+    cancelAnimationFrame(praf);
+    if (playing) { praf = requestAnimationFrame(step); try { navigator.wakeLock && navigator.wakeLock.request('screen').then(w => wakeLock = w).catch(() => {}); } catch (e) {} }
+    else if (wakeLock) { wakeLock.release().catch(() => {}); wakeLock = null; }
+  };
+  $('#pplay').onclick = e => { e.stopPropagation(); toggle(); };
+  sc.onclick = () => toggle();
+  $('#prst').onclick = () => { toggle(false); sc.scrollTop = 0; };
+  $('#pspd').oninput = e => { pset.speed = +e.target.value; persist(); };
+  $("#pminus").onclick = () => { pset.size = Math.max(22, pset.size - 4); txt.style.fontSize = pset.size + 'px'; persist(); };
+  $("#pplus").onclick = () => { pset.size = Math.min(96, pset.size + 4); txt.style.fontSize = pset.size + 'px'; persist(); };
+  $('#pmir').onclick = () => { pset.mirror = !pset.mirror; p.classList.toggle('mirror', pset.mirror); persist(); };
+  $('#pcl').onclick = () => closePrompter(true);
+  p._toggle = toggle;
+}
+function closePrompter(manual) {
+  const p = $('#prompter'); if (p.hidden) return;
+  if (p._toggle) p._toggle(false); p.hidden = true; p.innerHTML = '';
+  if (manual && history.state && history.state.pr) { skipPop = true; history.back(); }
+}
+document.addEventListener('keydown', e => {
+  const p = $('#prompter'); if (p.hidden) return;
+  if (e.key === ' ') { e.preventDefault(); p._toggle(); }
+  if (e.key === 'Escape') closePrompter(true);
+});
+
+// ---------- start ----------
+render();
+if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).catch(() => {}));
+</script>
+</body>
+</html>
