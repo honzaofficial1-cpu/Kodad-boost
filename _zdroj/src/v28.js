@@ -273,7 +273,7 @@ function readPlanDraft() {
     if (v('focus')) { x.focus = v('focus').value.trim(); x.note = v('note').value.trim(); const ck = v('ck').value; x.cardio = ck ? { kind: ck, min: num(v('cmin').value), bpm: num(v('cbpm').value) } : null; }
   });
 }
-document.addEventListener('change', ev => { if (view.n === 'planEdit' && ev.target.matches('[data-pf="tid"],[data-pf="ck"]')) { readPlanDraft(); const y = scrollY; render(); scrollTo(0, y); } });
+document.addEventListener('change', ev => { if (view.n === 'planEdit' && ev.target.matches('[data-pf="tid"],[data-pf="ck"]')) { readPlanDraft(); const a = $('#app'), y = a ? a.scrollTop : 0; render(); if (a) a.scrollTop = y; } });
 A['pf-stretch'] = b => { readPlanDraft(); const dw = +b.closest('.pde').dataset.dw; const x = planDraft.days[dw]; if (x) { x.stretch = !x.stretch; b.classList.toggle('on', x.stretch); } };
 A['plan-save'] = () => {
   readPlanDraft(); const d = planDraft; if (!Object.keys(d.days).length) return toast('Vyber aspoň jeden den');

@@ -4,10 +4,10 @@ from PIL import Image, ImageDraw, ImageFont
 B = os.path.dirname(os.path.abspath(__file__))
 src = lambda f: open(os.path.join(B, 'src', f), encoding='utf-8').read()
 mark = open(os.path.join(B,'assets','mark.svg'),encoding='utf-8').read().replace('<svg ','<svg aria-hidden="true" ')
-VERSION = '2.9.1'
+VERSION = '2.9.2'
 import base64 as _b64
 _ff = ''.join(f"@font-face{{font-family:'BC';font-weight:{w};font-style:{st};font-display:block;src:url(data:font/woff;base64,{_b64.b64encode(open(os.path.join(B,'assets','fonts',f),'rb').read()).decode()}) format('woff')}}" for f, w, st in [('bc-SemiBold.woff', 600, 'normal'), ('bc-Bold.woff', 700, 'normal'), ('bc-ExtraBoldItalic.woff', 800, 'italic')])
-css, js = _ff + src('style.css') + src('style3.css'), 'const APP_VERSION = ' + json.dumps(VERSION) + ';\nconst MARK = ' + json.dumps(mark) + ';\n' + src('data.js') + '\n' + src('app.js') + '\n' + src('body.js') + '\n' + src('extra.js') + '\n' + src('strip.js') + '\n' + src('muscles.js') + '\n' + src('styles2.js') + '\n' + src('v28.js') + '\nrender();\n'
+css, js = _ff + src('style.css') + src('style3.css'), 'const APP_VERSION = ' + json.dumps(VERSION) + ';\nconst MARK = ' + json.dumps(mark) + ';\n' + src('data.js') + '\n' + src('app.js') + '\n' + src('body.js') + '\n' + src('extra.js') + '\n' + src('strip.js') + '\n' + src('muscles.js') + '\n' + src('styles2.js') + '\n' + src('v28.js') + '\n' + src('v29.js') + '\nrender();\n'
 FONTS_OLD = '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">'
 FONTS = ''
 BODY = '<div id="app"></div><div id="sheet" hidden></div><div id="toast" role="status" aria-live="polite"></div>'
