@@ -14,312 +14,334 @@
 <link rel="icon" href="icons/icon-192.png">
 <style>
 :root{
-  --bg:#F4F7FA;--bg2:#FFFFFF;--card:#FFFFFF;--card2:#EEF2F6;--line:#E1E7EE;
-  --tx:#0F1A26;--tx2:#4D5B6B;--tx3:#8A97A6;
-  --acc:#38BDF8;--acc-d:#0284C7;--acc-tx:#06263B;--acc-soft:#E3F5FE;
-  --ok:#16A34A;--bad:#DC2626;--warn:#D97706;
-  --s-idea:#94A3B8;--s-script:#8B5CF6;--s-film:#F59E0B;--s-edit:#38BDF8;--s-done:#22C55E;
-  --r:16px;--safe-b:env(safe-area-inset-bottom,0px);--safe-t:env(safe-area-inset-top,0px);
-  --sh:0 1px 2px #0F1A260A,0 2px 8px #0F1A260A;
+  --bg:#F2F3F5;--surf:#FFFFFF;--sunk:#EBEDF0;--line:#E2E4E8;--line2:#D3D6DC;
+  --ink:#121418;--tx2:#575D69;--tx3:#8C929D;
+  --brand:#38BDF8;--link:#0369A1;--sel:#E4F4FC;
+  --ok:#2F9E5B;--bad:#C93636;--warn:#B7791F;
+  --s-idea:#A3A8B1;--s-script:#7A5CD6;--s-film:#D08A1E;--s-edit:#2E8FC7;--s-done:#2F9E5B;
+  --r:10px;--rs:8px;--safe-b:env(safe-area-inset-bottom,0px);--safe-t:env(safe-area-inset-top,0px);
   color-scheme:light;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 [hidden]{display:none!important}
-html,body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.45 -apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",Inter,"Segoe UI",Roboto,sans-serif}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 -apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display",Inter,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
 body{min-height:100dvh;padding-top:var(--safe-t)}
 button,input,select,textarea{font:inherit;color:inherit}
 button{cursor:pointer;border:0;background:none;padding:0}
-input,select,textarea{background:var(--card2);border:1.5px solid transparent;border-radius:12px;padding:10px 12px;width:100%;outline:none;font-size:16px}
-input:focus,select:focus,textarea:focus{border-color:var(--acc);background:var(--bg2)}
+button:disabled{opacity:.4;cursor:default}
+input,select,textarea{background:var(--surf);border:1px solid var(--line2);border-radius:var(--rs);padding:10px 12px;width:100%;outline:none;font-size:16px}
+input:focus,select:focus,textarea:focus{border-color:var(--link);box-shadow:0 0 0 3px #38BDF833}
 textarea{resize:none;min-height:44px;overflow:hidden;line-height:1.5}
-select{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238A97A6' stroke-width='2.5' stroke-linecap='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;background-size:16px;padding-right:28px}
-input[type=date]{min-height:43px}
-a{color:var(--acc-d)}
-.wrap{max-width:860px;margin:0 auto;padding:0 16px}
+select{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238C929D' stroke-width='2.5' stroke-linecap='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;background-size:15px;padding-right:28px}
+::placeholder{color:#A9AEB7}
+a{color:var(--link);text-decoration:none}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px}
+.num{font-variant-numeric:tabular-nums}
 
-.top{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
-.top .wrap{display:flex;align-items:center;gap:10px;height:58px}
-.logo{width:32px;height:32px;border-radius:10px;background:linear-gradient(160deg,var(--acc),#1A9BD6);display:grid;place-items:center;flex:none}
-.logo svg{width:13px;height:13px;fill:#fff;margin-left:2px}
-.top h1{font-size:24px;margin:0;font-weight:800;letter-spacing:-.03em;flex:1}
-.seg{display:flex;background:var(--card2);border-radius:10px;padding:3px}
-.seg button{padding:5px 11px;border-radius:8px;font-size:13.5px;font-weight:650;color:var(--tx2)}
-.seg button.on{background:var(--bg2);color:var(--tx);box-shadow:var(--sh)}
-
-main{padding-bottom:calc(96px + var(--safe-b))}
-h2{font-size:13px;text-transform:uppercase;letter-spacing:.07em;color:var(--tx3);margin:24px 2px 10px;font-weight:700;display:flex;align-items:center;gap:8px}
+/* hlavička a spodní lišta */
+.top{position:sticky;top:0;z-index:5;background:var(--bg)}
+.top .wrap{display:flex;align-items:center;gap:10px;height:60px}
+.logo{width:26px;height:26px;border-radius:7px;background:var(--brand);display:grid;place-items:center;flex:none}
+.logo svg{width:10px;height:10px;fill:#fff;margin-left:2px}
+.top h1{font-size:28px;margin:0;font-weight:800;letter-spacing:-.035em;flex:1}
+.seg{display:flex;background:var(--sunk);border-radius:var(--rs);padding:2px}
+.seg button{padding:5px 11px;border-radius:6px;font-size:13.5px;font-weight:600;color:var(--tx2)}
+.seg button.on{background:var(--surf);color:var(--ink);box-shadow:0 1px 2px #0000001a}
+main.wrap{padding-bottom:calc(100px + var(--safe-b))}
+h2{font-size:13px;color:var(--tx3);margin:26px 2px 8px;font-weight:600;display:flex;align-items:center;gap:8px}
 h2 .sp{flex:1}
-
-.tabs{position:fixed;left:0;right:0;bottom:0;z-index:6;background:color-mix(in srgb,var(--bg2) 92%,transparent);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid var(--line);padding-bottom:var(--safe-b)}
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--surf);border-top:1px solid var(--line);padding-bottom:var(--safe-b)}
 .tabs .wrap{display:flex}
-.tabs button{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 0 7px;font-size:11px;color:var(--tx3);font-weight:650}
-.tabs button svg{width:23px;height:23px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
-.tabs button.on{color:var(--acc-d)}
+.tabs button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 0 6px;font-size:10.5px;color:var(--tx3);font-weight:600}
+.tabs button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.tabs button.on{color:var(--ink)}
+.tabs button.on svg{stroke-width:2.2}
 
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:0 16px;border-radius:12px;background:var(--card2);font-weight:650;font-size:15px;white-space:nowrap;text-decoration:none;color:var(--tx)}
-.btn.pri{background:var(--acc);color:var(--acc-tx)}
-.btn.sm{min-height:34px;padding:0 12px;font-size:13.5px;border-radius:10px}
-.btn.xs{min-height:28px;padding:0 9px;font-size:12.5px;border-radius:8px}
-.btn.ghost{background:none;color:var(--acc-d)}
+/* tlačítka */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:42px;padding:0 15px;border-radius:var(--rs);background:var(--surf);border:1px solid var(--line2);font-weight:600;font-size:15px;white-space:nowrap;color:var(--ink)}
+.btn:active{background:var(--sunk)}
+.btn.pri{background:var(--ink);border-color:var(--ink);color:#fff}
+.btn.sm{min-height:34px;padding:0 12px;font-size:14px}
+.btn.xs{min-height:28px;padding:0 9px;font-size:13px;border-radius:6px}
+.btn.ghost{background:none;border-color:transparent;color:var(--link);padding-left:6px;padding-right:6px}
 .btn.danger{color:var(--bad)}
 .btn.full{width:100%}
-.ico{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;color:var(--tx2);flex:none}
-.ico:active{background:var(--card2)}
-.ico svg{width:21px;height:21px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
-.ico.on svg{fill:#F5B544;stroke:#F5B544}
+.ico{width:40px;height:40px;border-radius:var(--rs);display:grid;place-items:center;color:var(--tx2);flex:none}
+.ico:active{background:var(--sunk)}
+.ico svg{width:21px;height:21px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ico.on svg{fill:var(--ink);stroke:var(--ink)}
 
-.panel{background:var(--card);border-radius:var(--r);padding:12px;box-shadow:var(--sh)}
-.quick textarea{background:none;border:0;padding:4px 2px;font-size:17px}
-.quick .row{display:flex;gap:8px;align-items:center;margin-top:8px}
+/* formát: barevný čtvereček + název */
+.ft{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.ft i{width:8px;height:8px;border-radius:2px;background:var(--fc);flex:none}
+.code{font-size:10px;font-weight:700;letter-spacing:.02em;padding:2px 4px;border-radius:4px;background:color-mix(in srgb,var(--fc) 16%,#fff);color:color-mix(in srgb,var(--fc) 80%,#000);line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+
+/* rychlý zápis */
+.panel{background:var(--surf);border:1px solid var(--line);border-radius:var(--r);padding:12px}
+.quick textarea{border:0;padding:2px 0;font-size:17px;box-shadow:none}
+.quick textarea:focus{box-shadow:none}
+.quick .row{display:flex;gap:10px;align-items:center;margin-top:10px;border-top:1px solid var(--line);padding-top:10px}
 .chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:2px 0}
 .chips::-webkit-scrollbar{display:none}
 .chips.wrapc{flex-wrap:wrap;overflow:visible}
-.chip{flex:none;padding:6px 11px;border-radius:99px;background:var(--card2);font-size:13.5px;font-weight:650;color:var(--tx2);border:1.5px solid transparent}
-.chip.on{background:var(--acc-soft);color:var(--acc-d);border-color:var(--acc)}
+.chip{flex:none;padding:5px 10px;border-radius:6px;background:var(--surf);border:1px solid var(--line2);font-size:13.5px;font-weight:550;color:var(--tx2);display:inline-flex;align-items:center;gap:6px}
+.chip.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.quick .chips{margin-top:8px}
 .grow{flex:1;min-width:0}
 .muted{color:var(--tx3);font-size:13.5px}
-
-.search{margin-top:14px}
-.search input{padding-left:38px;background:var(--bg2) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238A97A6' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.5-3.5'/%3E%3C/svg%3E") no-repeat 11px 50%/18px;box-shadow:var(--sh)}
+.summary{color:var(--tx2);font-size:14px;margin:14px 2px 0}
+.summary b{color:var(--ink);font-weight:650}
+.search{margin-top:12px}
+.search input{padding-left:36px;background:var(--surf) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238C929D' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.5-3.5'/%3E%3C/svg%3E") no-repeat 11px 50%/17px;border-color:var(--line)}
 .filters{margin-top:8px}
 
-.list{display:grid;gap:10px;margin-top:12px}
-@media (min-width:700px){.list{grid-template-columns:1fr 1fr}}
-.card{background:var(--card);border-radius:var(--r);padding:12px 14px;text-align:left;width:100%;display:block;position:relative;box-shadow:var(--sh);border-left:4px solid var(--fc,var(--line))}
-.card:active{transform:scale(.99)}
-.card .t{font-weight:700;font-size:16px;line-height:1.3;padding-right:22px;word-break:break-word}
-.card .n{color:var(--tx2);font-size:14px;margin-top:3px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.card .m{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px;align-items:center}
-.card .star{position:absolute;top:11px;right:12px;color:#F5B544;font-size:15px}
-.badge{font-size:12px;font-weight:700;padding:3px 8px;border-radius:7px;background:var(--card2);color:var(--tx2);display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+/* seznam nápadů – jeden blok s linkami */
+.list{margin-top:12px;background:var(--surf);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.list:empty{display:none}
+.card{display:block;width:100%;text-align:left;padding:12px 14px;border-bottom:1px solid var(--line);position:relative;background:var(--surf)}
+.card:last-child{border-bottom:0}
+.card:active{background:#F7F8F9}
+.card .t{font-weight:600;font-size:16px;line-height:1.3;padding-right:20px;word-break:break-word}
+.card .n{color:var(--tx2);font-size:14px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card .m{display:flex;gap:4px 12px;flex-wrap:wrap;margin-top:7px;align-items:center;font-size:13px;color:var(--tx2)}
+.card .star{position:absolute;top:12px;right:14px;color:var(--ink);font-size:13px}
+.badge{font-size:13px;color:var(--tx2);display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
 .badge .dot{width:7px;height:7px;border-radius:50%}
-.badge.plain{background:none;padding:3px 0;color:var(--tx3)}
+.badge.plain{color:var(--tx3)}
 .badge.late{color:var(--bad)}
-.empty{text-align:center;color:var(--tx3);padding:40px 20px}
-.empty b{display:block;color:var(--tx2);font-size:17px;margin-bottom:6px}
+.btn.assign{min-height:24px;padding:0 7px;font-size:12.5px;margin-left:auto;color:var(--link);border-color:#BFE3F6;background:#F3FAFE}
+.empty{color:var(--tx3);padding:34px 4px;font-size:15px}
+.empty b{display:block;color:var(--ink);font-size:16px;margin-bottom:4px}
+.pbar{display:inline-flex;gap:2px;vertical-align:middle}
+.pbar i{width:8px;height:4px;border-radius:2px;background:var(--line2)}
+.pbar i.on{background:var(--ink)}
 
-.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:14px}
-.stat{background:var(--card);border-radius:12px;padding:8px 4px;text-align:center;box-shadow:var(--sh)}
-.stat b{display:block;font-size:20px;line-height:1.15}
-.stat span{font-size:11px;color:var(--tx3);font-weight:650}
+/* nástěnka */
+.board{display:flex;gap:10px;overflow-x:auto;padding:4px 16px 16px;margin:12px -16px 0;scroll-snap-type:x mandatory}
+.col{flex:0 0 min(84vw,290px);scroll-snap-align:start;align-self:flex-start}
+.col h3{margin:2px 2px 8px;font-size:14px;display:flex;align-items:center;gap:8px;font-weight:650}
+.col h3 .dot{width:8px;height:8px;border-radius:50%}
+.col h3 span{color:var(--tx3);font-weight:500;margin-left:auto}
+.col .card{border:1px solid var(--line);border-radius:var(--r);margin-bottom:8px}
+.col .card:last-child{border-bottom:1px solid var(--line)}
+.mv{display:flex;justify-content:space-between;margin-top:8px}
+.mv button{font-size:13px;color:var(--tx3);font-weight:600;padding:2px 0}
+.mv button:last-child{color:var(--link)}
+.mv button:disabled{visibility:hidden}
 
-.board{display:flex;gap:12px;overflow-x:auto;padding:4px 16px 16px;margin:12px -16px 0;scroll-snap-type:x mandatory}
-.col{flex:0 0 min(84vw,300px);scroll-snap-align:start;background:var(--card2);border-radius:var(--r);padding:10px;align-self:flex-start}
-.col h3{margin:2px 4px 10px;font-size:14px;display:flex;align-items:center;gap:8px}
-.col h3 .dot{width:9px;height:9px;border-radius:50%}
-.col h3 span{color:var(--tx3);font-weight:600;margin-left:auto}
-.col .card{margin-bottom:8px}
-.col .mv{display:flex;justify-content:space-between;margin-top:8px}
-.col .mv button{font-size:12.5px;color:var(--tx2);font-weight:650;padding:4px 8px;border-radius:7px;background:var(--card2)}
-.col .mv button:disabled{visibility:hidden}
-
-.wknav{display:flex;align-items:center;gap:6px;margin-top:6px}
-.wknav b{flex:1;text-align:center;font-size:16px}
-.goals{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
-.goal{display:flex;align-items:center;gap:6px;background:var(--card);border-radius:10px;padding:6px 10px;font-size:13.5px;font-weight:650;box-shadow:var(--sh)}
-.goal i{font-style:normal;color:var(--tx3);font-weight:700}
-.goal.ok{background:#DCFCE7;color:#166534}
-.goal.ok i{color:#166534}
-.gbar{height:8px;background:var(--card2);border-radius:9px;overflow:hidden;margin:12px 0 2px}
-.gbar i{display:block;height:100%;background:linear-gradient(90deg,var(--acc),#1A9BD6);border-radius:9px;transition:width .3s}
-.day{background:var(--card2);border-radius:18px;padding:10px;margin-top:10px}
-.day.today{box-shadow:inset 0 0 0 2px var(--acc)}
-.day.past .slot.ph{opacity:.55}
-.day .dh{display:flex;align-items:baseline;gap:6px;padding:0 2px 4px}
-.day .dh .dn{font-size:13px;color:var(--tx3);font-weight:650}
-.day .dh b{font-size:20px;letter-spacing:-.02em}
-.day .dh .sp{flex:1}
-.day .dh .ico{width:30px;height:30px;align-self:center}
-.day .dh .ico svg{width:18px;height:18px}
-.day .theme{font-size:12.5px;font-weight:700;color:var(--fc,var(--tx2));padding:2px 4px 8px;display:inline-flex;gap:6px;align-items:center}
-.day .theme span{color:var(--tx3);font-weight:500}
-.slot{background:var(--card);border-radius:14px;padding:12px;box-shadow:var(--sh);margin-bottom:8px;display:flex;flex-direction:column;gap:8px;align-items:flex-start;border-top:3px solid var(--fc,var(--line))}
-.slot:last-child{margin-bottom:0}
-.slot>b{font-size:15.5px;line-height:1.3;word-break:break-word}
-.slot .tag{font-size:12px;font-weight:700;color:var(--fc);display:flex;width:100%;align-items:center;gap:4px}
-.slot .tag .sp{flex:1}
-.slot .tag small{color:var(--tx3);font-size:12px}
-.slot .sst{width:auto;padding:5px 26px 5px 10px;font-size:13px;font-weight:700;border-radius:9px;background-color:color-mix(in srgb,var(--sc) 14%,var(--bg2));color:color-mix(in srgb,var(--sc) 65%,#000);border:1.5px solid color-mix(in srgb,var(--sc) 35%,transparent)}
-.slot .open{width:100%;justify-content:space-between;background:var(--card2)}
-.slot .mv{display:flex;justify-content:space-between;width:100%}
-.slot .mv button{font-size:12.5px;color:var(--tx3);font-weight:650;padding:2px}
-.slot .mv button:last-child{color:var(--tx2)}
-.slot .mv button:disabled{visibility:hidden}
-.slot.ph{border:1.5px dashed color-mix(in srgb,var(--fc,#94A3B8) 45%,transparent);background:color-mix(in srgb,var(--fc,#fff) 6%,var(--bg2));box-shadow:none;gap:2px}
-.slot.ph.free{--fc:#94A3B8}
-.slot.ph .big{width:40px;height:40px;border-radius:12px;background:var(--bg2);display:grid;place-items:center;font-size:20px;box-shadow:var(--sh);margin-bottom:8px}
-.slot.ph small{font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--tx3)}
-.slot.ph p{margin:2px 0 6px;font-size:13px;color:var(--tx2)}
-.slot.ph .btn{padding:0 4px;margin-left:-4px}
-body.wide .wrap{max-width:1100px}
-@media (min-width:900px){
-  .cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px;margin-top:8px}
-  .cal .day{margin-top:0}
-  .tasks{max-width:620px}
-}
-.mgrid{background:var(--card);border-radius:18px;padding:8px;box-shadow:var(--sh);margin-top:10px}
-.mhead,.mcells{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
-.mhead span{text-align:center;font-size:11.5px;font-weight:700;color:var(--tx3);padding:2px 0 4px}
-.mc{min-height:64px;border-radius:11px;background:var(--card2);padding:4px 2px;display:flex;flex-direction:column;align-items:center;gap:3px;min-width:0}
-.mc.out{opacity:.35}
-.mc.past:not(.sel) .dnum{color:var(--tx3)}
-.mc.today .dnum{background:var(--acc);color:var(--acc-tx)}
-.mc.sel{box-shadow:inset 0 0 0 2px var(--acc-d);background:var(--acc-soft)}
-.dnum{font-size:13px;font-weight:750;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;flex:none}
-.dots{display:flex;flex-wrap:wrap;justify-content:center;gap:2px}
-.dots i{font-style:normal;font-size:13px;line-height:1;width:22px;height:22px;border-radius:7px;display:grid;place-items:center;background:color-mix(in srgb,var(--fc) 20%,var(--bg2));box-shadow:inset 0 -3px 0 var(--sc)}
-.dots i.ph{background:none;box-shadow:none;outline:1.5px dashed color-mix(in srgb,var(--tx3) 45%,transparent);outline-offset:-1.5px;opacity:.55;font-size:11px}
-.dots i.more{background:none;box-shadow:none;font-size:10px;color:var(--tx3);width:auto;font-weight:700}
+/* kalendář */
+.wknav{display:flex;align-items:center;gap:4px;margin-top:2px}
+.wknav b{flex:1;font-size:20px;font-weight:750;letter-spacing:-.02em}
+.mgrid{background:var(--surf);border:1px solid var(--line);border-radius:var(--r);margin-top:8px;overflow:hidden}
+.mhead,.mcells{display:grid;grid-template-columns:repeat(7,minmax(0,1fr))}
+.mhead span{text-align:center;font-size:11.5px;font-weight:600;color:var(--tx3);padding:7px 0 6px;border-bottom:1px solid var(--line)}
+.mc{min-height:66px;padding:4px 3px 5px;display:flex;flex-direction:column;align-items:stretch;gap:3px;min-width:0;border-right:1px solid var(--line);border-bottom:1px solid var(--line);text-align:left}
+.mc:nth-child(7n){border-right:0}
+.mcells .mc:nth-last-child(-n+7){border-bottom:0}
+.mc.out .dnum,.mc.out .dots{opacity:.35}
+.mc.sel{background:var(--sel)}
+.dnum{font-size:13px;font-weight:600;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;flex:none;font-variant-numeric:tabular-nums}
+.mc.past:not(.today) .dnum{color:var(--tx3)}
+.mc.today .dnum{background:var(--brand);color:#fff;font-weight:700}
+.dots{display:flex;flex-direction:column;gap:2px;min-width:0}
+.dots .code{display:block}
+.dots .code.st-done{text-decoration:line-through;opacity:.6}
+.dots .ph{font-size:10px;color:var(--tx3);padding:0 3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500}
+.dots .more{font-size:10px;color:var(--tx3);padding:0 3px;font-weight:600}
 .ttl1{display:none}
 @media (min-width:700px){
-  .mc{min-height:100px;align-items:stretch;padding:6px}
-  .dnum{align-self:flex-start}
-  .dots{justify-content:flex-start}
-  .ttl1{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:11.5px;font-weight:650;text-align:left;color:var(--tx2);line-height:1.25}
+  .mc{min-height:104px;padding:6px}
+  .ttl1{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:12px;color:var(--tx2);line-height:1.25;margin-top:1px}
 }
-.modal .mc{min-height:48px}
+.modal .mgrid{margin-top:4px}
+.modal .mc{min-height:50px}
 .modal .ttl1{display:none}
-.daypanel{margin-top:16px}
-.dph{display:flex;align-items:center;gap:8px;margin:0 2px 2px}
-.dph b{font-size:20px;letter-spacing:-.02em}
-.theme{font-size:13px;font-weight:700;color:var(--fc,var(--tx2));padding:2px 2px 10px;display:inline-flex;gap:6px;align-items:center}
-.theme span{color:var(--tx3);font-weight:500}
-.dact{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
-.slot .hk{margin:0;font-size:14px;color:var(--tx2);font-style:italic}
-.pbar{display:inline-flex;gap:2px;vertical-align:middle}
-.pbar i{width:9px;height:5px;border-radius:3px;background:color-mix(in srgb,var(--tx3) 25%,transparent)}
-.pbar i.on{background:var(--sc)}
-.slot .pbar i{width:auto;flex:1;height:6px}
-.slot .pbar{display:flex;width:100%}
-.btn.assign{background:var(--acc-soft);color:var(--acc-d)}
-.datebtn{width:100%;min-height:43px;text-align:left;padding:9px 10px;font-size:15px;border-radius:12px;background:var(--bg2);box-shadow:var(--sh);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.proc{display:flex;gap:4px}
-.proc button{flex:1;display:flex;flex-direction:column;gap:5px;align-items:center;font-size:11.5px;font-weight:700;color:var(--tx3);padding:4px 0}
-.proc button i{display:block;height:7px;width:100%;border-radius:4px;background:var(--card2)}
-.proc button.on i{background:var(--sc)}
-.proc button.cur{color:var(--tx)}
-.nextst{margin-top:8px;width:100%;background:var(--acc-soft);color:var(--acc-d)}
-.bodybox textarea{min-height:150px}
-.mini{display:flex;align-items:center;gap:8px;padding:8px 10px;margin-top:6px;background:var(--card2);border-radius:10px;width:100%;text-align:left;border-left:4px solid var(--fc,var(--line))}
-.mini .t{flex:1;font-weight:650;font-size:14.5px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.mini .s{width:9px;height:9px;border-radius:50%;flex:none}
-.mini small{color:var(--tx3);font-weight:650;font-size:12px}
+.daypanel{margin-top:18px}
+.dph{display:flex;align-items:baseline;gap:8px;margin:0 2px}
+.dph b{font-size:22px;letter-spacing:-.025em;font-weight:750}
+.dph .today-tag{font-size:13px;color:var(--link);font-weight:600}
+.theme{font-size:14px;color:var(--tx2);padding:4px 2px 10px;display:inline-flex;gap:6px;align-items:center}
+.theme u{text-decoration:none;color:var(--link);font-weight:600}
+.dact{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.slot{background:var(--surf);border:1px solid var(--line);border-radius:var(--r);padding:13px 14px;margin-bottom:8px;display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+.slot .tag{font-size:13px;color:var(--tx2);display:flex;width:100%;align-items:center;gap:6px}
+.slot .tag .sp{flex:1}
+.slot>b{font-size:17px;line-height:1.3;word-break:break-word;font-weight:650}
+.slot .hk{margin:0;font-size:14.5px;color:var(--tx2)}
+.slot .pbar{display:flex;width:100%;margin:4px 0 2px}
+.slot .pbar i{flex:1;height:4px}
+.slot .open{margin-top:4px}
+.slot.ph{background:none;border:1px dashed var(--line2);gap:2px}
+.slot.ph small{font-size:12.5px;color:var(--tx3);font-weight:500}
+.slot.ph p{margin:2px 0 0;font-size:14px;color:var(--tx2)}
+.slot.ph .dact{margin-top:10px}
 
-.task{display:flex;align-items:center;gap:10px;background:var(--card);border-radius:12px;padding:4px 4px 4px 12px;margin-top:6px;box-shadow:var(--sh)}
-.task input[type=checkbox]{width:22px;height:22px;flex:none;accent-color:var(--acc-d);margin:0}
-.task input[type=text]{background:none;padding:9px 2px;border:0}
+/* týdenní cíle */
+.goals{background:var(--surf);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.goal{display:flex;align-items:center;gap:10px;padding:9px 14px;border-bottom:1px solid var(--line);font-size:14.5px}
+.goal:last-child{border-bottom:0}
+.goal .ft{flex:1}
+.goal .gb{width:70px;height:4px;background:var(--sunk);border-radius:2px;overflow:hidden}
+.goal .gb i{display:block;height:100%;background:var(--ink)}
+.goal.ok .gb i{background:var(--ok)}
+.goal em{font-style:normal;color:var(--tx2);font-variant-numeric:tabular-nums;width:30px;text-align:right;font-size:13.5px}
+.goal.ok em{color:var(--ok);font-weight:600}
+.mini{display:flex;align-items:center;gap:10px;padding:11px 14px;width:100%;text-align:left;background:var(--surf);border:1px solid var(--line);border-radius:var(--r);margin-top:6px}
+.mini .t{flex:1;font-weight:600;font-size:15px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mini small{color:var(--tx3);font-size:13px}
+
+/* úkoly */
+.tasklist{background:var(--surf);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.tasklist:empty{display:none}
+.task{display:flex;align-items:center;gap:10px;padding:2px 4px 2px 14px;border-bottom:1px solid var(--line)}
+.task:last-child{border-bottom:0}
+.task input[type=checkbox],.step input,.shot input[type=checkbox]{width:20px;height:20px;flex:none;accent-color:var(--ink);margin:0}
+.task input[type=text]{border:0;padding:10px 2px;box-shadow:none}
 .task.done input[type=text]{text-decoration:line-through;color:var(--tx3)}
+.addrow{display:flex;gap:8px;margin-top:8px}
 
-.insp{background:var(--card);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);display:flex;flex-direction:column}
-.insp .th{aspect-ratio:16/9;background:var(--card2) center/cover;display:block}
-.insp .bd{padding:10px 12px}
-.insp .src{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:var(--tx2)}
-.insp .src .pl{padding:2px 7px;border-radius:6px;color:#fff;font-size:11.5px}
-.insp p{margin:6px 0 0;font-size:14.5px;white-space:pre-wrap;word-break:break-word}
+/* inspirace */
+.ilist{display:grid;gap:10px;margin-top:12px}
+@media (min-width:700px){.ilist{grid-template-columns:1fr 1fr}}
+.insp{background:var(--surf);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column}
+.insp .th{aspect-ratio:16/9;background:var(--sunk) center/cover;display:block;border-bottom:1px solid var(--line)}
+.insp .bd{padding:11px 14px}
+.insp .src{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--tx2)}
+.insp .src .pl{font-weight:650;color:var(--ink)}
+.insp p{margin:6px 0 0;font-size:15px;white-space:pre-wrap;word-break:break-word}
 .insp .act{display:flex;gap:4px;margin-top:8px;align-items:center;flex-wrap:wrap}
 
-.hook{display:flex;gap:6px;align-items:flex-start;background:var(--card);border-radius:12px;padding:8px 4px 8px 14px;margin-bottom:8px;box-shadow:var(--sh)}
-.hook p{margin:10px 0;flex:1;word-break:break-word;font-weight:600}
-.formula{background:var(--card2);border-radius:12px;padding:8px 6px 8px 14px;margin-bottom:8px;color:var(--tx2);font-size:15px;display:flex;gap:8px;align-items:center}
+/* hooky */
+.hlist{background:var(--surf);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.hlist:empty{display:none}
+.hook{display:flex;gap:4px;align-items:flex-start;padding:4px 4px 4px 14px;border-bottom:1px solid var(--line)}
+.hook:last-child{border-bottom:0}
+.hook p{margin:10px 0;flex:1;word-break:break-word;font-size:15.5px}
+.formula{display:flex;gap:8px;align-items:center;padding:9px 6px 9px 2px;border-bottom:1px solid var(--line);color:var(--tx2);font-size:15px}
 .formula span{flex:1}
 
-.sheet{position:fixed;inset:0;z-index:20;background:var(--bg);overflow-y:auto;-webkit-overflow-scrolling:touch;padding-top:var(--safe-t);animation:up .2s ease}
-@keyframes up{from{transform:translateY(20px);opacity:0}}
-.sheet .bar{position:sticky;top:0;z-index:3;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
-.sheet .bar .wrap{display:flex;align-items:center;gap:2px;height:56px}
-.sheet .saved{font-size:12.5px;color:var(--tx3);margin-right:auto;margin-left:4px}
-.ttl{font-size:25px;font-weight:800;letter-spacing:-.025em;background:none!important;border:0!important;padding:4px 0;line-height:1.25}
-.meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
-.meta .w2{grid-column:span 2}
-label.l,.lbl-row label{display:block;font-size:12px;font-weight:700;color:var(--tx3);margin:0 0 5px 2px;text-transform:uppercase;letter-spacing:.05em}
-.meta select,.meta input{padding:9px 10px;font-size:15px;background-color:var(--bg2);box-shadow:var(--sh)}
-.stabs{display:flex;gap:3px;margin:18px 0 4px;background:var(--card2);padding:4px;border-radius:13px;position:sticky;top:56px;z-index:2}
-.stabs button{flex:1;padding:8px 2px;border-radius:10px;font-size:13.5px;font-weight:700;color:var(--tx2)}
-.stabs button.on{background:var(--bg2);color:var(--tx);box-shadow:var(--sh)}
-.fld{margin-top:16px}
-.fld textarea,.fld input{background-color:var(--bg2);box-shadow:var(--sh)}
-.hint{font-size:12.5px;color:var(--tx3);margin:5px 2px 0}
-.lbl-row{display:flex;align-items:center;gap:4px;margin-bottom:5px}
+/* editor */
+.sheet{position:fixed;inset:0;z-index:20;background:var(--bg);overflow-y:auto;-webkit-overflow-scrolling:touch;padding-top:var(--safe-t);animation:up .18s ease-out}
+@keyframes up{from{transform:translateY(14px);opacity:0}}
+.sheet .bar{position:sticky;top:0;z-index:3;background:var(--bg);border-bottom:1px solid transparent}
+.sheet .bar .wrap{display:flex;align-items:center;gap:2px;height:54px}
+.sheet .saved{font-size:13px;color:var(--tx3);margin-right:auto;margin-left:4px}
+.ttl{font-size:26px;font-weight:800;letter-spacing:-.03em;background:none!important;border:0!important;box-shadow:none!important;padding:4px 0;line-height:1.2}
+.meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+label.l,.lbl-row label{display:block;font-size:13px;font-weight:600;color:var(--tx3);margin:0 0 5px 2px}
+label.l span,.lbl-row label span{font-weight:400}
+.meta select,.meta input,.datebtn{padding:9px 10px;font-size:15px;min-height:42px}
+.datebtn{width:100%;text-align:left;border-radius:var(--rs);background:var(--surf);border:1px solid var(--line2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.proc{display:flex;gap:3px}
+.proc button{flex:1;display:flex;flex-direction:column;gap:6px;align-items:flex-start;font-size:12px;font-weight:550;color:var(--tx3);padding:4px 0}
+.proc button i{display:block;height:4px;width:100%;border-radius:2px;background:var(--line2)}
+.proc button.on i{background:var(--ink)}
+.proc button.cur{color:var(--ink);font-weight:700}
+.nextst{margin-top:10px;width:100%}
+.stabs{display:flex;margin:22px 0 4px;border-bottom:1px solid var(--line);position:sticky;top:54px;z-index:2;background:var(--bg)}
+.stabs button{flex:1;padding:10px 2px;font-size:14.5px;font-weight:600;color:var(--tx3);border-bottom:2px solid transparent;margin-bottom:-1px}
+.stabs button.on{color:var(--ink);border-color:var(--ink)}
+.stabs small{font-weight:500}
+.fld{margin-top:18px}
+.hint{font-size:13px;color:var(--tx3);margin:5px 2px 0}
+.lbl-row{display:flex;align-items:center;gap:2px;margin-bottom:5px}
 .lbl-row label{margin:0 0 0 2px;flex:1}
+.hookbox textarea{font-size:18px;font-weight:600;line-height:1.4}
+.bodybox textarea{min-height:170px}
 .macros{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
 .macros input{text-align:center;padding:9px 4px}
-.macros span{display:block;text-align:center;font-size:11px;color:var(--tx3);font-weight:700;margin-top:3px}
-
-.block{background:var(--card);border-radius:var(--r);padding:10px;margin-top:10px;box-shadow:var(--sh)}
-.block .bh{display:flex;align-items:center;margin-bottom:6px}
-.block .bh b{font-size:13px;color:var(--tx3);flex:1;margin-left:4px}
-.block .bh .ico{width:32px;height:32px}
-.block .bh .ico svg{width:17px;height:17px}
-.block input{font-size:14.5px;margin-bottom:6px;color:var(--tx2);background:var(--card2)}
-.block textarea{font-size:16px;background:var(--card2)}
-.hookbox textarea{font-size:17px;font-weight:650;border-color:var(--acc)!important}
-.ctabox textarea{border-color:#86EFAC!important}
-
-.tpl{display:grid;gap:8px;margin-top:12px}
-.tpl button{text-align:left;background:var(--card);border-radius:var(--r);padding:12px 14px;box-shadow:var(--sh);border-left:4px solid var(--fc,var(--line))}
-.tpl button b{display:block}
-.tpl button span{font-size:13.5px;color:var(--tx2)}
-
-.foot{position:sticky;bottom:0;margin:22px -16px 0;padding:10px 16px calc(10px + var(--safe-b));background:color-mix(in srgb,var(--bg2) 94%,transparent);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid var(--line);display:flex;gap:8px;align-items:center}
-.foot .info{flex:1;font-size:13px;color:var(--tx2);line-height:1.3}
-.foot .info b{color:var(--tx);font-size:15px}
+.macros span{display:block;text-align:center;font-size:12px;color:var(--tx3);margin-top:3px}
+.foot{position:sticky;bottom:0;margin:24px -16px 0;padding:10px 16px calc(10px + var(--safe-b));background:var(--surf);border-top:1px solid var(--line);display:flex;gap:8px;align-items:center}
+.foot .info{flex:1;font-size:13.5px;color:var(--tx2);line-height:1.3}
+.foot .info b{color:var(--ink);font-size:15px;font-variant-numeric:tabular-nums}
 .warn{color:var(--warn)}
-
-.step,.shot{display:flex;align-items:center;gap:10px;background:var(--card);border-radius:12px;padding:4px 4px 4px 12px;margin-top:6px;box-shadow:var(--sh)}
-.step{padding:11px 12px;font-weight:650}
-.step input,.shot input[type=checkbox]{width:22px;height:22px;flex:none;accent-color:var(--ok);margin:0}
+.steps,.shots{background:var(--surf);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.shots:empty{display:none}
+.step{display:flex;align-items:center;gap:12px;padding:11px 14px;border-bottom:1px solid var(--line);font-size:15px}
+.step:last-child{border-bottom:0}
 .step.done{color:var(--tx3);text-decoration:line-through}
-.shot input[type=text]{border:0;background:none;padding:8px 2px;box-shadow:none}
+.shot{display:flex;align-items:center;gap:10px;padding:2px 4px 2px 14px;border-bottom:1px solid var(--line)}
+.shot:last-child{border-bottom:0}
+.shot input[type=text]{border:0;padding:9px 2px;box-shadow:none}
 .shot.done input[type=text]{text-decoration:line-through;color:var(--tx3)}
-.progress{height:6px;background:var(--card2);border-radius:9px;overflow:hidden;margin-top:10px}
-.progress i{display:block;height:100%;background:var(--ok);border-radius:9px;transition:width .2s}
-.linkrow{display:flex;align-items:center;gap:8px;background:var(--card);border-radius:10px;padding:8px 10px;margin-top:6px;font-size:14px;box-shadow:var(--sh)}
-.linkrow a{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
+.linkrow{display:flex;align-items:center;gap:10px;padding:9px 2px;border-bottom:1px solid var(--line);font-size:14px}
+.linkrow a{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.linkrow b{font-weight:650;font-size:13px}
 
-.modal{position:fixed;inset:0;z-index:40;background:#0F1A2655;display:flex;align-items:flex-end;justify-content:center;animation:fade .15s}
+/* spodní panel (výběr) */
+.modal{position:fixed;inset:0;z-index:40;background:#1214184d;display:flex;align-items:flex-end;justify-content:center;animation:fade .15s}
 @keyframes fade{from{opacity:0}}
-.modal .box{background:var(--bg);width:100%;max-width:560px;max-height:82dvh;overflow-y:auto;border-radius:20px 20px 0 0;padding:16px 16px calc(16px + var(--safe-b))}
-.modal .box h3{margin:0 0 12px;font-size:18px}
-.modal .opt{display:block;width:100%;text-align:left;background:var(--card);border-radius:12px;padding:11px 13px;margin-bottom:8px;box-shadow:var(--sh);border-left:4px solid var(--fc,var(--line))}
-.modal .opt small{display:block;color:var(--tx3);font-size:12.5px;font-weight:650;margin-top:2px}
+.modal .box{background:var(--bg);width:100%;max-width:560px;max-height:84dvh;overflow-y:auto;border-radius:14px 14px 0 0;padding:18px 16px calc(16px + var(--safe-b));box-shadow:0 -8px 30px #0000001f}
+.modal .box h3{margin:0 0 12px;font-size:19px;letter-spacing:-.02em}
+.modal .opt{display:block;width:100%;text-align:left;background:var(--surf);padding:11px 14px;border:1px solid var(--line);border-bottom-width:0;font-size:15px}
+.modal .opt:first-of-type{border-radius:var(--r) var(--r) 0 0}
+.modal .opt + :not(.opt),.modal .opt:last-of-type{border-bottom-width:1px}
+.modal .opt small{display:block;color:var(--tx3);font-size:13px;margin-top:1px}
+.optgroup{border-radius:var(--r);overflow:hidden;border:1px solid var(--line);margin-bottom:8px}
+.optgroup .opt{border:0!important;border-bottom:1px solid var(--line)!important;border-radius:0!important}
+.optgroup .opt:last-child{border-bottom:0!important}
 
-#prompter{position:fixed;inset:0;z-index:50;background:#000;color:#fff}
+/* čtečka */
+#prompter{position:fixed;inset:0;z-index:50;background:#0B0C0E;color:#F4F4F2}
 #prompter .scroll{position:absolute;inset:0;overflow-y:auto;scrollbar-width:none}
 #prompter .scroll::-webkit-scrollbar{display:none}
-#prompter .txt{padding:45vh 7vw 80vh;font-weight:650;line-height:1.45;white-space:pre-wrap;word-break:break-word}
-#prompter .txt .sec{color:var(--acc);font-size:.42em;letter-spacing:.1em;text-transform:uppercase;display:block;margin:1.4em 0 .3em;font-weight:700}
+#prompter .txt{padding:45vh 7vw 80vh;font-weight:600;line-height:1.45;white-space:pre-wrap;word-break:break-word}
+#prompter .txt .sec{color:#7DD3FC;font-size:.4em;display:block;margin:1.4em 0 .3em;font-weight:600}
 #prompter.mirror .txt{transform:scaleX(-1)}
-#prompter .guide{position:absolute;left:0;right:0;top:38vh;height:2px;background:#38BDF866;pointer-events:none}
-#prompter .ctl{position:absolute;left:0;right:0;bottom:0;padding:12px 14px calc(12px + var(--safe-b));background:linear-gradient(transparent,#000d 30%);display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:center;transition:opacity .3s}
-#prompter.playing .ctl{opacity:.12}
-#prompter .ctl .btn{background:#222;color:#fff}
-#prompter .ctl .btn.pri{background:var(--acc);color:var(--acc-tx)}
-#prompter .ctl label{font-size:12px;color:#aaa;display:flex;align-items:center;gap:6px}
-#prompter .ctl input[type=range]{width:110px;padding:0;accent-color:var(--acc);background:none;border:0}
-#prompter .close{position:absolute;top:calc(10px + var(--safe-t));right:12px;z-index:2;color:#fff;background:#222;border-radius:50%}
+#prompter .guide{position:absolute;left:0;right:0;top:38vh;height:1px;background:#38BDF880;pointer-events:none}
+#prompter .ctl{position:absolute;left:0;right:0;bottom:0;padding:12px 14px calc(12px + var(--safe-b));background:#0B0C0Ef0;border-top:1px solid #222;display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:center;transition:opacity .3s}
+#prompter.playing .ctl{opacity:.1}
+#prompter .ctl .btn{background:#1C1E22;border-color:#2C2F35;color:#fff}
+#prompter .ctl .btn.pri{background:#fff;color:#000;border-color:#fff}
+#prompter .ctl label{font-size:12.5px;color:#999;display:flex;align-items:center;gap:6px}
+#prompter .ctl input[type=range]{width:110px;padding:0;accent-color:#fff;background:none;border:0;box-shadow:none}
+#prompter .close{position:absolute;top:calc(10px + var(--safe-t));right:12px;z-index:2;color:#fff;background:#1C1E22;border-radius:50%}
 
-#toast{position:fixed;left:50%;bottom:calc(98px + var(--safe-b));transform:translateX(-50%) translateY(20px);background:var(--tx);color:#fff;padding:10px 16px;border-radius:12px;font-weight:650;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:60;max-width:90vw;text-align:center}
+#toast{position:fixed;left:50%;bottom:calc(92px + var(--safe-b));transform:translateX(-50%) translateY(16px);background:var(--ink);color:#fff;padding:10px 14px;border-radius:var(--rs);font-weight:500;font-size:14px;opacity:0;pointer-events:none;transition:.2s;z-index:60;max-width:90vw;text-align:center}
 #toast.show{opacity:1;transform:translateX(-50%)}
 
-.set{background:var(--card);border-radius:var(--r);padding:14px;margin-bottom:10px;box-shadow:var(--sh)}
+/* nastavení */
+.set{background:var(--surf);border:1px solid var(--line);border-radius:var(--r);padding:14px;margin-bottom:10px}
 .set p{margin:0 0 12px;color:var(--tx2);font-size:14.5px}
+.set p:last-child{margin-bottom:0}
 .set .row{display:flex;gap:8px;flex-wrap:wrap}
 .olist{margin:0 0 12px;padding-left:20px;font-size:14.5px;color:var(--tx2)}
 .olist li{margin-bottom:8px}
-.olist a{font-weight:700}
-.grow-row{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--line)}
+.olist a{font-weight:600}
+.grow-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--line)}
 .grow-row:last-child{border:0}
-.grow-row span{flex:1;font-weight:600}
-.stepper{display:flex;align-items:center;gap:4px}
-.stepper button{width:32px;height:32px;border-radius:9px;background:var(--card2);font-weight:800;font-size:17px}
-.stepper b{width:24px;text-align:center}
+.grow-row .ft{flex:1;font-size:15px}
+.stepper{display:flex;align-items:center;gap:2px}
+.stepper button{width:30px;height:30px;border-radius:6px;border:1px solid var(--line2);font-weight:600;font-size:16px}
+.stepper b{width:26px;text-align:center;font-weight:600;font-variant-numeric:tabular-nums}
 .dayrow{display:flex;align-items:center;gap:10px;padding:5px 0}
-.dayrow span{width:70px;font-weight:650}
+.dayrow span{width:70px;font-size:15px}
 .dayrow select{padding:8px 28px 8px 10px;font-size:15px}
-.hero{background:linear-gradient(150deg,var(--acc),#1A9BD6);color:#fff;border-radius:var(--r);padding:16px;margin-top:12px}
-.hero b{font-size:17px;display:block}
-.hero p{margin:6px 0 12px;font-size:14.5px;opacity:.95}
-.hero .btn{background:#fff;color:var(--acc-tx)}
+body.wide .wrap{max-width:1080px}
+.meta .w2{grid-column:span 2}
+.hdate{font-size:30px;font-weight:800;letter-spacing:-.035em;margin:2px 2px 0;line-height:1.15}
+.hsub{color:var(--tx2);margin:4px 2px 14px;font-size:15px}
+.irow{display:flex;align-items:center;gap:12px;padding:11px 14px;border-bottom:1px solid var(--line)}
+.irow:last-child{border-bottom:0}
+.irow .tx{flex:1;min-width:0}
+.irow .tx b{display:block;font-weight:600;font-size:15.5px;line-height:1.3}
+.irow .tx small{display:block;color:var(--tx3);font-size:13px;margin-top:1px}
+.irow .btn{flex:none}
+.wstrip{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));background:var(--surf);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.ws{min-height:84px;padding:6px 3px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:2px;text-align:left;min-width:0}
+.ws:last-child{border-right:0}
+.ws .wd{font-size:11px;color:var(--tx3)}
+.ws b{font-size:15px;font-weight:650;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;margin-left:-2px}
+.ws.today b{background:var(--brand);color:#fff}
+.ws.past b{color:var(--tx3)}
+.ws .rh{margin-top:auto;font-size:10px;color:var(--tx3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ws .dots{display:flex;flex-direction:column;gap:2px}
+.code.st-shoot{background:none;box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--fc) 70%,#fff)}
+.seg.cmode{margin-top:10px}
+.seg.cmode button{flex:1}
+.legend{font-size:12.5px;color:var(--tx3);margin:6px 2px 0;display:flex;align-items:center;gap:6px}
+.rhnote{margin:-2px 2px 8px;font-size:14px;color:var(--ink);font-weight:600}
+.daypanel h2{margin-top:18px}
 </style>
 </head>
 <body>
@@ -333,10 +355,10 @@ label.l,.lbl-row label{display:block;font-size:12px;font-weight:700;color:var(--
 <main class="wrap" id="view"></main>
 
 <nav class="tabs"><div class="wrap">
-  <button data-v="ideas" class="on"><svg viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg>Nápady</button>
+  <button data-v="home" class="on"><svg viewBox="0 0 24 24"><path d="M4 11.5 12 5l8 6.5V20a1 1 0 0 1-1 1h-5v-6h-4v6H5a1 1 0 0 1-1-1z"/></svg>Dnes</button>
+  <button data-v="ideas"><svg viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg>Nápady</button>
   <button data-v="week"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Kalendář</button>
   <button data-v="insp"><svg viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg>Inspirace</button>
-  <button data-v="hooks"><svg viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>Hooky</button>
   <button data-v="more"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg>Více</button>
 </div></nav>
 
@@ -360,55 +382,55 @@ const SERIES = ['Cesta na stage', 'Nejlepší z Lidlu / Kauflandu / Globusu', 'M
 
 // formáty: n = název, e = emoji, c = barva, v = mluvím do kamery, x = extra pole, b = šablona [záběr, nápověda]
 const F = {
-  recept:   { n: 'Recept', e: '🍳', c: '#F97316', v: true, x: ['ingr', 'macros'], plat: 'reels',
+  recept:   { n: 'Recept', s: 'Recept', c: '#D9541E', v: true, x: ['ingr', 'macros'], plat: 'reels',
     desc: 'Rychlé, zdravé, fit – nauč lidi vařit', hook: 'Tohle jím 3× týdně a pořád hubnu…',
     b: [['Hotové jídlo – detail', 'Proč to jíst / pro koho to je…'], ['Ingredience na stole', 'Co potřebuješ…'], ['Krok 1', '…'], ['Krok 2', '…'], ['Krok 3', '…'], ['Ochutnávka', 'Výsledek + makra…']],
     cta: 'Ulož si recept a pošli ho kámošovi, co neumí vařit.' },
-  vareni:   { n: 'Vaření edit', e: '🎵', c: '#FB923C', v: false, x: ['ingr', 'macros'], plat: 'reels',
+  vareni:   { n: 'Vaření edit', s: 'Vaření', c: '#C27C0E', v: false, x: ['ingr', 'macros'], plat: 'reels',
     desc: 'Jen hudba + text na obrazovce', hook: 'Text přes první frame: „Fit burger za 10 minut“',
     b: [['Hotové jídlo (první frame)', 'Text na obrazovce…'], ['Ingredience', ''], ['Krájení – detail', ''], ['Pánev / vaření', ''], ['Servírování', ''], ['Ochutnávka', 'kcal / bílkoviny…']],
     cta: 'Recept v popisku 👇' },
-  headtalk: { n: 'Head talk', e: '🗣️', c: '#8B5CF6', v: true, x: [], plat: 'reels',
+  headtalk: { n: 'Head talk', s: 'Talk', c: '#7A5CD6', v: true, x: [], plat: 'reels',
     desc: 'Do kamery o čemkoli – i „střela do neznáma“', hook: 'Tahle chyba mě může stát všechno.',
     b: [['Do kamery', 'Hlavní myšlenka…'], ['Do kamery / B-roll', 'Příklad z mého života…'], ['Do kamery', 'Co si z toho vzít…']],
     cta: 'Napiš mi do komentářů, jak to máš ty.' },
-  gymedit:  { n: 'Gym edit', e: '🏋️', c: '#0EA5E9', v: false, x: [], plat: 'reels',
+  gymedit:  { n: 'Gym edit', s: 'Gym', c: '#1F7FB8', v: false, x: [], plat: 'reels',
     desc: 'Edit tréninku / session – hudba, záběry, text', hook: 'Text: „Leg day před závody“',
     b: [['Příchod / rozcvička', ''], ['Hlavní cvik – detail', ''], ['Těžká série', ''], ['Pump / zrcadlo', ''], ['Konec', '']],
     cta: 'Sleduj cestu na stage 🔥' },
-  rady:     { n: 'Rady a tipy', e: '🧠', c: '#0369A1', v: true, x: [], plat: 'reels',
+  rady:     { n: 'Rady a tipy', s: 'Rady', c: '#0E8A7D', v: true, x: [], plat: 'reels',
     desc: 'Vědecky: jak cvičit a jíst, co dělat a nedělat a proč', hook: 'Tohle dělá špatně 90 % lidí ve fitku.',
     b: [['Špatně', 'Chyba, kterou dělá většina…'], ['Správně', 'Jak to dělat správně…'], ['Detail / grafika', 'Proč – co říká věda…'], ['Ukázka', 'Shrnutí / tip navíc…']],
     cta: 'Ulož si to na příští trénink.' },
-  reakce:   { n: 'Reakce', e: '👀', c: '#EC4899', v: true, x: ['ref'], plat: 'reels',
+  reakce:   { n: 'Reakce', s: 'Reakce', c: '#C2417A', v: true, x: ['ref'], plat: 'reels',
     desc: 'Reaguju na video o jídle / cvičení', hook: 'Tohle video má milion zhlédnutí a je to blbost.',
     b: [['Originální video', 'Co tam říkají…'], ['Moje reakce do kamery', 'Můj názor / jak to je doopravdy…'], ['Důkaz / studie', 'Proč to tak je…']],
     cta: 'Pošli to někomu, kdo tomu věří.' },
-  skec:     { n: 'Skeč', e: '🎭', c: '#CA8A04', v: true, x: [], plat: 'reels',
+  skec:     { n: 'Skeč', s: 'Skeč', c: '#A68A0D', v: true, x: [], plat: 'reels',
     desc: 'Krátká scénka, výplň – top of the funnel', hook: 'Když ti trenér řekne „ještě jednu“…',
     b: [['Situace', 'Kde, kdo, co se děje…'], ['Postava A', '…'], ['Postava B', '…'], ['Pointa', 'Twist / punchline…']],
     cta: '' },
-  pribeh:   { n: 'Příběh', e: '📖', c: '#0D9488', v: true, x: [], plat: 'reels',
+  pribeh:   { n: 'Příběh', s: 'Příběh', c: '#5E8C2A', v: true, x: [], plat: 'reels',
     desc: 'Hrdina → překážka → cesta → proměna', hook: 'Tohle byl ten den, kdy se všechno změnilo.',
     b: [['Kde jsem byl', 'Výchozí bod…'], ['Překážka', 'Co bylo těžké…'], ['Zlom', 'Ten moment, kdy…'], ['Cesta', 'Co jsem začal dělat jinak…'], ['Proměna', 'Kde jsem teď…'], ['Ponaučení', 'Co si z toho má vzít divák…']],
     cta: 'Sleduj, ať vidíš, jak to pokračuje.' },
-  trend:    { n: 'Trend', e: '🔥', c: '#EF4444', v: true, x: ['ref'], plat: 'reels',
+  trend:    { n: 'Trend', s: 'Trend', c: '#D13A3A', v: true, x: ['ref'], plat: 'reels',
     desc: 'Trend / zvuk po svém – top of the funnel', hook: 'Proč cvičím nohy? Abych odkopnul kamion.',
     b: [['Setup trendu', 'Moje verze…'], ['Pointa', 'Twist…']], cta: '' },
-  ranking:  { n: 'Ranking', e: '🏆', c: '#D97706', v: true, x: [], plat: 'reels',
+  ranking:  { n: 'Ranking', s: 'Top', c: '#B5651D', v: true, x: [], plat: 'reels',
     desc: 'Top 5 / tier list – produkty, cviky, jídlo', hook: 'Top 5 ovoce z Lidlu – číslo 1 tě překvapí.',
     b: [['#5', '…'], ['#4', '…'], ['#3', '…'], ['#2', '…'], ['#1', 'A vítěz je…']], cta: 'Co bys dal na první místo ty?' },
-  karusel:  { n: 'Karusel', e: '🖼️', c: '#6366F1', v: false, x: [], plat: 'reels',
+  karusel:  { n: 'Karusel', s: 'Karusel', c: '#4F5BD5', v: false, x: [], plat: 'reels',
     desc: 'Slidy na IG (Canva + AI)', hook: 'Titulní slide – velký text',
     b: [['Slide 2', 'Text na slidu…'], ['Slide 3', '…'], ['Slide 4', '…'], ['Slide 5', '…'], ['Poslední slide', 'Shrnutí + ulož si to']], cta: 'Ulož si to 📌' },
-  vlog:     { n: 'Vlog', e: '🎥', c: '#16A34A', v: true, x: [], plat: 'youtube',
+  vlog:     { n: 'Vlog', s: 'Vlog', c: '#2E8B57', v: true, x: [], plat: 'youtube',
     desc: 'Long format – můj den, týdenní sestřih, akce', hook: 'Nejzajímavější moment hned na začátek…',
     b: [['Cold open', 'Nejlepší moment dne…'], ['Ráno', '…'], ['Trénink', '…'], ['Jídlo', '…'], ['Hlavní událost', '…'], ['Outro', 'Shrnutí, co dál…']],
     cta: 'Dej odběr, ať nepropásneš další díl.' },
-  soutez:   { n: 'Soutěž', e: '🎁', c: '#DB2777', v: true, x: [], plat: 'reels',
+  soutez:   { n: 'Soutěž', s: 'Soutěž', c: '#B0397A', v: true, x: [], plat: 'reels',
     desc: 'Nedělní soutěž', hook: 'Rozdávám…',
     b: [['Výhra', 'Co můžeš vyhrát…'], ['Jak se zapojit', 'Sleduj, lajkni, označ kámoše…'], ['Kdy vyhlásím', '…']], cta: 'Hodně štěstí 🍀' },
-  jine:     { n: 'Jiné', e: '💡', c: '#94A3B8', v: true, x: [], plat: 'reels',
+  jine:     { n: 'Jiné', s: 'Jiné', c: '#7C828D', v: true, x: [], plat: 'reels',
     desc: 'Volný formát', hook: '', b: [['', ''], ['', ''], ['', '']], cta: '' }
 };
 const FK = Object.keys(F);
@@ -430,9 +452,13 @@ const FORMULAS = [
 
 const DEF_GOALS = { recept: 2, rady: 1, gymedit: 1, skec: 2, trend: 2, pribeh: 1, headtalk: 1, ranking: 1, karusel: 1, soutez: 1 };
 const DEF_DAYS = ['recept', 'rady', '', 'gymedit', '', 'recept', 'soutez'];
+// pracovní rytmus týdne (Po–Ne): co se ten den dělá
+const RHY = { script: 'Psaní scénářů', film: 'Natáčení', edit: 'Střih', post: 'Publikace' };
+const RHY_S = { script: 'psaní', film: 'točení', edit: 'střih', post: 'publ.' };
+const DEF_RHYTHM = ['', '', 'film', '', 'edit', '', 'script'];
 
 // ---------- data ----------
-function blank() { return { ideas: [], hooks: [], insp: [], tasks: [], goals: { ...DEF_GOALS }, days: [...DEF_DAYS], style: '', setU: 0, deleted: {} }; }
+function blank() { return { ideas: [], hooks: [], insp: [], tasks: [], goals: { ...DEF_GOALS }, days: [...DEF_DAYS], rhythm: [...DEF_RHYTHM], style: '', setU: 0, deleted: {} }; }
 function norm(d) {
   const o = { ...blank(), ...d };
   o.ideas = o.ideas.map(i => {
@@ -476,10 +502,12 @@ const today = () => ds(new Date());
 const addDays = (s, n) => { const d = new Date(s + 'T12:00'); d.setDate(d.getDate() + n); return ds(d); };
 const monday = s => { const d = new Date(s + 'T12:00'); return addDays(s, -((d.getDay() + 6) % 7)); };
 const fmt = k => F[k] || F.jine;
+const ftag = k => `<span class="ft" style="--fc:${fmt(k).c}"><i></i>${fmt(k).n}</span>`;
+const fcode = (k, st = '') => `<span class="code ${st ? 'st-' + st : ''}" style="--fc:${fmt(k).c}">${fmt(k).s}</span>`;
 
 function newIdea(title, format) {
   const t = Date.now(), f = format || 'jine';
-  return { id: uid(), title, note: '', format: f, platform: fmt(f).plat, series: '', status: 'idea', fav: false, date: '',
+  return { id: uid(), title, note: '', format: f, platform: fmt(f).plat, series: '', status: 'idea', fav: false, date: '', shoot: '',
     hook: '', body: '', cta: '', link: '', blocks: [], music: '', ingr: '', macros: { kcal: '', p: '', c: '', f: '' }, ref: '',
     caption: '', hashtags: '', cover: '', shots: [], steps: {}, camera: '', links: '', created: t, updated: t };
 }
@@ -549,12 +577,12 @@ function openModal(html, bind) {
 const closeModal = () => { $('#modal').hidden = true; $('#modal').innerHTML = ''; };
 
 // ---------- navigace ----------
-let view = 'ideas';
+let view = 'home';
 const ui = { q: '', fs: 'active', ff: 'all', fi: 'all', addF: 'recept', mode: 'list', week: '' };
 try { Object.assign(ui, JSON.parse(localStorage.getItem('studio.ui')) || {}); } catch (e) {}
-ui.q = ''; ui.sel = ''; ui.month = '';
+ui.q = ''; ui.sel = ''; ui.month = ''; ui.cmode = ui.cmode || 'all';
 const keepUi = () => { try { localStorage.setItem('studio.ui', JSON.stringify(ui)); } catch (e) {} };
-const TITLES = { ideas: 'Nápady', week: 'Kalendář', insp: 'Inspirace', hooks: 'Hooky', more: 'Více' };
+const TITLES = { home: 'Dnes', ideas: 'Nápady', week: 'Kalendář', insp: 'Inspirace', hooks: 'Hooky', more: 'Více' };
 
 $$('.tabs button').forEach(b => b.onclick = () => go(b.dataset.v));
 function go(v) {
@@ -566,16 +594,17 @@ function go(v) {
 function render() {
   $('#topx').innerHTML = '';
   document.body.classList.toggle('wide', view === 'week');
-  ({ ideas: renderIdeas, week: renderWeek, insp: renderInsp, hooks: renderHooks, more: renderMore })[view]();
+  if (view === 'hooks') $('#topx').innerHTML = '<button class="btn sm" id="hback">Zpět</button>', $('#hback').onclick = () => go('more');
+  ({ home: renderHome, ideas: renderIdeas, week: renderWeek, insp: renderInsp, hooks: renderHooks, more: renderMore })[view]();
 }
 
 function badgeHTML(i) {
   const late = i.date && i.date < today() && i.status !== 'done';
   const sd = stepsDone(i);
-  return `<span class="badge" style="color:${fmt(i.format).c}">${fmt(i.format).e} ${fmt(i.format).n}</span>
+  return `<span class="badge">${ftag(i.format)}</span>
     <span class="badge"><span class="dot" style="background:var(--s-${i.status})"></span>${STATUS[i.status]} ${pbarHTML(i)}</span>
-    ${sd ? `<span class="badge plain">☑ ${sd}/${STEPS.length}</span>` : ''}
-    ${i.date ? `<span class="badge plain ${late ? 'late' : ''}">📅 ${relDate(i.date)}</span>` : i.status !== 'done' ? `<button class="btn xs assign" data-assign="${i.id}">📅 Na den</button>` : ''}
+    ${sd ? `<span class="badge plain">${sd}/${STEPS.length} kroků</span>` : ''}
+    ${i.date ? `<span class="badge plain ${late ? 'late' : ''}">${relDate(i.date)}</span>` : i.status !== 'done' ? `<button class="btn xs assign" data-assign="${i.id}">Na den</button>` : ''}
     ${i.series ? `<span class="badge plain">· ${esc(i.series)}</span>` : ''}`;
 }
 function cardHTML(i, extra = '') {
@@ -587,7 +616,7 @@ function cardHTML(i, extra = '') {
     <div class="m">${badgeHTML(i)}</div>${extra}</div>`;
 }
 function miniHTML(i) {
-  return `<button class="mini" style="--fc:${fmt(i.format).c}" data-open="${i.id}"><span>${fmt(i.format).e}</span><span class="t">${esc(i.title || 'Bez názvu')}</span>
+  return `<button class="mini" style="--fc:${fmt(i.format).c}" data-open="${i.id}">${fcode(i.format)}<span class="t">${esc(i.title || 'Bez názvu')}</span>
     ${stepsDone(i) ? `<small>${stepsDone(i)}/${STEPS.length}</small>` : ''}<span class="s" style="background:var(--s-${i.status})" title="${STATUS[i.status]}"></span></button>`;
 }
 document.addEventListener('click', e => {
@@ -608,6 +637,119 @@ function bindChips() {
   });
 }
 
+// ---------- DNES ----------
+const capFirst = s => s[0].toUpperCase() + s.slice(1);
+const longDate = d => capFirst(new Date(d + 'T12:00').toLocaleDateString('cs-CZ', { weekday: 'long', day: 'numeric', month: 'long' }));
+const hasScript = i => !!(i.hook.trim() || i.body.trim());
+const nextRhythmDay = (kind, from, until) => { for (let d = from; d <= until; d = addDays(d, 1)) if (db.rhythm[wdOf(d)] === kind) return d; return ''; };
+let recActs = [];
+
+// doporučení: jednoduchá pravidla nad tím, co je v kalendáři a v zásobníku
+function recommendations() {
+  const t = today(), recs = [], act = (label, fn) => ({ label, fn });
+  const open = db.ideas.filter(i => i.status !== 'done');
+  const late = open.filter(i => i.date && i.date < t);
+  if (late.length) recs.push({ text: late.length === 1 ? `„${late[0].title}“ je po termínu` : `${videos(late.length)} je po termínu`, sub: 'Publikuj, nebo přesuň na jiný den.', act: act('Přeplánovat', () => assignDay(late[0].id)) });
+  for (let n = 1, shown = 0; n <= 7 && shown < 2; n++) {
+    const d = addDays(t, n), th = themeOf(d);
+    if (th && !db.ideas.some(i => i.date === d)) { recs.push({ text: `Na ${relDate(d)} plánuješ ${fmt(th).n.toLowerCase()}, ale nic tam není`, sub: 'Vyber nápad ze zásobníku, nebo napiš nový.', act: act('Vybrat', () => planDay(d, th)) }); shown++; }
+  }
+  // v den psaní scénářů je seznam zvlášť nahoře, tak ho tu neopakujeme
+  if (db.rhythm[wdOf(t)] !== 'script') open.filter(i => i.date >= t && i.date <= addDays(t, 7) && !hasScript(i)).slice(0, 2)
+    .forEach(i => recs.push({ text: `Dopiš scénář: ${i.title}`, sub: `Vychází ${relDate(i.date)}`, act: act('Psát', () => openEditor(i.id, 'script')) }));
+  open.filter(i => hasScript(i) && !i.shoot && ['idea', 'script', 'film'].includes(i.status) && i.date && i.date >= t && i.date <= addDays(t, 10)).slice(0, 2).forEach(i => {
+    const fd = nextRhythmDay('film', t, i.date);
+    recs.push({ text: `Naplánuj natáčení: ${i.title}`, sub: `Vychází ${relDate(i.date)}${fd ? ', nejbližší den natáčení je ' + relDate(fd) : ''}`,
+      act: fd ? act('Na ' + relDate(fd), () => { i.shoot = fd; if (i.status === 'idea' || i.status === 'script') i.status = 'film'; i.updated = Date.now(); save(true); toast('Natáčení naplánováno'); render(); }) : act('Vybrat den', () => assignDay(i.id, null, null, 'shoot')) });
+  });
+  open.filter(i => i.status === 'edit' && i.date && i.date <= addDays(t, 3)).slice(0, 2)
+    .forEach(i => recs.push({ text: `Dostříhej: ${i.title}`, sub: `Vychází ${relDate(i.date)}`, act: act('Otevřít', () => openEditor(i.id, 'film')) }));
+  const ws = monday(t), we = addDays(ws, 6), wk = db.ideas.filter(i => i.date >= ws && i.date <= we);
+  const miss = Object.entries(db.goals).filter(([k, n]) => n > wk.filter(i => i.format === k).length).map(([k, n]) => [k, n - wk.filter(i => i.format === k).length]);
+  if (miss.length) recs.push({ text: 'Tento týden ještě chybí ' + miss.slice(0, 3).map(([k, n]) => `${n}× ${fmt(k).n.toLowerCase()}`).join(', ') + (miss.length > 3 ? '…' : ''), sub: 'Podle tvých týdenních cílů.', act: act('Zásobník', () => { ui.fs = 'pool'; ui.ff = 'all'; keepUi(); go('ideas'); }) });
+  const pool = open.filter(i => !i.date);
+  const planned14 = open.filter(i => i.date >= t && i.date <= addDays(t, 14)).length;
+  if (!pool.length) recs.push({ text: 'Zásobník nápadů je prázdný', sub: 'Zapiš pár nápadů, nebo se mrkni do uložené inspirace.', act: act('Inspirace', () => go('insp')) });
+  else if (pool.length >= 5 && planned14 < 4) recs.push({ text: `V zásobníku máš ${pool.length} nápadů, ale na dva týdny jen ${planned14} naplánovaná`, sub: 'Rozplánuj je do kalendáře.', act: act('Kalendář', () => go('week')) });
+  return recs.slice(0, 5);
+}
+
+function renderHome() {
+  const t = today(), wd = wdOf(t), rh = db.rhythm[wd], th = themeOf(t);
+  const outToday = db.ideas.filter(i => i.date === t);
+  const shootToday = db.ideas.filter(i => i.shoot === t && i.status !== 'done');
+  let work = [], workTitle = '';
+  if (rh === 'script') { workTitle = 'Den psaní scénářů'; work = db.ideas.filter(i => i.status !== 'done' && !hasScript(i) && i.date && i.date >= t && i.date <= addDays(t, 10)).sort((a, b) => a.date < b.date ? -1 : 1); }
+  if (rh === 'film') { workTitle = 'Den natáčení'; work = db.ideas.filter(i => ['script', 'film'].includes(i.status) && i.shoot !== t && (!i.shoot || i.shoot < t)).sort((a, b) => (a.date || '9') < (b.date || '9') ? -1 : 1); }
+  if (rh === 'edit') { workTitle = 'Den střihu'; work = db.ideas.filter(i => i.status === 'edit').sort((a, b) => (a.date || '9') < (b.date || '9') ? -1 : 1); }
+  if (rh === 'post') { workTitle = 'Den publikace'; work = db.ideas.filter(i => i.status === 'edit' && i.date && i.date <= addDays(t, 2)); }
+  const recs = recommendations(); recActs = recs.map(r => r.act.fn);
+  const row = (main, sub, btn) => `<div class="irow"><div class="tx">${main}${sub ? `<small>${sub}</small>` : ''}</div>${btn || ''}</div>`;
+  const today_rows = [
+    ...outToday.map(i => row(`<b>Vychází: ${esc(i.title)}</b>`, `${fmt(i.format).n} · ${STATUS[i.status]}`,
+      i.status === 'done' ? '<span class="muted">venku</span>' : `<button class="btn xs" data-pub="${i.id}">Publikováno</button>`)),
+    ...shootToday.map(i => row(`<b>Natočit: ${esc(i.title)}</b>`, `${fmt(i.format).n}${i.date ? ' · vychází ' + relDate(i.date) : ''}`, `<button class="btn xs" data-open="${i.id}">Otevřít</button>`)),
+    ...(th && !outToday.length ? [row(`<b>Na dnešek plánuješ ${fmt(th).n.toLowerCase()}</b>`, 'Zatím tu nic není.', `<button class="btn xs" data-hplan="${t}" data-th="${th}">Vybrat</button>`)] : [])
+  ];
+  const ws = monday(t);
+  let html = `
+    <p class="hsub">${[rh ? RHY[rh] : '', th ? 'v plánu ' + fmt(th).n.toLowerCase() : ''].filter(Boolean).join(' · ') || 'Volný den'}</p>
+    <form class="panel quick" id="hq"><textarea id="hqt" rows="1" placeholder="Rychlý nápad – jde do zásobníku"></textarea></form>
+    <h2>Dnes</h2>
+    ${today_rows.length ? `<div class="list">${today_rows.join('')}</div>` : '<p class="empty" style="padding:4px 2px">Na dnešek nic nevychází ani se netočí.</p>'}
+    ${workTitle && work.length ? `<h2>${workTitle}</h2><div class="list">${work.slice(0, 6).map(i => row(`<b>${esc(i.title)}</b>`, `${fmt(i.format).n}${i.date ? ' · vychází ' + relDate(i.date) : ''}`, `<button class="btn xs" data-open="${i.id}">${rh === 'script' ? 'Psát' : 'Otevřít'}</button>`)).join('')}</div>` : ''}
+    ${recs.length ? `<h2>Doporučuju</h2><div class="list">${recs.map((r, n) => row(`<b>${esc(r.text)}</b>`, esc(r.sub), `<button class="btn xs" data-rec="${n}">${esc(r.act.label)}</button>`)).join('')}</div>` : ''}
+    <h2>Tento týden</h2>
+    <div class="wstrip">${[0, 1, 2, 3, 4, 5, 6].map(n => {
+      const d = addDays(ws, n), its = db.ideas.filter(i => i.date === d), sh = db.ideas.filter(i => i.shoot === d);
+      return `<button class="ws ${d === t ? 'today' : ''} ${d < t ? 'past' : ''}" data-wsd="${d}"><span class="wd">${['po', 'út', 'st', 'čt', 'pá', 'so', 'ne'][n]}</span><b class="num">${+d.slice(8)}</b>
+        <span class="dots">${its.map(i => fcode(i.format, i.status)).join('')}${sh.map(i => fcode(i.format, 'shoot')).join('')}</span>${db.rhythm[n] ? `<span class="rh">${RHY_S[db.rhythm[n]]}</span>` : ''}</button>`;
+    }).join('')}</div>
+    ${tasksHTML()}`;
+  $('#view').innerHTML = html;
+  $('#vtitle').textContent = longDate(t);
+  const hq = $('#hqt');
+  hq.onkeydown = e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); $('#hq').requestSubmit(); } };
+  $('#hq').onsubmit = e => {
+    e.preventDefault(); const v = hq.value.trim(); if (!v) return;
+    const it = newIdea(v.split('\n')[0].slice(0, 140), 'jine'); db.ideas.unshift(it); save(true); toast('Uloženo do zásobníku'); render();
+  };
+  $$('[data-rec]').forEach(b => b.onclick = () => recActs[+b.dataset.rec]());
+  $$('[data-pub]').forEach(b => b.onclick = () => { setStatus(byId(b.dataset.pub), 'done'); render(); });
+  $$('[data-hplan]').forEach(b => b.onclick = () => planDay(b.dataset.hplan, b.dataset.th));
+  $$('[data-wsd]').forEach(b => b.onclick = () => { ui.sel = b.dataset.wsd; ui.month = monthStart(ui.sel); go('week'); });
+  bindTasks();
+}
+function tasksHTML() {
+  const open = db.tasks.filter(x => !x.done).length;
+  return `<div class="tasks"><h2>Úkoly${open ? ` (${open})` : ''}<span class="sp"></span>${db.tasks.some(x => x.done) ? '<button class="btn xs ghost" id="tclr">Smazat hotové</button>' : ''}</h2>
+    <div class="tasklist">${db.tasks.map(x => `<div class="task ${x.done ? 'done' : ''}" data-t="${x.id}"><input type="checkbox" ${x.done ? 'checked' : ''}><input type="text" value="${esc(x.text)}"><button class="ico" data-tx>${I.x}</button></div>`).join('')}</div>
+    <form id="tf" class="addrow"><input id="tnew" placeholder="Nový úkol – např. předělat profil"><button class="btn">Přidat</button></form></div>`;
+}
+function bindTasks() {
+  $('#tf').onsubmit = e => { e.preventDefault(); const v = $('#tnew').value.trim(); if (!v) return; db.tasks.push({ id: uid(), text: v, done: false, updated: Date.now() }); save(true); render(); $('#tnew').focus(); };
+  $$('.task').forEach(el => {
+    const x = db.tasks.find(y => y.id === el.dataset.t);
+    $('[type=checkbox]', el).onchange = e => { x.done = e.target.checked; x.updated = Date.now(); save(true); render(); };
+    $('[type=text]', el).oninput = e => { x.text = e.target.value; x.updated = Date.now(); save(); };
+    $('[data-tx]', el).onclick = () => { gone(x.id); db.tasks = db.tasks.filter(y => y !== x); save(true); render(); };
+  });
+  const tc = $('#tclr'); if (tc) tc.onclick = () => { gone(...db.tasks.filter(x => x.done).map(x => x.id)); db.tasks = db.tasks.filter(x => !x.done); save(true); render(); };
+}
+// naplánovat natáčení na konkrétní den
+function planShoot(date) {
+  const cand = db.ideas.filter(i => i.status !== 'done' && i.status !== 'edit' && i.shoot !== date)
+    .sort((a, b) => (hasScript(b) - hasScript(a)) || ((a.date || '9') < (b.date || '9') ? -1 : 1));
+  const opt = i => `<button class="opt" data-sp="${i.id}">${esc(i.title)}<small>${ftag(i.format)} · ${STATUS[i.status]}${i.date ? ' · vychází ' + relDate(i.date) : ''}${i.shoot ? ' · teď točíš ' + relDate(i.shoot) : ''}${hasScript(i) ? '' : ' · bez scénáře'}</small></button>`;
+  openModal(`<h3>Natáčení ${relDate(date)}</h3>
+    ${cand.length ? `<div class="optgroup">${cand.map(opt).join('')}</div>` : '<p class="muted">Nemáš nic rozpracovaného k natočení.</p>'}`, m => {
+    $$('[data-sp]', m).forEach(b => b.onclick = () => {
+      const i = byId(b.dataset.sp); i.shoot = date; if (i.status === 'idea' || i.status === 'script') i.status = 'film';
+      i.updated = Date.now(); save(true); closeModal(); render(); toast('Natáčení naplánováno');
+    });
+  });
+}
+
 // ---------- NÁPADY ----------
 function renderIdeas() {
   $('#topx').innerHTML = db.ideas.length ? `<div class="seg"><button data-mode="list" class="${ui.mode === 'list' ? 'on' : ''}">Seznam</button><button data-mode="board" class="${ui.mode === 'board' ? 'on' : ''}">Nástěnka</button></div>` : '';
@@ -624,17 +766,17 @@ function renderIdeas() {
   let html = `
     <form class="panel quick" id="qf">
       <textarea id="qt" rows="1" placeholder="Co tě napadlo? Stačí pár slov…"></textarea>
-      <div class="chips" id="addfc">${FK.map(k => chip('addF', k, fmt(k).e + ' ' + fmt(k).n)).join('')}</div>
+      <div class="chips" id="addfc">${FK.map(k => chip('addF', k, ftag(k))).join('')}</div>
       <div class="row"><span class="grow muted">Jde do zásobníku – na den ho dáš potom</span><button class="btn pri sm" type="submit">Uložit nápad</button></div>
     </form>`;
   if (!db.ideas.length) {
     html += '<div class="empty"><b>Zatím žádné nápady</b>Napiš první nahoru – stačí pár slov.</div>';
   } else {
-    if (ui.mode === 'list') html += `<div class="stats">${SKEYS.map(s => `<div class="stat"><b style="color:var(--s-${s})">${counts[s]}</b><span>${STATUS[s]}</span></div>`).join('')}</div>`;
+    if (ui.mode === 'list') html += `<p class="summary num">${SKEYS.map(s => `${STATUS[s]} <b>${counts[s]}</b>`).join(' · ')}</p>`;
     html += `<div class="search"><input id="q" type="search" placeholder="Hledat v nápadech a scénářích" value="${esc(ui.q)}"></div>
-      <div class="chips filters" id="fff">${chip('ff', 'all', 'Všechny formáty')}${FK.filter(k => db.ideas.some(i => i.format === k)).map(k => chip('ff', k, fmt(k).e + ' ' + fmt(k).n)).join('')}</div>`;
+      <div class="chips filters" id="fff">${chip('ff', 'all', 'Všechny formáty')}${FK.filter(k => db.ideas.some(i => i.format === k)).map(k => chip('ff', k, ftag(k))).join('')}</div>`;
     if (ui.mode === 'list') {
-      html += `<div class="chips filters" id="ffs">${chip('fs', 'active', 'Rozpracované')}${chip('fs', 'pool', '📥 Zásobník (' + db.ideas.filter(i => !i.date && i.status !== 'done').length + ')')}${chip('fs', 'fav', '★ Oblíbené')}${SKEYS.map(s => chip('fs', s, STATUS[s])).join('')}${chip('fs', 'all', 'Vše')}</div>
+      html += `<div class="chips filters" id="ffs">${chip('fs', 'active', 'Rozpracované')}${chip('fs', 'pool', 'Zásobník (' + db.ideas.filter(i => !i.date && i.status !== 'done').length + ')')}${chip('fs', 'fav', '★ Oblíbené')}${SKEYS.map(s => chip('fs', s, STATUS[s])).join('')}${chip('fs', 'all', 'Vše')}</div>
         <div class="list">${list.map(i => cardHTML(i)).join('') || '<div class="empty"><b>Nic tu není</b>Zkus jiný filtr.</div>'}</div>`;
     } else {
       html += `<div class="board">${SKEYS.map((s, si) => {
@@ -653,7 +795,7 @@ function renderIdeas() {
     const lines = v.split('\n'); const it = newIdea(lines[0].slice(0, 140), ui.addF);
     it.note = (lines[0].length > 140 ? lines[0].slice(140) + '\n' : '') + lines.slice(1).join('\n');
     const u = v.match(urlRe); if (u) it.links = u.join('\n');
-    db.ideas.unshift(it); save(true); toast('Nápad uložen ✓'); render();
+    db.ideas.unshift(it); save(true); toast('Nápad uložen'); render();
   };
   qt.onkeydown = e => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) $('#qf').requestSubmit(); };
   const qi = $('#q');
@@ -673,7 +815,7 @@ function renderIdeas() {
 }
 function setStatus(i, s) {
   i.status = s; i.updated = Date.now();
-  if (s === 'done') { toast('Venku! 🎉'); if (!i.date) i.date = today(); }
+  if (s === 'done') { toast('Publikováno'); if (!i.date) i.date = today(); }
   save(true);
 }
 
@@ -685,17 +827,19 @@ const addMonths = (m, n) => { const d = new Date(m + 'T12:00'); d.setDate(1); d.
 const monthLabel = m => MONTHS[+m.slice(5, 7) - 1] + ' ' + m.slice(0, 4);
 const wdOf = d => (new Date(d + 'T12:00').getDay() + 6) % 7;
 const themeOf = d => F[db.days[wdOf(d)]] ? db.days[wdOf(d)] : '';
-function monthGridHTML(m, sel, attr) {
+function monthGridHTML(m, sel, attr, mode = 'all') {
   const t = today(), next = addMonths(m, 1), last = addDays(monday(addDays(next, -1)), 6);
   let h = `<div class="mgrid"><div class="mhead">${['Po', 'Út', 'St', 'Čt', 'Pá', 'So', 'Ne'].map(x => `<span>${x}</span>`).join('')}</div><div class="mcells">`;
   for (let d = monday(m); d <= last; d = addDays(d, 1)) {
-    const items = db.ideas.filter(i => i.date === d), th = themeOf(d);
+    const items = mode === 'shoot' ? [] : db.ideas.filter(i => i.date === d), shoots = mode === 'post' ? [] : db.ideas.filter(i => i.shoot === d), th = themeOf(d);
+    const chips = [...items.map(i => fcode(i.format, i.status)), ...shoots.map(i => fcode(i.format, 'shoot'))];
+    const ph = mode === 'shoot' ? (db.rhythm[wdOf(d)] === 'film' ? 'točení' : '') : th ? fmt(th).s : '';
     h += `<button type="button" class="mc ${d < m || d >= next ? 'out' : ''} ${d === t ? 'today' : ''} ${d === sel ? 'sel' : ''} ${d < t ? 'past' : ''}" ${attr}="${d}">
       <span class="dnum">${+d.slice(8)}</span>
-      <span class="dots">${items.length
-        ? items.slice(0, 3).map(i => `<i style="--fc:${fmt(i.format).c};--sc:var(--s-${i.status})">${fmt(i.format).e}</i>`).join('') + (items.length > 3 ? `<i class="more">+${items.length - 3}</i>` : '')
-        : th ? `<i class="ph">${fmt(th).e}</i>` : ''}</span>
-      ${items.length ? `<span class="ttl1">${esc(items[0].title)}</span>` : ''}</button>`;
+      <span class="dots">${chips.length
+        ? chips.slice(0, 3).join('') + (chips.length > 3 ? `<span class="more">+${chips.length - 3}</span>` : '')
+        : ph ? `<span class="ph">${ph}</span>` : ''}</span>
+      ${items.length || shoots.length ? `<span class="ttl1">${esc((items[0] || shoots[0]).title)}</span>` : ''}</button>`;
   }
   return h + '</div></div>';
 }
@@ -715,32 +859,34 @@ function renderWeek() {
   const late = db.ideas.filter(i => i.date && i.date < t && i.status !== 'done');
   const dl = new Date(sel + 'T12:00').toLocaleDateString('cs-CZ', { weekday: 'long', day: 'numeric', month: 'long' }), dlabel = dl[0].toUpperCase() + dl.slice(1);
 
+  const shootsSel = db.ideas.filter(i => i.shoot === sel), rhSel = db.rhythm[wd];
   let html = `
     <div class="wknav"><button class="ico" id="mprev">${I.l}</button><b>${monthLabel(m)}</b>
       ${m !== monthStart(t) || sel !== t ? '<button class="btn xs" id="mnow">Dnes</button>' : ''}<button class="ico" id="mnext">${I.r}</button></div>
     <p class="muted" style="margin:0 2px;text-align:center">${videos(inMonth.length)} v měsíci · ${inMonth.filter(i => i.status === 'done').length} venku · ${poolN} v zásobníku</p>
-    ${monthGridHTML(m, sel, 'data-cd')}
+    <div class="seg cmode">${[['all', 'Vše'], ['post', 'Vychází'], ['shoot', 'Natáčení']].map(([k, v]) => `<button data-cm="${k}" class="${ui.cmode === k ? 'on' : ''}">${v}</button>`).join('')}</div>
+    ${monthGridHTML(m, sel, 'data-cd', ui.cmode)}
+    ${ui.cmode === 'all' ? '<p class="legend"><span class="code" style="--fc:#7C828D">Plné</span> vychází <span class="code st-shoot" style="--fc:#7C828D">Obrys</span> natáčení</p>' : ''}
     <div class="daypanel">
-      <div class="dph"><b>${dlabel}</b>${sel === t ? '<span class="badge" style="background:var(--acc-soft);color:var(--acc-d)">dnes</span>' : ''}</div>
-      <button class="theme" data-theme="${wd}" style="${th ? '--fc:' + fmt(th).c : ''}">Plán na ${DAYN[wd].toLowerCase()}: ${th ? fmt(th).e + ' ' + fmt(th).n : '☕ volný slot'} <span>✎</span></button>
+      <div class="dph"><b>${dlabel}</b>${sel === t ? '<span class="today-tag">dnes</span>' : ''}</div>
+      ${rhSel ? `<p class="rhnote">${RHY[rhSel]}</p>` : ''}
+      <button class="theme" data-theme="${wd}" style="${th ? '--fc:' + fmt(th).c : ''}">Plán na ${DAYN[wd].toLowerCase()}: ${th ? ftag(th) : 'volný slot'} <u>Změnit</u></button>
       ${items.map(slotHTML).join('')}
       ${items.length
-        ? `<div class="dact"><button class="btn sm" data-create="${sel}" data-k="${th || 'jine'}">+ Další video</button><button class="btn sm" data-plan="${sel}" data-th="${th}">📥 Ze zásobníku</button></div>`
+        ? `<div class="dact"><button class="btn sm" data-create="${sel}" data-k="${th || 'jine'}">+ Další video</button><button class="btn sm" data-plan="${sel}" data-th="${th}">Ze zásobníku</button></div>`
         : th
-          ? `<div class="slot ph" style="--fc:${fmt(th).c}"><div class="big">${fmt(th).e}</div><small>Plánovaný formát</small><b>${fmt(th).n}</b><p>Doplň konkrétní nápad a scénář.</p>
-              <div class="dact"><button class="btn sm pri" data-create="${sel}" data-k="${th}">+ Napsat scénář</button><button class="btn sm" data-plan="${sel}" data-th="${th}">📥 Ze zásobníku</button></div></div>`
-          : `<div class="slot ph free"><div class="big">☕</div><small>Volný den</small><b>Pauza / volný slot</b><p>Na dotočení, improvizaci nebo den volna.</p>
-              <div class="dact"><button class="btn sm" data-create="${sel}" data-k="jine">+ Nové video</button><button class="btn sm" data-plan="${sel}" data-th="">📥 Ze zásobníku</button></div></div>`}
+          ? `<div class="slot ph" style="--fc:${fmt(th).c}"><small>Plánovaný formát</small><b>${fmt(th).n}</b><p>Doplň konkrétní nápad a scénář.</p>
+              <div class="dact"><button class="btn sm pri" data-create="${sel}" data-k="${th}">+ Napsat scénář</button><button class="btn sm" data-plan="${sel}" data-th="${th}">Ze zásobníku</button></div></div>`
+          : `<div class="slot ph free"><small>Volný den</small><b>Pauza / volný slot</b><p>Na dotočení, improvizaci nebo den volna.</p>
+              <div class="dact"><button class="btn sm" data-create="${sel}" data-k="jine">+ Nové video</button><button class="btn sm" data-plan="${sel}" data-th="">Ze zásobníku</button></div></div>`}
+      <h2>Natáčení</h2>
+      ${shootsSel.length ? `<div class="list">${shootsSel.map(i => `<div class="irow"><div class="tx"><b>${esc(i.title)}</b><small>${fmt(i.format).n} · ${STATUS[i.status]}${i.date ? ' · vychází ' + relDate(i.date) : ''}</small></div><button class="btn xs" data-open="${i.id}">Otevřít</button></div>`).join('')}</div>` : ''}
+      <div class="dact"><button class="btn sm" data-shootplan="${sel}">+ Naplánovat natáčení${shootsSel.length ? ' dalšího' : ''}</button></div>
     </div>
     ${late.length ? `<h2 style="color:var(--bad)">Po termínu (${late.length})</h2>${late.map(miniHTML).join('')}` : ''}
     ${goals.length ? `<h2>Cíle na týden ${fmtDate(ws)} – ${fmtDate(we)}</h2>
-      <div class="gbar" style="margin-top:0"><i style="width:${totalGoal ? totalGot / totalGoal * 100 : 0}%"></i></div>
-      <p class="muted" style="margin:4px 2px 10px">Naplánováno ${totalGot}/${totalGoal} · venku ${wk.filter(i => i.status === 'done').length}</p>
-      <div class="goals">${goals.map(([k, n]) => `<span class="goal ${got(k) >= n ? 'ok' : ''}">${fmt(k).e} ${fmt(k).n} <i>${got(k)}/${n}</i></span>`).join('')}</div>` : ''}`;
-  const open = db.tasks.filter(x => !x.done).length;
-  html += `<div class="tasks"><h2>Úkoly${open ? ` (${open})` : ''}<span class="sp"></span>${db.tasks.some(x => x.done) ? '<button class="btn xs ghost" id="tclr">Smazat hotové</button>' : ''}</h2>
-    ${db.tasks.map(x => `<div class="task ${x.done ? 'done' : ''}" data-t="${x.id}"><input type="checkbox" ${x.done ? 'checked' : ''}><input type="text" value="${esc(x.text)}"><button class="ico" data-tx>${I.x}</button></div>`).join('')}
-    <form id="tf" style="display:flex;gap:8px;margin-top:8px"><input id="tnew" placeholder="Nový úkol – např. předělat profil" style="background:var(--bg2);box-shadow:var(--sh)"><button class="btn">Přidat</button></form></div>`;
+      <p class="muted num" style="margin:-4px 2px 8px">Naplánováno ${totalGot} z ${totalGoal}, venku ${wk.filter(i => i.status === 'done').length}</p>
+      <div class="goals">${goals.map(([k, n]) => `<div class="goal ${got(k) >= n ? 'ok' : ''}">${ftag(k)}<span class="gb"><i style="width:${Math.min(100, got(k) / n * 100)}%"></i></span><em>${got(k)}/${n}</em></div>`).join('')}</div>` : ''}`;
   $('#view').innerHTML = html;
 
   const goMonth = n => {
@@ -748,6 +894,7 @@ function renderWeek() {
     if (monthStart(ui.sel) !== ui.month) ui.sel = monthStart(t) === ui.month ? t : ui.month;
     render();
   };
+  $$('[data-cm]').forEach(b => b.onclick = () => { ui.cmode = b.dataset.cm; keepUi(); render(); });
   $('#mprev').onclick = () => goMonth(-1);
   $('#mnext').onclick = () => goMonth(1);
   const mn = $('#mnow'); if (mn) mn.onclick = () => { ui.sel = t; ui.month = monthStart(t); render(); };
@@ -776,14 +923,7 @@ function renderWeek() {
     const i = byId(b.dataset.mv), n = SKEYS.indexOf(i.status) + +b.dataset.d;
     if (n >= 0 && n < SKEYS.length) { setStatus(i, SKEYS[n]); render(); }
   });
-  $('#tf').onsubmit = e => { e.preventDefault(); const v = $('#tnew').value.trim(); if (!v) return; db.tasks.push({ id: uid(), text: v, done: false, updated: Date.now() }); save(true); render(); $('#tnew').focus(); };
-  $$('.task').forEach(el => {
-    const x = db.tasks.find(y => y.id === el.dataset.t);
-    $('[type=checkbox]', el).onchange = e => { x.done = e.target.checked; x.updated = Date.now(); save(true); render(); };
-    $('[type=text]', el).oninput = e => { x.text = e.target.value; x.updated = Date.now(); save(); };
-    $('[data-tx]', el).onclick = () => { gone(x.id); db.tasks = db.tasks.filter(y => y !== x); save(true); render(); };
-  });
-  const tc = $('#tclr'); if (tc) tc.onclick = () => { gone(...db.tasks.filter(x => x.done).map(x => x.id)); db.tasks = db.tasks.filter(x => !x.done); save(true); render(); };
+  $$('[data-shootplan]').forEach(b => b.onclick = () => planShoot(b.dataset.shootplan));
 }
 function pbarHTML(i) {
   const si = SKEYS.indexOf(i.status);
@@ -792,7 +932,7 @@ function pbarHTML(i) {
 function slotHTML(i) {
   const si = SKEYS.indexOf(i.status), f = fmt(i.format);
   return `<div class="slot" style="--fc:${f.c}">
-    <div class="tag">${f.e} ${f.n}<span class="sp"></span><span class="badge"><span class="dot" style="background:var(--s-${i.status})"></span>${STATUS[i.status]}</span></div>
+    <div class="tag">${ftag(i.format)}<span class="sp"></span><span class="badge"><span class="dot" style="background:var(--s-${i.status})"></span>${STATUS[i.status]}</span></div>
     <b>${esc(i.title || 'Bez názvu')}</b>
     ${i.hook ? `<p class="hk">„${esc(i.hook)}“</p>` : ''}
     ${pbarHTML(i)}
@@ -802,45 +942,45 @@ function slotHTML(i) {
 }
 function pickTheme(wd) {
   openModal(`<h3>Formát na ${DAYN[wd].toLowerCase()}</h3><p class="muted" style="margin:-6px 0 12px">Platí pro každý týden.</p>
-    <button class="opt" data-k="">☕ Volný slot<small>Pauza, dotočení, improvizace</small></button>
-    ${FK.filter(k => k !== 'jine').map(k => `<button class="opt" style="--fc:${fmt(k).c}" data-k="${k}">${fmt(k).e} ${fmt(k).n}<small>${fmt(k).desc}</small></button>`).join('')}`,
+    <div class="optgroup"><button class="opt" data-k="">Volný slot<small>Pauza, dotočení, improvizace</small></button>
+    ${FK.filter(k => k !== 'jine').map(k => `<button class="opt" data-k="${k}">${ftag(k)}<small>${fmt(k).desc}</small></button>`).join('')}</div>`,
   m => $$('[data-k]', m).forEach(b => b.onclick = () => { db.days[wd] = b.dataset.k; stampSet(); save(true); closeModal(); render(); }));
 }
 function planDay(date, th) {
   const rank = (a, b) => ((b.format === th) - (a.format === th)) || (SKEYS.indexOf(b.status) - SKEYS.indexOf(a.status)) || (b.updated - a.updated);
   const pool = db.ideas.filter(i => !i.date && i.status !== 'done').sort(rank);
   const other = db.ideas.filter(i => i.date && i.date !== date && i.status !== 'done').sort(rank);
-  const opt = i => `<button class="opt" style="--fc:${fmt(i.format).c}" data-pick="${i.id}">${esc(i.title)}<small>${fmt(i.format).e} ${fmt(i.format).n} · ${STATUS[i.status]}${i.date ? ' · teď ' + relDate(i.date) : ''}</small></button>`;
+  const opt = i => `<button class="opt" style="--fc:${fmt(i.format).c}" data-pick="${i.id}">${esc(i.title)}<small>${ftag(i.format)} · ${STATUS[i.status]}${i.date ? ' · teď ' + relDate(i.date) : ''}</small></button>`;
   const dn = new Date(date + 'T12:00').toLocaleDateString('cs-CZ', { weekday: 'long', day: 'numeric', month: 'numeric' });
   openModal(`<h3>Na ${dn}</h3>
-    <label class="l">📥 Zásobník nápadů</label>
-    ${pool.map(opt).join('') || '<p class="muted" style="margin:0 2px 12px">Zásobník je prázdný – nápady bez data se objeví tady.</p>'}
-    ${other.length ? `<label class="l" style="margin-top:14px">Přesunout z jiného dne</label>${other.map(opt).join('')}` : ''}
+    <label class="l">Zásobník nápadů</label>
+    ${pool.length ? `<div class="optgroup">${pool.map(opt).join('')}</div>` : '<p class="muted" style="margin:0 2px 12px">Zásobník je prázdný – nápady bez data se objeví tady.</p>'}
+    ${other.length ? `<label class="l" style="margin-top:14px">Přesunout z jiného dne</label><div class="optgroup">${other.map(opt).join('')}</div>` : ''}
     <label class="l" style="margin-top:14px">Nebo rovnou nový</label>
     <form id="pnf" style="display:flex;gap:8px;margin-bottom:6px"><input id="pnt" placeholder="Název videa…"><button class="btn pri">Přidat</button></form>
-    <div class="chips" id="pnc" style="margin-bottom:10px">${FK.map(k => `<button type="button" class="chip ${k === (th || 'jine') ? 'on' : ''}" data-k="${k}">${fmt(k).e} ${fmt(k).n}</button>`).join('')}</div>`,
+    <div class="chips" id="pnc" style="margin-bottom:10px">${FK.map(k => `<button type="button" class="chip ${k === (th || 'jine') ? 'on' : ''}" data-k="${k}">${ftag(k)}</button>`).join('')}</div>`,
   m => {
     let k = th || 'jine';
     $$('#pnc .chip', m).forEach(c => c.onclick = () => { k = c.dataset.k; $$('#pnc .chip', m).forEach(x => x.classList.toggle('on', x === c)); });
     $('#pnf', m).onsubmit = e => {
       e.preventDefault(); const v = $('#pnt', m).value.trim(); if (!v) return;
-      const it = newIdea(v, k); it.date = date; db.ideas.unshift(it); save(true); closeModal(); render(); toast('Naplánováno ✓');
+      const it = newIdea(v, k); it.date = date; db.ideas.unshift(it); save(true); closeModal(); render(); toast('Naplánováno');
     };
-    $$('[data-pick]', m).forEach(b => b.onclick = e => { e.stopPropagation(); const i = byId(b.dataset.pick); i.date = date; i.updated = Date.now(); save(true); closeModal(); render(); toast('Naplánováno ✓'); });
+    $$('[data-pick]', m).forEach(b => b.onclick = e => { e.stopPropagation(); const i = byId(b.dataset.pick); i.date = date; i.updated = Date.now(); save(true); closeModal(); render(); toast('Naplánováno'); });
   });
 }
 // přiřazení nápadu ke dni přes malý kalendář
-function assignDay(id, month, after) {
+function assignDay(id, month, after, field = 'date') {
   const i = byId(id); if (!i) return;
-  const m = month || monthStart(i.date || today());
+  const m = month || monthStart(i[field] || i.date || today());
   const done = msg => { i.updated = Date.now(); save(true); closeModal(); toast(msg); (after || render)(); };
-  openModal(`<h3>Na který den?</h3><p class="muted" style="margin:-6px 0 4px">${esc(i.title || 'Bez názvu')}</p>
+  openModal(`<h3>${field === 'shoot' ? 'Kdy to natočíš?' : 'Kdy to vychází?'}</h3><p class="muted" style="margin:-6px 0 4px">${esc(i.title || 'Bez názvu')}</p>
     <div class="wknav"><button class="ico" data-am="-1">${I.l}</button><b>${monthLabel(m)}</b><button class="ico" data-am="1">${I.r}</button></div>
-    ${monthGridHTML(m, i.date, 'data-aday')}
-    ${i.date ? '<button class="btn full ghost" data-aclear style="margin-top:10px">📥 Vrátit do zásobníku</button>' : ''}`, box => {
-    $$('[data-am]', box).forEach(b => b.onclick = e => { e.stopPropagation(); assignDay(id, addMonths(m, +b.dataset.am), after); });
-    $$('[data-aday]', box).forEach(b => b.onclick = () => { i.date = b.dataset.aday; done('Naplánováno na ' + relDate(i.date) + ' ✓'); });
-    const c = $('[data-aclear]', box); if (c) c.onclick = () => { i.date = ''; done('Vráceno do zásobníku'); };
+    ${monthGridHTML(m, i[field], 'data-aday', field === 'shoot' ? 'shoot' : 'post')}
+    ${i[field] ? `<button class="btn full ghost" data-aclear style="margin-top:10px">${field === 'shoot' ? 'Zrušit termín natáčení' : 'Vrátit do zásobníku'}</button>` : ''}`, box => {
+    $$('[data-am]', box).forEach(b => b.onclick = e => { e.stopPropagation(); assignDay(id, addMonths(m, +b.dataset.am), after, field); });
+    $$('[data-aday]', box).forEach(b => b.onclick = () => { i[field] = b.dataset.aday; if (field === 'shoot' && (i.status === 'idea' || i.status === 'script')) i.status = 'film'; done((field === 'shoot' ? 'Natáčení ' : 'Vychází ') + relDate(i[field])); });
+    const c = $('[data-aclear]', box); if (c) c.onclick = () => { i[field] = ''; done(field === 'shoot' ? 'Termín natáčení zrušen' : 'Vráceno do zásobníku'); };
   });
 }
 
@@ -851,16 +991,16 @@ function renderInsp() {
     <form class="panel" id="inf">
       <div style="display:flex;gap:8px"><input id="iu" inputmode="url" placeholder="Vlož odkaz na video (IG, TikTok, YouTube…)" autocomplete="off"><button type="button" class="btn sm" id="ipaste">Vložit</button></div>
       <textarea id="in" rows="1" placeholder="Co se ti na tom líbí? Hook, střih, vizuál, zvuk…" style="margin-top:8px"></textarea>
-      <div class="chips" id="ifc" style="margin-top:8px">${FK.map(k => `<button type="button" class="chip" data-k="${k}">${fmt(k).e} ${fmt(k).n}</button>`).join('')}</div>
+      <div class="chips" id="ifc" style="margin-top:8px">${FK.map(k => `<button type="button" class="chip" data-k="${k}">${ftag(k)}</button>`).join('')}</div>
       <div style="display:flex;justify-content:flex-end;margin-top:8px"><button class="btn pri sm">Uložit inspiraci</button></div>
     </form>
-    ${db.insp.length ? `<div class="chips filters" id="iff" style="margin-top:14px">${chip('fi', 'all', 'Vše')}${FK.filter(k => db.insp.some(x => x.format === k)).map(k => chip('fi', k, fmt(k).e + ' ' + fmt(k).n)).join('')}</div>` : ''}
-    <div class="list">${list.map(x => {
-      const [pn, pc] = linkPlat(x.url), y = ytId(x.url), used = x.used && byId(x.used);
+    ${db.insp.length ? `<div class="chips filters" id="iff" style="margin-top:14px">${chip('fi', 'all', 'Vše')}${FK.filter(k => db.insp.some(x => x.format === k)).map(k => chip('fi', k, ftag(k))).join('')}</div>` : ''}
+    <div class="ilist">${list.map(x => {
+      const [pn] = linkPlat(x.url), y = ytId(x.url), used = x.used && byId(x.used);
       return `<div class="insp">
         ${y ? `<a class="th" href="${esc(x.url)}" target="_blank" rel="noopener" style="background-image:url(https://i.ytimg.com/vi/${y}/mqdefault.jpg)"></a>` : ''}
         <div class="bd">
-          <div class="src"><span class="pl" style="background:${pc}">${esc(pn)}</span>${x.format ? `<span style="color:${fmt(x.format).c}">${fmt(x.format).e} ${fmt(x.format).n}</span>` : ''}<span class="grow"></span><span class="muted" style="font-weight:500">${fmtDate(ds(new Date(x.created)))}</span></div>
+          <div class="src"><span class="pl">${esc(pn)}</span>${x.format ? `${ftag(x.format)}` : ''}<span class="grow"></span><span class="muted" style="font-weight:500">${fmtDate(ds(new Date(x.created)))}</span></div>
           ${x.note ? `<p>${esc(x.note)}</p>` : ''}
           <div class="act">
             <a class="btn xs" href="${esc(x.url)}" target="_blank" rel="noopener">Otevřít ↗</a>
@@ -893,7 +1033,7 @@ function renderInsp() {
 }
 function addInsp(url, note, format) {
   if (db.insp.some(x => x.url === url)) { toast('Tohle už máš uložené'); return; }
-  db.insp.unshift({ id: uid(), url, note: note || '', format: format || '', created: Date.now(), updated: Date.now() }); save(true); toast('Inspirace uložena ✓');
+  db.insp.unshift({ id: uid(), url, note: note || '', format: format || '', created: Date.now(), updated: Date.now() }); save(true); toast('Inspirace uložena');
 }
 
 // ---------- HOOKY ----------
@@ -902,11 +1042,11 @@ function renderHooks() {
     <form class="panel quick" id="hf"><textarea id="ht" rows="1" placeholder="Dobrý hook – první věta videa…"></textarea>
       <div class="row"><span class="grow muted">První 1–3 s rozhodují, jestli lidi zůstanou.</span><button class="btn pri sm">Uložit</button></div></form>
     <h2>Moje hooky (${db.hooks.length})</h2>
-    ${db.hooks.map(h => `<div class="hook"><p>${esc(h.text)}</p><button class="ico" data-hc="${h.id}">${I.copy}</button><button class="ico" data-hd="${h.id}">${I.trash}</button></div>`).join('') || '<p class="muted">Zatím žádné. Ukládej si věty, které fungují – u tebe i u ostatních. Pak je otoč z jiného úhlu.</p>'}
+    <div class="hlist">${db.hooks.map(h => `<div class="hook"><p>${esc(h.text)}</p><button class="ico" data-hc="${h.id}">${I.copy}</button><button class="ico" data-hd="${h.id}">${I.trash}</button></div>`).join('')}</div>${db.hooks.length ? '' : '<p class="muted">Zatím žádné. Ukládej si věty, které fungují – u tebe i u ostatních. Pak je otoč z jiného úhlu.</p>'}
     <h2>Osvědčené vzorce</h2>
     ${FORMULAS.map((f, n) => `<div class="formula"><span>${esc(f)}</span><button class="btn xs ghost" data-fu="${n}">Použít</button></div>`).join('')}`;
   const ht = $('#ht');
-  $('#hf').onsubmit = e => { e.preventDefault(); const v = ht.value.trim(); if (!v) return; db.hooks.unshift({ id: uid(), text: v, updated: Date.now() }); save(true); render(); toast('Hook uložen ✓'); };
+  $('#hf').onsubmit = e => { e.preventDefault(); const v = ht.value.trim(); if (!v) return; db.hooks.unshift({ id: uid(), text: v, updated: Date.now() }); save(true); render(); toast('Hook uložen'); };
   $$('[data-hc]').forEach(b => b.onclick = () => copy(db.hooks.find(h => h.id === b.dataset.hc).text));
   $$('[data-hd]').forEach(b => b.onclick = () => { if (!confirm('Smazat hook?')) return; gone(b.dataset.hd); db.hooks = db.hooks.filter(h => h.id !== b.dataset.hd); save(true); render(); });
   $$('[data-fu]').forEach(b => b.onclick = () => { ht.value = FORMULAS[b.dataset.fu]; grow(ht); scrollTo(0, 0); ht.focus(); const p = ht.value.indexOf('['); if (p >= 0) ht.setSelectionRange(p, ht.value.indexOf(']', p) + 1); });
@@ -918,14 +1058,18 @@ function renderMore() {
   $('#view').innerHTML = `
     <h2>Synchronizace</h2>
     <div class="set" id="syncbox">${syncBoxHTML()}</div>
+    <h2>Hooky</h2>
+    <div class="set"><p>${db.hooks.length} uložených hooků a osvědčené vzorce.</p><button class="btn" id="tohooks">Otevřít banku hooků</button></div>
     <h2>Můj styl</h2>
     <div class="set"><p>Barvy, font titulků, styl editu, tvůrci, ze kterých čerpáš, zásady.</p>
       <textarea id="style" rows="4" placeholder="Barva, font titulků, styl editu, vzory…">${esc(db.style)}</textarea></div>
     <h2>Týdenní cíle</h2>
     <div class="set"><p>Kolik videí kterého formátu chceš týdně. Uvidíš to v Kalendáři.</p>
-      ${FK.filter(k => k !== 'jine').map(k => `<div class="grow-row"><span>${fmt(k).e} ${fmt(k).n}</span><div class="stepper"><button data-g="${k}" data-d="-1">−</button><b>${db.goals[k] || 0}</b><button data-g="${k}" data-d="1">+</button></div></div>`).join('')}</div>
+      ${FK.filter(k => k !== 'jine').map(k => `<div class="grow-row">${ftag(k)}<div class="stepper"><button data-g="${k}" data-d="-1">−</button><b>${db.goals[k] || 0}</b><button data-g="${k}" data-d="1">+</button></div></div>`).join('')}</div>
+    <h2>Pracovní rytmus</h2>
+    <div class="set"><p>Co v který den děláš. Podle toho ti stránka Dnes ukáže, co dělat.</p>${DAYN.map((d, n) => `<div class="dayrow"><span>${d}</span><select data-rh="${n}"><option value="">—</option>${Object.entries(RHY).map(([k, v]) => `<option value="${k}" ${db.rhythm[n] === k ? 'selected' : ''}>${v}</option>`).join('')}</select></div>`).join('')}</div>
     <h2>Témata dní</h2>
-    <div class="set">${DAYN.map((d, n) => `<div class="dayrow"><span>${d}</span><select data-day="${n}"><option value="">—</option>${FK.map(k => `<option value="${k}" ${db.days[n] === k ? 'selected' : ''}>${fmt(k).e} ${fmt(k).n}</option>`).join('')}</select></div>`).join('')}</div>
+    <div class="set">${DAYN.map((d, n) => `<div class="dayrow"><span>${d}</span><select data-day="${n}"><option value="">—</option>${FK.map(k => `<option value="${k}" ${db.days[n] === k ? 'selected' : ''}>${fmt(k).n}</option>`).join('')}</select></div>`).join('')}</div>
     <h2>Záloha</h2>
     <div class="set"><p>Záložní kopie do souboru – pro jistotu, nebo když nechceš synchronizaci.</p>
       <div class="row"><button class="btn pri" id="exp">Stáhnout zálohu</button><button class="btn" id="imp">Nahrát zálohu</button><input type="file" id="impf" accept=".json,application/json" hidden></div></div>
@@ -937,6 +1081,8 @@ function renderMore() {
   $('#style').oninput = e => { db.style = e.target.value; stampSet(); save(); };
   growAll($('#view'));
   $$('[data-g]').forEach(b => b.onclick = () => { const k = b.dataset.g; db.goals[k] = Math.max(0, Math.min(14, (db.goals[k] || 0) + +b.dataset.d)); stampSet(); save(true); b.parentElement.querySelector('b').textContent = db.goals[k]; });
+  $('#tohooks').onclick = () => go('hooks');
+  $$('[data-rh]').forEach(s => s.onchange = () => { db.rhythm[+s.dataset.rh] = s.value; stampSet(); save(true); });
   $$('[data-day]').forEach(s => s.onchange = () => { db.days[+s.dataset.day] = s.value; stampSet(); save(true); });
   $('#exp').onclick = () => {
     const blob = new Blob([JSON.stringify({ app: 'studio', exported: new Date().toISOString(), ...db }, null, 1)], { type: 'application/json' });
@@ -957,7 +1103,7 @@ function renderMore() {
         if (db.ideas.length && !confirm('Opravdu přepsat všechna současná data zálohou?')) return;
         db = norm(d);
       }
-      save(true); toast('Záloha nahrána ✓'); render();
+      save(true); toast('Záloha nahrána'); render();
     } catch (err) { toast('Tohle není platná záloha'); }
   };
   $('#expt').onclick = () => copy((db.style ? '# Můj styl\n' + db.style + '\n\n==========\n\n' : '') + db.ideas.map(ideaText).join('\n\n==========\n\n'), 'Zkopírováno');
@@ -1020,7 +1166,7 @@ function mergeDb(a, b) {
   return norm({
     ideas: mg(a.ideas, b.ideas).sort(byIdDesc), hooks: mg(a.hooks, b.hooks).sort(byIdDesc),
     insp: mg(a.insp, b.insp).sort(byIdDesc), tasks: mg(a.tasks, b.tasks).sort((p, q) => -byIdDesc(p, q)),
-    goals: { ...st.goals }, days: [...st.days], style: st.style, setU: st.setU || 0, deleted: del
+    goals: { ...st.goals }, days: [...st.days], rhythm: [...(st.rhythm || DEF_RHYTHM)], style: st.style, setU: st.setU || 0, deleted: del
   });
 }
 const typing = () => { const el = document.activeElement; return el && /INPUT|TEXTAREA|SELECT/.test(el.tagName) && el.closest('#view, #modal'); };
@@ -1067,7 +1213,7 @@ function syncBoxHTML() {
     </ol>
     <div class="row"><input id="stok" class="grow" placeholder="ghp_…" autocomplete="off" autocapitalize="off" spellcheck="false" style="flex:1;min-width:0"><button class="btn pri" id="sgo">Propojit</button></div>`;
   const when = sc.last ? new Date(sc.last).toLocaleString('cs-CZ', { day: 'numeric', month: 'numeric', hour: '2-digit', minute: '2-digit' }) : '';
-  return `<p>${sc.err ? `<b style="color:var(--bad)">⚠️ ${esc(sc.err)}</b>` : syncing ? '🔄 Synchronizuju…' : sc.last ? `✅ Synchronizováno ${when}` : 'Připojeno'}${sc.user ? `<br><span class="muted">GitHub: ${esc(sc.user)}</span>` : ''}</p>
+  return `<p>${sc.err ? `<b style="color:var(--bad)">${esc(sc.err)}</b>` : syncing ? 'Synchronizuju…' : sc.last ? `Synchronizováno ${when}` : 'Připojeno'}${sc.user ? `<br><span class="muted">GitHub: ${esc(sc.user)}</span>` : ''}</p>
     <div class="row"><button class="btn" id="snow" ${syncing ? 'disabled' : ''}>Synchronizovat teď</button><button class="btn ghost danger" id="soff">Odpojit</button></div>`;
 }
 function bindSyncBox() {
@@ -1075,7 +1221,7 @@ function bindSyncBox() {
   if (go) go.onclick = async () => {
     const tok = $('#stok').value.trim(); if (!tok) return $('#stok').focus();
     sc = { token: tok }; go.disabled = true; go.textContent = 'Ověřuju…';
-    try { sc.user = (await gh('/user')).login; keepSc(); toast('Propojeno ✓'); await syncNow(); }
+    try { sc.user = (await gh('/user')).login; keepSc(); toast('Propojeno'); await syncNow(); }
     catch (e) { sc = {}; keepSc(); toast(e.message || 'Nepodařilo se připojit'); setSyncState(); }
   };
   const now = $('#snow'); if (now) now.onclick = () => { $('#snow').disabled = true; syncNow(); };
@@ -1107,7 +1253,7 @@ addEventListener('popstate', () => {
   if (!$('#modal').hidden) closeModal();
   if (cur) closeEditor(true);
 });
-function flashSaved() { const s = $('#saved'); if (s) { s.textContent = 'Uloženo ✓'; clearTimeout(s._t); s._t = setTimeout(() => s.textContent = '', 1400); } }
+function flashSaved() { const s = $('#saved'); if (s) { s.textContent = 'Uloženo'; clearTimeout(s._t); s._t = setTimeout(() => s.textContent = '', 1400); } }
 
 function renderEditor() {
   const i = cur, f = fmt(i.format);
@@ -1124,10 +1270,11 @@ function renderEditor() {
     <div class="wrap">
       <textarea class="ttl" data-f="title" rows="1" placeholder="Název videa">${esc(i.title)}</textarea>
       <div class="meta">
-        <div><label class="l">Formát</label><select data-f="format">${FK.map(k => `<option value="${k}" ${i.format === k ? 'selected' : ''}>${fmt(k).e} ${fmt(k).n}</option>`).join('')}</select></div>
+        <div><label class="l">Formát</label><select data-f="format">${FK.map(k => `<option value="${k}" ${i.format === k ? 'selected' : ''}>${fmt(k).n}</option>`).join('')}</select></div>
         <div><label class="l">Kam</label><select data-f="platform">${Object.entries(PLAT).map(([k, v]) => `<option value="${k}" ${i.platform === k ? 'selected' : ''}>${v}</option>`).join('')}</select></div>
-        <div><label class="l">Den</label><button class="datebtn" id="edate">${i.date ? '📅 ' + relDate(i.date) : '📥 Zásobník'}</button></div>
-        <div><label class="l">Série</label><input data-f="series" list="serl" placeholder="Např. Cesta na stage" value="${esc(i.series)}">
+        <div><label class="l">Vychází</label><button class="datebtn" id="edate">${i.date ? relDate(i.date) : 'Zásobník · vybrat'}</button></div>
+        <div><label class="l">Natáčení</label><button class="datebtn" id="eshoot">${i.shoot ? relDate(i.shoot) : 'Vybrat den'}</button></div>
+        <div class="w2"><label class="l">Série</label><input data-f="series" list="serl" placeholder="Např. Cesta na stage" value="${esc(i.series)}">
           <datalist id="serl">${[...new Set([...SERIES, ...db.ideas.map(x => x.series).filter(Boolean)])].map(s => `<option value="${esc(s)}">`).join('')}</datalist></div>
       </div>
       ${procHTML(i)}
@@ -1144,7 +1291,7 @@ function procHTML(i) {
   const si = SKEYS.indexOf(i.status);
   return `<div id="proc"><label class="l" style="margin-top:14px">Proces</label>
     <div class="proc">${SKEYS.map((k, n) => `<button data-st="${k}" class="${n <= si ? 'on' : ''} ${n === si ? 'cur' : ''}" style="--sc:var(--s-${i.status})"><i></i>${STATUS[k]}</button>`).join('')}</div>
-    ${si < SKEYS.length - 1 ? `<button class="btn sm nextst" id="nextst">Další krok: ${STATUS[SKEYS[si + 1]]} →</button>` : '<p class="muted" style="margin:8px 2px 0">🎉 Video je venku</p>'}</div>`;
+    ${si < SKEYS.length - 1 ? `<button class="btn sm nextst" id="nextst">Další krok: ${STATUS[SKEYS[si + 1]]} →</button>` : '<p class="muted" style="margin:8px 2px 0">Video je venku.</p>'}</div>`;
 }
 function bindProc() {
   $$('#proc [data-st]').forEach(b => b.onclick = () => { setStatus(cur, b.dataset.st); renderEditor(); });
@@ -1152,8 +1299,8 @@ function bindProc() {
 }
 function extraFields(i) {
   const f = fmt(i.format); let h = '';
-  if (f.x.includes('ingr')) h += `<div class="fld"><label class="l">🥕 Ingredience</label><textarea data-f="ingr" rows="3" placeholder="200 g kuřecích prsou&#10;100 g rýže…">${esc(i.ingr)}</textarea></div>`;
-  if (f.x.includes('macros')) h += `<div class="fld"><label class="l">📊 Makra na porci</label><div class="macros">
+  if (f.x.includes('ingr')) h += `<div class="fld"><label class="l">Ingredience</label><textarea data-f="ingr" rows="3" placeholder="200 g kuřecích prsou&#10;100 g rýže…">${esc(i.ingr)}</textarea></div>`;
+  if (f.x.includes('macros')) h += `<div class="fld"><label class="l">Makra na porci</label><div class="macros">
     ${[['kcal', 'kcal'], ['p', 'bílkoviny g'], ['c', 'sacharidy g'], ['f', 'tuky g']].map(([k, l]) => `<div><input data-m="${k}" inputmode="decimal" value="${esc(i.macros[k])}"><span>${l}</span></div>`).join('')}</div></div>`;
   return h;
 }
@@ -1161,36 +1308,35 @@ function tabScript(i) {
   const f = fmt(i.format);
   const bodyPh = f.b.map(([a, b]) => [a, b].filter(x => x && x !== '…').join(' – ')).filter(Boolean).join('\n') || 'Hlavní obsah videa…';
   return `
-    <div class="fld hookbox"><div class="lbl-row"><label>🎣 Hook · první 1–3 s</label>
+    <div class="fld hookbox"><div class="lbl-row"><label>Hook <span>· první 1–3 s</span></label>
       <button class="btn xs ghost" id="hpick">Z banky</button><button class="btn xs ghost" id="hsave">Uložit</button></div>
       <textarea data-f="hook" rows="1" placeholder="${esc(f.hook || 'Věta, která diváka zastaví…')}">${esc(i.hook)}</textarea></div>
-    <div class="fld bodybox"><label class="l">📝 Tělo · ${f.v ? 'co říkám a ukazuju' : 'záběry a text na obrazovce'}</label>
+    <div class="fld bodybox"><label class="l">Tělo <span>· ${f.v ? 'co říkám a ukazuju' : 'záběry a text na obrazovce'}</span></label>
       <textarea data-f="body" rows="7" placeholder="${esc(bodyPh)}">${esc(i.body)}</textarea></div>
-    <div class="fld ctabox"><label class="l">📣 CTA · výzva na konci</label>
+    <div class="fld ctabox"><label class="l">CTA <span>· výzva na konci</span></label>
       <textarea data-f="cta" rows="1" placeholder="${esc(f.cta || 'Ulož / sleduj / napiš do komentářů…')}">${esc(i.cta)}</textarea></div>
-    <div class="fld"><label class="l">🔗 Odkaz · nepovinné</label>
+    <div class="fld"><label class="l">Odkaz <span>· nepovinné</span></label>
       <input data-f="link" inputmode="url" autocomplete="off" placeholder="Originál, trend, produkt, odkaz do popisku…" value="${esc(i.link)}">
       ${/^https?:/.test(i.link) ? `<p class="hint"><a href="${esc(i.link)}" target="_blank" rel="noopener">Otevřít odkaz ↗</a></p>` : ''}</div>
     ${extraFields(i)}
     <div class="foot">
       <div class="info" id="stats"></div>
       <button class="btn sm" id="scopy" title="Kopírovat">${I.copy.replace('<svg', '<svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"')}</button>
-      ${f.v ? '<button class="btn pri sm" id="prompt">▶ Čtečka</button>' : ''}
+      ${f.v ? '<button class="btn pri sm" id="prompt">Čtečka</button>' : ''}
     </div>`;
 }
 function tabFilm(i) {
   const done = i.shots.filter(s => s.done).length;
   return `
     <h2>Postup ${stepsDone(i)}/${STEPS.length}</h2>
-    ${STEPS.map(s => `<label class="step ${i.steps[s] ? 'done' : ''}"><input type="checkbox" data-step="${esc(s)}" ${i.steps[s] ? 'checked' : ''}>${s}</label>`).join('')}
+    <div class="steps">${STEPS.map(s => `<label class="step ${i.steps[s] ? 'done' : ''}"><input type="checkbox" data-step="${esc(s)}" ${i.steps[s] ? 'checked' : ''}>${s}</label>`).join('')}</div>
     <h2>Kamera</h2>
     <div class="chips wrapc">${CAMS.map(c => `<button class="chip ${i.camera === c ? 'on' : ''}" data-cam="${esc(c)}">${c}</button>`).join('')}</div>
-    <div class="fld"><label class="l">🎵 Hudba / zvuk</label><input data-f="music" placeholder="Název zvuku nebo odkaz" value="${esc(i.music)}"></div>
+    <div class="fld"><label class="l">Hudba / zvuk</label><input data-f="music" placeholder="Název zvuku nebo odkaz" value="${esc(i.music)}"></div>
     <h2>Záběry ${i.shots.length ? done + '/' + i.shots.length : ''}</h2>
-    ${i.shots.length ? `<div class="progress"><i style="width:${done / i.shots.length * 100}%"></i></div>` : ''}
-    ${i.shots.map(s => `<div class="shot ${s.done ? 'done' : ''}" data-s="${s.id}">
-      <input type="checkbox" ${s.done ? 'checked' : ''} data-sc><input type="text" value="${esc(s.text)}" data-st placeholder="Záběr…"><button class="ico" data-sx>${I.x}</button></div>`).join('')}
-    <form id="sf" style="display:flex;gap:8px;margin-top:8px"><input id="snew" placeholder="Nový záběr – co natočit" style="background:var(--bg2);box-shadow:var(--sh)"><button class="btn">Přidat</button></form>
+    <div class="shots">${i.shots.map(s => `<div class="shot ${s.done ? 'done' : ''}" data-s="${s.id}">
+      <input type="checkbox" ${s.done ? 'checked' : ''} data-sc><input type="text" value="${esc(s.text)}" data-st placeholder="Záběr…"><button class="ico" data-sx>${I.x}</button></div>`).join('')}</div>
+    <form id="sf" class="addrow"><input id="snew" placeholder="Nový záběr – co natočit"><button class="btn">Přidat</button></form>
     <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
       ${done ? '<button class="btn sm ghost" id="sclear">Smazat odškrtnuté</button>' : ''}
     </div>
@@ -1217,7 +1363,7 @@ function tabNote(i) {
       <textarea data-f="note" rows="5" placeholder="Rozepiš myšlenku – proč to bude fungovat, pro koho to je, jaký úhel…">${esc(i.note)}</textarea></div>
     <div class="fld"><label class="l">Inspirace a odkazy</label>
       <textarea data-f="links" rows="2" placeholder="Odkazy na videa, zvuky, reference…">${esc(i.links)}</textarea>
-      ${links.map(u => `<div class="linkrow"><span class="badge" style="background:${linkPlat(u)[1]};color:#fff">${esc(linkPlat(u)[0])}</span><a href="${esc(u)}" target="_blank" rel="noopener">${esc(u.replace(/^https?:\/\/(www\.)?/, ''))}</a></div>`).join('')}</div>
+      ${links.map(u => `<div class="linkrow"><b>${esc(linkPlat(u)[0])}</b><a href="${esc(u)}" target="_blank" rel="noopener">${esc(u.replace(/^https?:\/\/(www\.)?/, ''))}</a></div>`).join('')}</div>
     ${!i.hook && !i.body ? `<button class="btn pri full" style="margin-top:18px" data-et="script">Napsat scénář →</button>` : ''}
     <p class="hint" style="margin-top:18px">Vytvořeno ${new Date(i.created).toLocaleString('cs-CZ')}</p>`;
 }
@@ -1261,7 +1407,8 @@ function bindEditor() {
   $$('[data-m]', ed).forEach(el => el.oninput = () => { i.macros[el.dataset.m] = el.value; touch(); });
   bindProc();
   $('#edate').onclick = () => assignDay(i.id, null, renderEditor);
-  const hs = $('#hsave'); if (hs) hs.onclick = () => { const t = i.hook.trim(); if (!t) return toast('Nejdřív napiš hook'); if (db.hooks.some(h => h.text === t)) return toast('Už ho máš v hookách'); db.hooks.unshift({ id: uid(), text: t, updated: Date.now() }); save(true); toast('Uloženo do hooků ✓'); };
+  $('#eshoot').onclick = () => assignDay(i.id, null, renderEditor, 'shoot');
+  const hs = $('#hsave'); if (hs) hs.onclick = () => { const t = i.hook.trim(); if (!t) return toast('Nejdřív napiš hook'); if (db.hooks.some(h => h.text === t)) return toast('Už ho máš v hookách'); db.hooks.unshift({ id: uid(), text: t, updated: Date.now() }); save(true); toast('Uloženo do hooků'); };
   const hp = $('#hpick'); if (hp) hp.onclick = pickHook;
   const sc = $('#scopy'); if (sc) sc.onclick = () => copy(scriptText(i, true).map(([l, t]) => `[${l}]\n${t}`).join('\n\n') + (i.link.trim() ? '\n\n[Odkaz]\n' + i.link.trim() : ''), 'Scénář zkopírován');
   const pr = $('#prompt'); if (pr) pr.onclick = openPrompter;
@@ -1271,7 +1418,7 @@ function bindEditor() {
     if (c.checked && c.dataset.step === 'Scénář' && ['idea', 'script'].includes(i.status)) i.status = 'film';
     if (c.checked && c.dataset.step === 'Natočeno' && ['idea', 'script', 'film'].includes(i.status)) i.status = 'edit';
     touch();
-    if (stepsDone(i) === STEPS.length && i.status !== 'done') toast('Všechno hotovo – stačí publikovat 🚀');
+    if (stepsDone(i) === STEPS.length && i.status !== 'done') toast('Všechno hotovo, zbývá publikovat');
     renderEditor();
   });
   $$('[data-cam]', ed).forEach(c => c.onclick = () => { i.camera = i.camera === c.dataset.cam ? '' : c.dataset.cam; touch(); renderEditor(); });
@@ -1298,7 +1445,7 @@ function bindEditor() {
 
 function pickHook() {
   const all = [...db.hooks.map(h => h.text), ...FORMULAS.filter(f => !db.hooks.some(h => h.text === f))];
-  openModal(`<h3>Vyber hook</h3>${all.map((t, n) => `<button class="opt" data-n="${n}">${esc(t)}</button>`).join('')}`, m => {
+  openModal(`<h3>Vyber hook</h3><div class="optgroup">${all.map((t, n) => `<button class="opt" data-n="${n}">${esc(t)}</button>`).join('')}</div>`, m => {
     $$('[data-n]', m).forEach(b => b.onclick = () => {
       cur.hook = all[+b.dataset.n]; touch(); closeModal(); renderEditor();
       const h = $('#editor [data-f=hook]'); h.focus(); const p = h.value.indexOf('['); if (p >= 0) h.setSelectionRange(p, h.value.indexOf(']', p) + 1);
@@ -1318,8 +1465,8 @@ function openPrompter() {
     <div class="scroll" id="psc"><div class="txt" id="ptxt" style="font-size:${pset.size}px">${parts.map(([l, t]) => `<span class="sec">${esc(l)}</span>${esc(t)}`).join('\n')}</div></div>
     <div class="guide"></div>
     <div class="ctl">
-      <button class="btn pri" id="pplay">▶ Start</button>
-      <button class="btn" id="prst">⟲</button>
+      <button class="btn pri" id="pplay">Spustit</button>
+      <button class="btn" id="prst">Od začátku</button>
       <label>Rychlost <input type="range" id="pspd" min="1" max="10" step="0.5" value="${pset.speed}"></label>
       <button class="btn" id="pminus">A−</button><button class="btn" id="pplus">A+</button>
       <button class="btn" id="pmir">Zrcadlit</button>
@@ -1339,7 +1486,7 @@ function openPrompter() {
   const toggle = on => {
     playing = on ?? !playing; last = 0;
     p.classList.toggle('playing', playing);
-    $('#pplay').textContent = playing ? '❚❚ Pauza' : '▶ Start';
+    $('#pplay').textContent = playing ? 'Pauza' : 'Spustit';
     cancelAnimationFrame(praf);
     if (playing) { praf = requestAnimationFrame(step); try { navigator.wakeLock && navigator.wakeLock.request('screen').then(w => wakeLock = w).catch(() => {}); } catch (e) {} }
     else if (wakeLock) { wakeLock.release().catch(() => {}); wakeLock = null; }
