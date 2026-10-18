@@ -42,9 +42,14 @@ function fixBottom() {
   const port = innerHeight > innerWidth; const gap = sa && port ? Math.max(0, Math.round(screen.height - innerHeight)) : 0;
   const fix = gap > 0 && gap < 140 ? gap : 0;
   // okno končí nad spodní hranou displeje → bezpečný okraj už je mimo okno, bar dáme těsně ke spodku okna
-  if (fix > 20) document.documentElement.style.setProperty('--tabb', '8px'); else document.documentElement.style.removeProperty('--tabb');
+  const R = document.documentElement.style;
+  if (fix > 20 && S.settings.vbStretch) { R.setProperty('--tabb', `${34 - fix}px`); R.setProperty('--appb', `-${fix}px`); R.setProperty('--fullh', screen.height + 'px'); document.documentElement.classList.add('vbs'); }
+  else if (fix > 20) { R.setProperty('--tabb', '8px'); R.removeProperty('--appb'); document.documentElement.classList.remove('vbs'); }
+  else { R.removeProperty('--tabb'); R.removeProperty('--appb'); document.documentElement.classList.remove('vbs'); }
   window.__vb = { sab, ih: innerHeight, sh: screen.height, sa, fix };
 }
 fixBottom(); addEventListener('resize', fixBottom); addEventListener('orientationchange', () => setTimeout(fixBottom, 300));
 const _9vSettings = vSettings;
-vSettings = function () { const v = window.__vb || {}; return _9vSettings().replace(/Kodad boost · verze ([^<]*)<\/span>/, (m, ver) => `Kodad boost · verze ${ver}</span><span class="mut" style="font-size:11px">displej ${v.sh} · okno ${v.ih} · spodní okraj ${v.sab} · posun ${v.fix}${v.sa ? '' : ' · prohlížeč'}</span>`); };
+vSettings = function () { const v = window.__vb || {}; const sw = v.fix > 20 ? `<button class="sw ${S.settings.vbStretch ? 'on' : ''}" data-a="vb-tog" style="margin-top:10px;width:100%"><span>Roztáhnout až dolů (zkouška)<small>iOS dává aplikaci o ${v.fix} bodů kratší okno. Když bude lišta po zapnutí useknutá, vypni to.</small></span><span class="k"></span></button>` : ''; return _9vSettings().replace('<div style="margin:40px auto 0;opacity:.5', sw + '<div style="margin:40px auto 0;opacity:.5').replace(/Kodad boost · verze ([^<]*)<\/span>/, (m, ver) => `Kodad boost · verze ${ver}</span><span class="mut" style="font-size:11px">displej ${v.sh} · okno ${v.ih} · spodní okraj ${v.sab} · posun ${v.fix}${v.sa ? '' : ' · prohlížeč'}</span>`); };
+
+A['vb-tog'] = () => { S.settings.vbStretch = !S.settings.vbStretch; save(true); fixBottom(); render(); };
