@@ -162,4 +162,4 @@ body{padding:0}
 nav.tabs{bottom:calc(10px + env(safe-area-inset-bottom,0px));transform:translateZ(0)}
 #sheet .pn{will-change:transform;touch-action:pan-y}
 #sheet .grab{width:44px;height:5px;margin:4px auto 20px;padding:0;box-shadow:0 0 0 14px transparent}
-nav.tabs{bottom:calc(max(6px, env(safe-area-inset-bottom,0px) - 12px) - var(--vbfix,0px))}
+nav.tabs{bottom:var(--tabb,max(6px, calc(env(safe-area-inset-bottom,0px) - 12px)))}

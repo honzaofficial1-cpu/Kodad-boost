@@ -41,7 +41,8 @@ function fixBottom() {
   const sa = !!(navigator.standalone || matchMedia('(display-mode: standalone)').matches);
   const port = innerHeight > innerWidth; const gap = sa && port ? Math.max(0, Math.round(screen.height - innerHeight)) : 0;
   const fix = gap > 0 && gap < 140 ? gap : 0;
-  document.documentElement.style.setProperty('--vbfix', fix + 'px');
+  // okno končí nad spodní hranou displeje → bezpečný okraj už je mimo okno, bar dáme těsně ke spodku okna
+  if (fix > 20) document.documentElement.style.setProperty('--tabb', '8px'); else document.documentElement.style.removeProperty('--tabb');
   window.__vb = { sab, ih: innerHeight, sh: screen.height, sa, fix };
 }
 fixBottom(); addEventListener('resize', fixBottom); addEventListener('orientationchange', () => setTimeout(fixBottom, 300));
