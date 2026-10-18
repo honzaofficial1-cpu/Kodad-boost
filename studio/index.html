@@ -261,6 +261,9 @@ label.l,.lbl-row label{display:block;font-size:12px;font-weight:700;color:var(--
 .set{background:var(--card);border-radius:var(--r);padding:14px;margin-bottom:10px;box-shadow:var(--sh)}
 .set p{margin:0 0 12px;color:var(--tx2);font-size:14.5px}
 .set .row{display:flex;gap:8px;flex-wrap:wrap}
+.olist{margin:0 0 12px;padding-left:20px;font-size:14.5px;color:var(--tx2)}
+.olist li{margin-bottom:8px}
+.olist a{font-weight:700}
 .grow-row{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--line)}
 .grow-row:last-child{border:0}
 .grow-row span{flex:1;font-weight:600}
@@ -386,7 +389,7 @@ const DEF_GOALS = { recept: 2, rady: 1, gymedit: 1, skec: 2, trend: 2, pribeh: 1
 const DEF_DAYS = ['recept', 'rady', '', 'gymedit', '', 'recept', 'soutez'];
 
 // ---------- data ----------
-function blank() { return { ideas: [], hooks: [], insp: [], tasks: [], goals: { ...DEF_GOALS }, days: [...DEF_DAYS], style: '' }; }
+function blank() { return { ideas: [], hooks: [], insp: [], tasks: [], goals: { ...DEF_GOALS }, days: [...DEF_DAYS], style: '', setU: 0, deleted: {} }; }
 function norm(d) {
   const o = { ...blank(), ...d };
   o.ideas = o.ideas.map(i => {
@@ -407,7 +410,11 @@ function save(now) {
   clearTimeout(saveT);
   const go = () => { try { localStorage.setItem(KEY, JSON.stringify(db)); flashSaved(); } catch (e) { toast('Nepodařilo se uložit!'); } };
   if (now) go(); else saveT = setTimeout(go, 300);
+  syncSoon();
 }
+// smazané položky si pamatujeme, ať je synchronizace nevrátí zpátky
+const gone = (...ids) => ids.forEach(id => db.deleted[id] = Date.now());
+const stampSet = () => db.setU = Date.now();
 addEventListener('pagehide', () => save(true));
 document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') save(true); });
 try { navigator.storage && navigator.storage.persist && navigator.storage.persist(); } catch (e) {}
@@ -682,14 +689,14 @@ function renderWeek() {
     const i = byId(b.dataset.mv), n = SKEYS.indexOf(i.status) + +b.dataset.d;
     if (n >= 0 && n < SKEYS.length) { setStatus(i, SKEYS[n]); render(); }
   });
-  $('#tf').onsubmit = e => { e.preventDefault(); const v = $('#tnew').value.trim(); if (!v) return; db.tasks.push({ id: uid(), text: v, done: false }); save(true); render(); $('#tnew').focus(); };
+  $('#tf').onsubmit = e => { e.preventDefault(); const v = $('#tnew').value.trim(); if (!v) return; db.tasks.push({ id: uid(), text: v, done: false, updated: Date.now() }); save(true); render(); $('#tnew').focus(); };
   $$('.task').forEach(el => {
     const x = db.tasks.find(y => y.id === el.dataset.t);
-    $('[type=checkbox]', el).onchange = e => { x.done = e.target.checked; save(true); render(); };
-    $('[type=text]', el).oninput = e => { x.text = e.target.value; save(); };
-    $('[data-tx]', el).onclick = () => { db.tasks = db.tasks.filter(y => y !== x); save(true); render(); };
+    $('[type=checkbox]', el).onchange = e => { x.done = e.target.checked; x.updated = Date.now(); save(true); render(); };
+    $('[type=text]', el).oninput = e => { x.text = e.target.value; x.updated = Date.now(); save(); };
+    $('[data-tx]', el).onclick = () => { gone(x.id); db.tasks = db.tasks.filter(y => y !== x); save(true); render(); };
   });
-  const tc = $('#tclr'); if (tc) tc.onclick = () => { db.tasks = db.tasks.filter(x => !x.done); save(true); render(); };
+  const tc = $('#tclr'); if (tc) tc.onclick = () => { gone(...db.tasks.filter(x => x.done).map(x => x.id)); db.tasks = db.tasks.filter(x => !x.done); save(true); render(); };
 }
 function slotHTML(i) {
   const si = SKEYS.indexOf(i.status), f = fmt(i.format);
@@ -705,7 +712,7 @@ function pickTheme(wd) {
   openModal(`<h3>Formát na ${DAYN[wd].toLowerCase()}</h3><p class="muted" style="margin:-6px 0 12px">Platí pro každý týden.</p>
     <button class="opt" data-k="">☕ Volný slot<small>Pauza, dotočení, improvizace</small></button>
     ${FK.filter(k => k !== 'jine').map(k => `<button class="opt" style="--fc:${fmt(k).c}" data-k="${k}">${fmt(k).e} ${fmt(k).n}<small>${fmt(k).desc}</small></button>`).join('')}`,
-  m => $$('[data-k]', m).forEach(b => b.onclick = () => { db.days[wd] = b.dataset.k; save(true); closeModal(); render(); }));
+  m => $$('[data-k]', m).forEach(b => b.onclick = () => { db.days[wd] = b.dataset.k; stampSet(); save(true); closeModal(); render(); }));
 }
 function planDay(date, th) {
   const pool = db.ideas.filter(i => i.status !== 'done' && i.date !== date)
@@ -764,18 +771,18 @@ function renderInsp() {
     if (!u) { toast('Tohle nevypadá jako odkaz'); return; }
     addInsp(u, $('#in').value.trim(), k); render();
   };
-  $$('[data-ix]').forEach(b => b.onclick = () => { if (!confirm('Smazat inspiraci?')) return; db.insp = db.insp.filter(x => x.id !== b.dataset.ix); save(true); render(); });
+  $$('[data-ix]').forEach(b => b.onclick = () => { if (!confirm('Smazat inspiraci?')) return; gone(b.dataset.ix); db.insp = db.insp.filter(x => x.id !== b.dataset.ix); save(true); render(); });
   $$('[data-i2i]').forEach(b => b.onclick = () => {
     const x = db.insp.find(y => y.id === b.dataset.i2i);
     const it = newIdea(x.note ? x.note.split('\n')[0].slice(0, 80) : 'Nápad z inspirace', x.format || 'jine');
     it.links = x.url; it.note = x.note; if (fmt(it.format).x.includes('ref')) it.ref = x.url;
-    db.ideas.unshift(it); x.used = it.id; save(true); render(); openEditor(it.id);
+    db.ideas.unshift(it); x.used = it.id; x.updated = Date.now(); save(true); render(); openEditor(it.id);
   });
   bindChips();
 }
 function addInsp(url, note, format) {
   if (db.insp.some(x => x.url === url)) { toast('Tohle už máš uložené'); return; }
-  db.insp.unshift({ id: uid(), url, note: note || '', format: format || '', created: Date.now() }); save(true); toast('Inspirace uložena ✓');
+  db.insp.unshift({ id: uid(), url, note: note || '', format: format || '', created: Date.now(), updated: Date.now() }); save(true); toast('Inspirace uložena ✓');
 }
 
 // ---------- HOOKY ----------
@@ -788,9 +795,9 @@ function renderHooks() {
     <h2>Osvědčené vzorce</h2>
     ${FORMULAS.map((f, n) => `<div class="formula"><span>${esc(f)}</span><button class="btn xs ghost" data-fu="${n}">Použít</button></div>`).join('')}`;
   const ht = $('#ht');
-  $('#hf').onsubmit = e => { e.preventDefault(); const v = ht.value.trim(); if (!v) return; db.hooks.unshift({ id: uid(), text: v }); save(true); render(); toast('Hook uložen ✓'); };
+  $('#hf').onsubmit = e => { e.preventDefault(); const v = ht.value.trim(); if (!v) return; db.hooks.unshift({ id: uid(), text: v, updated: Date.now() }); save(true); render(); toast('Hook uložen ✓'); };
   $$('[data-hc]').forEach(b => b.onclick = () => copy(db.hooks.find(h => h.id === b.dataset.hc).text));
-  $$('[data-hd]').forEach(b => b.onclick = () => { if (!confirm('Smazat hook?')) return; db.hooks = db.hooks.filter(h => h.id !== b.dataset.hd); save(true); render(); });
+  $$('[data-hd]').forEach(b => b.onclick = () => { if (!confirm('Smazat hook?')) return; gone(b.dataset.hd); db.hooks = db.hooks.filter(h => h.id !== b.dataset.hd); save(true); render(); });
   $$('[data-fu]').forEach(b => b.onclick = () => { ht.value = FORMULAS[b.dataset.fu]; grow(ht); scrollTo(0, 0); ht.focus(); const p = ht.value.indexOf('['); if (p >= 0) ht.setSelectionRange(p, ht.value.indexOf(']', p) + 1); });
 }
 
@@ -798,6 +805,8 @@ function renderHooks() {
 function renderMore() {
   const size = new Blob([localStorage.getItem(KEY) || '']).size;
   $('#view').innerHTML = `
+    <h2>Synchronizace</h2>
+    <div class="set" id="syncbox">${syncBoxHTML()}</div>
     <h2>Můj styl</h2>
     <div class="set"><p>Barvy, font titulků, styl editu, tvůrci, ze kterých čerpáš, zásady.</p>
       <textarea id="style" rows="4" placeholder="Barva, font titulků, styl editu, vzory…">${esc(db.style)}</textarea></div>
@@ -807,16 +816,17 @@ function renderMore() {
     <h2>Témata dní</h2>
     <div class="set">${DAYN.map((d, n) => `<div class="dayrow"><span>${d}</span><select data-day="${n}"><option value="">—</option>${FK.map(k => `<option value="${k}" ${db.days[n] === k ? 'selected' : ''}>${fmt(k).e} ${fmt(k).n}</option>`).join('')}</select></div>`).join('')}</div>
     <h2>Záloha</h2>
-    <div class="set"><p>Data jsou jen v tomhle telefonu (v appce z plochy). Občas si stáhni zálohu – přes ni je přeneseš i do počítače.</p>
+    <div class="set"><p>Záložní kopie do souboru – pro jistotu, nebo když nechceš synchronizaci.</p>
       <div class="row"><button class="btn pri" id="exp">Stáhnout zálohu</button><button class="btn" id="imp">Nahrát zálohu</button><input type="file" id="impf" accept=".json,application/json" hidden></div></div>
     <div class="set"><p>Všechno jako text – do Poznámek nebo pro ChatGPT / Clauda.</p><button class="btn" id="expt">Kopírovat vše jako text</button></div>
     <p class="muted" style="text-align:center">${db.ideas.length} nápadů · ${db.ideas.filter(i => i.status === 'done').length} venku · ${db.insp.length} inspirací · ${db.hooks.length} hooků · ${(size / 1024).toFixed(1)} kB</p>
     <div class="set" style="margin-top:20px"><button class="btn danger" id="wipe">Smazat všechna data</button></div>
     <p class="muted" style="text-align:center;margin-top:20px">Na iPhonu: Safari → Sdílet → Přidat na plochu.</p>`;
-  $('#style').oninput = e => { db.style = e.target.value; save(); };
+  bindSyncBox();
+  $('#style').oninput = e => { db.style = e.target.value; stampSet(); save(); };
   growAll($('#view'));
-  $$('[data-g]').forEach(b => b.onclick = () => { const k = b.dataset.g; db.goals[k] = Math.max(0, Math.min(14, (db.goals[k] || 0) + +b.dataset.d)); save(true); b.parentElement.querySelector('b').textContent = db.goals[k]; });
-  $$('[data-day]').forEach(s => s.onchange = () => { db.days[+s.dataset.day] = s.value; save(true); });
+  $$('[data-g]').forEach(b => b.onclick = () => { const k = b.dataset.g; db.goals[k] = Math.max(0, Math.min(14, (db.goals[k] || 0) + +b.dataset.d)); stampSet(); save(true); b.parentElement.querySelector('b').textContent = db.goals[k]; });
+  $$('[data-day]').forEach(s => s.onchange = () => { db.days[+s.dataset.day] = s.value; stampSet(); save(true); });
   $('#exp').onclick = () => {
     const blob = new Blob([JSON.stringify({ app: 'studio', exported: new Date().toISOString(), ...db }, null, 1)], { type: 'application/json' });
     const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'studio-zaloha-' + today() + '.json'; a.click();
@@ -831,8 +841,7 @@ function renderMore() {
       delete d.app; delete d.exported;
       const merge = db.ideas.length && confirm(`Záloha má ${d.ideas.length} nápadů.\n\nOK = přidat k současným (stejné nahradit)\nZrušit = přepsat vše`);
       if (merge) {
-        const mg = (a, b) => { const m = new Map((a || []).map(x => [x.id, x])); (b || []).forEach(x => m.set(x.id, x)); return [...m.values()]; };
-        db = norm({ ...db, ideas: mg(db.ideas, d.ideas).sort((a, b) => b.updated - a.updated), hooks: mg(db.hooks, d.hooks), insp: mg(db.insp, d.insp), tasks: mg(db.tasks, d.tasks) });
+        db = mergeDb(db, d);
       } else {
         if (db.ideas.length && !confirm('Opravdu přepsat všechna současná data zálohou?')) return;
         db = norm(d);
@@ -841,7 +850,7 @@ function renderMore() {
     } catch (err) { toast('Tohle není platná záloha'); }
   };
   $('#expt').onclick = () => copy((db.style ? '# Můj styl\n' + db.style + '\n\n==========\n\n' : '') + db.ideas.map(ideaText).join('\n\n==========\n\n'), 'Zkopírováno');
-  $('#wipe').onclick = () => { if (confirm('Smazat VŠECHNO? Nejde to vrátit.') && confirm('Fakt? Stáhl sis zálohu?')) { db = blank(); save(true); render(); } };
+  $('#wipe').onclick = () => { if (confirm('Smazat VŠECHNO? Nejde to vrátit.') && confirm('Fakt? Stáhl sis zálohu?')) { const del = { ...db.deleted }; [...db.ideas, ...db.hooks, ...db.insp, ...db.tasks].forEach(x => del[x.id] = Date.now()); db = blank(); db.deleted = del; db.setU = Date.now(); save(true); render(); } };
 }
 
 function ideaText(i) {
@@ -856,6 +865,111 @@ function ideaText(i) {
   if (i.links.trim()) s.push('', '## Odkazy', i.links.trim());
   return s.join('\n');
 }
+
+// ---------- SYNCHRONIZACE (soukromý gist na GitHubu) ----------
+const SKEY = 'studio.sync', GFILE = 'studio-data.json', GDESC = 'Studio – data appky (nemazat)';
+let sc = (() => { try { return JSON.parse(localStorage.getItem(SKEY)) || {}; } catch (e) { return {}; } })();
+const keepSc = () => { try { localStorage.setItem(SKEY, JSON.stringify(sc)); } catch (e) {} };
+let syncing = false, syncAgain = false, syncT;
+function syncSoon(ms = 4000) { if (!sc.token) return; clearTimeout(syncT); syncT = setTimeout(syncNow, ms); }
+
+async function gh(path, opt = {}) {
+  const r = await fetch('https://api.github.com' + path, { ...opt, cache: 'no-store',
+    headers: { Authorization: 'Bearer ' + sc.token, Accept: 'application/vnd.github+json', ...(opt.body ? { 'Content-Type': 'application/json' } : {}) } });
+  if (r.status === 401) throw new Error('Token neplatí – vlož nový');
+  if (r.status === 403 || r.status === 404) { const e = new Error(r.status === 403 ? 'Token nemá oprávnění „gist“' : 'Nenalezeno'); e.nf = r.status === 404; throw e; }
+  if (!r.ok) throw new Error('GitHub hlásí chybu ' + r.status);
+  return r.json();
+}
+async function findGist() {
+  for (let page = 1; page <= 5; page++) {
+    const list = await gh('/gists?per_page=100&page=' + page);
+    const g = list.find(x => x.files && x.files[GFILE]);
+    if (g) return g.id;
+    if (list.length < 100) break;
+  }
+  return null;
+}
+// sloučí dvě verze dat: u každé položky vyhrává novější úprava, smazané zůstanou smazané
+function mergeDb(a, b) {
+  b = norm(b);
+  const del = { ...(a.deleted || {}) };
+  Object.entries(b.deleted || {}).forEach(([k, t]) => del[k] = Math.max(del[k] || 0, t));
+  const old = Date.now() - 90 * 864e5;
+  Object.keys(del).forEach(k => { if (del[k] < old) delete del[k]; });
+  const mg = (x = [], y = []) => {
+    const m = new Map();
+    [...x, ...y].forEach(it => { const o = m.get(it.id); if (!o || (it.updated || 0) > (o.updated || 0)) m.set(it.id, it); });
+    return [...m.values()].filter(it => !(del[it.id] >= (it.updated || 0)));
+  };
+  // pevné pořadí, ať se zařízení nepřetahují jen kvůli jinému řazení
+  const byIdDesc = (p, q) => p.id < q.id ? 1 : -1;
+  const st = (b.setU || 0) > (a.setU || 0) ? b : a;
+  return norm({
+    ideas: mg(a.ideas, b.ideas).sort(byIdDesc), hooks: mg(a.hooks, b.hooks).sort(byIdDesc),
+    insp: mg(a.insp, b.insp).sort(byIdDesc), tasks: mg(a.tasks, b.tasks).sort((p, q) => -byIdDesc(p, q)),
+    goals: { ...st.goals }, days: [...st.days], style: st.style, setU: st.setU || 0, deleted: del
+  });
+}
+const typing = () => { const el = document.activeElement; return el && /INPUT|TEXTAREA|SELECT/.test(el.tagName) && el.closest('#view, #modal'); };
+
+async function syncNow() {
+  if (!sc.token || !navigator.onLine) return;
+  if (syncing) { syncAgain = true; return; }
+  if (cur || typing() || !$('#prompter').hidden) { syncSoon(5000); return; }
+  syncing = true; setSyncState();
+  try {
+    if (!sc.gist) sc.gist = await findGist();
+    let remote = null;
+    if (sc.gist) {
+      try {
+        const f = (await gh('/gists/' + sc.gist)).files[GFILE];
+        if (f) remote = JSON.parse(f.truncated ? await (await fetch(f.raw_url, { cache: 'no-store' })).text() : f.content);
+      } catch (e) { if (e.nf) sc.gist = null; else throw e; }
+    }
+    const before = JSON.stringify(db);
+    const merged = mergeDb(db, remote || {});
+    const out = JSON.stringify(merged);
+    if (!sc.gist) sc.gist = (await gh('/gists', { method: 'POST', body: JSON.stringify({ description: GDESC, public: false, files: { [GFILE]: { content: out } } }) })).id;
+    else if (!remote || out !== JSON.stringify(mergeDb(norm(remote), {})))
+      await gh('/gists/' + sc.gist, { method: 'PATCH', body: JSON.stringify({ files: { [GFILE]: { content: out } } }) });
+    if (JSON.stringify(db) !== before) syncAgain = true; // během čekání na síť se něco změnilo – sloučíme znovu
+    else if (out !== before) {
+      db = merged;
+      try { localStorage.setItem(KEY, out); } catch (e) {}
+      if (!cur && !typing() && $('#modal').hidden) render();
+    }
+    sc.last = Date.now(); sc.err = '';
+  } catch (e) { sc.err = e.message || 'Chyba sítě'; }
+  keepSc(); syncing = false; setSyncState();
+  if (syncAgain) { syncAgain = false; syncSoon(1000); }
+}
+addEventListener('online', () => syncSoon(500));
+
+function syncBoxHTML() {
+  if (!sc.token) return `<p>Propoj telefon a počítač. Data se uloží do soukromého gistu na tvém GitHubu a sjednotí se všude, kde je internet. Offline appka funguje dál a dorovná se po připojení.</p>
+    <ol class="olist">
+      <li><a href="https://github.com/settings/tokens/new?scopes=gist&description=Studio%20appka" target="_blank" rel="noopener">Otevři GitHub → nový token ↗</a><br><span class="muted">Je předvyplněný jen na „gist“. Expiration nastav na „No expiration“ a dole dej Generate token.</span></li>
+      <li>Token (začíná <code>ghp_</code>) zkopíruj a vlož sem.</li>
+      <li>Na druhém zařízení vlož ten samý token.</li>
+    </ol>
+    <div class="row"><input id="stok" class="grow" placeholder="ghp_…" autocomplete="off" autocapitalize="off" spellcheck="false" style="flex:1;min-width:0"><button class="btn pri" id="sgo">Propojit</button></div>`;
+  const when = sc.last ? new Date(sc.last).toLocaleString('cs-CZ', { day: 'numeric', month: 'numeric', hour: '2-digit', minute: '2-digit' }) : '';
+  return `<p>${sc.err ? `<b style="color:var(--bad)">⚠️ ${esc(sc.err)}</b>` : syncing ? '🔄 Synchronizuju…' : sc.last ? `✅ Synchronizováno ${when}` : 'Připojeno'}${sc.user ? `<br><span class="muted">GitHub: ${esc(sc.user)}</span>` : ''}</p>
+    <div class="row"><button class="btn" id="snow" ${syncing ? 'disabled' : ''}>Synchronizovat teď</button><button class="btn ghost danger" id="soff">Odpojit</button></div>`;
+}
+function bindSyncBox() {
+  const go = $('#sgo');
+  if (go) go.onclick = async () => {
+    const tok = $('#stok').value.trim(); if (!tok) return $('#stok').focus();
+    sc = { token: tok }; go.disabled = true; go.textContent = 'Ověřuju…';
+    try { sc.user = (await gh('/user')).login; keepSc(); toast('Propojeno ✓'); await syncNow(); }
+    catch (e) { sc = {}; keepSc(); toast(e.message || 'Nepodařilo se připojit'); setSyncState(); }
+  };
+  const now = $('#snow'); if (now) now.onclick = () => { $('#snow').disabled = true; syncNow(); };
+  const off = $('#soff'); if (off) off.onclick = () => { if (!confirm('Odpojit synchronizaci na tomhle zařízení? Data tady zůstanou.')) return; sc = {}; keepSc(); setSyncState(); };
+}
+function setSyncState() { const b = $('#syncbox'); if (b && !(b.contains(document.activeElement) && document.activeElement.id === 'stok')) { b.innerHTML = syncBoxHTML(); bindSyncBox(); } }
 
 // ---------- EDITOR ----------
 let cur = null, etab = 'script', skipPop = false;
@@ -873,6 +987,7 @@ function closeEditor(fromPop) {
   $('#editor').hidden = true; document.body.style.overflow = '';
   render();
   if (!fromPop && history.state && history.state.ed) { skipPop = true; history.back(); }
+  syncSoon(800);
 }
 addEventListener('popstate', () => {
   if (skipPop) { skipPop = false; return; }
@@ -1009,7 +1124,7 @@ function bindEditor() {
   $('#efav').onclick = e => { i.fav = !i.fav; e.currentTarget.classList.toggle('on', i.fav); touch(); };
   $('#edel').onclick = () => {
     if (!confirm('Smazat „' + (i.title || 'Bez názvu') + '“?')) return;
-    db.ideas = db.ideas.filter(x => x !== i); db.insp.forEach(x => { if (x.used === i.id) delete x.used; });
+    gone(i.id); db.ideas = db.ideas.filter(x => x !== i); db.insp.forEach(x => { if (x.used === i.id) { delete x.used; x.updated = Date.now(); } });
     closeEditor(); toast('Smazáno');
   };
   $('#edup').onclick = () => {
@@ -1055,7 +1170,7 @@ function bindEditor() {
     i.blocks.splice(+b.dataset.bx, 1); touch(); renderEditor();
   });
   const badd = $('#badd'); if (badd) badd.onclick = () => { i.blocks.push({ id: uid(), shot: '', text: '' }); touch(); renderEditor(); const all = $$('[data-bf=shot]', ed); all[all.length - 1].focus(); };
-  const hs = $('#hsave'); if (hs) hs.onclick = () => { const t = i.hook.trim(); if (!t) return toast('Nejdřív napiš hook'); if (db.hooks.some(h => h.text === t)) return toast('Už ho máš v hookách'); db.hooks.unshift({ id: uid(), text: t }); save(true); toast('Uloženo do hooků ✓'); };
+  const hs = $('#hsave'); if (hs) hs.onclick = () => { const t = i.hook.trim(); if (!t) return toast('Nejdřív napiš hook'); if (db.hooks.some(h => h.text === t)) return toast('Už ho máš v hookách'); db.hooks.unshift({ id: uid(), text: t, updated: Date.now() }); save(true); toast('Uloženo do hooků ✓'); };
   const hp = $('#hpick'); if (hp) hp.onclick = pickHook;
   const sc = $('#scopy'); if (sc) sc.onclick = () => copy(scriptText(i, true).map(([l, t]) => `[${l}]\n${t}`).join('\n\n') || i.blocks.map(b => b.shot).filter(Boolean).join('\n'), 'Scénář zkopírován');
   const pr = $('#prompt'); if (pr) pr.onclick = openPrompter;
@@ -1172,6 +1287,9 @@ document.addEventListener('keydown', e => {
   if (u) { addInsp(u[0], (sp.get('title') || '').trim(), ''); history.replaceState(null, '', location.pathname); view = 'insp'; }
   go(view);
 })();
+syncNow();
+setInterval(() => { if (document.visibilityState === 'visible') syncNow(); }, 90000);
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') syncNow(); });
 matchMedia('(min-width: 900px)').addEventListener('change', () => { if (view === 'week' && !cur) render(); });
 if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).catch(() => {}));
 </script>
