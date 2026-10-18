@@ -138,7 +138,7 @@ function sheet(html, onMount) {
 }
 function closeSheet() { const el = $('#sheet'); el.hidden = true; el.innerHTML = ''; document.body.style.overflow = ''; }
 const tabs = () => `<nav class="tabs">${[['home', 'Domů', 'home'], ['cal', 'Kalendář', 'cal'], ['mery', 'Míry', 'ruler'], ['acts', 'Aktivity', 'flame']]
-  .map(([n, l, i]) => `<button data-a="tab" data-v="${n}" class="${view.n === n || (n === 'home' && ['gym', 'prog', 'progEx', 'lib', 'tpls', 'summary'].includes(view.n)) ? 'on' : ''}">${ico(i)}${l}</button>`).join('')}</nav>`;
+  .map(([n, l, i]) => `<button data-a="tab" data-v="${n}" class="${view.n === n || (n === 'home' && ['gym', 'prog', 'progEx', 'lib', 'tpls', 'summary', 'plan', 'planEdit', 'badges'].includes(view.n)) ? 'on' : ''}">${ico(i)}${l}</button>`).join('')}</nav>`;
 const hdr = (left, mid, right) => `<header class="hdr">${left || '<span></span>'}${mid}${right || '<span></span>'}</header>`;
 const backBtn = (to = 'home') => `<button class="round" data-a="tab" data-v="${to}" aria-label="Zpět">${ico('back')}</button>`;
 function ringSVG(val, max, size, stroke, col) {
@@ -146,10 +146,11 @@ function ringSVG(val, max, size, stroke, col) {
   return `<svg viewBox="0 0 ${size} ${size}"><circle cx="${size / 2}" cy="${size / 2}" r="${r}" fill="none" stroke="#2E2E31" stroke-width="${stroke}"/><circle cx="${size / 2}" cy="${size / 2}" r="${r}" fill="none" stroke="${col}" stroke-width="${stroke}" stroke-linecap="round" stroke-dasharray="${c * f} ${c}" ${f ? '' : 'stroke-opacity="0"'}/></svg>`;
 }
 
+var XV = {};
 function render() {
   clearInterval(timerI);
   const V = { home: vHome, cal: vCal, prog: vProg, progEx: vProgEx, lib: vLib, workout: vWorkout, fin: vFin, summary: vSummary, mery: vMery, gym: vGym, tpl: vTpl, tpls: vTpls, acts: vActs, settings: vSettings };
-  $('#app').innerHTML = (V[view.n] || vHome)();
+  $('#app').innerHTML = (V[view.n] || XV[view.n] || vHome)();
   const a = S.active && sesById(S.active);
   if (a && !a.end && view.n !== 'fin') timerI = setInterval(() => $$('[data-timer]').forEach(t => t.textContent = fclock((Date.now() - a.start) / 1000)), 1000);
   $$('textarea.notep').forEach(autoGrow);

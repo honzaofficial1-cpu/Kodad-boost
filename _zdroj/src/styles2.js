@@ -29,11 +29,11 @@ async function drawSticker(sp, on) {
   const lines = sp.times || [(sp.date || '').replace(/\s*\d{4}$/, ''), sp.stats && sp.stats[0] ? `${sp.stats[0].value} ${sp.stats[0].label}` : ''];
   x.font = `700 30px ${CF}`; const rightW = Math.max(...lines.map(t => x.measureText(t || '').width)) + 70;
   const tx = bx + bw + 40;
-  x.fillStyle = '#F5F5F7'; x.font = `italic 800 40px ${CF}`; spacedL(x, clip(x, sp.title.toUpperCase(), W - tx - rightW - 40), tx, H / 2 + 6, 2);
+  x.fillStyle = '#F5F5F7'; { const room = W - tx - rightW - 40, T = sp.title.toUpperCase(); let fs = 40; x.font = `italic 800 ${fs}px ${CF}`; while (x.measureText(T).width + T.length * 2 > room && fs > 26) { fs -= 2; x.font = `italic 800 ${fs}px ${CF}`; } spacedL(x, clip(x, T, room), tx, H / 2 + 6, 2); }
   if (sp.kicker && sp.kicker !== sp.title) { x.fillStyle = '#9A9AA0'; x.font = `600 20px ${CF}`; spacedL(x, clip(x, sp.kicker.toUpperCase(), W - tx - rightW - 40), tx, H / 2 + 38, 3); }
   // vpravo dva řádky + šikmá lišta
   x.textAlign = 'right'; x.fillStyle = '#A8A8AE'; x.font = `700 30px ${CF}`;
-  x.fillText(lines[0] || '', W - 74, H / 2 - 12); x.fillText(lines[1] || '', W - 74, H / 2 + 36); x.textAlign = 'left';
+  if (lines[1]) { x.fillText(lines[0] || '', W - 74, H / 2 - 12); x.fillText(lines[1], W - 74, H / 2 + 36); } else x.fillText(lines[0] || '', W - 74, H / 2 + 11); x.textAlign = 'left';
   x.fillStyle = col; slab(x, W - 58, 58, 8, H - 116); x.fill();
   return c;
 }
