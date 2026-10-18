@@ -146,3 +146,9 @@ h1,h2,.gcard h1,.plhero h2{font-family:var(--fd);font-style:italic;font-weight:8
 .bgrid.sm .bdg{display:flex;border:0;padding:4px;text-align:center}
 .bgrid.sm .bdg svg{width:64px;height:64px}
 .legend u[style*="--done"]{background:var(--done)!important}
+
+.dsec{display:flex;flex-direction:column;gap:12px;padding-top:14px;border-top:1px solid var(--line)}
+.dsh{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.dsh b{font-family:var(--fd);font-style:italic;font-weight:800;font-size:24px;text-transform:uppercase}
+.dsh span{font-size:13px;color:var(--mut)}
+.dsh span::first-letter{text-transform:uppercase}

@@ -94,10 +94,10 @@ function mTiles() {
   const st = bStart();
   const tile = (k, val, u, n) => `<div class="mtile"><span>${k}</span><b>${val}${u ? `<small>${u}</small>` : ''}</b><em>${n}</em></div>`;
   return `<div class="mtiles">
-    ${tile('Průměr 7 dní', a7 == null ? '–' : nf(a7, 1), ' kg', last7.length ? `${last7.length} vážení` : 'zatím bez vážení')}
+    ${tile('Průměr 7 dní', a7 == null ? '–' : nf(a7, 1), ' kg', last7.length ? `z ${last7.length} vážení` : 'zatím bez vážení')}
     ${tile('Změna za týden', v.ch == null ? '–' : sg(v.ch, 2), ' kg', S.settings.paceEval ? `<i class="stp ${v.st[0]}">${v.st[1]}</i>` : 'průměr proti minulému týdnu')}
     ${tile('Pas od startu', wd == null ? '–' : sg(wd, 1), ' cm', S.settings.paceEval && wd != null && wd >= 4 ? '<i class="stp bad">Zvaž udržovačku</i>' : lc ? `${lc.src === 'měření' ? 'tuk' : 'odhad tuku'} ${nf(lc.bf * 100, 1)} %` : 'po 2 měřeních')}
-    ${tile('Dodržení 7 dní', ad7.length ? Math.round(avgOf(ad7) * 100) : '–', ad7.length ? ' %' : '', st ? `týden ${weekNo(today(), st)} od startu` : 'start = první záznam')}
+    ${tile('Dodržení 7 dní', ad7.length ? Math.round(avgOf(ad7) * 100) : '–', ad7.length ? ' %' : '', ad7.length ? `zapsáno ${ad7.length} ze 7 dní` : 'nezapsáno')}
   </div>`;
 }
 function mDen() {
@@ -105,17 +105,22 @@ function mDen() {
   if (!bf || bf.kind !== 'd' || bf.date !== k) { bf = { kind: 'd', date: k, adherence: d.adherence ?? null }; SCALES.forEach(([s]) => bf[s] = d[s] ?? null); }
   const auto = autoTraining(k); const sick = !!S.days[k]?.sick;
   const segH = (f, opts, cls = '') => `<div class="seg ${cls}" data-bseg="${f}">${opts.map(o => `<button data-a="bseg" data-f="${f}" data-v="${o}" class="${String(bf[f]) === String(o) ? 'on' : ''}">${o}</button>`).join('')}</div>`;
+  const yk = dkey(addDays(pdate(k), -1)); const ys = sessionOn(yk); const isT = k === today();
+  const adhNote = bf.adherence == null ? '<span class="mut" style="font-size:13px;font-weight:500;letter-spacing:0;text-transform:none">nezapsáno</span>' : '';
   return `<div class="card mform">
     <div class="mh"><h2>Denní záznam</h2>${BD().days[k] ? '<span class="chip prog">uloženo</span>' : ''}</div>
-    <p class="mut hint">Vyplň ráno: váha po WC nalačno, kolik jsi spal a kroky + jídelníček za včerejšek (den je uzavřený, čísla sedí). Trénink se bere z appky.</p>
     <div class="form">
-      <div class="two"><label class="f">Datum<input id="b-date" type="date" value="${k}"></label><label class="f">Ranní váha (kg)<input id="b-weight" class="bigin" inputmode="decimal" value="${kg(d.weight)}" placeholder="88,4"></label></div>
-      <div class="two"><label class="f">Kroky (včera)<input id="b-steps" inputmode="numeric" value="${d.steps ?? ''}" placeholder="11000"></label><label class="f">Spánek (h)<input id="b-sleep" inputmode="decimal" value="${kg(d.sleep)}" placeholder="7,5"></label></div>
-      <button class="sw ${sick ? 'on' : ''}" data-a="b-sick" data-k="${k}"><span>Nemoc<small>Označí den v kalendáři</small></span><span class="k"></span></button>
+      <label class="f">Ráno dne<input id="b-date" type="date" value="${k}"></label>
+      <div class="dsec"><div class="dsh"><b>${isT ? 'Dnes ráno' : 'To ráno'}</b><span>${flong(k)}</span></div>
+        <div class="two"><label class="f">Váha nalačno (kg)<input id="b-weight" class="bigin" inputmode="decimal" value="${kg(d.weight)}" placeholder="88,4"></label><label class="f">Spánek v noci (h)<input id="b-sleep" inputmode="decimal" value="${kg(d.sleep)}" placeholder="7,5"></label></div>
+        <button class="sw ${sick ? 'on' : ''}" data-a="b-sick" data-k="${k}"><span>Jsem nemocný<small>Označí ${isT ? 'dnešek' : 'ten den'} v kalendáři</small></span><span class="k"></span></button></div>
+      <div class="dsec"><div class="dsh"><b>${isT ? 'Včera' : 'Den předtím'}</b><span>${flong(yk)}</span></div>
+        <label class="f">Kroky za celý den<input id="b-steps" inputmode="numeric" value="${d.steps ?? ''}" placeholder="11000"></label>
+        <div><div class="lbl ml" style="display:flex;justify-content:space-between;align-items:baseline">Jídelníček dodržen ${adhNote}</div>${segH('adherence', ['Ano', 'Částečně', 'Ne'])}</div>
+        <label class="f">Co bylo jinak<textarea id="b-dev" placeholder="např. oběd v restauraci místo chilli">${esc(d.deviation || '')}</textarea></label>
+        <p class="mut" style="font-size:13px;margin:0">${ys && ys.end ? `Trénink: ${esc(ys.name)} · ${fmin(ys.end - ys.start)} min (z aplikace)` : 'Trénink: žádný (bere se z aplikace)'}</p></div>
       ${SCALES.map(([f, l, leg]) => `<div><div class="ml scl"><span>${l}</span><small>${leg}</small></div>${segH(f, [1, 2, 3, 4, 5])}</div>`).join('')}
-      <div><div class="lbl ml">Jídelníček včera dodržen</div>${segH('adherence', ['Ano', 'Částečně', 'Ne'])}</div>
-      <label class="f">Co bylo včera jinak<textarea id="b-dev" placeholder="např. oběd v restauraci místo chilli">${esc(d.deviation || '')}</textarea></label>
-      <label class="f">Poznámka<textarea id="b-note" placeholder="jak ses cítil, spánek…">${esc(d.note || '')}</textarea></label>
+      <label class="f">Poznámka<textarea id="b-note" placeholder="jak ses cítil…">${esc(d.note || '')}</textarea></label>
     </div>
     <div class="bottom-acts" style="margin-top:18px"><button class="pill white" data-a="b-save-day">Uložit den</button>${BD().days[k] ? `<button class="btn danger block" data-a="b-del-day" data-k="${k}">Smazat záznam</button>` : ''}</div>
   </div>`;
