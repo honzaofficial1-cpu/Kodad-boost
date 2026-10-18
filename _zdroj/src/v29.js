@@ -34,3 +34,16 @@ go = function (n, p = {}) { view = { n, ...p }; render(); const a = APPEL(); if 
   };
   document.addEventListener('touchend', end); document.addEventListener('touchcancel', end);
 })();
+// spodní bar: když iOS ve webové aplikaci nahlásí kratší okno než displej, dorovnáme to
+function fixBottom() {
+  const pr = document.createElement('div'); pr.style.cssText = 'position:fixed;left:0;bottom:0;width:1px;height:env(safe-area-inset-bottom,0px);visibility:hidden;pointer-events:none';
+  document.body.appendChild(pr); const sab = pr.offsetHeight; pr.remove();
+  const sa = !!(navigator.standalone || matchMedia('(display-mode: standalone)').matches);
+  const port = innerHeight > innerWidth; const gap = sa && port ? Math.max(0, Math.round(screen.height - innerHeight)) : 0;
+  const fix = gap > 0 && gap < 140 ? gap : 0;
+  document.documentElement.style.setProperty('--vbfix', fix + 'px');
+  window.__vb = { sab, ih: innerHeight, sh: screen.height, sa, fix };
+}
+fixBottom(); addEventListener('resize', fixBottom); addEventListener('orientationchange', () => setTimeout(fixBottom, 300));
+const _9vSettings = vSettings;
+vSettings = function () { const v = window.__vb || {}; return _9vSettings().replace(/Kodad boost · verze ([^<]*)<\/span>/, (m, ver) => `Kodad boost · verze ${ver}</span><span class="mut" style="font-size:11px">displej ${v.sh} · okno ${v.ih} · spodní okraj ${v.sab} · posun ${v.fix}${v.sa ? '' : ' · prohlížeč'}</span>`); };
