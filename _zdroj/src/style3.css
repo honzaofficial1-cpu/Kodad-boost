@@ -166,3 +166,11 @@ nav.tabs{bottom:var(--tabb,max(6px, calc(env(safe-area-inset-bottom,0px) - 12px)
 
 #app{bottom:var(--appb,0px)}
 html.vbs,html.vbs body{height:var(--fullh)}
+
+/* trasa */
+.gpxbox{display:flex;flex-direction:column;gap:8px}
+.gpxbtn{display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer}
+#gpx-info{font-size:13px;line-height:1.4}
+.rsvg{color:var(--hot);display:block}
+.rsvg.gpxprev{width:120px;height:120px;margin:4px auto 0}
+.rsvg.rmini{width:42px;height:42px;flex:none;opacity:.9}
