@@ -1,0 +1,21 @@
+name: Studio – zkouška veřejných čísel
+on:
+  push:
+    branches: [stats-probe]
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Instagram, TikTok, YouTube bez přihlášení
+        run: |
+          UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36"
+          echo "== IG profil"; curl -s -m 25 -A "$UA" -H "x-ig-app-id: 936619743392459" -o ig.json -w "HTTP %{http_code} %{size_download}B\n" "https://i.instagram.com/api/v1/users/web_profile_info/?username=instagram" || true
+          python3 -c "import json;d=json.load(open('ig.json'))['data']['user'];print('IG followers',d['edge_followed_by']['count']);n=d['edge_owner_to_timeline_media']['edges'][0]['node'];print('IG post views',n.get('video_view_count'),'likes',n['edge_liked_by']['count'])" || head -c 300 ig.json
+          echo "== TikTok profil"; curl -s -m 25 -A "$UA" -o tt.html -w "HTTP %{http_code} %{size_download}B\n" "https://www.tiktok.com/@tiktok" || true
+          grep -o '"followerCount":[0-9]*' tt.html | head -1 || echo "TT: nic"
+          echo "== TikTok video"; curl -s -m 25 -A "$UA" -o ttv.html -w "HTTP %{http_code} %{size_download}B\n" "https://www.tiktok.com/@scout2015/video/6718335390845095173" || true
+          grep -o '"stats":{[^}]*}' ttv.html | head -1 || echo "TT video: nic"
+          echo "== YouTube feed"; curl -s -m 25 -o yt.xml -w "HTTP %{http_code} %{size_download}B\n" "https://www.youtube.com/feeds/videos.xml?channel_id=UCBR8-60-B28hp2BmDPdntcQ" || true
+          grep -o '<media:statistics views="[0-9]*"/>' yt.xml | head -2 || echo "YT: nic"
+          echo "== YouTube kanál"; curl -s -m 25 -A "$UA" -H "Accept-Language: en" -o ytc.html -w "HTTP %{http_code} %{size_download}B\n" "https://www.youtube.com/@YouTube" || true
+          grep -o '[0-9.,]*[KMB]\? subscribers' ytc.html | head -1 || echo "YT subs: nic"
