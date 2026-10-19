@@ -7,7 +7,7 @@ pmarkup = function (k) { const p = PICTO[k]; if (p && p.f && p.s) return `${p.f.
 Object.assign(ACT_TYPES, {
   stairs: { name: 'Schody (stroj)', cls: 'act', extra: 1 },
   row: { name: 'Veslo (stroj)', cls: 'act', extra: 1 },
-  skierg: { name: 'SkiErg', cls: 'act', extra: 1 },
+  skierg: { name: 'Běžky (SkiErg)', cls: 'act', extra: 1 },
   hyrox: { name: 'Hyrox', cls: 'act', extra: 1 },
 });
 // „Jiné“ ať zůstane poslední
@@ -76,11 +76,11 @@ specActivity = a => {
   if (PICTO[t]) { sp.picto = t; sp.col = COLK(t); }
   if (t === 'climb') { sp.title = `Lezení · ${a.kind || 'Stěna'}`; if (a.routes) { sp.big = String(a.routes); sp.unit = a.kind === 'Boulder' ? (a.routes === 1 ? 'boulder' : a.routes < 5 ? 'bouldry' : 'bouldrů') : (a.routes === 1 ? 'cesta' : a.routes < 5 ? 'cesty' : 'cest'); sp.bigLabel = a.kind === 'Boulder' ? 'Bouldry' : 'Cesty'; }
     sp.stats = [a.grade ? { id: 'grade', label: 'max obtížnost', value: a.grade } : null, a.min ? { id: 'min', label: 'min', value: String(a.min) } : null].filter(Boolean); }
-  if (t === 'row' || t === 'skierg') { sp.title = t === 'row' ? 'Veslo' : 'SkiErg'; sp.big = a.m ? thou(a.m) : (a.sec ? fT(a.sec) : '✓'); sp.unit = a.m ? 'm' : ''; sp.bigLabel = 'Vzdálenost';
+  if (t === 'row' || t === 'skierg') { sp.title = t === 'row' ? 'Veslo' : 'Běžky · SkiErg'; sp.big = a.m ? thou(a.m) : (a.sec ? fT(a.sec) : '✓'); sp.unit = a.m ? 'm' : ''; sp.bigLabel = 'Vzdálenost';
     sp.stats = [a.sec ? { id: 'min', label: 'čas', value: fT(a.sec) } : null, a.m && a.sec ? { id: 'split', label: '/500 m', value: fT(Math.round(a.sec / a.m * 500)) } : null, a.bpm ? { id: 'bpm', label: 'tep', value: `${a.bpm} bpm` } : null].filter(Boolean); }
   if (t === 'stairs') { sp.title = 'Schody'; sp.big = a.floors ? String(a.floors) : String(a.min || '✓'); sp.unit = a.floors ? 'pater' : (a.min ? 'min' : ''); sp.bigLabel = a.floors ? 'Patra' : 'Čas';
     sp.stats = [a.floors && a.min ? { id: 'min', label: 'min', value: String(a.min) } : null, a.level ? { id: 'lvl', label: 'level', value: String(a.level) } : null, a.bpm ? { id: 'bpm', label: 'tep', value: `${a.bpm} bpm` } : null].filter(Boolean); }
-  if (t === 'hyrox') { sp.title = `Hyrox · ${a.kind || 'Závod'}`; sp.big = a.sec ? fT(a.sec) : '✓'; sp.unit = ''; sp.bigLabel = 'Celkový čas';
+  if (t === 'hyrox') { sp.title = 'HYROX'; sp.kicker = ''; sp.big = a.sec ? fT(a.sec) : '✓'; sp.unit = ''; sp.bigLabel = 'Celkový čas';
     sp.stats = [a.splits?.run ? { id: 'run', label: 'běh celkem', value: fT(a.splits.run) } : null, a.cat ? { id: 'cat', label: 'kategorie', value: a.cat } : null].filter(Boolean);
     const L = a.splits ? HX_ST.map((s, i) => a.splits[i] ? [s, fT(a.splits[i])] : null).filter(Boolean) : []; sp.lists = (sp.lists || []).filter(l => l.id === 'note'); if (L.length) sp.lists.unshift({ id: 'hx', title: 'Stanoviště', items: L }); }
   return sp;
