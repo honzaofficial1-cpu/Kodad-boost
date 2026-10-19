@@ -468,6 +468,8 @@ h2 .cnt{color:var(--tx3);font-weight:500}
 .flame{display:inline-flex;align-items:center;gap:4px;padding:3px 9px 3px 6px;border-radius:99px;background:#FFF1E8;color:#C2410C}
 .flame svg{width:17px;height:17px;fill:#F26B1D}
 .flame b{font-size:15px;font-weight:750}
+.fabpaste{position:fixed;right:calc(max(18px,calc(50vw - 380px + 18px)) + 70px);bottom:calc(85px + var(--safe-b));z-index:7;height:40px;padding:0 14px;border-radius:99px;background:var(--surf);border:1px solid var(--line2);font-weight:600;font-size:14px;box-shadow:0 4px 12px #0000001a}
+.fabpaste:active{background:var(--sunk)}
 </style>
 </head>
 <body>
@@ -989,12 +991,47 @@ function renderIdeas() {
       ${sec('Rozpracované', work)}${sec('Zásobník', pool)}
       ${done.length ? `<h2>Hotové <span class="cnt">${done.length}</span><span class="sp"></span><button class="btn xs ghost" id="tdone">${ui.showDoneIdeas ? 'Skrýt' : 'Zobrazit'}</button></h2>${ui.showDoneIdeas ? `<div class="list">${done.map(row).join('')}</div>` : ''}` : ''}
       ${!work.length && !pool.length && !done.length ? '<div class="empty"><b>Nic nenalezeno</b></div>' : ''}`;
-  $('#view').insertAdjacentHTML('beforeend', '<button class="fab" id="fab" aria-label="Nový nápad">' + I.plus + '</button>');
+  $('#view').insertAdjacentHTML('beforeend', '<button class="fabpaste" id="fabpaste">Vložit nápady</button><button class="fab" id="fab" aria-label="Nový nápad">' + I.plus + '</button>');
   $('#fab').onclick = () => newIdeaSheet();
+  $('#fabpaste').onclick = () => pasteIdeas();
   const td = $('#tdone'); if (td) td.onclick = () => { ui.showDoneIdeas = !ui.showDoneIdeas; render(); };
   const qi = $('#q');
   if (qi) qi.oninput = () => { ui.q = qi.value; const pos = qi.selectionStart; render(); const n = $('#q'); n.focus(); n.setSelectionRange(pos, pos); };
   bindChips();
+}
+// vložení nápadů ze Clauda: řádek STUDIO-NAPADY a za ním JSON pole
+const IDEAS_MARK = 'STUDIO-NAPADY';
+function parseIdeasPaste(text) {
+  const k = String(text || '').indexOf(IDEAS_MARK); if (k < 0) return null;
+  const rest = text.slice(k + IDEAS_MARK.length), a = rest.indexOf('['), b = rest.lastIndexOf(']');
+  if (a < 0 || b < a) return null;
+  try { const arr = JSON.parse(rest.slice(a, b + 1)); return Array.isArray(arr) ? arr : null; } catch (e) { return null; }
+}
+function addPastedIdeas(text) {
+  const arr = parseIdeasPaste(text);
+  const str = v => typeof v === 'string' ? v.trim() : '';
+  const list = (arr || []).filter(o => o && typeof o === 'object' && str(o.title)).map(o => {
+    const it = newIdea(str(o.title).slice(0, 140), { format: F[o.format] ? o.format : 'jine', topic: db.topics.some(t => t.id === o.topic) ? o.topic : '' });
+    Object.assign(it, { hook: str(o.hook), note: str(o.note), series: str(o.series), body: str(o.body), cta: str(o.cta) });
+    it.segs = [it.hook, ...it.body.split(/\n\s*\n/), it.cta].map(x => x.trim()).filter(Boolean).map(say => ({ id: uid(), say, broll: '' }));
+    return it;
+  });
+  if (!list.length) { toast('Tohle nejsou nápady ze Clauda'); return false; }
+  db.ideas.unshift(...list); save(true); render();
+  toast(`Přidáno ${list.length} ${plural(list.length, 'nápad', 'nápady', 'nápadů')}`);
+  return true;
+}
+async function pasteIdeas() {
+  let text = '';
+  try { text = await navigator.clipboard.readText(); } catch (e) { text = ''; }
+  if (text && text.trim()) { addPastedIdeas(text); return; }
+  // schránku nejde přečíst – text se vloží ručně
+  openModal(`<h3>Vložit nápady</h3><p class="muted" style="margin:-6px 0 10px">Vlož sem text od Clauda (začíná řádkem ${IDEAS_MARK}).</p>
+    <textarea id="pastet" rows="8" placeholder="${IDEAS_MARK}&#10;[{&quot;title&quot;: …}]"></textarea>
+    <button class="btn pri full" id="pasteadd" style="margin-top:10px">Přidat</button>`, m => {
+    setTimeout(() => { const el = $('#pastet', m); el && el.focus(); }, 50);
+    $('#pasteadd', m).onclick = () => { if (addPastedIdeas($('#pastet', m).value)) closeModal(); };
+  });
 }
 // nový nápad: napíšu, vyberu co to bude, uložím jako nápad nebo rovnou píšu scénář
 function newIdeaSheet() {
@@ -1371,7 +1408,7 @@ function renderMore() {
     <div class="set"><textarea id="style" rows="3" placeholder="Barva, font titulků, styl editu, vzory…">${esc(db.style)}</textarea></div>
     <h2>Záloha</h2>
     <div class="set"><p>Záložní kopie do souboru.</p>
-      <div class="row"><button class="btn" id="exp">Stáhnout zálohu</button><button class="btn" id="imp">Nahrát zálohu</button><input type="file" id="impf" accept=".json,application/json" hidden></div></div>
+      <div class="row"><button class="btn" id="exp">Stáhnout zálohu</button><button class="btn" id="imp">Nahrát zálohu</button><button class="btn" id="pasteideas">Vložit nápady</button><input type="file" id="impf" accept=".json,application/json" hidden></div></div>
     <div class="set"><p>Všechno jako text – do Poznámek nebo pro ChatGPT / Clauda.</p><button class="btn" id="expt">Kopírovat vše jako text</button></div>
     <p class="muted" style="text-align:center">${db.ideas.length} nápadů · ${db.ideas.filter(i => i.status === 'done').length} venku · ${db.insp.length} inspirací · ${db.hooks.length} hooků · ${(size / 1024).toFixed(1)} kB</p>
     <div class="set" style="margin-top:20px"><button class="btn danger" id="wipe">Smazat všechna data</button></div>`;
@@ -1404,6 +1441,7 @@ function renderMore() {
     setTimeout(() => URL.revokeObjectURL(a.href), 2000);
   };
   $('#imp').onclick = () => $('#impf').click();
+  $('#pasteideas').onclick = () => pasteIdeas();
   $('#impf').onchange = async e => {
     const f = e.target.files[0]; if (!f) return;
     try {
