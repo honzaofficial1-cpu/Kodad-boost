@@ -174,3 +174,8 @@ html.vbs,html.vbs body{height:var(--fullh)}
 .rsvg{color:var(--hot);display:block}
 .rsvg.gpxprev{width:120px;height:120px;margin:4px auto 0}
 .rsvg.rmini{width:42px;height:42px;flex:none;opacity:.9}
+
+.at.act[data-t=stairs] .ic{color:#F2B84B}.at.act[data-t=row] .ic{color:#5AB0FF}.at.act[data-t=skierg] .ic{color:#7FD1E8}.at.act[data-t=hyrox] .ic{color:#FFD23F}
+.hxs summary{cursor:pointer;font-weight:600;padding:6px 2px;color:var(--fg)}
+.hxg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.hxg .f{font-size:13px}
