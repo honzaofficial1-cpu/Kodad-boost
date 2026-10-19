@@ -16,9 +16,9 @@
 :root{
   --bg:#F2F3F5;--surf:#FFFFFF;--sunk:#EBEDF0;--line:#E2E4E8;--line2:#D3D6DC;
   --ink:#121418;--tx2:#575D69;--tx3:#8C929D;
-  --brand:#38BDF8;--link:#0369A1;--sel:#E4F4FC;
+  --brand:#F26A1B;--link:#C2410C;--sel:#FFF1E8;
   --ok:#2F9E5B;--bad:#C93636;--warn:#B7791F;
-  --s-idea:#A3A8B1;--s-script:#7A5CD6;--s-film:#D08A1E;--s-edit:#2E8FC7;--s-done:#2F9E5B;
+  --s-idea:#A3A8B1;--s-script:#7A5CD6;--s-film:#D08A1E;--s-edit:#0E8A7D;--s-done:#2F9E5B;
   --r:10px;--rs:8px;--safe-b:env(safe-area-inset-bottom,0px);--safe-t:env(safe-area-inset-top,0px);
   color-scheme:light;
 }
@@ -30,7 +30,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 button{cursor:pointer;border:0;background:none;padding:0}
 button:disabled{opacity:.4;cursor:default}
 input,select,textarea{background:var(--surf);border:1px solid var(--line2);border-radius:var(--rs);padding:10px 12px;width:100%;outline:none;font-size:16px}
-input:focus,select:focus,textarea:focus{border-color:var(--link);box-shadow:0 0 0 3px #38BDF833}
+input:focus,select:focus,textarea:focus{border-color:var(--link);box-shadow:0 0 0 3px #F26A1B33}
 textarea{resize:none;min-height:44px;overflow:hidden;line-height:1.5}
 select{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238C929D' stroke-width='2.5' stroke-linecap='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;background-size:15px;padding-right:28px}
 ::placeholder{color:#A9AEB7}
@@ -41,8 +41,8 @@ a{color:var(--link);text-decoration:none}
 /* hlavička a spodní lišta */
 .top{position:sticky;top:0;z-index:5;background:var(--bg)}
 .top .wrap{display:flex;align-items:center;gap:10px;height:60px}
-.logo{width:26px;height:26px;border-radius:7px;background:var(--brand);display:grid;place-items:center;flex:none}
-.logo svg{width:10px;height:10px;fill:#fff;margin-left:2px}
+.logo{width:26px;height:26px;border-radius:7px;background:var(--ink);display:grid;place-items:center;flex:none}
+.logo svg{width:17px;height:17px}
 .top h1{font-size:28px;margin:0;font-weight:800;letter-spacing:-.035em;flex:1}
 .seg{display:flex;background:var(--sunk);border-radius:var(--rs);padding:2px}
 .seg button{padding:5px 11px;border-radius:6px;font-size:13.5px;font-weight:600;color:var(--tx2)}
@@ -108,7 +108,7 @@ h2 .sp{flex:1}
 .badge .dot{width:7px;height:7px;border-radius:50%}
 .badge.plain{color:var(--tx3)}
 .badge.late{color:var(--bad)}
-.btn.assign{min-height:24px;padding:0 7px;font-size:12.5px;margin-left:auto;color:var(--link);border-color:#BFE3F6;background:#F3FAFE}
+.btn.assign{min-height:24px;padding:0 7px;font-size:12.5px;margin-left:auto;color:var(--link);border-color:#FBD3B8;background:#FFF6F0}
 .empty{color:var(--tx3);padding:34px 4px;font-size:15px}
 .empty b{display:block;color:var(--ink);font-size:16px;margin-bottom:4px}
 .pbar{display:inline-flex;gap:2px;vertical-align:middle}
@@ -285,9 +285,9 @@ label.l span,.lbl-row label span{font-weight:400}
 #prompter .scroll{position:absolute;inset:0;overflow-y:auto;scrollbar-width:none}
 #prompter .scroll::-webkit-scrollbar{display:none}
 #prompter .txt{padding:45vh 7vw 80vh;font-weight:600;line-height:1.45;white-space:pre-wrap;word-break:break-word}
-#prompter .txt .sec{color:#7DD3FC;font-size:.4em;display:block;margin:1.4em 0 .3em;font-weight:600}
+#prompter .txt .sec{color:#FDBA74;font-size:.4em;display:block;margin:1.4em 0 .3em;font-weight:600}
 #prompter.mirror .txt{transform:scaleX(-1)}
-#prompter .guide{position:absolute;left:0;right:0;top:38vh;height:1px;background:#38BDF880;pointer-events:none}
+#prompter .guide{position:absolute;left:0;right:0;top:38vh;height:1px;background:#F26A1B80;pointer-events:none}
 #prompter .ctl{position:absolute;left:0;right:0;bottom:0;padding:12px 14px calc(12px + var(--safe-b));background:#0B0C0Ef0;border-top:1px solid #222;display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:center;transition:opacity .3s}
 #prompter.playing .ctl{opacity:.1}
 #prompter .ctl .btn{background:#1C1E22;border-color:#2C2F35;color:#fff}
@@ -435,11 +435,11 @@ details.tips[open] summary::before{transform:rotate(90deg)}
 .rp{color:var(--link);font-weight:700}
 .rem.add input{border:0;box-shadow:none;padding:11px 0;background:none;flex:1;min-width:0}
 .rpbtn{flex:none;margin-top:8px;min-width:34px;height:30px;border-radius:7px;font-weight:800;color:var(--line2);font-size:14px;letter-spacing:-.04em}
-.rpbtn.on{color:var(--link);background:#EAF6FD}
+.rpbtn.on{color:var(--link);background:#FFF1E8}
 /* nápady */
 h2 .cnt{color:var(--tx3);font-weight:500}
 .card .m span{color:var(--tx2)}
-.fab{position:fixed;right:max(18px,calc(50vw - 380px + 18px));bottom:calc(76px + var(--safe-b));z-index:7;width:58px;height:58px;border-radius:50%;background:var(--brand);color:#fff;display:grid;place-items:center;box-shadow:0 6px 18px #0369A13d}
+.fab{position:fixed;right:max(18px,calc(50vw - 380px + 18px));bottom:calc(76px + var(--safe-b));z-index:7;width:58px;height:58px;border-radius:50%;background:var(--brand);color:#fff;display:grid;place-items:center;box-shadow:0 6px 18px #C2410C40}
 .fab svg{width:26px;height:26px;stroke:#fff;stroke-width:2.4;fill:none;stroke-linecap:round}
 .fab:active{transform:scale(.95)}
 /* počítadlo */
@@ -448,12 +448,32 @@ h2 .cnt{color:var(--tx3);font-weight:500}
 .streak div:last-child{border-right:0}
 .streak b{display:block;font-size:26px;font-weight:800;letter-spacing:-.03em;line-height:1.1}
 .streak span{font-size:12.5px;color:var(--tx3)}
+/* scénář po částech */
+.sg{background:var(--surf);border:1px solid var(--line);border-radius:var(--r);padding:8px 12px 10px;margin-top:10px}
+.sgh{display:flex;align-items:center;gap:2px;font-size:13px;color:var(--tx3);font-weight:600;margin-bottom:4px}
+.sgh .sp{flex:1}
+.sgh .ico{width:30px;height:30px}
+.sgh .ico svg{width:16px;height:16px}
+.sg textarea{border:0;box-shadow:none!important;padding:4px 0;font-size:17px;line-height:1.45;min-height:30px}
+.sg .brin{margin-top:6px;font-size:14px;padding:8px 10px;background:#F6F7F9;border-color:var(--line)}
+.sg [data-addb]{padding-left:0}
+.filmview{margin-top:14px;background:var(--surf);border:1px solid var(--line);border-radius:var(--r);padding:6px 16px}
+.filmview p{font-size:22px;line-height:1.4;font-weight:600;margin:0;padding:14px 0;border-bottom:1px solid var(--line);display:flex;gap:12px}
+.filmview p:last-child{border-bottom:0}
+.filmview small{font-size:13px;color:var(--tx3);font-weight:600;padding-top:6px;min-width:14px}
+.bchk{width:20px;height:20px;flex:none;accent-color:var(--ink);margin:0}
+/* ohníček */
+.calinfo{display:flex;align-items:center;gap:10px;margin:2px 2px 0}
+.calinfo .sp{flex:1}
+.flame{display:inline-flex;align-items:center;gap:4px;padding:3px 9px 3px 6px;border-radius:99px;background:#FFF1E8;color:#C2410C}
+.flame svg{width:17px;height:17px;fill:#F26B1D}
+.flame b{font-size:15px;font-weight:750}
 </style>
 </head>
 <body>
 
 <header class="top"><div class="wrap">
-  <div class="logo"><svg viewBox="0 0 10 12"><path d="M0 0v12l10-6z"/></svg></div>
+  <div class="logo"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="10" rx="2.2" fill="#fff"/><path d="M3.2 9.4 19.6 5.6l.6 2.7L3.8 12.1z" fill="#fff"/><path d="M7 8.5 9 8M12 7.4l2-.5M17 6.3l1.5-.3" stroke="#F26A1B" stroke-width="1.6" stroke-linecap="round"/></svg></div>
   <h1 id="vtitle">Dnes</h1>
   <div id="topx"></div>
 </div></header>
@@ -527,7 +547,7 @@ const FORMULAS = [
   'Jak jsem [výsledek] za [čas] bez [překážka].', 'Pokud děláš [X], musíš vidět tohle.', '[X] vs. [Y] – co je doopravdy lepší?',
   'Tohle jsem dělal špatně celé roky.', 'Tohle jím, když [cíl].', 'Recept na [jídlo], který zvládne i ten, kdo neumí vařit.'
 ];
-const RHY = { research: 'Rešerše a nápady', script: 'Psaní scénářů', film: 'Natáčení a upload', edit: 'Střih', post: 'Publikace' };
+const RHY = { research: 'Nápady', script: 'Psaní scénářů', film: 'Natáčení', edit: 'Střih', post: 'Publikace' };
 const RHY_S = { research: 'nápady', script: 'scénáře', film: 'točení', edit: 'střih', post: 'publ.' };
 const DEF_RHYTHM = ['research', 'script', 'film', '', '', '', ''];
 const OLD_RHYTHM = ['', '', 'film', '', 'edit', '', 'script'];
@@ -583,7 +603,8 @@ function linkPlat(u) {
   try { return new URL(u).hostname.replace(/^www\./, ''); } catch (e) { return 'Odkaz'; }
 }
 const ytId = u => { const m = /(?:youtu\.be\/|[?&]v=|shorts\/|embed\/|live\/)([\w-]{11})/.exec(u); return m && m[1]; };
-const hasScript = i => i.kind === 'long' ? i.chapters.some(c => c.text.trim()) || !!i.intro.promise.trim() : !!(i.hook.trim() || i.body.trim());
+const hasScript = i => i.kind === 'long' ? i.chapters.some(c => c.text.trim()) || !!i.intro.promise.trim() : i.segs.some(x => x.say.trim());
+const hookOf = i => i.kind === 'long' ? '' : ((i.segs[0] || {}).say || '').trim();
 
 const I = {
   back: '<svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>',
@@ -608,7 +629,7 @@ function newIdea(title, opt = {}) {
   const t = Date.now(), f = opt.format || 'jine', kind = opt.kind || 'short';
   return { id: uid(), kind, title, note: '', topic: opt.topic || '', format: f, platform: kind === 'long' ? 'youtube' : fmt(f).plat, series: '', status: 'idea', fav: false,
     date: '', shoot: '', hook: '', body: '', cta: '', link: '', ingr: '', macros: { kcal: '', p: '', c: '', f: '' },
-    caption: '', hashtags: '', cover: '', shots: [], chk: {}, camera: '', music: '', links: '', parent: '', struct: f === 'pribeh' ? 'story' : '', source: '', editorNote: '',
+    caption: '', hashtags: '', cover: '', shots: [], chk: {}, camera: '', music: '', links: '', parent: '', segs: [], drive: '', source: '', editorNote: '',
     titles: [], thumbs: [], why: '', intro: { show: '', promise: '', start: '' }, chapters: [], broll: [], sources: [],
     res: { url: '', h24: {}, d7: {}, d30: {}, lesson: '' }, created: t, updated: t };
 }
@@ -635,6 +656,10 @@ function norm(d) {
     if (!n.body && Array.isArray(i.blocks) && i.blocks.length) n.body = i.blocks.map(x => [x.shot && x.shot.trim() ? '[' + x.shot.trim() + ']' : '', (x.text || '').trim()].filter(Boolean).join(' ')).filter(Boolean).join('\n\n');
     if (!n.link && i.ref) n.link = i.ref;
     delete n.blocks; delete n.ref; delete n.steps;
+    // scénář po částech: co kdy říkám + případný B-roll
+    if (!Array.isArray(i.segs) || !i.segs.length) {
+      n.segs = [n.hook, ...n.body.split(/\n\s*\n/), n.cta].map(x => (x || '').trim()).filter(Boolean).map(say => ({ id: uid(), say, broll: '' }));
+    }
     ['h24', 'd7', 'd30'].forEach(k => n.res[k] = { ...(n.res[k] || {}) });
     return n;
   });
@@ -669,9 +694,7 @@ function scriptText(i, withLabels) {
     i.chapters.forEach((c, n) => { if (c.text.trim()) parts.push([L(c.title.trim() || 'Kapitola ' + (n + 1)), c.text.trim()]); });
     return parts;
   }
-  if (i.hook.trim()) parts.push([L('Hook'), i.hook.trim()]);
-  if (i.body.trim()) parts.push([L('Tělo'), i.body.trim()]);
-  if (i.cta.trim()) parts.push([L('CTA'), i.cta.trim()]);
+  i.segs.forEach((x, n) => { if (x.say.trim()) parts.push([L(n === 0 ? 'Hook' : 'Část ' + (n + 1)), x.say.trim()]); });
   return parts;
 }
 const words = i => scriptText(i).map(p => p[1]).join(' ').split(/\s+/).filter(Boolean).length;
@@ -727,10 +750,10 @@ const closeModal = () => { $('#modal').hidden = true; $('#modal').innerHTML = ''
 let view = 'home';
 const ui = { q: '', fs: 'active', ff: 'all', ft: 'all', addT: '', addLong: false, mode: 'list', cmode: 'all', sp: 'ig', sper: 90, scp: 'd7', rcp: 'h24', fi: 'all', etab: {} };
 try { Object.assign(ui, JSON.parse(localStorage.getItem('studio.ui')) || {}); } catch (e) {}
-ui.q = ''; ui.sel = ''; ui.month = ''; ui.showDone = false; ui.showDoneIdeas = false;
+ui.q = ''; ui.sel = ''; ui.month = ''; ui.showDone = false; ui.showDoneIdeas = false; ui.smode = 'write';
 const keepUi = () => { try { localStorage.setItem('studio.ui', JSON.stringify(ui)); } catch (e) {} };
-const TITLES = { home: 'Dnes', ideas: 'Nápady', insp: 'Nápady', week: 'Kalendář', stats: 'Výsledky', more: 'Více', hooks: 'Banka hooků', plan: 'Týdenní plán' };
-const TABOF = { insp: 'ideas', hooks: 'more', plan: 'home' };
+const TITLES = { home: 'Dnes', ideas: 'Nápady', insp: 'Nápady', week: 'Kalendář', stats: 'Výsledky', more: 'Více', hooks: 'Banka hooků' };
+const TABOF = { insp: 'ideas', hooks: 'more' };
 $$('.tabs button').forEach(b => b.onclick = () => go(b.dataset.v));
 function go(v) {
   view = v;
@@ -741,7 +764,7 @@ function go(v) {
 function render() {
   $('#topx').innerHTML = '';
   document.body.classList.toggle('wide', view === 'week' || view === 'stats');
-  ({ home: renderHome, ideas: renderIdeas, insp: renderInsp, week: renderCal, stats: renderStats, hooks: renderHooks, more: renderMore, plan: renderPlan })[view]();
+  ({ home: renderHome, ideas: renderIdeas, insp: renderInsp, week: renderCal, stats: renderStats, hooks: renderHooks, more: renderMore })[view]();
 }
 document.addEventListener('click', e => {
   if (e.target.closest('[data-mv]')) return;
@@ -768,7 +791,7 @@ function setStatus(i, s) {
 const pbarHTML = i => { const si = SKEYS.indexOf(i.status); return `<span class="pbar" title="${STATUS[i.status]}">${SKEYS.map((k, n) => `<i class="${n <= si ? 'on' : ''}"></i>`).join('')}</span>`; };
 function cardHTML(i, extra = '') {
   const late = i.date && i.date < today() && i.status !== 'done';
-  const snippet = i.kind === 'long' ? (i.why || i.note) : (i.hook || i.note || i.body);
+  const snippet = i.kind === 'long' ? (i.why || i.note) : (hookOf(i) || i.note);
   return `<div class="card" data-open="${i.id}" role="button" tabindex="0">
     ${i.fav ? '<span class="star">★</span>' : ''}
     <div class="t">${esc(i.title || 'Bez názvu')}</div>
@@ -787,17 +810,20 @@ function primaryAction() {
   const t = today(), open = db.ideas.filter(i => i.status !== 'done');
   const pub = open.filter(i => i.date && i.date <= t).sort((a, b) => a.date < b.date ? -1 : 1)[0];
   if (pub) return { k: pub.date < t ? 'Mělo vyjít ' + relDate(pub.date) : 'Dnes vychází', t: pub.title, s: kindTag(pub) + ' · ' + STATUS[pub.status], id: pub.id,
-    a: [['Otevřít', () => openEditor(pub.id)], ['Publikováno', () => { setStatus(pub, 'done'); render(); }]] };
+    a: [...(/^https?:/.test(pub.drive) ? [['Stáhnout z Disku', () => window.open(pub.drive, '_blank')]] : [['Otevřít', () => openEditor(pub.id)]]), ['Zveřejněno', () => { setStatus(pub, 'done'); render(); }]] };
   const sh = open.find(i => i.shoot === t && i.status !== 'edit');
-  if (sh) return { k: 'Dnes točíš', t: sh.title, s: kindTag(sh) + (sh.date ? ' · vychází ' + relDate(sh.date) : ''), id: sh.id, a: [['Otevřít', () => openEditor(sh.id, sh.kind === 'long' ? 'chapters' : 'film')]] };
+  if (sh) return { k: 'Dnes točíš', t: sh.title, s: kindTag(sh) + (sh.date ? ' · vychází ' + relDate(sh.date) : ''), id: sh.id, a: [['Otevřít', () => { ui.smode = 'film'; openEditor(sh.id, sh.kind === 'long' ? 'chapters' : 'script'); }]] };
   const due = dueResults()[0];
   if (due) return { k: 'Zapiš výsledky po ' + CPS[due.cp], t: due.i.title, s: 'Vyšlo ' + relDate(due.i.date) + ' · ' + PLAT[due.i.platform], id: due.i.id, a: [['Zapsat', () => { ui.rcp = due.cp; openEditor(due.i.id, 'res'); }]] };
-  const rh = db.rhythm[wdOf(t)], w = weekDoc(monday(t)), picks = w ? w.picks.map(byId).filter(x => x && x.status !== 'done') : [];
-  if (rh === 'research' && picks.length < (w ? w.count : 3)) return { k: 'Rešerše a nápady · 60–90 min', t: picks.length ? `Vyber ještě ${(w ? w.count : 3) - picks.length} nápady na tento týden` : 'Vyber nápady na tento týden', s: 'Problémy cílovky, uložený obsah, tvůj život. Pak filtr: je to moje? mám důkaz?', a: [['Týdenní plán', () => openWeek('research')]] };
-  const toWrite = picks.find(i => !hasScript(i));
-  if (rh === 'script' && toWrite) return { k: 'Scénáře · 60 min', t: toWrite.title, s: `Jen záchytné body, do 75 sekund. ${picks.filter(i => !hasScript(i)).length > 1 ? 'Na týden zbývá ' + videos(picks.filter(i => !hasScript(i)).length) + '.' : ''}`, id: toWrite.id, a: [['Psát', () => openEditor(toWrite.id)], ['Týdenní plán', () => openWeek('script')]] };
-  const toFilm = picks.filter(i => hasScript(i) && ['idea', 'script', 'film'].includes(i.status));
-  if (rh === 'film' && toFilm.length) return { k: 'Natáčení a upload · 2 h', t: `Natoč ${videos(toFilm.length)} za sebou`, s: toFilm.map(i => i.title).join(' · '), a: [['Checklist', () => openWeek('film')]] };
+  const rh = db.rhythm[wdOf(t)];
+  const ready = open.find(i => i.status === 'edit' && /^https?:/.test(i.drive));
+  if (ready) return { k: 'Připraveno ke zveřejnění', t: ready.title, s: kindTag(ready) + (ready.date ? ' · vychází ' + relDate(ready.date) : ''), id: ready.id,
+    a: [['Stáhnout z Disku', () => window.open(ready.drive, '_blank')], ['Zveřejněno', () => { ready.date = ready.date && ready.date <= t ? ready.date : t; setStatus(ready, 'done'); render(); }]] };
+  if (rh === 'research') return { k: 'Den na nápady', t: 'Zapiš si nápady na tento týden', s: 'Co teď řeší lidi kolem tebe, co sis uložil ve feedu, co řešíš sám.', a: [['Nový nápad', () => newIdeaSheet()]] };
+  const toWrite = open.filter(i => !hasScript(i) && i.kind === 'short').sort((a, b) => ((a.date || '9') < (b.date || '9') ? -1 : 1) || b.updated - a.updated)[0];
+  if (rh === 'script' && toWrite) return { k: 'Den na scénáře', t: toWrite.title, s: 'Napiš přesně, co kdy říkáš.', id: toWrite.id, a: [['Psát', () => openEditor(toWrite.id)]] };
+  const toFilm = open.filter(i => hasScript(i) && ['idea', 'script', 'film'].includes(i.status));
+  if (rh === 'film' && toFilm.length) return { k: 'Den natáčení', t: `Natoč ${videos(toFilm.length)}`, s: toFilm.map(i => i.title).join(' · '), id: toFilm[0].id, a: [['Točit', () => { ui.smode = 'film'; openEditor(toFilm[0].id); }]] };
   const noScript = open.filter(i => i.date && i.date >= t && i.date <= addDays(t, 10) && !hasScript(i)).sort((a, b) => a.date < b.date ? -1 : 1)[0];
   if (noScript && (rh === 'script' || noScript.date <= addDays(t, 3))) return { k: 'Napiš scénář · vychází ' + relDate(noScript.date), t: noScript.title, s: kindTag(noScript), id: noScript.id, a: [['Psát', () => openEditor(noScript.id)]] };
   const cont = open.filter(i => hasScript(i) && ['idea', 'script'].includes(i.status)).sort((a, b) => b.updated - a.updated)[0];
@@ -843,9 +869,8 @@ function renderHome() {
     ${outToday.length || shootToday.length ? `<h2>Dnes taky</h2><div class="list">${[
       ...outToday.map(i => irow(`<b>Vychází: ${esc(i.title)}</b>`, kindTag(i) + ' · ' + STATUS[i.status], i.status === 'done' ? '<span class="muted">venku</span>' : `<button class="btn xs" data-pub="${i.id}">Publikováno</button>`)),
       ...shootToday.map(i => irow(`<b>Natočit: ${esc(i.title)}</b>`, kindTag(i), `<button class="btn xs" data-open="${i.id}">Otevřít</button>`))].join('')}</div>` : ''}
-    <div style="margin-top:18px">${streakHTML()}</div>
     ${todoHTML()}
-    <h2>Tento týden<span class="sp"></span><button class="btn xs ghost" id="toplan">Týdenní plán</button></h2>
+    <h2>Tento týden</h2>
     <div class="wstrip">${[0, 1, 2, 3, 4, 5, 6].map(n => {
       const d = addDays(ws, n), its = db.ideas.filter(i => i.date === d), sh = db.ideas.filter(i => i.shoot === d);
       return `<button class="ws ${d === t ? 'today' : ''} ${d < t ? 'past' : ''}" data-wsd="${d}"><span class="wd">${DSHORT[n]}</span><b class="num">${+d.slice(8)}</b>
@@ -855,7 +880,6 @@ function renderHome() {
   $$('[data-ha]').forEach(b => b.onclick = () => homeActs[+b.dataset.ha]());
   $$('[data-pub]').forEach(b => b.onclick = () => { setStatus(byId(b.dataset.pub), 'done'); render(); });
   $$('[data-wsd]').forEach(b => b.onclick = () => { ui.sel = b.dataset.wsd; ui.month = monthStart(ui.sel); go('week'); });
-  $('#toplan').onclick = () => openWeek();
   bindTodo();
 }
 
@@ -941,22 +965,13 @@ function streaks() {
   return { total, month, days, weeks: wk, best, thisWeek: weeks.has(monday(t)) };
 }
 const plural = (n, a, b, c) => n === 1 ? a : n >= 2 && n <= 4 ? b : c;
-function streakHTML() {
-  const s = streaks();
-  return `<div class="streak">
-    <div><b class="num">${s.total}</b><span>${plural(s.total, 'video venku', 'videa venku', 'videí venku')}</span></div>
-    <div><b class="num">${s.weeks}</b><span>${plural(s.weeks, 'týden', 'týdny', 'týdnů')} v řadě</span></div>
-    <div><b class="num">${s.days}</b><span>${plural(s.days, 'den', 'dny', 'dní')} v řadě</span></div>
-  </div>
-  <p class="muted" style="margin:6px 2px 0">${s.month} tento měsíc · nejdelší série ${s.best} ${plural(s.best, 'týden', 'týdny', 'týdnů')}${s.weeks && !s.thisWeek ? ' · tento týden ještě nic, ať série nespadne' : ''}</p>`;
-}
 
 // ================= NÁPADY =================
 function renderIdeas() {
   $('#topx').innerHTML = '<button class="btn sm" id="toinsp">Inspirace</button>'; $('#toinsp').onclick = () => go('insp');
   const q = ui.q.toLowerCase();
   const all = db.ideas.filter(i => (ui.ft === 'all' || i.topic === ui.ft) &&
-    (!q || [i.title, i.note, i.hook, i.body, i.why, ...i.chapters.map(c => c.title + ' ' + c.text)].join(' ').toLowerCase().includes(q)));
+    (!q || [i.title, i.note, ...i.segs.map(x => x.say + ' ' + x.broll), i.why, ...i.chapters.map(c => c.title + ' ' + c.text)].join(' ').toLowerCase().includes(q)));
   const byUpd = (a, b) => (b.fav - a.fav) || (b.updated - a.updated);
   const work = all.filter(i => i.status !== 'done' && (i.status !== 'idea' || hasScript(i))).sort(byUpd);
   const pool = all.filter(i => i.status === 'idea' && !hasScript(i)).sort(byUpd);
@@ -1091,9 +1106,9 @@ function slotHTML(i) {
   return `<div class="slot">
     <div class="tag"><span>${kindTag(i)}</span><span class="sp"></span><span class="badge"><span class="dot" style="background:var(--s-${i.status})"></span>${STATUS[i.status]}</span></div>
     <b>${esc(i.title || 'Bez názvu')}</b>
-    ${i.hook ? `<p class="hk">„${esc(i.hook)}“</p>` : ''}
+    ${hookOf(i) ? `<p class="hk">„${esc(hookOf(i))}“</p>` : ''}
     ${pbarHTML(i)}
-    <button class="btn sm open" data-open="${i.id}">${hasScript(i) ? 'Otevřít scénář' : 'Napsat scénář'} →</button>
+    <div class="dact" style="margin-top:4px"><button class="btn sm" data-open="${i.id}">${hasScript(i) ? 'Otevřít' : 'Napsat scénář'}</button>${/^https?:/.test(i.drive) ? `<a class="btn sm" href="${esc(i.drive)}" target="_blank" rel="noopener">Stáhnout z Disku ↗</a>` : ''}</div>
     <div class="mv"><button data-mv="${i.id}" data-d="-1" ${si === 0 ? 'disabled' : ''}>← Zpět</button><button data-mv="${i.id}" data-d="1" ${si === SKEYS.length - 1 ? 'disabled' : ''}>Další: ${STATUS[SKEYS[si + 1]] || ''} →</button></div>
   </div>`;
 }
@@ -1101,7 +1116,7 @@ function renderCal() {
   const t = today();
   if (!ui.sel) ui.sel = t;
   if (!ui.month) ui.month = monthStart(ui.sel);
-  const m = ui.month, sel = ui.sel, wd = wdOf(sel), th = db.days[wd], rhSel = db.rhythm[wd];
+  const m = ui.month, sel = ui.sel, wd = wdOf(sel), th = db.days[wd], rhSel = db.rhythm[wd], st = streaks();
   const inMonth = db.ideas.filter(i => i.date.slice(0, 7) === m.slice(0, 7));
   const poolN = db.ideas.filter(i => !i.date && i.status !== 'done').length;
   const items = db.ideas.filter(i => i.date === sel), shootsSel = db.ideas.filter(i => i.shoot === sel);
@@ -1112,7 +1127,9 @@ function renderCal() {
   $('#view').innerHTML = `
     <div class="wknav"><button class="ico" id="mprev">${I.l}</button><b>${monthLabel(m)}</b>
       ${m !== monthStart(t) || sel !== t ? '<button class="btn xs" id="mnow">Dnes</button>' : ''}<button class="ico" id="mnext">${I.r}</button></div>
-    <p class="muted" style="margin:0 2px">${videos(inMonth.length)} v měsíci · ${inMonth.filter(i => i.status === 'done').length} venku · ${poolN} v zásobníku</p>
+    <div class="calinfo"><button class="flame" id="flame" title="Dnes zveřejněno"><svg viewBox="0 0 24 24"><path d="M12.6 2.2c.5 3.3 3.9 5 3.9 9.4a4.5 4.5 0 0 1-9 0c0-1.9.9-3.3 1.8-4.2.3 1.5 1.1 2.3 1.8 2.3.1-2.8-.6-4.8 1.5-7.5z"/></svg><b class="num">${st.total}</b></button>
+      <span class="muted">${st.weeks ? `${st.weeks} ${plural(st.weeks, 'týden', 'týdny', 'týdnů')} v řadě` : 'Vydej video a rozjeď sérii'}${st.thisWeek ? '' : st.weeks ? ' · tento týden ještě nic' : ''}</span>
+      <span class="sp"></span><button class="btn xs" id="pubtoday">Dnes zveřejněno</button></div>
     <div class="seg cmode">${[['all', 'Vše'], ['post', 'Vychází'], ['shoot', 'Natáčení']].map(([k, v]) => `<button data-cm="${k}" class="${ui.cmode === k ? 'on' : ''}">${v}</button>`).join('')}</div>
     ${monthGridHTML(m, sel, 'data-cd', ui.cmode)}
     ${ui.cmode === 'all' ? '<p class="legend"><span class="code" style="--fc:#7C828D">Plné</span> vychází <span class="code st-shoot" style="--fc:#7C828D">Obrys</span> natáčení · barva = téma</p>' : ''}
@@ -1129,6 +1146,7 @@ function renderCal() {
     ${late.length ? `<h2 style="color:var(--bad)">Po termínu (${late.length})</h2><div class="list">${late.map(i => irow(`<b>${esc(i.title)}</b>`, relDate(i.date) + ' · ' + STATUS[i.status], `<button class="btn xs" data-open="${i.id}">Otevřít</button>`)).join('')}</div>` : ''}
     ${goals.length ? `<h2>Cíle na týden ${fmtDate(ws)} – ${fmtDate(we)}</h2>
       <div class="goals">${goals.map(([k, n]) => `<div class="goal ${got(k) >= n ? 'ok' : ''}">${ftag(k)}<span class="gb"><i style="width:${Math.min(100, got(k) / n * 100)}%"></i></span><em>${got(k)}/${n}</em></div>`).join('')}</div>` : ''}`;
+  $('#flame').onclick = $('#pubtoday').onclick = () => publishedToday();
   const goMonth = n => { ui.month = addMonths(ui.month, n); if (monthStart(ui.sel) !== ui.month) ui.sel = monthStart(t) === ui.month ? t : ui.month; render(); };
   $$('[data-cm]').forEach(b => b.onclick = () => { ui.cmode = b.dataset.cm; keepUi(); render(); });
   $('#mprev').onclick = () => goMonth(-1);
@@ -1159,6 +1177,19 @@ function renderCal() {
     e.stopPropagation();
     const i = byId(b.dataset.mv), n = SKEYS.indexOf(i.status) + +b.dataset.d;
     if (n >= 0 && n < SKEYS.length) { setStatus(i, SKEYS[n]); render(); }
+  });
+}
+// odkliknutí „dnes zveřejněno“ – vybere se video, nebo se jen započítá
+function publishedToday() {
+  const t = today();
+  const cand = db.ideas.filter(i => i.status !== 'done').sort((a, b) => ((b.date === t) - (a.date === t)) || ((b.status === 'edit') - (a.status === 'edit')) || (b.updated - a.updated));
+  const doneToday = db.ideas.filter(i => i.status === 'done' && i.date === t);
+  openModal(`<h3>Dnes zveřejněno</h3>
+    ${doneToday.length ? `<p class="muted" style="margin:-6px 0 12px">Dnes už venku: ${doneToday.map(i => esc(i.title)).join(', ')}</p>` : ''}
+    ${cand.length ? `<label class="l">Které video?</label><div class="optgroup">${cand.slice(0, 12).map(i => `<button class="opt" data-pt="${i.id}">${esc(i.title)}<small>${kindTag(i)} · ${STATUS[i.status]}${i.date ? ' · ' + relDate(i.date) : ''}</small></button>`).join('')}</div>` : ''}
+    <button class="btn full" id="ptplain" style="margin-top:8px">Jen započítat – video v appce nemám</button>`, m => {
+    $$('[data-pt]', m).forEach(b => b.onclick = () => { const i = byId(b.dataset.pt); i.date = t; setStatus(i, 'done'); closeModal(); render(); });
+    $('#ptplain', m).onclick = () => { const i = newIdea('Video ' + fmtDate(t)); i.status = 'done'; i.date = t; db.ideas.unshift(i); save(true); closeModal(); toast('Započítáno'); render(); };
   });
 }
 function pickTheme(wd) {
@@ -1204,104 +1235,9 @@ function assignDay(id, month, after, field = 'date') {
 
 // ================= TÝDENNÍ PLÁN (dávkování: Po nápady, Út scénáře, St natáčení) =================
 const SOURCES = { fa: 'Problém cílovky', feed: 'Uložený obsah', life: 'Můj život' };
-const STRUCTS = {
-  edu: { n: 'Vzdělávací', b: ['Problém', 'Můj systém / framework', 'Konkrétní kroky'] },
-  story: { n: 'Příběh', b: ['Kontext', 'Konflikt', 'Zlomový bod', 'Rozuzlení'] }
-};
-let planWeek = '';
-function weekDoc(ws, create) {
-  let w = db.weeks.find(x => x.id === ws);
-  if (!w && create) {
-    const prev = [...db.weeks].sort((a, b) => a.id < b.id ? 1 : -1)[0];
-    w = { id: ws, count: prev ? prev.count : 3, blocks: { ...(prev ? prev.blocks : { research: '', script: '', film: '' }) }, fa: ['', '', ''], feed: ['', '', ''], life: ['', '', ''],
-      picks: [], folder: prev ? prev.folder : '', chk: {}, good: '', diff: '', best: '', updated: Date.now() };
-    db.weeks.push(w);
-  }
-  return w;
-}
 const slug = s => (s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-zA-Z0-9 ]/g, ' ').trim().split(/\s+/).slice(0, 3)
   .map((x, n) => n ? x[0].toUpperCase() + x.slice(1).toLowerCase() : x.toLowerCase()).join('');
 const fileName = i => `${slug(i.topic ? topic(i.topic).n : i.title) || 'video'}_${(i.shoot || today()).slice(8)}${(i.shoot || today()).slice(5, 7)}`;
-const scriptSec = i => words(i) / WPS;
-function openWeek(section) { planWeek = monday(today()); go('plan'); if (section) setTimeout(() => { const s = $('#w-' + section); s && scrollTo({ top: s.getBoundingClientRect().top + scrollY - 70 }); }, 30); }
-function renderPlan() {
-  if (!planWeek) planWeek = monday(today());
-  const ws = planWeek, we = addDays(ws, 6), w = weekDoc(ws, true);
-  const picks = w.picks.map(byId).filter(Boolean);
-  $('#topx').innerHTML = '<button class="btn sm" id="pback">Zpět</button>'; $('#pback').onclick = () => go('home');
-  const wtouch = () => { w.updated = Date.now(); save(); };
-  const list3 = (key, ph) => `<div class="slist">${w[key].map((t, n) => `<div class="lrow"><input value="${esc(t)}" data-wl="${key}" data-n="${n}" placeholder="${ph}"><button class="btn xs ghost" data-w2i="${key}" data-n="${n}">→ Nápad</button></div>`).join('')}</div>
-    <button class="btn xs ghost" data-wadd="${key}" style="margin-top:4px">+ Další</button>`;
-  const flag = (i, k, l) => `<button class="chip ${i.chk['f:' + k] ? 'on' : ''}" data-flag="${k}" data-id="${i.id}">${l}</button>`;
-  $('#view').innerHTML = `
-    <div class="wknav"><button class="ico" id="wprev">${I.l}</button><b>Týden ${fmtDate(ws)} – ${fmtDate(we)}</b>${ws !== monday(today()) ? '<button class="btn xs" id="wnow">Tento</button>' : ''}<button class="ico" id="wnext">${I.r}</button></div>
-    <p class="muted" style="margin:2px 2px 0">Každý den jeden typ práce. Do čtvrtka máš obsah na týden dopředu.</p>
-    <div class="set" style="margin-top:12px"><div class="grow-row"><span class="grow">Kolik videí tento týden natočím</span><div class="stepper"><button data-wc="-1">−</button><b>${w.count}</b><button data-wc="1">+</button></div></div></div>
-
-    <h2 id="w-research">Pondělí · rešerše a nápady · 60–90 min</h2>
-    <div class="set">
-      <label class="l">Kdy si tenhle blok zamknu</label><input data-wb="research" value="${esc(w.blocks.research)}" placeholder="Např. po 7:00–8:30">
-      <label class="l" style="margin-top:14px">Problémy cílovky – co teď řeší <span>· z hovorů a DMs</span></label>${list3('fa', 'Problém…')}
-      <label class="l" style="margin-top:14px">Uložené ve feedu – co rezonuje a proč</label>${list3('feed', 'Příspěvek a proč fungoval…')}
-      <label class="l" style="margin-top:14px">Z mého života – co teď řeším</label>${list3('life', 'Moment, situace, insight…')}
-    </div>
-    <div class="set"><p><b>Filtr před výběrem:</b> Je to dostatečně moje, nebo by to natočil kdokoli jiný? Mám důkaz, že to funguje?</p>
-      <label class="l">Výběr na tento týden (${picks.length}/${w.count})</label>
-      ${picks.length ? `<div class="list">${picks.map(i => `<div class="irow"><div class="tx"><b>${esc(i.title)}</b><small>${kindTag(i)}${i.source ? ' · ' + SOURCES[i.source] : ''}</small><div class="chips" style="margin-top:6px">${flag(i, 'own', 'Je to moje')}${flag(i, 'proof', 'Mám důkaz')}</div></div><button class="ico" data-unpick="${i.id}">${I.x}</button></div>`).join('')}</div>` : '<p class="muted" style="margin:0 2px">Zatím nic. Vyber ze zásobníku nebo udělej nápad z poznámek výše.</p>'}
-      <button class="btn sm" id="wpick" style="margin-top:10px">+ Vybrat ze zásobníku</button></div>
-
-    <h2 id="w-script">Úterý · scénáře · 60 min</h2>
-    <div class="set">
-      <label class="l">Kdy si tenhle blok zamknu</label><input data-wb="script" value="${esc(w.blocks.script)}" placeholder="Např. út 7:00–8:00">
-      <p class="muted" style="margin:10px 2px 8px">Nepiš slovo od slova – jen záchytné body a přechody mezi myšlenkami. Každý scénář do 75 sekund čtení nahlas.</p>
-      ${picks.length ? `<div class="list">${picks.map(i => { const s = scriptSec(i); return irow(`<b>${esc(i.title)}</b>`, `${STRUCTS[i.struct] ? STRUCTS[i.struct].n : 'Bez struktury'} · ${hasScript(i) ? `<span class="${s > 75 ? 'warn' : ''}">~${fmtDur(s)}</span>` : 'bez scénáře'}`, `<button class="btn xs" data-open="${i.id}">${hasScript(i) ? 'Upravit' : 'Psát'}</button>`); }).join('')}</div>` : ''}
-    </div>
-
-    <h2 id="w-film">Středa · natáčení a upload · 2 h</h2>
-    <div class="set">
-      <label class="l">Kdy si tenhle blok zamknu</label><input data-wb="film" value="${esc(w.blocks.film)}" placeholder="Např. st 16:00–18:00">
-      ${db.remind.film.length ? `<div class="remind" style="margin-top:14px"><div class="rh2"><span>Checklist před natáčením</span></div>${db.remind.film.map(r => `<label class="rchk ${w.chk[r] ? 'on' : ''}"><input type="checkbox" data-wchk="${esc(r)}" ${w.chk[r] ? 'checked' : ''}><span>${esc(r)}</span></label>`).join('')}</div>` : ''}
-      <p class="muted" style="margin:10px 2px">Natoč všechno za sebou v jednom bloku. Mezi videi vyměň outfit a úhel kamery – feed bude pestrý, i když je všechno z jednoho dne.</p>
-      <label class="l">Složka se záznamy</label><input data-wf value="${esc(w.folder)}" placeholder="Google Drive / SwissTransfer – cesta nebo odkaz">
-      ${picks.length ? `<label class="l" style="margin-top:14px">Videa – název souboru a poznámka pro editora</label><div class="list">${picks.map(i => `<div class="irow"><div class="tx"><b>${esc(i.title)}</b>
-        <div class="fnrow"><code>${esc(fileName(i))}</code><button class="btn xs ghost" data-fcopy="${esc(fileName(i))}">Kopírovat</button></div>
-        <input data-enote="${i.id}" value="${esc(i.editorNote)}" placeholder="Co musí editor vědět dopředu?"></div>
-        <label class="lchk"><input type="checkbox" data-shot="${i.id}" ${['edit', 'done'].includes(i.status) ? 'checked' : ''}> natočeno</label></div>`).join('')}</div>` : ''}
-    </div>
-
-    <h2>Reflexe na konci týdne</h2>
-    <div class="set">
-      <label class="l">Co fungovalo</label><textarea data-wr="good" rows="2">${esc(w.good)}</textarea>
-      <label class="l" style="margin-top:12px">Co příště udělám jinak</label><textarea data-wr="diff" rows="2">${esc(w.diff)}</textarea>
-      <label class="l" style="margin-top:12px">Která videa nejvíc rezonovala a proč</label><textarea data-wr="best" rows="2">${esc(w.best)}</textarea>
-    </div>`;
-  growAll($('#view'));
-  $('#wprev').onclick = () => { planWeek = addDays(ws, -7); render(); };
-  $('#wnext').onclick = () => { planWeek = addDays(ws, 7); render(); };
-  const wn = $('#wnow'); if (wn) wn.onclick = () => { planWeek = monday(today()); render(); };
-  $$('[data-wc]').forEach(b => b.onclick = () => { w.count = Math.max(1, Math.min(14, w.count + +b.dataset.wc)); wtouch(); render(); });
-  $$('[data-wb]').forEach(el => el.oninput = () => { w.blocks[el.dataset.wb] = el.value; wtouch(); });
-  $$('[data-wl]').forEach(el => el.oninput = () => { w[el.dataset.wl][+el.dataset.n] = el.value; wtouch(); });
-  $$('[data-wadd]').forEach(b => b.onclick = () => { w[b.dataset.wadd].push(''); wtouch(); render(); });
-  $$('[data-w2i]').forEach(b => b.onclick = () => {
-    const key = b.dataset.w2i, n = +b.dataset.n, t = (w[key][n] || '').trim(); if (!t) return toast('Nejdřív něco napiš');
-    const it = newIdea(t.slice(0, 140)); it.source = key; it.note = t; db.ideas.unshift(it);
-    w.picks.push(it.id); w[key].splice(n, 1); if (w[key].length < 3) w[key].push(''); wtouch(); save(true); render(); toast('Nápad vybrán na tento týden');
-  });
-  $$('[data-flag]').forEach(b => b.onclick = () => { const i = byId(b.dataset.id); i.chk['f:' + b.dataset.flag] = !i.chk['f:' + b.dataset.flag]; i.updated = Date.now(); save(); render(); });
-  $$('[data-unpick]').forEach(b => b.onclick = () => { w.picks = w.picks.filter(x => x !== b.dataset.unpick); wtouch(); render(); });
-  $('#wpick').onclick = () => {
-    const pool = db.ideas.filter(i => i.status !== 'done' && !w.picks.includes(i.id)).sort((a, b) => (!!a.date - !!b.date) || (b.updated - a.updated));
-    openModal(`<h3>Vybrat na týden</h3>${pool.length ? `<div class="optgroup">${pool.map(i => `<button class="opt" data-wp="${i.id}">${esc(i.title)}<small>${kindTag(i)} · ${STATUS[i.status]}${i.date ? ' · vychází ' + relDate(i.date) : ''}</small></button>`).join('')}</div>` : '<p class="muted">Žádné rozpracované nápady.</p>'}`,
-      m => $$('[data-wp]', m).forEach(b => b.onclick = () => { w.picks.push(b.dataset.wp); wtouch(); b.remove(); toast('Přidáno'); render(); if (!$('[data-wp]', m)) closeModal(); }));
-  };
-  $$('[data-wchk]').forEach(el => el.onchange = () => { w.chk[el.dataset.wchk] = el.checked; el.closest('.rchk').classList.toggle('on', el.checked); wtouch(); });
-  const wf = $('[data-wf]'); wf.oninput = () => { w.folder = wf.value; wtouch(); };
-  $$('[data-fcopy]').forEach(b => b.onclick = () => copy(b.dataset.fcopy, 'Název zkopírován'));
-  $$('[data-enote]').forEach(el => el.oninput = () => { const i = byId(el.dataset.enote); i.editorNote = el.value; i.updated = Date.now(); save(); });
-  $$('[data-shot]').forEach(el => el.onchange = () => { const i = byId(el.dataset.shot); if (el.checked) { if (!i.shoot) i.shoot = today(); setStatus(i, 'edit'); } else setStatus(i, 'film'); render(); });
-  $$('[data-wr]').forEach(el => el.oninput = () => { w[el.dataset.wr] = el.value; wtouch(); });
-}
 
 // ================= VÝSLEDKY =================
 function lineChartHTML(pts, unit) {
@@ -1357,8 +1293,7 @@ function renderStats() {
   const byF = group(i => i.kind === 'long' ? 'long' : i.format !== 'jine' ? i.format : null, k => k === 'long' ? 'YouTube projekt' : ftag(k));
   const byT = group(i => i.topic || null, k => ttag(k));
   $('#view').innerHTML = `
-    ${streakHTML()}
-    <div class="chips filters" id="sper" style="margin-top:14px">${[[30, '30 dní'], [90, '90 dní'], [365, 'Rok'], [0, 'Vše']].map(([v, l]) => `<button class="chip ${ui.sper === v ? 'on' : ''}" data-chip="sper" data-val="${v}">${l}</button>`).join('')}</div>
+    <div class="chips filters" id="sper">${[[30, '30 dní'], [90, '90 dní'], [365, 'Rok'], [0, 'Vše']].map(([v, l]) => `<button class="chip ${ui.sper === v ? 'on' : ''}" data-chip="sper" data-val="${v}">${l}</button>`).join('')}</div>
     <h2>Účet na ${PGN[g]}u</h2>
     ${pts.length >= 2 ? lineChartHTML(pts, g === 'yt' ? 'odběratelů' : 'sledujících') : `<p class="muted" style="margin:0 2px 8px">${acc.length ? 'Pro graf zapiš stav aspoň dvakrát.' : 'Zapisuj si občas počet sledujících – třeba každou neděli. Uvidíš, jak rosteš.'}</p>`}
     <p class="summary num">${last ? `Teď <b>${fnum(num(last.f))}</b>${base && base !== last ? ` · za období <b>${pctTxt(Math.round(num(last.f) - num(base.f))).replace(' %', '')}</b>` : ''} · ` : ''}vyšlo <b>${pub.length}</b> · zhlédnutí celkem <b>${fnum(pub.reduce((a, i) => a + best(i), 0))}</b></p>
@@ -1424,7 +1359,7 @@ function renderMore() {
     <h2>Checklist vydání (YouTube projekty)</h2>
     <div class="set">${strListHTML('release', 'Nová položka')}</div>
     <h2>Pracovní rytmus</h2>
-    <div class="set"><p>Co v který den děláš. Podle toho ti stránka Dnes ukáže, na co se zaměřit.</p><button class="btn sm" id="rhpreset" style="margin-bottom:10px">Dávkování: Po nápady, Út scénáře, St natáčení</button>${DAYN.map((d, n) => `<div class="dayrow"><span>${d}</span><select data-rh="${n}"><option value="">—</option>${Object.entries(RHY).map(([k, v]) => `<option value="${k}" ${db.rhythm[n] === k ? 'selected' : ''}>${v}</option>`).join('')}</select></div>`).join('')}</div>
+    <div class="set"><p>Co v který den děláš. Podle toho ti stránka Dnes ukáže, na co se zaměřit.</p><button class="btn sm" id="rhpreset" style="margin-bottom:10px">Po nápady, Út scénáře, St natáčení</button>${DAYN.map((d, n) => `<div class="dayrow"><span>${d}</span><select data-rh="${n}"><option value="">—</option>${Object.entries(RHY).map(([k, v]) => `<option value="${k}" ${db.rhythm[n] === k ? 'selected' : ''}>${v}</option>`).join('')}</select></div>`).join('')}</div>
     <h2>Formáty dní <span class="sp"></span></h2>
     <div class="set"><p>Nepovinné. Když si nastavíš, že třeba v pondělí vychází návod, kalendář ti připomene prázdné dny.</p>${DAYN.map((d, n) => `<div class="dayrow"><span>${d}</span><select data-day="${n}"><option value="">—</option>${FK.filter(k => k !== 'jine').map(k => `<option value="${k}" ${db.days[n] === k ? 'selected' : ''}>${fmt(k).n}</option>`).join('')}</select></div>`).join('')}</div>
     <h2>Týdenní cíle</h2>
@@ -1597,7 +1532,7 @@ function setSyncState() { const b = $('#syncbox'); if (b && !(document.activeEle
 
 // ================= EDITOR =================
 let cur = null, skipPop = false;
-const SHORT_TABS = { script: 'Scénář', film: 'Natáčení', post: 'Popisek', res: 'Výsledky', note: 'Poznámky' };
+const SHORT_TABS = { script: 'Scénář', edit: 'Střih', post: 'Popisek', res: 'Výsledky', note: 'Poznámky' };
 const LONG_TABS = { concept: 'Koncept', intro: 'Úvod 30 s', chapters: 'Kapitoly', broll: 'Záběry', sources: 'Zdroje', release: 'Vydání', shorts: 'Shorts', res: 'Výsledky' };
 const tabsOf = i => i.kind === 'long' ? LONG_TABS : SHORT_TABS;
 let etab = 'script';
@@ -1638,7 +1573,7 @@ function renderEditor() {
   ed.innerHTML = `
     <div class="bar"><div class="wrap">
       <button class="ico" id="eback">${I.back}</button><span class="saved" id="saved"></span>
-      <button class="ico ${i.fav ? 'on' : ''}" id="efav">${I.star}</button><button class="ico" id="edup">${I.dup}</button><button class="ico" id="edel">${I.trash}</button>
+      <button class="ico ${i.fav ? 'on' : ''}" id="efav">${I.star}</button><button class="ico" id="edup">${I.dup}</button><button class="ico" id="edel">${I.trash}</button><button class="btn sm pri" id="esave" style="margin-left:6px">Uložit</button>
     </div></div>
     <div class="wrap">
       ${parent ? `<p class="muted" style="margin:0 2px">Z projektu <button class="btn xs ghost" data-open="${parent.id}" data-tab="shorts">${esc(parent.title)}</button></p>` : ''}
@@ -1679,29 +1614,41 @@ const listRows = (arr, key, rowFn) => arr.map((x, n) => `<div class="block" data
 const TABS = {
   script: i => {
     const f = fmt(i.format);
-    return `${remindHTML(i, 'script', 's:', 'Připomínky ke scénáři')}
-      <div class="fld"><label class="l">Struktura</label><div class="seg cmode" style="margin-top:0">${[['edu', 'Vzdělávací'], ['story', 'Příběh'], ['', 'Volná']].map(([k, v]) => `<button data-struct="${k}" class="${(i.struct || '') === k ? 'on' : ''}">${v}</button>`).join('')}</div>
-        <p class="hint">Piš jen záchytné body a přechody mezi myšlenkami, ne slovo od slova.</p></div>
-      <div class="fld hookbox"><div class="lbl-row"><label>Hook <span>· první 1–3 s</span></label>
-        <button class="btn xs ghost" id="hpick">Z banky</button><button class="btn xs ghost" id="hsave">Uložit do banky</button></div>
-        <textarea data-f="hook" rows="1" placeholder="${esc(f.hook || 'Věta, která diváka zastaví…')}">${esc(i.hook)}</textarea></div>
-      <div class="fld bodybox"><label class="l">Tělo <span>· ${f.v ? 'co říkám a ukazuju' : 'záběry a text na obrazovce'}</span></label>
-        <textarea data-f="body" rows="7" placeholder="${esc((STRUCTS[i.struct] ? STRUCTS[i.struct].b : f.b).join('\n') || 'Hlavní obsah videa…')}">${esc(i.body)}</textarea></div>
-      <div class="fld"><label class="l">CTA <span>· výzva na konci</span></label><textarea data-f="cta" rows="1" placeholder="${esc(f.cta || 'Ulož / sleduj / napiš do komentářů…')}">${esc(i.cta)}</textarea></div>
-      <div class="fld"><label class="l">Odkaz <span>· nepovinné</span></label><input data-f="link" inputmode="url" autocomplete="off" placeholder="Originál, trend, produkt…" value="${esc(i.link)}">
-        ${/^https?:/.test(i.link) ? `<p class="hint"><a href="${esc(i.link)}" target="_blank" rel="noopener">Otevřít odkaz ↗</a></p>` : ''}</div>
-      ${extraFields(i)}${foot(i)}`;
+    if (!i.segs.length) i.segs = [0, 1, 2].map(() => ({ id: uid(), say: '', broll: '' }));
+    const ph = n => n === 0 ? (f.hook || 'Hook – první věta, která diváka zastaví') : n === i.segs.length - 1 && n > 1 ? 'CTA – ' + (f.cta || 'co má divák udělat') : (n === 1 && f.b.length ? f.b.join(' → ') : 'Co říkám…');
+    if (ui.smode === 'film') return `
+      <div class="seg cmode" style="margin-top:16px"><button data-smode="write">Psát</button><button data-smode="film" class="on">Točit</button></div>
+      ${db.remind.film.length ? `<details class="tips"><summary>Před natáčením</summary>${remindHTML(i, 'film', 'p:', 'Checklist')}</details>` : ''}
+      <div class="filmview">${i.segs.filter(x => x.say.trim()).map((x, n) => `<p><small>${n + 1}</small>${esc(x.say)}</p>`).join('') || '<p class="muted">Scénář je zatím prázdný.</p>'}</div>
+      ${foot(i)}`;
+    return `
+      <div class="seg cmode" style="margin-top:16px"><button data-smode="write" class="on">Psát</button><button data-smode="film">Točit</button></div>
+      <p class="hint" style="margin:8px 2px 0">Napiš přesně, co kdy říkáš. B-roll si připiš jen tam, kde ho chceš – při natáčení ho neuvidíš.</p>
+      ${i.segs.map((x, n) => `<div class="sg" data-sg="${n}">
+        <div class="sgh"><span>${n === 0 ? 'Hook' : 'Část ' + (n + 1)}</span>${n === 0 ? '<button class="btn xs ghost" id="hpick">Z banky</button><button class="btn xs ghost" id="hsave">Uložit do banky</button>' : ''}<span class="sp"></span>
+          <button class="ico" data-su ${n === 0 ? 'disabled' : ''}>${I.up}</button><button class="ico" data-sd ${n === i.segs.length - 1 ? 'disabled' : ''}>${I.down}</button><button class="ico" data-sx>${I.x}</button></div>
+        <textarea data-sgf="say" rows="2" placeholder="${esc(ph(n))}">${esc(x.say)}</textarea>
+        ${x.broll || x.openB ? `<input data-sgf="broll" value="${esc(x.broll)}" placeholder="B-roll / záběr přes obraz" class="brin">` : '<button class="btn xs ghost" data-addb>+ B-roll / záběr</button>'}
+      </div>`).join('')}
+      <button class="btn sm" id="sgadd" style="margin-top:10px">+ Přidat část</button>
+      ${db.remind.script.length ? `<details class="tips"><summary>Připomínky ke scénáři (${db.remind.script.filter(r => i.chk['s:' + r]).length}/${db.remind.script.length})</summary>${remindHTML(i, 'script', 's:', 'Připomínky')}</details>` : ''}
+      ${topic(i.topic).recipe ? `<details class="tips"><summary>Ingredience a makra</summary>${extraFields(i)}</details>` : ''}
+      ${foot(i)}`;
   },
-  film: i => `
-    <h2>Kamera</h2><div class="chips wrapc">${CAMS.map(c => `<button class="chip ${i.camera === c ? 'on' : ''}" data-cam="${esc(c)}">${c}</button>`).join('')}</div>
+  edit: i => {
+    const br = i.segs.map((x, n) => ({ x, n })).filter(o => o.x.broll.trim());
+    return `
+    <div class="fld"><label class="l">Sestříhané video <span>· odkaz na Disk</span></label>
+      <input data-f="drive" inputmode="url" autocomplete="off" placeholder="Google Disk, iCloud, Dropbox…" value="${esc(i.drive)}">
+      ${/^https?:/.test(i.drive) ? `<a class="btn sm" style="margin-top:8px" href="${esc(i.drive)}" target="_blank" rel="noopener">Otevřít a stáhnout ↗</a>` : '<p class="hint">Až video sestříháš a nahraješ, vlož sem odkaz. Pak ho odsud jen stáhneš a postneš.</p>'}</div>
+    <h2>B-roll a záběry ze scénáře</h2>
+    ${br.length ? `<div class="list">${br.map(o => `<label class="irow"><input type="checkbox" class="bchk" data-bd="${o.n}" ${o.x.bdone ? 'checked' : ''}><div class="tx"><b>${esc(o.x.broll)}</b><small>${o.n + 1}. „${esc(o.x.say.slice(0, 70))}${o.x.say.length > 70 ? '…' : ''}“</small></div></label>`).join('')}</div>` : '<p class="muted" style="margin:0 2px">Ve scénáři zatím nemáš žádný B-roll. Připíšeš ho u části přes „+ B-roll / záběr“.</p>'}
+    <div class="fld"><label class="l">Poznámka pro střih</label><textarea data-f="editorNote" rows="2" placeholder="Co nesmím zapomenout…">${esc(i.editorNote)}</textarea></div>
     <div class="fld"><label class="l">Hudba / zvuk</label><input data-f="music" placeholder="Název zvuku nebo odkaz" value="${esc(i.music)}"></div>
-    <h2>Záběry</h2>
-    <div class="shots">${i.shots.map(s => `<div class="shot ${s.done ? 'done' : ''}" data-s="${s.id}"><input type="checkbox" ${s.done ? 'checked' : ''} data-sc><input type="text" value="${esc(s.text)}" data-st placeholder="Záběr…"><button class="ico" data-sx>${I.x}</button></div>`).join('')}</div>
-    <form id="sf" class="addrow"><input id="snew" placeholder="Nový záběr – co natočit"><button class="btn">Přidat</button></form>
     <div class="fld"><label class="l">Název souboru <span>· tema_datum</span></label><div class="fnrow"><code>${esc(fileName(i))}</code><button class="btn xs ghost" data-fcopy="${esc(fileName(i))}">Kopírovat</button></div></div>
-    <div class="fld"><label class="l">Poznámka pro editora <span>· co musí vědět dopředu</span></label><textarea data-f="editorNote" rows="2">${esc(i.editorNote)}</textarea></div>
     ${remindHTML(i, 'edit', 'e:', 'Připomínky ke střihu')}
-    ${i.ingr.trim() ? `<h2>Nákup</h2><div class="set" style="white-space:pre-wrap;font-size:15px">${esc(i.ingr)}</div>` : ''}`,
+    ${i.ingr.trim() ? `<h2>Nákup</h2><div class="set" style="white-space:pre-wrap;font-size:15px">${esc(i.ingr)}</div>` : ''}`;
+  },
   post: i => `
     <div class="fld"><div class="lbl-row"><label>Popisek</label>${i.ingr.trim() ? '<button class="btn xs ghost" id="pfill">Vložit recept</button>' : ''}<button class="btn xs ghost" id="pcopy">Kopírovat vše</button></div>
       <textarea data-f="caption" rows="4" placeholder="Text pod video…">${esc(i.caption)}</textarea><p class="hint" id="capn">${i.caption.length} znaků</p></div>
@@ -1713,6 +1660,7 @@ const TABS = {
       <label class="rchk ${i.chk['f:own'] ? 'on' : ''}"><input type="checkbox" data-chk="f:own" ${i.chk['f:own'] ? 'checked' : ''}><span>Je to dostatečně moje – nikdo jiný by to nenatočil stejně</span></label>
       <label class="rchk ${i.chk['f:proof'] ? 'on' : ''}"><input type="checkbox" data-chk="f:proof" ${i.chk['f:proof'] ? 'checked' : ''}><span>Mám důkaz, že to funguje (data od jiných tvůrců)</span></label></div>
     <div class="fld"><label class="l">Poznámky</label><textarea data-f="note" rows="5" placeholder="Proč to bude fungovat, pro koho to je, jaký úhel…">${esc(i.note)}</textarea></div>
+    <div class="fld"><label class="l">Odkaz <span>· originál, trend, produkt</span></label><input data-f="link" inputmode="url" autocomplete="off" value="${esc(i.link)}">${/^https?:/.test(i.link) ? `<p class="hint"><a href="${esc(i.link)}" target="_blank" rel="noopener">Otevřít ↗</a></p>` : ''}</div>
     <div class="fld"><label class="l">Inspirace a odkazy</label><textarea data-f="links" rows="2" placeholder="Odkazy na videa, zvuky, reference…">${esc(i.links)}</textarea>
       ${(i.links.match(urlRe) || []).map(u => `<div class="linkrow"><b>${esc(linkPlat(u))}</b><a href="${esc(u)}" target="_blank" rel="noopener">${esc(u.replace(/^https?:\/\/(www\.)?/, ''))}</a></div>`).join('')}</div>
     <p class="hint" style="margin-top:18px">Vytvořeno ${new Date(i.created).toLocaleString('cs-CZ')}</p>`,
@@ -1776,7 +1724,7 @@ const TABS = {
   shorts: i => {
     const kids = db.ideas.filter(x => x.parent === i.id);
     return `<p class="muted" style="margin:14px 2px 0">Krátká videa z tohoto projektu – každé má vlastní hook a termín a zůstává propojené.</p>
-      ${kids.length ? `<div class="list" style="margin-top:12px">${kids.map(k => irow(`<b>${esc(k.title)}</b>`, `${PLAT[k.platform]} · ${STATUS[k.status]}${k.date ? ' · vychází ' + relDate(k.date) : ' · bez data'}${k.hook ? ' · „' + esc(k.hook.slice(0, 40)) + '“' : ''}`, `<button class="btn xs" data-open="${k.id}">Otevřít</button>`)).join('')}</div>` : ''}
+      ${kids.length ? `<div class="list" style="margin-top:12px">${kids.map(k => irow(`<b>${esc(k.title)}</b>`, `${PLAT[k.platform]} · ${STATUS[k.status]}${k.date ? ' · vychází ' + relDate(k.date) : ' · bez data'}${hookOf(k) ? ' · „' + esc(hookOf(k).slice(0, 40)) + '“' : ''}`, `<button class="btn xs" data-open="${k.id}">Otevřít</button>`)).join('')}</div>` : ''}
       <form class="panel" id="kidf" style="margin-top:12px"><input id="kidt" placeholder="Název krátkého videa"><textarea id="kidh" rows="1" placeholder="Hook" style="margin-top:8px"></textarea>
         <div style="display:flex;justify-content:flex-end;margin-top:8px"><button class="btn pri sm">Vytvořit krátké video</button></div></form>`;
   }
@@ -1800,6 +1748,7 @@ function updStats() {
 function bindEditor() {
   const ed = $('#editor'), i = cur;
   $('#eback').onclick = () => closeEditor();
+  $('#esave').onclick = () => { closeEditor(); toast('Uloženo'); };
   $('#efav').onclick = e => { i.fav = !i.fav; e.currentTarget.classList.toggle('on', i.fav); touch(); };
   $('#edel').onclick = () => {
     if (!confirm('Smazat „' + (i.title || 'Bez názvu') + '“?')) return;
@@ -1828,7 +1777,7 @@ function bindEditor() {
       }
       i[fld] = el.value; touch();
       // jakmile začneš psát scénář, posune se nápad do fáze Scénář
-      if (['hook', 'body', 'cta'].includes(fld) && i.status === 'idea' && el.value.trim()) { i.status = 'script'; $('#proc').outerHTML = procHTML(i); bindProcOnly(); }
+      if (fld === 'drive' && /^https?:/.test(el.value.trim()) && ['idea', 'script', 'film'].includes(i.status)) { i.status = 'edit'; $('#proc').outerHTML = procHTML(i); bindProcOnly(); toast('Střih hotový – video čeká na zveřejnění'); }
       if (fld === 'kind') { if (i.kind === 'long') { i.platform = 'youtube'; if (i.format === 'jine') i.format = 'vlog'; } etab = Object.keys(tabsOf(i))[0]; renderEditor(); return; }
       if (fld === 'format') { if (!hasScript(i) && i.kind !== 'long') i.platform = fmt(i.format).plat; renderEditor(); return; }
       if (fld === 'topic' || fld === 'platform') { renderEditor(); return; }
@@ -1837,17 +1786,29 @@ function bindEditor() {
     });
   });
   $$('[data-src]', ed).forEach(b => b.onclick = () => { i.source = i.source === b.dataset.src ? '' : b.dataset.src; touch(); renderEditor(); });
-  $$('[data-struct]', ed).forEach(b => b.onclick = () => { i.struct = b.dataset.struct; touch(); renderEditor(); });
+  $$('[data-smode]', ed).forEach(b => b.onclick = () => { ui.smode = b.dataset.smode; renderEditor(); });
+  $$('[data-sg]', ed).forEach(box => {
+    const n = +box.dataset.sg, x = i.segs[n];
+    $$('[data-sgf]', box).forEach(el => el.oninput = () => {
+      x[el.dataset.sgf] = el.value; touch(); updStats();
+      if (el.dataset.sgf === 'say' && i.status === 'idea' && el.value.trim()) { i.status = 'script'; $('#proc').outerHTML = procHTML(i); bindProcOnly(); }
+    });
+    const ab = $('[data-addb]', box); if (ab) ab.onclick = () => { x.openB = true; renderEditor(); const inp = $(`[data-sg="${n}"] .brin`); inp && inp.focus(); };
+    const mv = d => { [i.segs[n], i.segs[n + d]] = [i.segs[n + d], i.segs[n]]; touch(); renderEditor(); };
+    $('[data-su]', box).onclick = () => mv(-1); $('[data-sd]', box).onclick = () => mv(1);
+    $('[data-sx]', box).onclick = () => { if ((x.say + x.broll).trim() && !confirm('Smazat tuhle část?')) return; i.segs.splice(n, 1); touch(); renderEditor(); };
+  });
+  const sga = $('#sgadd'); if (sga) sga.onclick = () => { i.segs.push({ id: uid(), say: '', broll: '' }); touch(); renderEditor(); const all = $$('[data-sgf=say]', ed); all[all.length - 1].focus(); };
+  $$('[data-bd]', ed).forEach(c => c.onchange = () => { i.segs[+c.dataset.bd].bdone = c.checked; touch(); });
   $$('[data-m]', ed).forEach(el => el.oninput = () => { i.macros[el.dataset.m] = el.value; touch(); });
   $$('[data-i]', ed).forEach(el => el.oninput = () => { i.intro[el.dataset.i] = el.value; if (i.status === 'idea' && el.value.trim()) i.status = 'script'; touch(); updStats(); });
   $$('[data-chk]', ed).forEach(el => el.onchange = () => { i.chk[el.dataset.chk] = el.checked; el.closest('.rchk').classList.toggle('on', el.checked); touch(); });
   $$('[data-goremind]', ed).forEach(b => b.onclick = () => { closeEditor(); go('more'); setTimeout(() => { const s = $('#remind-sec'); s && scrollTo({ top: s.getBoundingClientRect().top + scrollY - 70 }); }, 50); });
-  const hs = $('#hsave'); if (hs) hs.onclick = () => { const t = i.hook.trim(); if (!t) return toast('Nejdřív napiš hook'); if (db.hooks.some(h => h.text === t)) return toast('Už ho máš v bance'); db.hooks.unshift({ id: uid(), text: t, updated: Date.now() }); save(true); toast('Uloženo do banky hooků'); };
+  const hs = $('#hsave'); if (hs) hs.onclick = () => { const t = hookOf(i); if (!t) return toast('Nejdřív napiš hook'); if (db.hooks.some(h => h.text === t)) return toast('Už ho máš v bance'); db.hooks.unshift({ id: uid(), text: t, updated: Date.now() }); save(true); toast('Uloženo do banky hooků'); };
   const hp = $('#hpick'); if (hp) hp.onclick = pickHook;
   const sc_ = $('#scopy'); if (sc_) sc_.onclick = () => copy(ideaText(i), 'Zkopírováno');
   const pr = $('#prompt'); if (pr) pr.onclick = openPrompter;
   // natáčení
-  $$('[data-cam]', ed).forEach(c => c.onclick = () => { i.camera = i.camera === c.dataset.cam ? '' : c.dataset.cam; touch(); renderEditor(); });
   $$('[data-fcopy]', ed).forEach(b => b.onclick = () => copy(b.dataset.fcopy, 'Název zkopírován'));
   const sf = $('#sf');
   if (sf) {
@@ -1912,7 +1873,7 @@ function bindEditor() {
   // krátká videa z projektu
   const kf = $('#kidf'); if (kf) kf.onsubmit = e => {
     e.preventDefault(); const t = $('#kidt').value.trim(); if (!t) return $('#kidt').focus();
-    const k = newIdea(t, { topic: i.topic, format: 'headtalk' }); k.parent = i.id; k.hook = $('#kidh').value.trim(); k.series = i.series; if (k.hook) k.status = 'script';
+    const k = newIdea(t, { topic: i.topic, format: 'headtalk' }); k.parent = i.id; const hk = $('#kidh').value.trim(); if (hk) { k.segs = [{ id: uid(), say: hk, broll: '' }]; k.status = 'script'; } k.series = i.series;
     db.ideas.unshift(k); touch(); save(true); renderEditor(); toast('Krátké video vytvořeno – dej mu termín');
   };
 }
@@ -1924,8 +1885,8 @@ function pickHook() {
   const all = [...db.hooks.map(h => h.text), ...FORMULAS.filter(f => !db.hooks.some(h => h.text === f))];
   openModal(`<h3>Vyber hook</h3><div class="optgroup">${all.map((t, n) => `<button class="opt" data-n="${n}">${esc(t)}</button>`).join('')}</div>`, m => {
     $$('[data-n]', m).forEach(b => b.onclick = () => {
-      cur.hook = all[+b.dataset.n]; touch(); closeModal(); renderEditor();
-      const h = $('#editor [data-f=hook]'); h.focus(); const p = h.value.indexOf('['); if (p >= 0) h.setSelectionRange(p, h.value.indexOf(']', p) + 1);
+      if (!cur.segs.length) cur.segs.push({ id: uid(), say: '', broll: '' }); cur.segs[0].say = all[+b.dataset.n]; touch(); closeModal(); renderEditor();
+      const h = $('#editor [data-sgf=say]'); h.focus(); const p = h.value.indexOf('['); if (p >= 0) h.setSelectionRange(p, h.value.indexOf(']', p) + 1);
     });
   });
 }
