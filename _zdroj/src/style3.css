@@ -369,3 +369,17 @@ html.food .hdr h1{color:#FFFFFF}
 .kmore{margin-top:6px}.kmore summary{list-style:none;cursor:pointer;padding:14px 2px;color:var(--mut);font-size:14px;font-weight:600;border-bottom:1px solid var(--line)}
 .kmore summary::-webkit-details-marker{display:none}.kmore summary::after{content:" +";color:var(--hot)}.kmore[open] summary::after{content:" –"}
 .kol{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:9px;font-size:15px;line-height:1.35}.kol li::marker{color:var(--hot);font-weight:700}
+/* v2.19 */
+.tbang{position:absolute;top:4px;right:calc(50% - 22px);width:16px;height:16px;border-radius:50%;background:#FF8A3D;color:#0A0A0A;font-style:normal;font-size:11px;font-weight:800;display:grid;place-items:center;line-height:1}
+nav.tabs button{position:relative}
+.hdr.h2b{grid-template-columns:100px 1fr 100px}.hbtns{display:flex;gap:8px;justify-content:flex-end}
+.sobb{color:var(--mut)}.sobb.on{color:var(--hot)}
+.sobs{padding-top:4px}.sobs .lbl{color:var(--hot)}
+.sobnum{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 16px;margin:10px 0 8px;text-align:left}
+.sobnum span{display:flex;align-items:baseline;gap:6px}
+.sobnum b{font-family:var(--fd);font-style:italic;font-weight:800;font-size:72px;line-height:.9}
+.sobnum small{font-family:var(--fd);font-style:italic;font-weight:800;font-size:22px;text-transform:uppercase;color:var(--mut)}
+.seg.rate{gap:0}.seg.rate button{border-radius:0}.seg.rate button:first-child{border-radius:999px 0 0 999px}.seg.rate button:last-child{border-radius:0 999px 999px 0}
+.seg.rate button.in{background:var(--hot);color:#0A0A0A}
+.seg.rate button.on{border-radius:0 999px 999px 0}.seg.rate button.on:first-child{border-radius:999px}
+.card .seg.rate button.in{background:var(--hot)}

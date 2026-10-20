@@ -53,7 +53,7 @@ XV.whoop = function () {
   const bars = days7.map(kk => { const x = wDay(kk) || {}; return `<div class="w7b"><i style="height:${x.rec != null ? Math.max(6, x.rec) : 4}%;background:${recCol(x.rec)}"></i><span>${DOW[pdate(kk).getDay()]}</span></div>`; }).join('');
   const av = key => { const v = days7.map(kk => wDay(kk)?.[key]).filter(x => x != null); return v.length ? v.reduce((a, b) => a + b, 0) / v.length : null; };
   const P = woPending(); const lim = Date.now() - 14 * DMS; const used = new Set(S.activities.map(a => a.whoopId).filter(Boolean));
-  const wos = Object.values(w.wo).filter(x => x.start > lim).sort((a, b) => b.start - a.start);
+  const wos = Object.values(w.wo).filter(x => x.start > lim && !GYMLIKE.test(x.sport) && !finished().some(s => woFor(s) === x)).sort((a, b) => b.start - a.start);
   const woRow = x => { const t = (WSPORT.find(([r]) => r.test(x.sport)) || [0, 'other'])[1]; const nm = t === 'other' ? x.sport : (ACT_TYPES[t]?.name || x.sport); const gym = finished().find(s => woFor(s) === x);
     const st = used.has(x.id) ? 'propsáno' : gym ? `k tréninku ${esc(gym.name)}` : (W().dis || {})[x.id] ? 'nepropsáno' : P.includes(x) ? '' : 'posilování';
     return `<div class="li wpend"><span class="ic ${ACT_TYPES[t]?.cls || 'act'}" data-t="${t}">${ico(ACT_TYPES[t]?.icon || 'plus')}</span><div class="t"><b>${esc(gym ? 'Posilování' : nm)}</b><small>${fday(dkey(new Date(x.start)))} · ${Math.round((x.end - x.start) / 60000)} min${x.km ? ` · ${kg(x.km)} km` : ''}${x.strain != null ? ` · strain ${kg(x.strain)}` : ''}${x.hr ? ` · Ø ${x.hr} bpm` : ''}</small></div>${st ? `<span class="pst">${st}</span>` : `<button class="btn white" style="padding:9px 14px" data-a="wo-add" data-id="${x.id}">Propsat</button>`}</div>`; };
@@ -79,20 +79,23 @@ A['w-day'] = b => { const k = view.d || today(); const n = dkey(addDays(pdate(k)
 // ---------- potvrzení, co z WHOOP aktivity propsat ----------
 A['wo-add'] = b => {
   const x = W().wo[b.dataset.id]; if (!x) return; const t = (WSPORT.find(([r]) => r.test(x.sport)) || [0, 'other'])[1]; const min = Math.round((x.end - x.start) / 60000);
-  const F_ = [['min', `Čas ${min} min`, true], x.km ? ['km', `Vzdálenost ${kg(x.km)} km`, true] : null, x.hr ? ['hr', `Ø tep ${x.hr} bpm`, true] : null, x.strain != null ? ['strain', `Strain ${kg(x.strain)}`, true] : null, x.elev ? ['elev', `Převýšení ${x.elev} m`, false] : null].filter(Boolean);
+  const F_ = [x.km ? ['km', `Vzdálenost ${kg(x.km)} km`, true] : null, x.hr ? ['hr', `Ø tep ${x.hr} bpm`, true] : null, x.strain != null ? ['strain', `Strain ${kg(x.strain)}`, true] : null, x.elev ? ['elev', `Převýšení ${x.elev} m`, false] : null].filter(Boolean);
   sheet(`<h2>Propsat z WHOOPu</h2><p class="mut" style="margin:4px 0 0">${esc(x.sport)} · ${flong(dkey(new Date(x.start)))} · ${new Date(x.start).toLocaleTimeString('cs-CZ', { hour: '2-digit', minute: '2-digit' })}</p>
     <div class="form"><label class="f">Jako aktivitu<select id="wo-t">${Object.entries(ACT_TYPES).map(([k2, v]) => `<option value="${k2}" ${k2 === t ? 'selected' : ''}>${v.name}</option>`).join('')}</select></label>
-      <div><div class="lbl" style="margin:0 2px 8px">Co propsat</div><div class="chips wofs">${F_.map(([k2, l, on]) => `<button class="chip ${on ? 'on' : ''}" data-a="part-tog" data-v="${k2}">${l}</button>`).join('')}</div></div></div>
+      <div class="two"><label class="f">Minuty<input id="wo-min" inputmode="numeric" value="${min}"></label><label class="f">Datum<input id="wo-d" type="date" value="${dkey(new Date(x.start))}"></label></div>
+      <label class="f" id="wo-lblf" ${t === 'other' ? '' : 'hidden'}>Co to bylo<input id="wo-lbl" value="${esc(x.sport)}"></label>
+      ${F_.length ? `<div><div class="lbl" style="margin:0 2px 8px">Co ještě propsat</div><div class="chips wofs">${F_.map(([k2, l, on]) => `<button class="chip ${on ? 'on' : ''}" data-a="part-tog" data-v="${k2}">${l}</button>`).join('')}</div></div>` : ''}</div>
     <div class="actions"><button class="btn" data-a="wo-dis2" data-id="${x.id}">Nepropisovat</button><button class="btn white" data-a="wo-add2" data-id="${x.id}">Propsat</button></div>`);
 };
 A['wo-dis2'] = b => { W().dis[b.dataset.id] = 1; save(true); closeSheet(); render(); toast('Nepropsáno'); };
 A['wo-add2'] = b => {
   const x = W().wo[b.dataset.id]; if (!x) return; const t = $('#wo-t').value; const on = new Set([...document.querySelectorAll('#sheet .wofs .chip.on')].map(c => c.dataset.v));
-  const a = { id: uid(), type: t, date: dkey(new Date(x.start)), ts: Date.now(), whoopId: x.id, note: '' };
-  if (on.has('min')) { a.min = Math.round((x.end - x.start) / 60000); if (['run', 'bike', 'xcski', 'row', 'skierg', 'hyrox'].includes(t)) a.sec = Math.round((x.end - x.start) / 1000); }
+  const a = { id: uid(), type: t, date: $('#wo-d').value || dkey(new Date(x.start)), ts: Date.now(), whoopId: x.id, note: '' };
+  const m0 = Math.round((x.end - x.start) / 60000), mm = Math.round(num($('#wo-min').value) || 0);
+  if (mm > 0) { a.min = mm; if (['run', 'bike', 'xcski', 'row', 'skierg', 'hyrox'].includes(t)) a.sec = mm === m0 ? Math.round((x.end - x.start) / 1000) : mm * 60; }
   if (on.has('km')) { if (['row', 'skierg'].includes(t)) a.m = Math.round(x.km * 1000); else a.km = x.km; }
   if (on.has('hr')) a.bpm = x.hr; if (on.has('strain')) a.strain = x.strain; if (on.has('elev')) a.elev = x.elev;
-  if (t === 'other') a.label = x.sport; if (t === 'bike') a.kind = a.km ? 'Kolo venku' : 'Rotoped';
+  if (t === 'other') a.label = ($('#wo-lbl').value || '').trim() || x.sport; if (t === 'bike') a.kind = a.km ? 'Kolo venku' : 'Rotoped';
   S.activities.push(a); save(true); closeSheet(); render(); toast('Propsáno – detaily doplníš klepnutím v Aktivitách'); setTimeout(checkBadges, 600);
 };
 
@@ -162,3 +165,4 @@ A['f-meal'] = withUP(function (b) {
   });
 });
 function $$s(q) { return [...document.querySelectorAll(q)]; }
+document.addEventListener('change', e => { if (e.target.id === 'wo-t') { const f = $('#wo-lblf'); if (f) f.hidden = e.target.value !== 'other'; } });
