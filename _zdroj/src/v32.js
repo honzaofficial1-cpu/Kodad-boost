@@ -31,7 +31,7 @@ function whoopMerge(j) {
 // přihlášení se vrací s ?whoop=klíč
 (function () {
   const q = new URLSearchParams(location.search); const k = q.get('whoop');
-  if (k) { S.settings.whoopKey = k; delete S.settings.whoopErr; save(true); history.replaceState(null, '', location.pathname); setTimeout(() => { toast('WHOOP propojený'); whoopSync(true); }, 400); }
+  if (k) { try { sessionStorage.setItem('kb-wfresh', '1'); } catch (e) { } S.settings.whoopKey = k; delete S.settings.whoopErr; save(true); history.replaceState(null, '', location.pathname); setTimeout(() => { toast('WHOOP propojený'); whoopSync(true); }, 400); }
 })();
 setTimeout(() => whoopSync(), 1500);
 document.addEventListener('visibilitychange', () => { if (!document.hidden) whoopSync(); });
