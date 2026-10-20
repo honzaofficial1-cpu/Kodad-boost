@@ -137,7 +137,7 @@ function sheet(html, onMount) {
   el.hidden = false; document.body.style.overflow = 'hidden'; onMount && onMount(el);
 }
 function closeSheet() { const el = $('#sheet'); el.hidden = true; el.innerHTML = ''; document.body.style.overflow = ''; }
-const tabs = () => `<nav class="tabs">${[['home', 'Domů', 'home'], ['cal', 'Kalendář', 'cal'], ['mery', 'Míry', 'ruler'], ['acts', 'Aktivity', 'flame']]
+let tabs = () => `<nav class="tabs">${[['home', 'Domů', 'home'], ['cal', 'Kalendář', 'cal'], ['mery', 'Míry', 'ruler'], ['acts', 'Aktivity', 'flame']]
   .map(([n, l, i]) => `<button data-a="tab" data-v="${n}" class="${view.n === n || (n === 'home' && ['gym', 'prog', 'progEx', 'lib', 'tpls', 'summary', 'plan', 'planEdit', 'badges'].includes(view.n)) ? 'on' : ''}">${ico(i)}${l}</button>`).join('')}</nav>`;
 const hdr = (left, mid, right) => `<header class="hdr">${left || '<span></span>'}${mid}${right || '<span></span>'}</header>`;
 const backBtn = (to = 'home') => `<button class="round" data-a="tab" data-v="${to}" aria-label="Zpět">${ico('back')}</button>`;

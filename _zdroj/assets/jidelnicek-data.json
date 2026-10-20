@@ -1,0 +1,6892 @@
+{
+ "meta": {
+  "nazev": "Nabírací systém v1",
+  "verze": "2026-10-20",
+  "vychozi_krok": 0,
+  "jednotky": "gramy; maso syrové, přílohy suché, ovoce jedlá část, konzervy slité",
+  "energie": "EU faktory 4/4/9 kcal/g, vláknina 2 kcal/g",
+  "poradi_cyklu": [
+   "A",
+   "B",
+   "C"
+  ],
+  "treninkove_dny_vychozi": [
+   "Po",
+   "Út",
+   "Čt",
+   "So"
+  ],
+  "upozorneni": "Hodnoty jsou převážně databázové odhady; výrobky bez etikety ověřit."
+ },
+ "suroviny": {
+  "vejce": {
+   "nazev": "Vejce celá (bez skořápky)",
+   "na_100g": {
+    "kcal": 139,
+    "bilkoviny_g": 12.6,
+    "sacharidy_g": 0.7,
+    "tuky_g": 9.5,
+    "vlaknina_g": 0.0,
+    "nasycene_g": 3.1
+   },
+   "poznamka": "1 vejce M/L ≈ 55 g bez skořápky",
+   "kategorie_nakupu": "Lednice",
+   "baleni": "550 g"
+  },
+  "cottage": {
+   "nazev": "Cottage sýr (~4 % tuku)",
+   "na_100g": {
+    "kcal": 97,
+    "bilkoviny_g": 11.5,
+    "sacharidy_g": 3.0,
+    "tuky_g": 4.3,
+    "vlaknina_g": 0.0,
+    "nasycene_g": 2.8
+   },
+   "poznamka": "etiketa: ověřit",
+   "kategorie_nakupu": "Lednice",
+   "baleni": "180 g"
+  },
+  "tvaroh": {
+   "nazev": "Tvaroh polotučný",
+   "na_100g": {
+    "kcal": 102,
+    "bilkoviny_g": 12.0,
+    "sacharidy_g": 3.5,
+    "tuky_g": 4.5,
+    "vlaknina_g": 0.0,
+    "nasycene_g": 3.0
+   },
+   "poznamka": "etiketa: ověřit",
+   "kategorie_nakupu": "Lednice",
+   "baleni": "250 g"
+  },
+  "recky_jogurt_0": {
+   "nazev": "Řecký jogurt 0 % (Milko)",
+   "na_100g": {
+    "kcal": 57,
+    "bilkoviny_g": 10.0,
+    "sacharidy_g": 3.5,
+    "tuky_g": 0.3,
+    "vlaknina_g": 0.0,
+    "nasycene_g": 0.2
+   },
+   "poznamka": "etiketa výrobce ověřena",
+   "kategorie_nakupu": "Lednice",
+   "baleni": "140 g"
+  },
+  "jogurt_bily_3": {
+   "nazev": "Bílý jogurt 3 % s živými kulturami",
+   "na_100g": {
+    "kcal": 65,
+    "bilkoviny_g": 4.5,
+    "sacharidy_g": 5.0,
+    "tuky_g": 3.0,
+    "vlaknina_g": 0.0,
+    "nasycene_g": 2.0
+   },
+   "poznamka": "etiketa: ověřit",
+   "kategorie_nakupu": "Lednice",
+   "baleni": "150 g"
+  },
+  "kefir": {
+   "nazev": "Kefír 1,5 %",
+   "na_100g": {
+    "kcal": 43,
+    "bilkoviny_g": 3.3,
+    "sacharidy_g": 4.0,
+    "tuky_g": 1.5,
+    "vlaknina_g": 0.0,
+    "nasycene_g": 1.0
+   },
+   "poznamka": "etiketa: ověřit",
+   "kategorie_nakupu": "Lednice",
+   "baleni": "500 g"
+  },
+  "mleko": {
+   "nazev": "Mléko polotučné 1,5 %",
+   "na_100g": {
+    "kcal": 46,
+    "bilkoviny_g": 3.4,
+    "sacharidy_g": 4.8,
+    "tuky_g": 1.5,
+    "vlaknina_g": 0.0,
+    "nasycene_g": 1.0
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Lednice",
+   "baleni": "1000 g"
+  },
+  "feta": {
+   "nazev": "Feta (ovčí/kozí)",
+   "na_100g": {
+    "kcal": 256,
+    "bilkoviny_g": 16.0,
+    "sacharidy_g": 0.7,
+    "tuky_g": 21.0,
+    "vlaknina_g": 0.0,
+    "nasycene_g": 14.0
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Lednice",
+   "baleni": "200 g"
+  },
+  "parmazan": {
+   "nazev": "Parmazán",
+   "na_100g": {
+    "kcal": 388,
+    "bilkoviny_g": 35.8,
+    "sacharidy_g": 3.2,
+    "tuky_g": 25.8,
+    "vlaknina_g": 0.0,
+    "nasycene_g": 16.4
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Lednice",
+   "baleni": "150 g"
+  },
+  "mozzarella_light": {
+   "nazev": "Mozzarella light (po slití)",
+   "na_100g": {
+    "kcal": 153,
+    "bilkoviny_g": 17.0,
+    "sacharidy_g": 1.0,
+    "tuky_g": 9.0,
+    "vlaknina_g": 0.0,
+    "nasycene_g": 6.0
+   },
+   "poznamka": "etiketa: ověřit",
+   "kategorie_nakupu": "Lednice",
+   "baleni": "125 g"
+  },
+  "smetana12": {
+   "nazev": "Smetana na vaření 12 %",
+   "na_100g": {
+    "kcal": 136,
+    "bilkoviny_g": 3.0,
+    "sacharidy_g": 4.0,
+    "tuky_g": 12.0,
+    "vlaknina_g": 0.0,
+    "nasycene_g": 7.8
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Lednice",
+   "baleni": "200 g"
+  },
+  "whey": {
+   "nazev": "Syrovátkový protein Veiny Galaxy (vanilka)",
+   "na_100g": {
+    "kcal": 402,
+    "bilkoviny_g": 77.3,
+    "sacharidy_g": 8.8,
+    "tuky_g": 6.4,
+    "vlaknina_g": 0.0,
+    "nasycene_g": 4.1
+   },
+   "poznamka": "Kalorické tabulky – ověřit etiketou",
+   "kategorie_nakupu": "Zásoba",
+   "baleni": "1 kg"
+  },
+  "kur_prsa": {
+   "nazev": "Kuřecí prsa (syrová)",
+   "na_100g": {
+    "kcal": 103,
+    "bilkoviny_g": 23.1,
+    "sacharidy_g": 0.0,
+    "tuky_g": 1.2,
+    "vlaknina_g": 0.0,
+    "nasycene_g": 0.3
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Maso a ryby",
+   "baleni": "500 g"
+  },
+  "kur_stehna": {
+   "nazev": "Kuřecí stehna vykostěná bez kůže (syrová)",
+   "na_100g": {
+    "kcal": 114,
+    "bilkoviny_g": 19.7,
+    "sacharidy_g": 0.0,
+    "tuky_g": 3.9,
+    "vlaknina_g": 0.0,
+    "nasycene_g": 1.0
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Maso a ryby",
+   "baleni": "500 g"
+  },
+  "krut_prsa": {
+   "nazev": "Krůtí prsa (syrová)",
+   "na_100g": {
+    "kcal": 108,
+    "bilkoviny_g": 23.5,
+    "sacharidy_g": 0.0,
+    "tuky_g": 1.5,
+    "vlaknina_g": 0.0,
+    "nasycene_g": 0.4
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Maso a ryby",
+   "baleni": "500 g"
+  },
+  "krut_prsa_pecena": {
+   "nazev": "Krůtí prsa pečená (váženo upečené)",
+   "na_100g": {
+    "kcal": 138,
+    "bilkoviny_g": 30.0,
+    "sacharidy_g": 0.0,
+    "tuky_g": 2.0,
+    "vlaknina_g": 0.0,
+    "nasycene_g": 0.6
+   },
+   "poznamka": "domácí, ne šunka",
+   "kategorie_nakupu": "Maso a ryby",
+   "baleni": null
+  },
+  "krut_mlete": {
+   "nazev": "Krůtí mleté (~7 % tuku, syrové)",
+   "na_100g": {
+    "kcal": 139,
+    "bilkoviny_g": 19.0,
+    "sacharidy_g": 0.0,
+    "tuky_g": 7.0,
+    "vlaknina_g": 0.0,
+    "nasycene_g": 2.0
+   },
+   "poznamka": "etiketa: ověřit",
+   "kategorie_nakupu": "Maso a ryby",
+   "baleni": "500 g"
+  },
+  "hov_mlete5": {
+   "nazev": "Hovězí mleté 5 % (syrové)",
+   "na_100g": {
+    "kcal": 129,
+    "bilkoviny_g": 21.0,
+    "sacharidy_g": 0.0,
+    "tuky_g": 5.0,
+    "vlaknina_g": 0.0,
+    "nasycene_g": 2.2
+   },
+   "poznamka": "etiketa: ověřit",
+   "kategorie_nakupu": "Maso a ryby",
+   "baleni": "400 g"
+  },
+  "hov_zadni": {
+   "nazev": "Hovězí zadní (syrové)",
+   "na_100g": {
+    "kcal": 126,
+    "bilkoviny_g": 21.5,
+    "sacharidy_g": 0.0,
+    "tuky_g": 4.5,
+    "vlaknina_g": 0.0,
+    "nasycene_g": 1.8
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Maso a ryby",
+   "baleni": null
+  },
+  "hov_klizka": {
+   "nazev": "Hovězí kližka (syrová)",
+   "na_100g": {
+    "kcal": 132,
+    "bilkoviny_g": 20.5,
+    "sacharidy_g": 0.0,
+    "tuky_g": 5.5,
+    "vlaknina_g": 0.0,
+    "nasycene_g": 2.2
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Maso a ryby",
+   "baleni": null
+  },
+  "vep_panenka": {
+   "nazev": "Vepřová panenka (syrová)",
+   "na_100g": {
+    "kcal": 115,
+    "bilkoviny_g": 21.0,
+    "sacharidy_g": 0.0,
+    "tuky_g": 3.4,
+    "vlaknina_g": 0.0,
+    "nasycene_g": 1.2
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Maso a ryby",
+   "baleni": null
+  },
+  "losos": {
+   "nazev": "Losos atlantický chovaný (syrový)",
+   "na_100g": {
+    "kcal": 202,
+    "bilkoviny_g": 20.4,
+    "sacharidy_g": 0.0,
+    "tuky_g": 13.4,
+    "vlaknina_g": 0.0,
+    "nasycene_g": 3.1
+   },
+   "poznamka": "EPA+DHA cca 2 g/100 g, kolísá",
+   "kategorie_nakupu": "Maso a ryby",
+   "baleni": null
+  },
+  "sardinky": {
+   "nazev": "Sardinky Vilgain ve vlastní šťávě (slité)",
+   "na_100g": {
+    "kcal": 168,
+    "bilkoviny_g": 25.9,
+    "sacharidy_g": 0.0,
+    "tuky_g": 7.2,
+    "vlaknina_g": 0.0,
+    "nasycene_g": 2.2
+   },
+   "poznamka": "údaje výrobce; 1 plechovka 120 g ≈ 85 g ryby",
+   "kategorie_nakupu": "Zásoba",
+   "baleni": "konzerva 120 g (~85 g ryby)"
+  },
+  "tunak": {
+   "nazev": "Tuňák ve vlastní šťávě (slitý)",
+   "na_100g": {
+    "kcal": 107,
+    "bilkoviny_g": 24.5,
+    "sacharidy_g": 0.0,
+    "tuky_g": 1.0,
+    "vlaknina_g": 0.0,
+    "nasycene_g": 0.3
+   },
+   "poznamka": "1 konzerva ≈ 110 g slitého",
+   "kategorie_nakupu": "Zásoba",
+   "baleni": "konzerva 160 g (110 g slitá)"
+  },
+  "krevety": {
+   "nazev": "Krevety oloupané (syrové)",
+   "na_100g": {
+    "kcal": 84,
+    "bilkoviny_g": 20.0,
+    "sacharidy_g": 0.0,
+    "tuky_g": 0.5,
+    "vlaknina_g": 0.0,
+    "nasycene_g": 0.1
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Mražené",
+   "baleni": "200 g"
+  },
+  "chleb_zitny": {
+   "nazev": "Žitný kváskový chléb celozrnný",
+   "na_100g": {
+    "kcal": 214,
+    "bilkoviny_g": 6.5,
+    "sacharidy_g": 40.0,
+    "tuky_g": 1.5,
+    "vlaknina_g": 7.0,
+    "nasycene_g": 0.3
+   },
+   "poznamka": "etiketa: ověřit",
+   "kategorie_nakupu": "Lednice",
+   "baleni": "500 g"
+  },
+  "tortilla_cz": {
+   "nazev": "Celozrnná tortilla",
+   "na_100g": {
+    "kcal": 290,
+    "bilkoviny_g": 9.5,
+    "sacharidy_g": 44.0,
+    "tuky_g": 7.0,
+    "vlaknina_g": 6.5,
+    "nasycene_g": 2.0
+   },
+   "poznamka": "1 ks ≈ 62 g; etiketa: ověřit",
+   "kategorie_nakupu": "Lednice",
+   "baleni": "372 g"
+  },
+  "vlocky": {
+   "nazev": "Ovesné vločky",
+   "na_100g": {
+    "kcal": 362,
+    "bilkoviny_g": 13.0,
+    "sacharidy_g": 58.0,
+    "tuky_g": 6.5,
+    "vlaknina_g": 10.0,
+    "nasycene_g": 1.2
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Zásoba",
+   "baleni": "500 g"
+  },
+  "ryzova_kase": {
+   "nazev": "Rýžová kaše Grizly (suchá)",
+   "na_100g": {
+    "kcal": 350,
+    "bilkoviny_g": 8.5,
+    "sacharidy_g": 75.7,
+    "tuky_g": 1.2,
+    "vlaknina_g": 1.0,
+    "nasycene_g": 0.2
+   },
+   "poznamka": "údaje výrobce; vláknina neuvedena (odhad)",
+   "kategorie_nakupu": "Zásoba",
+   "baleni": "1 kg"
+  },
+  "basmati": {
+   "nazev": "Rýže basmati (suchá)",
+   "na_100g": {
+    "kcal": 352,
+    "bilkoviny_g": 7.5,
+    "sacharidy_g": 78.0,
+    "tuky_g": 0.8,
+    "vlaknina_g": 1.3,
+    "nasycene_g": 0.2
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Zásoba",
+   "baleni": "1 kg"
+  },
+  "sushi_ryze": {
+   "nazev": "Rýže na sushi (suchá)",
+   "na_100g": {
+    "kcal": 347,
+    "bilkoviny_g": 6.6,
+    "sacharidy_g": 78.0,
+    "tuky_g": 0.6,
+    "vlaknina_g": 1.4,
+    "nasycene_g": 0.2
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Zásoba",
+   "baleni": "500 g–1 kg"
+  },
+  "arborio": {
+   "nazev": "Rýže arborio (suchá)",
+   "na_100g": {
+    "kcal": 351,
+    "bilkoviny_g": 6.8,
+    "sacharidy_g": 79.0,
+    "tuky_g": 0.6,
+    "vlaknina_g": 1.0,
+    "nasycene_g": 0.2
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Zásoba",
+   "baleni": "500 g"
+  },
+  "testoviny": {
+   "nazev": "Semolinové těstoviny (suché)",
+   "na_100g": {
+    "kcal": 358,
+    "bilkoviny_g": 13.0,
+    "sacharidy_g": 71.5,
+    "tuky_g": 1.5,
+    "vlaknina_g": 3.2,
+    "nasycene_g": 0.3
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Zásoba",
+   "baleni": "500 g"
+  },
+  "testoviny_cz": {
+   "nazev": "Celozrnné těstoviny (suché)",
+   "na_100g": {
+    "kcal": 342,
+    "bilkoviny_g": 14.0,
+    "sacharidy_g": 62.0,
+    "tuky_g": 2.5,
+    "vlaknina_g": 8.0,
+    "nasycene_g": 0.4
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Zásoba",
+   "baleni": "500 g"
+  },
+  "ryzove_nudle": {
+   "nazev": "Rýžové nudle (suché)",
+   "na_100g": {
+    "kcal": 349,
+    "bilkoviny_g": 6.0,
+    "sacharidy_g": 79.0,
+    "tuky_g": 0.6,
+    "vlaknina_g": 1.6,
+    "nasycene_g": 0.2
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Zásoba",
+   "baleni": "200 g"
+  },
+  "brambory": {
+   "nazev": "Brambory (syrové, loupané)",
+   "na_100g": {
+    "kcal": 75,
+    "bilkoviny_g": 2.0,
+    "sacharidy_g": 15.5,
+    "tuky_g": 0.1,
+    "vlaknina_g": 2.2,
+    "nasycene_g": 0.0
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Ovoce a zelenina",
+   "baleni": null
+  },
+  "bataty": {
+   "nazev": "Batáty (syrové)",
+   "na_100g": {
+    "kcal": 82,
+    "bilkoviny_g": 1.6,
+    "sacharidy_g": 17.1,
+    "tuky_g": 0.1,
+    "vlaknina_g": 3.0,
+    "nasycene_g": 0.0
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Ovoce a zelenina",
+   "baleni": null
+  },
+  "cocka_cervena": {
+   "nazev": "Červená čočka (suchá)",
+   "na_100g": {
+    "kcal": 338,
+    "bilkoviny_g": 24.5,
+    "sacharidy_g": 52.0,
+    "tuky_g": 1.1,
+    "vlaknina_g": 11.0,
+    "nasycene_g": 0.2
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Zásoba",
+   "baleni": "500 g"
+  },
+  "fazole_cerne": {
+   "nazev": "Černé fazole (konzerva, slité)",
+   "na_100g": {
+    "kcal": 102,
+    "bilkoviny_g": 7.5,
+    "sacharidy_g": 13.5,
+    "tuky_g": 0.5,
+    "vlaknina_g": 7.0,
+    "nasycene_g": 0.1
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Zásoba",
+   "baleni": "konzerva 400 g (240 g slitá)"
+  },
+  "fazole_cervene": {
+   "nazev": "Červené fazole (konzerva, slité)",
+   "na_100g": {
+    "kcal": 104,
+    "bilkoviny_g": 7.5,
+    "sacharidy_g": 14.0,
+    "tuky_g": 0.5,
+    "vlaknina_g": 6.5,
+    "nasycene_g": 0.1
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Zásoba",
+   "baleni": "konzerva 400 g (240 g slitá)"
+  },
+  "cizrna": {
+   "nazev": "Cizrna (konzerva, slitá)",
+   "na_100g": {
+    "kcal": 128,
+    "bilkoviny_g": 7.0,
+    "sacharidy_g": 16.0,
+    "tuky_g": 2.6,
+    "vlaknina_g": 6.4,
+    "nasycene_g": 0.3
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Zásoba",
+   "baleni": "konzerva 400 g (240 g slitá)"
+  },
+  "edamame": {
+   "nazev": "Edamame vyloupané (mražené)",
+   "na_100g": {
+    "kcal": 120,
+    "bilkoviny_g": 11.9,
+    "sacharidy_g": 3.7,
+    "tuky_g": 5.2,
+    "vlaknina_g": 5.2,
+    "nasycene_g": 0.6
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Mražené",
+   "baleni": "400 g"
+  },
+  "hrasek": {
+   "nazev": "Hrášek mražený",
+   "na_100g": {
+    "kcal": 70,
+    "bilkoviny_g": 5.2,
+    "sacharidy_g": 9.1,
+    "tuky_g": 0.4,
+    "vlaknina_g": 4.5,
+    "nasycene_g": 0.1
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Mražené",
+   "baleni": "450 g"
+  },
+  "kukurice": {
+   "nazev": "Kukuřice sladká (konzerva, slitá)",
+   "na_100g": {
+    "kcal": 84,
+    "bilkoviny_g": 2.4,
+    "sacharidy_g": 15.0,
+    "tuky_g": 1.2,
+    "vlaknina_g": 2.0,
+    "nasycene_g": 0.2
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Zásoba",
+   "baleni": "konzerva 340 g (285 g slitá)"
+  },
+  "rajcata": {
+   "nazev": "Rajčata",
+   "na_100g": {
+    "kcal": 18,
+    "bilkoviny_g": 0.9,
+    "sacharidy_g": 2.6,
+    "tuky_g": 0.2,
+    "vlaknina_g": 1.2,
+    "nasycene_g": 0.0
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Ovoce a zelenina",
+   "baleni": null
+  },
+  "rajcata_kons": {
+   "nazev": "Rajčata krájená (konzerva)",
+   "na_100g": {
+    "kcal": 22,
+    "bilkoviny_g": 1.0,
+    "sacharidy_g": 3.5,
+    "tuky_g": 0.2,
+    "vlaknina_g": 1.0,
+    "nasycene_g": 0.0
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Zásoba",
+   "baleni": "konzerva 400 g"
+  },
+  "passata": {
+   "nazev": "Passata",
+   "na_100g": {
+    "kcal": 28,
+    "bilkoviny_g": 1.4,
+    "sacharidy_g": 4.5,
+    "tuky_g": 0.2,
+    "vlaknina_g": 1.2,
+    "nasycene_g": 0.0
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Zásoba",
+   "baleni": "500 g"
+  },
+  "paprika": {
+   "nazev": "Paprika červená",
+   "na_100g": {
+    "kcal": 29,
+    "bilkoviny_g": 1.0,
+    "sacharidy_g": 4.6,
+    "tuky_g": 0.3,
+    "vlaknina_g": 2.1,
+    "nasycene_g": 0.0
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Ovoce a zelenina",
+   "baleni": null
+  },
+  "okurka": {
+   "nazev": "Okurka",
+   "na_100g": {
+    "kcal": 17,
+    "bilkoviny_g": 0.7,
+    "sacharidy_g": 3.1,
+    "tuky_g": 0.1,
+    "vlaknina_g": 0.5,
+    "nasycene_g": 0.0
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Ovoce a zelenina",
+   "baleni": null
+  },
+  "spenat": {
+   "nazev": "Špenát (čerstvý/mražený)",
+   "na_100g": {
+    "kcal": 25,
+    "bilkoviny_g": 2.9,
+    "sacharidy_g": 1.4,
+    "tuky_g": 0.4,
+    "vlaknina_g": 2.2,
+    "nasycene_g": 0.1
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Mražené",
+   "baleni": "450 g"
+  },
+  "zampiony": {
+   "nazev": "Žampiony",
+   "na_100g": {
+    "kcal": 26,
+    "bilkoviny_g": 3.1,
+    "sacharidy_g": 2.3,
+    "tuky_g": 0.3,
+    "vlaknina_g": 1.0,
+    "nasycene_g": 0.0
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Ovoce a zelenina",
+   "baleni": null
+  },
+  "cuketa": {
+   "nazev": "Cuketa",
+   "na_100g": {
+    "kcal": 18,
+    "bilkoviny_g": 1.2,
+    "sacharidy_g": 2.1,
+    "tuky_g": 0.3,
+    "vlaknina_g": 1.0,
+    "nasycene_g": 0.1
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Ovoce a zelenina",
+   "baleni": null
+  },
+  "mrkev": {
+   "nazev": "Mrkev",
+   "na_100g": {
+    "kcal": 38,
+    "bilkoviny_g": 0.9,
+    "sacharidy_g": 6.8,
+    "tuky_g": 0.2,
+    "vlaknina_g": 2.8,
+    "nasycene_g": 0.0
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Ovoce a zelenina",
+   "baleni": null
+  },
+  "celer": {
+   "nazev": "Celer bulva",
+   "na_100g": {
+    "kcal": 42,
+    "bilkoviny_g": 1.5,
+    "sacharidy_g": 7.4,
+    "tuky_g": 0.3,
+    "vlaknina_g": 1.8,
+    "nasycene_g": 0.1
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Ovoce a zelenina",
+   "baleni": null
+  },
+  "petrzel_koren": {
+   "nazev": "Petržel kořen",
+   "na_100g": {
+    "kcal": 64,
+    "bilkoviny_g": 2.0,
+    "sacharidy_g": 11.0,
+    "tuky_g": 0.5,
+    "vlaknina_g": 4.0,
+    "nasycene_g": 0.1
+   },
+   "poznamka": "odhad",
+   "kategorie_nakupu": "Ovoce a zelenina",
+   "baleni": null
+  },
+  "cibule": {
+   "nazev": "Cibule",
+   "na_100g": {
+    "kcal": 39,
+    "bilkoviny_g": 1.1,
+    "sacharidy_g": 7.6,
+    "tuky_g": 0.1,
+    "vlaknina_g": 1.7,
+    "nasycene_g": 0.0
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Ovoce a zelenina",
+   "baleni": null
+  },
+  "cibule_jarni": {
+   "nazev": "Jarní cibulka",
+   "na_100g": {
+    "kcal": 33,
+    "bilkoviny_g": 1.8,
+    "sacharidy_g": 4.7,
+    "tuky_g": 0.2,
+    "vlaknina_g": 2.6,
+    "nasycene_g": 0.0
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Ovoce a zelenina",
+   "baleni": null
+  },
+  "cesnek": {
+   "nazev": "Česnek",
+   "na_100g": {
+    "kcal": 158,
+    "bilkoviny_g": 6.4,
+    "sacharidy_g": 31.0,
+    "tuky_g": 0.5,
+    "vlaknina_g": 2.1,
+    "nasycene_g": 0.1
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Ovoce a zelenina",
+   "baleni": null
+  },
+  "zazvor": {
+   "nazev": "Zázvor",
+   "na_100g": {
+    "kcal": 82,
+    "bilkoviny_g": 1.8,
+    "sacharidy_g": 15.8,
+    "tuky_g": 0.8,
+    "vlaknina_g": 2.0,
+    "nasycene_g": 0.2
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Ovoce a zelenina",
+   "baleni": null
+  },
+  "brokolice": {
+   "nazev": "Brokolice",
+   "na_100g": {
+    "kcal": 36,
+    "bilkoviny_g": 2.8,
+    "sacharidy_g": 4.0,
+    "tuky_g": 0.4,
+    "vlaknina_g": 2.6,
+    "nasycene_g": 0.1
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Ovoce a zelenina",
+   "baleni": null
+  },
+  "fazolky": {
+   "nazev": "Zelené fazolky",
+   "na_100g": {
+    "kcal": 32,
+    "bilkoviny_g": 1.8,
+    "sacharidy_g": 4.3,
+    "tuky_g": 0.2,
+    "vlaknina_g": 2.7,
+    "nasycene_g": 0.0
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Mražené",
+   "baleni": "450 g"
+  },
+  "zeli_cervene": {
+   "nazev": "Červené zelí",
+   "na_100g": {
+    "kcal": 33,
+    "bilkoviny_g": 1.4,
+    "sacharidy_g": 5.3,
+    "tuky_g": 0.2,
+    "vlaknina_g": 2.1,
+    "nasycene_g": 0.0
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Ovoce a zelenina",
+   "baleni": null
+  },
+  "salat": {
+   "nazev": "Hlávkový/ledový salát",
+   "na_100g": {
+    "kcal": 14,
+    "bilkoviny_g": 0.9,
+    "sacharidy_g": 1.8,
+    "tuky_g": 0.1,
+    "vlaknina_g": 1.2,
+    "nasycene_g": 0.0
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Ovoce a zelenina",
+   "baleni": null
+  },
+  "klicky_mungo": {
+   "nazev": "Mungo klíčky",
+   "na_100g": {
+    "kcal": 34,
+    "bilkoviny_g": 3.0,
+    "sacharidy_g": 4.1,
+    "tuky_g": 0.2,
+    "vlaknina_g": 1.8,
+    "nasycene_g": 0.0
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Ovoce a zelenina",
+   "baleni": null
+  },
+  "kysane_zeli": {
+   "nazev": "Kysané zelí (domácí)",
+   "na_100g": {
+    "kcal": 16,
+    "bilkoviny_g": 0.9,
+    "sacharidy_g": 1.4,
+    "tuky_g": 0.1,
+    "vlaknina_g": 2.9,
+    "nasycene_g": 0.0
+   },
+   "poznamka": "hodně soli",
+   "kategorie_nakupu": "Lednice",
+   "baleni": null
+  },
+  "avokado": {
+   "nazev": "Avokádo (dužina)",
+   "na_100g": {
+    "kcal": 161,
+    "bilkoviny_g": 2.0,
+    "sacharidy_g": 1.8,
+    "tuky_g": 14.7,
+    "vlaknina_g": 6.7,
+    "nasycene_g": 2.1
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Ovoce a zelenina",
+   "baleni": null
+  },
+  "kiwi": {
+   "nazev": "Kiwi (jedlá část)",
+   "na_100g": {
+    "kcal": 55,
+    "bilkoviny_g": 1.1,
+    "sacharidy_g": 10.1,
+    "tuky_g": 0.5,
+    "vlaknina_g": 3.0,
+    "nasycene_g": 0.0
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Ovoce a zelenina",
+   "baleni": null
+  },
+  "banan": {
+   "nazev": "Banán (bez slupky)",
+   "na_100g": {
+    "kcal": 93,
+    "bilkoviny_g": 1.1,
+    "sacharidy_g": 20.2,
+    "tuky_g": 0.3,
+    "vlaknina_g": 2.6,
+    "nasycene_g": 0.1
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Ovoce a zelenina",
+   "baleni": null
+  },
+  "jablko": {
+   "nazev": "Jablko (jedlá část)",
+   "na_100g": {
+    "kcal": 53,
+    "bilkoviny_g": 0.3,
+    "sacharidy_g": 11.4,
+    "tuky_g": 0.2,
+    "vlaknina_g": 2.4,
+    "nasycene_g": 0.0
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Ovoce a zelenina",
+   "baleni": null
+  },
+  "pomeranc": {
+   "nazev": "Pomeranč (bez slupky)",
+   "na_100g": {
+    "kcal": 47,
+    "bilkoviny_g": 0.9,
+    "sacharidy_g": 9.4,
+    "tuky_g": 0.1,
+    "vlaknina_g": 2.4,
+    "nasycene_g": 0.0
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Ovoce a zelenina",
+   "baleni": null
+  },
+  "boruvky": {
+   "nazev": "Borůvky",
+   "na_100g": {
+    "kcal": 59,
+    "bilkoviny_g": 0.7,
+    "sacharidy_g": 12.1,
+    "tuky_g": 0.3,
+    "vlaknina_g": 2.4,
+    "nasycene_g": 0.0
+   },
+   "poznamka": "mražené před jídlem povařit 2 min",
+   "kategorie_nakupu": "Mražené",
+   "baleni": "300 g"
+  },
+  "maliny": {
+   "nazev": "Maliny",
+   "na_100g": {
+    "kcal": 46,
+    "bilkoviny_g": 1.2,
+    "sacharidy_g": 5.4,
+    "tuky_g": 0.7,
+    "vlaknina_g": 6.5,
+    "nasycene_g": 0.0
+   },
+   "poznamka": "mražené před jídlem povařit 2 min",
+   "kategorie_nakupu": "Mražené",
+   "baleni": "300 g"
+  },
+  "mango": {
+   "nazev": "Mango (dužina)",
+   "na_100g": {
+    "kcal": 64,
+    "bilkoviny_g": 0.8,
+    "sacharidy_g": 13.4,
+    "tuky_g": 0.4,
+    "vlaknina_g": 1.6,
+    "nasycene_g": 0.1
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Ovoce a zelenina",
+   "baleni": null
+  },
+  "datle": {
+   "nazev": "Datle (bez pecek)",
+   "na_100g": {
+    "kcal": 298,
+    "bilkoviny_g": 2.5,
+    "sacharidy_g": 67.0,
+    "tuky_g": 0.4,
+    "vlaknina_g": 8.0,
+    "nasycene_g": 0.0
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Zásoba",
+   "baleni": "200 g"
+  },
+  "citron": {
+   "nazev": "Citronová šťáva",
+   "na_100g": {
+    "kcal": 30,
+    "bilkoviny_g": 0.4,
+    "sacharidy_g": 6.6,
+    "tuky_g": 0.2,
+    "vlaknina_g": 0.3,
+    "nasycene_g": 0.0
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Ovoce a zelenina",
+   "baleni": null
+  },
+  "limetka": {
+   "nazev": "Limetková šťáva",
+   "na_100g": {
+    "kcal": 35,
+    "bilkoviny_g": 0.4,
+    "sacharidy_g": 7.9,
+    "tuky_g": 0.1,
+    "vlaknina_g": 0.4,
+    "nasycene_g": 0.0
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Ovoce a zelenina",
+   "baleni": null
+  },
+  "med": {
+   "nazev": "Med",
+   "na_100g": {
+    "kcal": 330,
+    "bilkoviny_g": 0.3,
+    "sacharidy_g": 82.0,
+    "tuky_g": 0.0,
+    "vlaknina_g": 0.2,
+    "nasycene_g": 0.0
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Zásoba",
+   "baleni": "500 g"
+  },
+  "cukr": {
+   "nazev": "Cukr",
+   "na_100g": {
+    "kcal": 400,
+    "bilkoviny_g": 0.0,
+    "sacharidy_g": 100.0,
+    "tuky_g": 0.0,
+    "vlaknina_g": 0.0,
+    "nasycene_g": 0.0
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Zásoba",
+   "baleni": "1 kg"
+  },
+  "kakao": {
+   "nazev": "Kakao nealkalizované, neslazené",
+   "na_100g": {
+    "kcal": 360,
+    "bilkoviny_g": 19.6,
+    "sacharidy_g": 21.0,
+    "tuky_g": 13.7,
+    "vlaknina_g": 37.0,
+    "nasycene_g": 8.1
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Zásoba",
+   "baleni": "150 g"
+  },
+  "vlasske": {
+   "nazev": "Vlašské ořechy",
+   "na_100g": {
+    "kcal": 689,
+    "bilkoviny_g": 15.2,
+    "sacharidy_g": 7.0,
+    "tuky_g": 65.2,
+    "vlaknina_g": 6.7,
+    "nasycene_g": 6.1
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Zásoba",
+   "baleni": "200 g"
+  },
+  "mandle": {
+   "nazev": "Mandle",
+   "na_100g": {
+    "kcal": 595,
+    "bilkoviny_g": 21.2,
+    "sacharidy_g": 9.0,
+    "tuky_g": 49.9,
+    "vlaknina_g": 12.5,
+    "nasycene_g": 3.8
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Zásoba",
+   "baleni": "200 g"
+  },
+  "chia": {
+   "nazev": "Chia semínka",
+   "na_100g": {
+    "kcal": 442,
+    "bilkoviny_g": 16.5,
+    "sacharidy_g": 7.7,
+    "tuky_g": 30.7,
+    "vlaknina_g": 34.4,
+    "nasycene_g": 3.3
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Zásoba",
+   "baleni": "300 g"
+  },
+  "sezam": {
+   "nazev": "Sezam",
+   "na_100g": {
+    "kcal": 588,
+    "bilkoviny_g": 17.7,
+    "sacharidy_g": 11.7,
+    "tuky_g": 49.7,
+    "vlaknina_g": 11.8,
+    "nasycene_g": 7.0
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Zásoba",
+   "baleni": "100 g"
+  },
+  "dynova_seminka": {
+   "nazev": "Dýňová semínka",
+   "na_100g": {
+    "kcal": 593,
+    "bilkoviny_g": 30.2,
+    "sacharidy_g": 4.7,
+    "tuky_g": 49.0,
+    "vlaknina_g": 6.0,
+    "nasycene_g": 8.7
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Zásoba",
+   "baleni": "200 g"
+  },
+  "olej_olivovy": {
+   "nazev": "Extra panenský olivový olej",
+   "na_100g": {
+    "kcal": 900,
+    "bilkoviny_g": 0.0,
+    "sacharidy_g": 0.0,
+    "tuky_g": 100.0,
+    "vlaknina_g": 0.0,
+    "nasycene_g": 14.0
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Zásoba",
+   "baleni": "750 ml"
+  },
+  "olej_sezamovy": {
+   "nazev": "Sezamový olej",
+   "na_100g": {
+    "kcal": 900,
+    "bilkoviny_g": 0.0,
+    "sacharidy_g": 0.0,
+    "tuky_g": 100.0,
+    "vlaknina_g": 0.0,
+    "nasycene_g": 14.0
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Zásoba",
+   "baleni": "250 ml"
+  },
+  "maslo": {
+   "nazev": "Máslo",
+   "na_100g": {
+    "kcal": 733,
+    "bilkoviny_g": 0.9,
+    "sacharidy_g": 0.1,
+    "tuky_g": 81.0,
+    "vlaknina_g": 0.0,
+    "nasycene_g": 51.0
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Lednice",
+   "baleni": "250 g"
+  },
+  "sojova_omacka": {
+   "nazev": "Sójová omáčka (se sníženým obsahem soli)",
+   "na_100g": {
+    "kcal": 59,
+    "bilkoviny_g": 8.1,
+    "sacharidy_g": 4.9,
+    "tuky_g": 0.6,
+    "vlaknina_g": 0.8,
+    "nasycene_g": 0.1
+   },
+   "poznamka": "hodně sodíku",
+   "kategorie_nakupu": "Zásoba",
+   "baleni": "250 ml"
+  },
+  "rybi_omacka": {
+   "nazev": "Rybí omáčka",
+   "na_100g": {
+    "kcal": 35,
+    "bilkoviny_g": 5.1,
+    "sacharidy_g": 3.6,
+    "tuky_g": 0.0,
+    "vlaknina_g": 0.0,
+    "nasycene_g": 0.0
+   },
+   "poznamka": "hodně sodíku",
+   "kategorie_nakupu": "Zásoba",
+   "baleni": "200 ml"
+  },
+  "horcice": {
+   "nazev": "Dijonská hořčice",
+   "na_100g": {
+    "kcal": 78,
+    "bilkoviny_g": 6.0,
+    "sacharidy_g": 3.0,
+    "tuky_g": 4.0,
+    "vlaknina_g": 3.0,
+    "nasycene_g": 0.3
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Zásoba",
+   "baleni": "200 g"
+  },
+  "vyvar_hovezi": {
+   "nazev": "Hovězí vývar domácí",
+   "na_100g": {
+    "kcal": 14,
+    "bilkoviny_g": 2.0,
+    "sacharidy_g": 0.5,
+    "tuky_g": 0.5,
+    "vlaknina_g": 0.0,
+    "nasycene_g": 0.2
+   },
+   "poznamka": "odhad – složení vývaru se liší",
+   "kategorie_nakupu": "Lednice",
+   "baleni": null
+  },
+  "vyvar_zel": {
+   "nazev": "Zeleninový vývar",
+   "na_100g": {
+    "kcal": 5,
+    "bilkoviny_g": 0.3,
+    "sacharidy_g": 0.8,
+    "tuky_g": 0.1,
+    "vlaknina_g": 0.0,
+    "nasycene_g": 0.0
+   },
+   "poznamka": "odhad; hodně soli, pokud z bujonu",
+   "kategorie_nakupu": "Zásoba",
+   "baleni": "bujon se sníženým obsahem soli"
+  },
+  "nori": {
+   "nazev": "Nori (sušené)",
+   "na_100g": {
+    "kcal": 274,
+    "bilkoviny_g": 41.0,
+    "sacharidy_g": 5.0,
+    "tuky_g": 2.0,
+    "vlaknina_g": 36.0,
+    "nasycene_g": 0.5
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Zásoba",
+   "baleni": "10 plátů"
+  },
+  "ryzovy_ocet": {
+   "nazev": "Rýžový ocet (neochucený)",
+   "na_100g": {
+    "kcal": 0,
+    "bilkoviny_g": 0.0,
+    "sacharidy_g": 0.0,
+    "tuky_g": 0.0,
+    "vlaknina_g": 0.0,
+    "nasycene_g": 0.0
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Zásoba",
+   "baleni": "250 ml"
+  },
+  "bulgur": {
+   "nazev": "Bulgur (suchý)",
+   "na_100g": {
+    "kcal": 350,
+    "bilkoviny_g": 11.0,
+    "sacharidy_g": 69.0,
+    "tuky_g": 1.5,
+    "vlaknina_g": 8.0,
+    "nasycene_g": 0.3
+   },
+   "poznamka": "Lidl – FatSecret; vláknina odhad, ověřit etiketou",
+   "kategorie_nakupu": "Zásoba",
+   "baleni": "500 g"
+  },
+  "gnocchi": {
+   "nazev": "Gnocchi bramborové (balené)",
+   "na_100g": {
+    "kcal": 150,
+    "bilkoviny_g": 3.8,
+    "sacharidy_g": 30.5,
+    "tuky_g": 0.5,
+    "vlaknina_g": 3.9,
+    "nasycene_g": 0.3
+   },
+   "poznamka": "podle etikety ja! (REWE); ověřit Lidl",
+   "kategorie_nakupu": "Lednice",
+   "baleni": "500 g"
+  },
+  "skorice": {
+   "nazev": "Skořice",
+   "na_100g": {
+    "kcal": 233,
+    "bilkoviny_g": 4.0,
+    "sacharidy_g": 25.0,
+    "tuky_g": 1.2,
+    "vlaknina_g": 53.0,
+    "nasycene_g": 0.3
+   },
+   "poznamka": null,
+   "kategorie_nakupu": "Ovoce a zelenina",
+   "baleni": null
+  }
+ },
+ "recepty": [
+  {
+   "kod": "S1",
+   "slot": "Snídaně",
+   "nazev": "Míchaná vejce s cottage, žitný kváskový chléb a zelenina",
+   "suroviny": [
+    {
+     "surovina": "vejce",
+     "nazev": "Vejce celá (bez skořápky)",
+     "g": 165,
+     "poznamka": "3 ks"
+    },
+    {
+     "surovina": "cottage",
+     "nazev": "Cottage sýr (~4 % tuku)",
+     "g": 100,
+     "poznamka": null
+    },
+    {
+     "surovina": "chleb_zitny",
+     "nazev": "Žitný kváskový chléb celozrnný",
+     "g": 160,
+     "poznamka": null
+    },
+    {
+     "surovina": "rajcata",
+     "nazev": "Rajčata",
+     "g": 150,
+     "poznamka": null
+    },
+    {
+     "surovina": "paprika",
+     "nazev": "Paprika červená",
+     "g": 100,
+     "poznamka": null
+    },
+    {
+     "surovina": "olej_olivovy",
+     "nazev": "Extra panenský olivový olej",
+     "g": 5,
+     "poznamka": "na pánev"
+    },
+    {
+     "surovina": "kiwi",
+     "nazev": "Kiwi (jedlá část)",
+     "g": 150,
+     "poznamka": "jedlá část, cca 2 ks"
+    }
+   ],
+   "hodnoty_porce": {
+    "kcal": 852,
+    "bilkoviny_g": 46.7,
+    "sacharidy_g": 91.8,
+    "tuky_g": 28.7,
+    "vlaknina_g": 19.6,
+    "nasycene_g": 9.1
+   },
+   "priprava": "Vejce rozšlehat se špetkou soli, na oleji pomalu míchat na mírném ohni. Cottage podávat vedle nebo vmíchat na konci. Chléb, nakrájená zelenina, kiwi jako dezert.",
+   "skladovani": "Připravovat čerstvě (5 min). Míchaná vejce dopředu nedělat.",
+   "poznamka": null,
+   "modul_prilohy": {
+    "surovina": "chleb_zitny",
+    "g": 45
+   }
+  },
+  {
+   "kod": "S2",
+   "slot": "Snídaně",
+   "nazev": "Ovesná kaše přes noc s kefírem, borůvkami a ořechy",
+   "suroviny": [
+    {
+     "surovina": "vlocky",
+     "nazev": "Ovesné vločky",
+     "g": 95,
+     "poznamka": "suché"
+    },
+    {
+     "surovina": "kefir",
+     "nazev": "Kefír 1,5 %",
+     "g": 300,
+     "poznamka": null
+    },
+    {
+     "surovina": "whey",
+     "nazev": "Syrovátkový protein Veiny Galaxy (vanilka)",
+     "g": 25,
+     "poznamka": null
+    },
+    {
+     "surovina": "chia",
+     "nazev": "Chia semínka",
+     "g": 10,
+     "poznamka": null
+    },
+    {
+     "surovina": "vlasske",
+     "nazev": "Vlašské ořechy",
+     "g": 15,
+     "poznamka": null
+    },
+    {
+     "surovina": "boruvky",
+     "nazev": "Borůvky",
+     "g": 150,
+     "poznamka": "mražené povařit 2 min a zchladit"
+    },
+    {
+     "surovina": "med",
+     "nazev": "Med",
+     "g": 10,
+     "poznamka": null
+    }
+   ],
+   "hodnoty_porce": {
+    "kcal": 842,
+    "bilkoviny_g": 46.6,
+    "sacharidy_g": 97.5,
+    "tuky_g": 25.6,
+    "vlaknina_g": 17.6,
+    "nasycene_g": 6.4
+   },
+   "priprava": "Večer smíchat vločky, chia, protein a kefír, nechat v lednici přes noc. Ráno přidat borůvky, ořechy a med.",
+   "skladovani": "V lednici max. 24 h. Hodí se připravit večer předem; lze udělat 2 porce najednou.",
+   "poznamka": null,
+   "modul_prilohy": {
+    "surovina": "vlocky",
+    "g": 25
+   }
+  },
+  {
+   "kod": "S3",
+   "slot": "Snídaně",
+   "nazev": "Omeleta se špenátem, žampiony a fetou + chléb",
+   "suroviny": [
+    {
+     "surovina": "vejce",
+     "nazev": "Vejce celá (bez skořápky)",
+     "g": 165,
+     "poznamka": "3 ks"
+    },
+    {
+     "surovina": "feta",
+     "nazev": "Feta (ovčí/kozí)",
+     "g": 30,
+     "poznamka": null
+    },
+    {
+     "surovina": "spenat",
+     "nazev": "Špenát (čerstvý/mražený)",
+     "g": 100,
+     "poznamka": null
+    },
+    {
+     "surovina": "zampiony",
+     "nazev": "Žampiony",
+     "g": 100,
+     "poznamka": null
+    },
+    {
+     "surovina": "cottage",
+     "nazev": "Cottage sýr (~4 % tuku)",
+     "g": 60,
+     "poznamka": "vedle"
+    },
+    {
+     "surovina": "chleb_zitny",
+     "nazev": "Žitný kváskový chléb celozrnný",
+     "g": 140,
+     "poznamka": null
+    },
+    {
+     "surovina": "olej_olivovy",
+     "nazev": "Extra panenský olivový olej",
+     "g": 5,
+     "poznamka": null
+    },
+    {
+     "surovina": "pomeranc",
+     "nazev": "Pomeranč (bez slupky)",
+     "g": 200,
+     "poznamka": "jedlá část"
+    }
+   ],
+   "hodnoty_porce": {
+    "kcal": 853,
+    "bilkoviny_g": 49.4,
+    "sacharidy_g": 81.7,
+    "tuky_g": 32.6,
+    "vlaknina_g": 17.8,
+    "nasycene_g": 12.2
+   },
+   "priprava": "Žampiony a špenát krátce osmahnout, zalít rozšlehanými vejci, posypat fetou, dopéct pod pokličkou. Cottage a chléb vedle, pomeranč jako dezert.",
+   "skladovani": "Čerstvě (10 min).",
+   "poznamka": null,
+   "modul_prilohy": {
+    "surovina": "chleb_zitny",
+    "g": 45
+   }
+  },
+  {
+   "kod": "S4",
+   "slot": "Snídaně",
+   "nazev": "Sardinky na žitném chlebu s cottage, pažitkou a citronem",
+   "suroviny": [
+    {
+     "surovina": "sardinky",
+     "nazev": "Sardinky Vilgain ve vlastní šťávě (slité)",
+     "g": 85,
+     "poznamka": "1 plechovka 120 g, slitá"
+    },
+    {
+     "surovina": "cottage",
+     "nazev": "Cottage sýr (~4 % tuku)",
+     "g": 100,
+     "poznamka": "s pažitkou, citronem, pepřem"
+    },
+    {
+     "surovina": "chleb_zitny",
+     "nazev": "Žitný kváskový chléb celozrnný",
+     "g": 170,
+     "poznamka": null
+    },
+    {
+     "surovina": "okurka",
+     "nazev": "Okurka",
+     "g": 100,
+     "poznamka": null
+    },
+    {
+     "surovina": "rajcata",
+     "nazev": "Rajčata",
+     "g": 100,
+     "poznamka": null
+    },
+    {
+     "surovina": "citron",
+     "nazev": "Citronová šťáva",
+     "g": 10,
+     "poznamka": null
+    },
+    {
+     "surovina": "olej_olivovy",
+     "nazev": "Extra panenský olivový olej",
+     "g": 5,
+     "poznamka": "pokapat"
+    },
+    {
+     "surovina": "jablko",
+     "nazev": "Jablko (jedlá část)",
+     "g": 200,
+     "poznamka": "jedlá část"
+    }
+   ],
+   "hodnoty_porce": {
+    "kcal": 793,
+    "bilkoviny_g": 46.8,
+    "sacharidy_g": 100.2,
+    "tuky_g": 18.7,
+    "vlaknina_g": 18.4,
+    "nasycene_g": 5.9
+   },
+   "priprava": "Cottage smíchat s pažitkou, citronem a pepřem, namazat na chléb, navrch sardinky, pokapat olejem. Zelenina vedle, jablko jako dezert.",
+   "skladovani": "Čerstvě (5 min). Otevřené sardinky v lednici do 24 h v uzavřené nádobě.",
+   "poznamka": null,
+   "modul_prilohy": {
+    "surovina": "chleb_zitny",
+    "g": 45
+   }
+  },
+  {
+   "kod": "S5",
+   "slot": "Snídaně",
+   "nazev": "Ovesné lívance s tvarohem a malinami",
+   "suroviny": [
+    {
+     "surovina": "vlocky",
+     "nazev": "Ovesné vločky",
+     "g": 80,
+     "poznamka": "umleté na mouku"
+    },
+    {
+     "surovina": "vejce",
+     "nazev": "Vejce celá (bez skořápky)",
+     "g": 110,
+     "poznamka": "2 ks"
+    },
+    {
+     "surovina": "tvaroh",
+     "nazev": "Tvaroh polotučný",
+     "g": 100,
+     "poznamka": "do těsta"
+    },
+    {
+     "surovina": "mleko",
+     "nazev": "Mléko polotučné 1,5 %",
+     "g": 100,
+     "poznamka": null
+    },
+    {
+     "surovina": "banan",
+     "nazev": "Banán (bez slupky)",
+     "g": 100,
+     "poznamka": "do těsta"
+    },
+    {
+     "surovina": "olej_olivovy",
+     "nazev": "Extra panenský olivový olej",
+     "g": 5,
+     "poznamka": "na pánev"
+    },
+    {
+     "surovina": "recky_jogurt_0",
+     "nazev": "Řecký jogurt 0 % (Milko)",
+     "g": 60,
+     "poznamka": "navrch"
+    },
+    {
+     "surovina": "maliny",
+     "nazev": "Maliny",
+     "g": 150,
+     "poznamka": "mražené povařit 2 min"
+    },
+    {
+     "surovina": "med",
+     "nazev": "Med",
+     "g": 15,
+     "poznamka": null
+    }
+   ],
+   "hodnoty_porce": {
+    "kcal": 881,
+    "bilkoviny_g": 48.6,
+    "sacharidy_g": 98.2,
+    "tuky_g": 28.2,
+    "vlaknina_g": 20.4,
+    "nasycene_g": 9.3
+   },
+   "priprava": "Vločky umlít, smíchat s vejci, tvarohem, mlékem a rozmačkaným banánem (+ 1/2 lžičky prášku do pečiva). Péct malé lívance na mírném ohni. Podávat s jogurtem, malinami a medem.",
+   "skladovani": "Čerstvě, nebo upéct 2–3 porce a skladovat v lednici do 2 dnů; lze zamrazit.",
+   "poznamka": null,
+   "modul_prilohy": {
+    "surovina": "vlocky",
+    "g": 25
+   }
+  },
+  {
+   "kod": "S6",
+   "slot": "Snídaně",
+   "nazev": "Rýžová kaše s kakaem, banánem a ořechy",
+   "suroviny": [
+    {
+     "surovina": "ryzova_kase",
+     "nazev": "Rýžová kaše Grizly (suchá)",
+     "g": 90,
+     "poznamka": "suchá"
+    },
+    {
+     "surovina": "mleko",
+     "nazev": "Mléko polotučné 1,5 %",
+     "g": 300,
+     "poznamka": null
+    },
+    {
+     "surovina": "whey",
+     "nazev": "Syrovátkový protein Veiny Galaxy (vanilka)",
+     "g": 30,
+     "poznamka": null
+    },
+    {
+     "surovina": "kakao",
+     "nazev": "Kakao nealkalizované, neslazené",
+     "g": 10,
+     "poznamka": null
+    },
+    {
+     "surovina": "banan",
+     "nazev": "Banán (bez slupky)",
+     "g": 120,
+     "poznamka": null
+    },
+    {
+     "surovina": "vlasske",
+     "nazev": "Vlašské ořechy",
+     "g": 20,
+     "poznamka": null
+    },
+    {
+     "surovina": "med",
+     "nazev": "Med",
+     "g": 10,
+     "poznamka": null
+    }
+   ],
+   "hodnoty_porce": {
+    "kcal": 893,
+    "bilkoviny_g": 47.4,
+    "sacharidy_g": 121.1,
+    "tuky_g": 22.3,
+    "vlaknina_g": 9.1,
+    "nasycene_g": 6.6
+   },
+   "priprava": "Kaši připravit s horkým mlékem podle obalu, po mírném vychladnutí vmíchat protein a kakao. Navrch banán, ořechy a med.",
+   "skladovani": "Čerstvě (5 min).",
+   "poznamka": null,
+   "modul_prilohy": {
+    "surovina": "ryzova_kase",
+    "g": 30
+   }
+  },
+  {
+   "kod": "S7",
+   "slot": "Snídaně",
+   "nazev": "Snídaňové tortilly s vejci, fazolemi a avokádem",
+   "suroviny": [
+    {
+     "surovina": "tortilla_cz",
+     "nazev": "Celozrnná tortilla",
+     "g": 124,
+     "poznamka": "2 ks"
+    },
+    {
+     "surovina": "vejce",
+     "nazev": "Vejce celá (bez skořápky)",
+     "g": 165,
+     "poznamka": "3 ks"
+    },
+    {
+     "surovina": "fazole_cerne",
+     "nazev": "Černé fazole (konzerva, slité)",
+     "g": 80,
+     "poznamka": "slité"
+    },
+    {
+     "surovina": "cottage",
+     "nazev": "Cottage sýr (~4 % tuku)",
+     "g": 50,
+     "poznamka": null
+    },
+    {
+     "surovina": "avokado",
+     "nazev": "Avokádo (dužina)",
+     "g": 40,
+     "poznamka": null
+    },
+    {
+     "surovina": "rajcata",
+     "nazev": "Rajčata",
+     "g": 100,
+     "poznamka": null
+    },
+    {
+     "surovina": "paprika",
+     "nazev": "Paprika červená",
+     "g": 80,
+     "poznamka": null
+    },
+    {
+     "surovina": "limetka",
+     "nazev": "Limetková šťáva",
+     "g": 10,
+     "poznamka": null
+    }
+   ],
+   "hodnoty_porce": {
+    "kcal": 828,
+    "bilkoviny_g": 46.9,
+    "sacharidy_g": 75.8,
+    "tuky_g": 33.2,
+    "vlaknina_g": 19.3,
+    "nasycene_g": 9.9
+   },
+   "priprava": "Vejce zamíchat s fazolemi na nepřilnavé pánvi bez oleje. Tortilly naplnit vejci, cottage, avokádem a salsou z rajčat, papriky a limetky (bez pálivého).",
+   "skladovani": "Čerstvě (10 min).",
+   "poznamka": null,
+   "modul_prilohy": {
+    "surovina": "tortilla_cz",
+    "g": 31
+   }
+  },
+  {
+   "kod": "P1",
+   "slot": "Před tréninkem",
+   "nazev": "Rýžová kaše s banánem a medem",
+   "suroviny": [
+    {
+     "surovina": "ryzova_kase",
+     "nazev": "Rýžová kaše Grizly (suchá)",
+     "g": 85,
+     "poznamka": "suchá"
+    },
+    {
+     "surovina": "mleko",
+     "nazev": "Mléko polotučné 1,5 %",
+     "g": 300,
+     "poznamka": null
+    },
+    {
+     "surovina": "whey",
+     "nazev": "Syrovátkový protein Veiny Galaxy (vanilka)",
+     "g": 30,
+     "poznamka": null
+    },
+    {
+     "surovina": "banan",
+     "nazev": "Banán (bez slupky)",
+     "g": 130,
+     "poznamka": null
+    },
+    {
+     "surovina": "med",
+     "nazev": "Med",
+     "g": 10,
+     "poznamka": null
+    },
+    {
+     "surovina": "skorice",
+     "nazev": "Skořice",
+     "g": 0,
+     "poznamka": "dle chuti"
+    }
+   ],
+   "hodnoty_porce": {
+    "kcal": 711,
+    "bilkoviny_g": 42.1,
+    "sacharidy_g": 115.8,
+    "tuky_g": 7.8,
+    "vlaknina_g": 4.2,
+    "nasycene_g": 4.5
+   },
+   "priprava": "Kaši zalít horkým mlékem, po chvíli vmíchat protein. Navrch banán, med a skořice.",
+   "skladovani": "Čerstvě nebo do termosky.",
+   "poznamka": null,
+   "modul_prilohy": {
+    "surovina": "ryzova_kase",
+    "g": 30
+   }
+  },
+  {
+   "kod": "P2",
+   "slot": "Před tréninkem",
+   "nazev": "Žitný sendvič s pečenými krůtími prsy a mozzarellou",
+   "suroviny": [
+    {
+     "surovina": "chleb_zitny",
+     "nazev": "Žitný kváskový chléb celozrnný",
+     "g": 170,
+     "poznamka": null
+    },
+    {
+     "surovina": "krut_prsa_pecena",
+     "nazev": "Krůtí prsa pečená (váženo upečené)",
+     "g": 60,
+     "poznamka": "váženo upečené"
+    },
+    {
+     "surovina": "mozzarella_light",
+     "nazev": "Mozzarella light (po slití)",
+     "g": 60,
+     "poznamka": null
+    },
+    {
+     "surovina": "rajcata",
+     "nazev": "Rajčata",
+     "g": 100,
+     "poznamka": null
+    },
+    {
+     "surovina": "salat",
+     "nazev": "Hlávkový/ledový salát",
+     "g": 30,
+     "poznamka": null
+    },
+    {
+     "surovina": "horcice",
+     "nazev": "Dijonská hořčice",
+     "g": 10,
+     "poznamka": null
+    },
+    {
+     "surovina": "pomeranc",
+     "nazev": "Pomeranč (bez slupky)",
+     "g": 200,
+     "poznamka": "jedlá část"
+    }
+   ],
+   "hodnoty_porce": {
+    "kcal": 662,
+    "bilkoviny_g": 42.8,
+    "sacharidy_g": 90.8,
+    "tuky_g": 10.0,
+    "vlaknina_g": 18.6,
+    "nasycene_g": 4.5
+   },
+   "priprava": "Krůtí prsa upéct dopředu (viz poznámka), nakrájet na plátky. Sendvič s mozzarellou, rajčaty, salátem a hořčicí. Pomeranč vedle.",
+   "skladovani": "Upečená krůtí prsa v lednici 3 dny; hotový sendvič téhož dne.",
+   "poznamka": "Krůtí prsa: 500 g syrových upéct na 180 °C cca 25 min (vnitřní teplota 74 °C) → cca 350 g upečených, vystačí na 5–6 sendvičů.",
+   "modul_prilohy": {
+    "surovina": "chleb_zitny",
+    "g": 45
+   }
+  },
+  {
+   "kod": "P3",
+   "slot": "Před tréninkem",
+   "nazev": "Řecký jogurt s vločkami, banánem a borůvkami",
+   "suroviny": [
+    {
+     "surovina": "recky_jogurt_0",
+     "nazev": "Řecký jogurt 0 % (Milko)",
+     "g": 270,
+     "poznamka": null
+    },
+    {
+     "surovina": "vlocky",
+     "nazev": "Ovesné vločky",
+     "g": 80,
+     "poznamka": null
+    },
+    {
+     "surovina": "banan",
+     "nazev": "Banán (bez slupky)",
+     "g": 120,
+     "poznamka": null
+    },
+    {
+     "surovina": "boruvky",
+     "nazev": "Borůvky",
+     "g": 100,
+     "poznamka": "mražené povařit 2 min"
+    },
+    {
+     "surovina": "med",
+     "nazev": "Med",
+     "g": 25,
+     "poznamka": null
+    }
+   ],
+   "hodnoty_porce": {
+    "kcal": 696,
+    "bilkoviny_g": 39.5,
+    "sacharidy_g": 112.7,
+    "tuky_g": 6.7,
+    "vlaknina_g": 13.6,
+    "nasycene_g": 1.6
+   },
+   "priprava": "Vše smíchat v misce nebo krabičce. Vločky lze namočit do jogurtu už ráno.",
+   "skladovani": "Do školy v uzavřené krabičce; mimo lednici max. 2 h.",
+   "poznamka": null,
+   "modul_prilohy": {
+    "surovina": "vlocky",
+    "g": 25
+   }
+  },
+  {
+   "kod": "P4",
+   "slot": "Před tréninkem",
+   "nazev": "Kuře s opečenými gnocchi a cuketou",
+   "suroviny": [
+    {
+     "surovina": "kur_prsa",
+     "nazev": "Kuřecí prsa (syrová)",
+     "g": 130,
+     "poznamka": "syrová"
+    },
+    {
+     "surovina": "gnocchi",
+     "nazev": "Gnocchi bramborové (balené)",
+     "g": 300,
+     "poznamka": "z balení"
+    },
+    {
+     "surovina": "cuketa",
+     "nazev": "Cuketa",
+     "g": 100,
+     "poznamka": null
+    },
+    {
+     "surovina": "rajcata",
+     "nazev": "Rajčata",
+     "g": 80,
+     "poznamka": "cherry"
+    },
+    {
+     "surovina": "olej_olivovy",
+     "nazev": "Extra panenský olivový olej",
+     "g": 8,
+     "poznamka": null
+    }
+   ],
+   "hodnoty_porce": {
+    "kcal": 687,
+    "bilkoviny_g": 43.4,
+    "sacharidy_g": 95.7,
+    "tuky_g": 11.5,
+    "vlaknina_g": 13.7,
+    "nasycene_g": 2.5
+   },
+   "priprava": "Kuře na kostky opéct na polovině oleje a vyndat. Na zbytku oleje opéct gnocchi dozlatova (rovnou z balení, 6–8 min), přidat cuketu a rajčata, 3 min podusit, vrátit kuře, dochutit česnekem, oreganem a pepřem.",
+   "skladovani": "Čerstvě nebo do krabičky; v lednici 2 dny. Otevřené gnocchi do 2–3 dnů, zbytek zamrazit (vaří se rovnou zmražené).",
+   "poznamka": null,
+   "modul_prilohy": {
+    "surovina": "gnocchi",
+    "g": 70
+   }
+  },
+  {
+   "kod": "P5",
+   "slot": "Před tréninkem",
+   "nazev": "Kefírový shake s banánem, vločkami a datlemi",
+   "suroviny": [
+    {
+     "surovina": "kefir",
+     "nazev": "Kefír 1,5 %",
+     "g": 400,
+     "poznamka": null
+    },
+    {
+     "surovina": "whey",
+     "nazev": "Syrovátkový protein Veiny Galaxy (vanilka)",
+     "g": 25,
+     "poznamka": null
+    },
+    {
+     "surovina": "banan",
+     "nazev": "Banán (bez slupky)",
+     "g": 150,
+     "poznamka": null
+    },
+    {
+     "surovina": "vlocky",
+     "nazev": "Ovesné vločky",
+     "g": 50,
+     "poznamka": null
+    },
+    {
+     "surovina": "datle",
+     "nazev": "Datle (bez pecek)",
+     "g": 35,
+     "poznamka": null
+    }
+   ],
+   "hodnoty_porce": {
+    "kcal": 696,
+    "bilkoviny_g": 41.5,
+    "sacharidy_g": 101.0,
+    "tuky_g": 11.4,
+    "vlaknina_g": 11.7,
+    "nasycene_g": 5.8
+   },
+   "priprava": "Vše rozmixovat. Vločky lze předem namočit v kefíru na 10 min.",
+   "skladovani": "Mixovat čerstvě; v uzavřené lahvi v chladu do 2 h.",
+   "poznamka": null,
+   "modul_prilohy": {
+    "surovina": "banan",
+    "g": 105
+   }
+  },
+  {
+   "kod": "P6",
+   "slot": "Před tréninkem",
+   "nazev": "Tortilla s tuňákem, kukuřicí a jogurtovým dresinkem",
+   "suroviny": [
+    {
+     "surovina": "tortilla_cz",
+     "nazev": "Celozrnná tortilla",
+     "g": 124,
+     "poznamka": "2 ks"
+    },
+    {
+     "surovina": "tunak",
+     "nazev": "Tuňák ve vlastní šťávě (slitý)",
+     "g": 110,
+     "poznamka": "1 konzerva, slitý"
+    },
+    {
+     "surovina": "recky_jogurt_0",
+     "nazev": "Řecký jogurt 0 % (Milko)",
+     "g": 40,
+     "poznamka": "dresink s citronem a koprem"
+    },
+    {
+     "surovina": "kukurice",
+     "nazev": "Kukuřice sladká (konzerva, slitá)",
+     "g": 60,
+     "poznamka": "slitá"
+    },
+    {
+     "surovina": "salat",
+     "nazev": "Hlávkový/ledový salát",
+     "g": 40,
+     "poznamka": null
+    },
+    {
+     "surovina": "rajcata",
+     "nazev": "Rajčata",
+     "g": 100,
+     "poznamka": null
+    },
+    {
+     "surovina": "citron",
+     "nazev": "Citronová šťáva",
+     "g": 10,
+     "poznamka": null
+    },
+    {
+     "surovina": "banan",
+     "nazev": "Banán (bez slupky)",
+     "g": 120,
+     "poznamka": "vedle"
+    }
+   ],
+   "hodnoty_porce": {
+    "kcal": 689,
+    "bilkoviny_g": 46.8,
+    "sacharidy_g": 93.2,
+    "tuky_g": 11.2,
+    "vlaknina_g": 14.1,
+    "nasycene_g": 3.1
+   },
+   "priprava": "Tuňák smíchat s jogurtem, citronem, koprem a kukuřicí, zabalit do tortill se salátem a rajčaty. Banán vedle.",
+   "skladovani": "Do školy v krabičce, v chladu; tuňákovou směs sníst týž den.",
+   "poznamka": "Tuňák max. 1× týdně (rtuť).",
+   "modul_prilohy": {
+    "surovina": "banan",
+    "g": 105
+   }
+  },
+  {
+   "kod": "H1",
+   "slot": "Hlavní jídlo",
+   "nazev": "Chilli con carne (nepálivé) s rýží",
+   "suroviny": [
+    {
+     "surovina": "hov_mlete5",
+     "nazev": "Hovězí mleté 5 % (syrové)",
+     "g": 125,
+     "poznamka": "syrové"
+    },
+    {
+     "surovina": "fazole_cervene",
+     "nazev": "Červené fazole (konzerva, slité)",
+     "g": 120,
+     "poznamka": "slité"
+    },
+    {
+     "surovina": "passata",
+     "nazev": "Passata",
+     "g": 200,
+     "poznamka": null
+    },
+    {
+     "surovina": "paprika",
+     "nazev": "Paprika červená",
+     "g": 100,
+     "poznamka": null
+    },
+    {
+     "surovina": "cibule",
+     "nazev": "Cibule",
+     "g": 60,
+     "poznamka": null
+    },
+    {
+     "surovina": "cesnek",
+     "nazev": "Česnek",
+     "g": 5,
+     "poznamka": null
+    },
+    {
+     "surovina": "kukurice",
+     "nazev": "Kukuřice sladká (konzerva, slitá)",
+     "g": 50,
+     "poznamka": "slitá"
+    },
+    {
+     "surovina": "olej_olivovy",
+     "nazev": "Extra panenský olivový olej",
+     "g": 8,
+     "poznamka": null
+    },
+    {
+     "surovina": "basmati",
+     "nazev": "Rýže basmati (suchá)",
+     "g": 115,
+     "poznamka": "suchá"
+    },
+    {
+     "surovina": "recky_jogurt_0",
+     "nazev": "Řecký jogurt 0 % (Milko)",
+     "g": 40,
+     "poznamka": "navrch"
+    }
+   ],
+   "hodnoty_porce": {
+    "kcal": 943,
+    "bilkoviny_g": 53.9,
+    "sacharidy_g": 135.1,
+    "tuky_g": 17.3,
+    "vlaknina_g": 15.9,
+    "nasycene_g": 4.4
+   },
+   "priprava": "Cibuli a česnek orestovat, přidat maso, opéct. Přidat papriku, kmín, sladkou papriku, oregano, passatu a fazole, dusit 30 min. Podávat s rýží a lžící jogurtu.",
+   "skladovani": "Chilli 3 dny v lednici, zamrazit do 3 měsíců. Rýži čerstvě, nebo zchladit do 1 h a sníst do 24 h.",
+   "poznamka": null,
+   "modul_prilohy": {
+    "surovina": "basmati",
+    "g": 30
+   }
+  },
+  {
+   "kod": "H2",
+   "slot": "Hlavní jídlo",
+   "nazev": "Hovězí ragú z pomalého hrnce s pappardelle",
+   "suroviny": [
+    {
+     "surovina": "hov_klizka",
+     "nazev": "Hovězí kližka (syrová)",
+     "g": 120,
+     "poznamka": "syrová"
+    },
+    {
+     "surovina": "passata",
+     "nazev": "Passata",
+     "g": 200,
+     "poznamka": null
+    },
+    {
+     "surovina": "mrkev",
+     "nazev": "Mrkev",
+     "g": 80,
+     "poznamka": null
+    },
+    {
+     "surovina": "celer",
+     "nazev": "Celer bulva",
+     "g": 50,
+     "poznamka": null
+    },
+    {
+     "surovina": "cibule",
+     "nazev": "Cibule",
+     "g": 60,
+     "poznamka": null
+    },
+    {
+     "surovina": "cesnek",
+     "nazev": "Česnek",
+     "g": 5,
+     "poznamka": null
+    },
+    {
+     "surovina": "olej_olivovy",
+     "nazev": "Extra panenský olivový olej",
+     "g": 10,
+     "poznamka": null
+    },
+    {
+     "surovina": "testoviny",
+     "nazev": "Semolinové těstoviny (suché)",
+     "g": 140,
+     "poznamka": "suché"
+    },
+    {
+     "surovina": "parmazan",
+     "nazev": "Parmazán",
+     "g": 5,
+     "poznamka": null
+    },
+    {
+     "surovina": "spenat",
+     "nazev": "Špenát (čerstvý/mražený)",
+     "g": 80,
+     "poznamka": "vmíchat na konci"
+    }
+   ],
+   "hodnoty_porce": {
+    "kcal": 927,
+    "bilkoviny_g": 52.2,
+    "sacharidy_g": 125.6,
+    "tuky_g": 21.1,
+    "vlaknina_g": 12.9,
+    "nasycene_g": 5.4
+   },
+   "priprava": "Kližku na kostky opéct, zeleninu nakrájet nadrobno a orestovat. Vše s passatou, bobkovým listem a tymiánem do pomalého hrnce na 7–8 h. Maso rozebrat vidličkou, vmíchat špenát. Podávat s těstovinami a parmazánem.",
+   "skladovani": "Ragú 3 dny v lednici, mrazit do 3 měsíců. Těstoviny vařit čerstvě (10 min).",
+   "poznamka": null,
+   "modul_prilohy": {
+    "surovina": "testoviny",
+    "g": 30
+   }
+  },
+  {
+   "kod": "H3",
+   "slot": "Hlavní jídlo",
+   "nazev": "Svíčková (zeleninová omáčka) s hovězím a rýží",
+   "suroviny": [
+    {
+     "surovina": "hov_zadni",
+     "nazev": "Hovězí zadní (syrové)",
+     "g": 160,
+     "poznamka": "syrové"
+    },
+    {
+     "surovina": "mrkev",
+     "nazev": "Mrkev",
+     "g": 100,
+     "poznamka": null
+    },
+    {
+     "surovina": "celer",
+     "nazev": "Celer bulva",
+     "g": 60,
+     "poznamka": null
+    },
+    {
+     "surovina": "petrzel_koren",
+     "nazev": "Petržel kořen",
+     "g": 40,
+     "poznamka": null
+    },
+    {
+     "surovina": "cibule",
+     "nazev": "Cibule",
+     "g": 50,
+     "poznamka": null
+    },
+    {
+     "surovina": "smetana12",
+     "nazev": "Smetana na vaření 12 %",
+     "g": 80,
+     "poznamka": null
+    },
+    {
+     "surovina": "olej_olivovy",
+     "nazev": "Extra panenský olivový olej",
+     "g": 12,
+     "poznamka": null
+    },
+    {
+     "surovina": "horcice",
+     "nazev": "Dijonská hořčice",
+     "g": 5,
+     "poznamka": null
+    },
+    {
+     "surovina": "basmati",
+     "nazev": "Rýže basmati (suchá)",
+     "g": 115,
+     "poznamka": "suchá"
+    },
+    {
+     "surovina": "citron",
+     "nazev": "Citronová šťáva",
+     "g": 5,
+     "poznamka": null
+    }
+   ],
+   "hodnoty_porce": {
+    "kcal": 938,
+    "bilkoviny_g": 48.9,
+    "sacharidy_g": 112.8,
+    "tuky_g": 30.6,
+    "vlaknina_g": 8.0,
+    "nasycene_g": 11.1
+   },
+   "priprava": "Maso a zeleninu opéct, podlít vodou, přidat nové koření, bobkový list, dusit doměkka (pomalý hrnec 6 h). Maso vyndat, zeleninu rozmixovat se smetanou, dochutit hořčicí a citronem. Rýži uvařit v rýžovaru.",
+   "skladovani": "Omáčka s masem 3 dny v lednici, dobře se mrazí. Rýži čerstvě, nebo zchladit do 1 h a sníst do 24 h.",
+   "poznamka": null,
+   "modul_prilohy": {
+    "surovina": "basmati",
+    "g": 30
+   }
+  },
+  {
+   "kod": "H4",
+   "slot": "Hlavní jídlo",
+   "nazev": "Kuřecí gyros bowl s tzatziki a bulgurem",
+   "suroviny": [
+    {
+     "surovina": "kur_stehna",
+     "nazev": "Kuřecí stehna vykostěná bez kůže (syrová)",
+     "g": 130,
+     "poznamka": "vykostěná, syrová"
+    },
+    {
+     "surovina": "bulgur",
+     "nazev": "Bulgur (suchý)",
+     "g": 130,
+     "poznamka": "suchý"
+    },
+    {
+     "surovina": "recky_jogurt_0",
+     "nazev": "Řecký jogurt 0 % (Milko)",
+     "g": 100,
+     "poznamka": "tzatziki"
+    },
+    {
+     "surovina": "okurka",
+     "nazev": "Okurka",
+     "g": 150,
+     "poznamka": "část do tzatziki"
+    },
+    {
+     "surovina": "rajcata",
+     "nazev": "Rajčata",
+     "g": 150,
+     "poznamka": null
+    },
+    {
+     "surovina": "paprika",
+     "nazev": "Paprika červená",
+     "g": 100,
+     "poznamka": null
+    },
+    {
+     "surovina": "cibule",
+     "nazev": "Cibule",
+     "g": 30,
+     "poznamka": "červená"
+    },
+    {
+     "surovina": "cesnek",
+     "nazev": "Česnek",
+     "g": 4,
+     "poznamka": null
+    },
+    {
+     "surovina": "feta",
+     "nazev": "Feta (ovčí/kozí)",
+     "g": 20,
+     "poznamka": "do salátu"
+    },
+    {
+     "surovina": "citron",
+     "nazev": "Citronová šťáva",
+     "g": 10,
+     "poznamka": null
+    },
+    {
+     "surovina": "olej_olivovy",
+     "nazev": "Extra panenský olivový olej",
+     "g": 12,
+     "poznamka": "marináda + salát"
+    }
+   ],
+   "hodnoty_porce": {
+    "kcal": 922,
+    "bilkoviny_g": 57.1,
+    "sacharidy_g": 110.7,
+    "tuky_g": 24.3,
+    "vlaknina_g": 15.7,
+    "nasycene_g": 6.4
+   },
+   "priprava": "Stehna naložit do oleje, citronu, česneku, oregana, sladké papriky a kmínu (min. 2 h), opéct nebo upéct na 200 °C 20 min, nakrájet na nudličky. Tzatziki z jogurtu, nastrouhané okurky a česneku. Bulgur uvařit v dvojnásobku osolené vody (10–12 min) a nechat 5 min dojít pod pokličkou. Podávat se salátem z rajčat, papriky, okurky, cibule a fety.",
+   "skladovani": "Maso i bulgur 3 dny v lednici (bulgur rychle zchladit); tzatziki 2 dny zvlášť. Bulgur lze uvařit rovnou na všechny porce.",
+   "poznamka": null,
+   "modul_prilohy": {
+    "surovina": "bulgur",
+    "g": 30
+   }
+  },
+  {
+   "kod": "H5",
+   "slot": "Hlavní jídlo",
+   "nazev": "Kuřecí curry s cizrnou a špenátem",
+   "suroviny": [
+    {
+     "surovina": "kur_prsa",
+     "nazev": "Kuřecí prsa (syrová)",
+     "g": 110,
+     "poznamka": "syrová"
+    },
+    {
+     "surovina": "cizrna",
+     "nazev": "Cizrna (konzerva, slitá)",
+     "g": 100,
+     "poznamka": "slitá"
+    },
+    {
+     "surovina": "spenat",
+     "nazev": "Špenát (čerstvý/mražený)",
+     "g": 100,
+     "poznamka": null
+    },
+    {
+     "surovina": "rajcata_kons",
+     "nazev": "Rajčata krájená (konzerva)",
+     "g": 200,
+     "poznamka": null
+    },
+    {
+     "surovina": "cibule",
+     "nazev": "Cibule",
+     "g": 60,
+     "poznamka": null
+    },
+    {
+     "surovina": "cesnek",
+     "nazev": "Česnek",
+     "g": 5,
+     "poznamka": null
+    },
+    {
+     "surovina": "zazvor",
+     "nazev": "Zázvor",
+     "g": 5,
+     "poznamka": null
+    },
+    {
+     "surovina": "jogurt_bily_3",
+     "nazev": "Bílý jogurt 3 % s živými kulturami",
+     "g": 100,
+     "poznamka": "na konci, nevařit"
+    },
+    {
+     "surovina": "olej_olivovy",
+     "nazev": "Extra panenský olivový olej",
+     "g": 10,
+     "poznamka": null
+    },
+    {
+     "surovina": "basmati",
+     "nazev": "Rýže basmati (suchá)",
+     "g": 125,
+     "poznamka": "suchá"
+    }
+   ],
+   "hodnoty_porce": {
+    "kcal": 941,
+    "bilkoviny_g": 52.3,
+    "sacharidy_g": 133.8,
+    "tuky_g": 18.8,
+    "vlaknina_g": 13.5,
+    "nasycene_g": 4.4
+   },
+   "priprava": "Cibuli, česnek a zázvor orestovat s garam masalou a kurkumou. Přidat kuře, rajčata a cizrnu, dusit 15 min. Vmíchat špenát a mimo plotnu jogurt. Podávat s rýží.",
+   "skladovani": "Curry 3 dny v lednici, mrazit lze. Rýže viz výše.",
+   "poznamka": null,
+   "modul_prilohy": {
+    "surovina": "basmati",
+    "g": 30
+   }
+  },
+  {
+   "kod": "H6",
+   "slot": "Hlavní jídlo",
+   "nazev": "Krůtí masové kuličky v rajčatové omáčce se špagetami",
+   "suroviny": [
+    {
+     "surovina": "krut_mlete",
+     "nazev": "Krůtí mleté (~7 % tuku, syrové)",
+     "g": 130,
+     "poznamka": "syrové"
+    },
+    {
+     "surovina": "passata",
+     "nazev": "Passata",
+     "g": 250,
+     "poznamka": null
+    },
+    {
+     "surovina": "cuketa",
+     "nazev": "Cuketa",
+     "g": 150,
+     "poznamka": null
+    },
+    {
+     "surovina": "cibule",
+     "nazev": "Cibule",
+     "g": 40,
+     "poznamka": null
+    },
+    {
+     "surovina": "cesnek",
+     "nazev": "Česnek",
+     "g": 5,
+     "poznamka": null
+    },
+    {
+     "surovina": "olej_olivovy",
+     "nazev": "Extra panenský olivový olej",
+     "g": 10,
+     "poznamka": null
+    },
+    {
+     "surovina": "testoviny",
+     "nazev": "Semolinové těstoviny (suché)",
+     "g": 140,
+     "poznamka": "suché"
+    },
+    {
+     "surovina": "parmazan",
+     "nazev": "Parmazán",
+     "g": 10,
+     "poznamka": null
+    }
+   ],
+   "hodnoty_porce": {
+    "kcal": 930,
+    "bilkoviny_g": 52.5,
+    "sacharidy_g": 119.4,
+    "tuky_g": 24.8,
+    "vlaknina_g": 9.8,
+    "nasycene_g": 6.2
+   },
+   "priprava": "Maso osolit, opepřit, přidat česnek a petrželku, tvarovat kuličky, opéct nebo upéct (200 °C, 15 min). Omáčku z cibule, cukety a passaty provařit, přidat kuličky na 10 min. Podávat se špagetami a parmazánem.",
+   "skladovani": "Kuličky v omáčce 3 dny v lednici, mrazit do 3 měsíců.",
+   "poznamka": null,
+   "modul_prilohy": {
+    "surovina": "testoviny",
+    "g": 30
+   }
+  },
+  {
+   "kod": "H7",
+   "slot": "Hlavní jídlo",
+   "nazev": "Krůtí stir-fry s rýžovými nudlemi a edamame",
+   "suroviny": [
+    {
+     "surovina": "krut_prsa",
+     "nazev": "Krůtí prsa (syrová)",
+     "g": 120,
+     "poznamka": "syrová"
+    },
+    {
+     "surovina": "ryzove_nudle",
+     "nazev": "Rýžové nudle (suché)",
+     "g": 135,
+     "poznamka": "suché"
+    },
+    {
+     "surovina": "edamame",
+     "nazev": "Edamame vyloupané (mražené)",
+     "g": 60,
+     "poznamka": null
+    },
+    {
+     "surovina": "brokolice",
+     "nazev": "Brokolice",
+     "g": 150,
+     "poznamka": null
+    },
+    {
+     "surovina": "mrkev",
+     "nazev": "Mrkev",
+     "g": 80,
+     "poznamka": null
+    },
+    {
+     "surovina": "paprika",
+     "nazev": "Paprika červená",
+     "g": 80,
+     "poznamka": null
+    },
+    {
+     "surovina": "sojova_omacka",
+     "nazev": "Sójová omáčka (se sníženým obsahem soli)",
+     "g": 15,
+     "poznamka": null
+    },
+    {
+     "surovina": "zazvor",
+     "nazev": "Zázvor",
+     "g": 5,
+     "poznamka": null
+    },
+    {
+     "surovina": "cesnek",
+     "nazev": "Česnek",
+     "g": 5,
+     "poznamka": null
+    },
+    {
+     "surovina": "olej_sezamovy",
+     "nazev": "Sezamový olej",
+     "g": 5,
+     "poznamka": null
+    },
+    {
+     "surovina": "olej_olivovy",
+     "nazev": "Extra panenský olivový olej",
+     "g": 5,
+     "poznamka": null
+    },
+    {
+     "surovina": "sezam",
+     "nazev": "Sezam",
+     "g": 5,
+     "poznamka": null
+    },
+    {
+     "surovina": "limetka",
+     "nazev": "Limetková šťáva",
+     "g": 10,
+     "poznamka": null
+    }
+   ],
+   "hodnoty_porce": {
+    "kcal": 923,
+    "bilkoviny_g": 51.7,
+    "sacharidy_g": 128.4,
+    "tuky_g": 19.4,
+    "vlaknina_g": 14.1,
+    "nasycene_g": 3.0
+   },
+   "priprava": "Krůtí nudličky prudce opéct, vyndat. Orestovat zeleninu a edamame, vrátit maso, přidat sójovou omáčku, zázvor, česnek, limetku. Smíchat s namočenými nudlemi, posypat sezamem.",
+   "skladovani": "2 dny v lednici.",
+   "poznamka": null,
+   "modul_prilohy": {
+    "surovina": "ryzove_nudle",
+    "g": 30
+   }
+  },
+  {
+   "kod": "H8",
+   "slot": "Hlavní jídlo",
+   "nazev": "Pečený losos s bramborami, fazolkami a koprovým jogurtem",
+   "suroviny": [
+    {
+     "surovina": "losos",
+     "nazev": "Losos atlantický chovaný (syrový)",
+     "g": 150,
+     "poznamka": "syrový"
+    },
+    {
+     "surovina": "brambory",
+     "nazev": "Brambory (syrové, loupané)",
+     "g": 550,
+     "poznamka": "syrové"
+    },
+    {
+     "surovina": "fazolky",
+     "nazev": "Zelené fazolky",
+     "g": 200,
+     "poznamka": null
+    },
+    {
+     "surovina": "recky_jogurt_0",
+     "nazev": "Řecký jogurt 0 % (Milko)",
+     "g": 60,
+     "poznamka": "s koprem a citronem"
+    },
+    {
+     "surovina": "citron",
+     "nazev": "Citronová šťáva",
+     "g": 10,
+     "poznamka": null
+    },
+    {
+     "surovina": "olej_olivovy",
+     "nazev": "Extra panenský olivový olej",
+     "g": 12,
+     "poznamka": "na brambory"
+    }
+   ],
+   "hodnoty_porce": {
+    "kcal": 926,
+    "bilkoviny_g": 51.2,
+    "sacharidy_g": 96.6,
+    "tuky_g": 33.2,
+    "vlaknina_g": 17.5,
+    "nasycene_g": 6.5
+   },
+   "priprava": "Brambory nakrájet, pokapat olejem, péct 25 min na 200 °C. Přidat lososa, péct dalších 12–15 min. Fazolky uvařit nebo podusit. Jogurt s koprem a citronem jako omáčka.",
+   "skladovani": "Nejlépe čerstvě. Upečený losos 1 den v lednici.",
+   "poznamka": "Porce lososa podle balení: rozdíl ±30 g ≈ ±70 kcal.",
+   "modul_prilohy": {
+    "surovina": "brambory",
+    "g": 135
+   }
+  },
+  {
+   "kod": "H9",
+   "slot": "Hlavní jídlo",
+   "nazev": "Sushi bowl s lososem, avokádem a edamame",
+   "suroviny": [
+    {
+     "surovina": "losos",
+     "nazev": "Losos atlantický chovaný (syrový)",
+     "g": 150,
+     "poznamka": "pečený, nebo v kvalitě k syrové konzumaci"
+    },
+    {
+     "surovina": "sushi_ryze",
+     "nazev": "Rýže na sushi (suchá)",
+     "g": 110,
+     "poznamka": "suchá"
+    },
+    {
+     "surovina": "ryzovy_ocet",
+     "nazev": "Rýžový ocet (neochucený)",
+     "g": 20,
+     "poznamka": null
+    },
+    {
+     "surovina": "cukr",
+     "nazev": "Cukr",
+     "g": 6,
+     "poznamka": "do rýže"
+    },
+    {
+     "surovina": "avokado",
+     "nazev": "Avokádo (dužina)",
+     "g": 50,
+     "poznamka": null
+    },
+    {
+     "surovina": "edamame",
+     "nazev": "Edamame vyloupané (mražené)",
+     "g": 60,
+     "poznamka": null
+    },
+    {
+     "surovina": "okurka",
+     "nazev": "Okurka",
+     "g": 100,
+     "poznamka": null
+    },
+    {
+     "surovina": "mrkev",
+     "nazev": "Mrkev",
+     "g": 60,
+     "poznamka": null
+    },
+    {
+     "surovina": "nori",
+     "nazev": "Nori (sušené)",
+     "g": 3,
+     "poznamka": null
+    },
+    {
+     "surovina": "sojova_omacka",
+     "nazev": "Sójová omáčka (se sníženým obsahem soli)",
+     "g": 15,
+     "poznamka": null
+    },
+    {
+     "surovina": "sezam",
+     "nazev": "Sezam",
+     "g": 5,
+     "poznamka": null
+    }
+   ],
+   "hodnoty_porce": {
+    "kcal": 947,
+    "bilkoviny_g": 50.6,
+    "sacharidy_g": 103.6,
+    "tuky_g": 34.1,
+    "vlaknina_g": 12.0,
+    "nasycene_g": 6.7
+   },
+   "priprava": "Rýži uvařit, ochutit octem a cukrem. Lososa upéct (nebo nakrájet syrový, pokud je k syrové konzumaci). Sestavit misku s avokádem, edamame, okurkou, mrkví, nori a sezamem, zakápnout sójovou omáčkou.",
+   "skladovani": "Čerstvě. Syrovou rybu jen v kvalitě určené k syrové konzumaci (předem zmražená).",
+   "poznamka": null,
+   "modul_prilohy": {
+    "surovina": "sushi_ryze",
+    "g": 30
+   }
+  },
+  {
+   "kod": "H10",
+   "slot": "Hlavní jídlo",
+   "nazev": "Krevetové rizoto s hráškem a citronem",
+   "suroviny": [
+    {
+     "surovina": "krevety",
+     "nazev": "Krevety oloupané (syrové)",
+     "g": 150,
+     "poznamka": "syrové, oloupané"
+    },
+    {
+     "surovina": "arborio",
+     "nazev": "Rýže arborio (suchá)",
+     "g": 135,
+     "poznamka": "suchá"
+    },
+    {
+     "surovina": "hrasek",
+     "nazev": "Hrášek mražený",
+     "g": 100,
+     "poznamka": null
+    },
+    {
+     "surovina": "cibule",
+     "nazev": "Cibule",
+     "g": 50,
+     "poznamka": null
+    },
+    {
+     "surovina": "cesnek",
+     "nazev": "Česnek",
+     "g": 5,
+     "poznamka": null
+    },
+    {
+     "surovina": "vyvar_zel",
+     "nazev": "Zeleninový vývar",
+     "g": 600,
+     "poznamka": "ml"
+    },
+    {
+     "surovina": "parmazan",
+     "nazev": "Parmazán",
+     "g": 15,
+     "poznamka": null
+    },
+    {
+     "surovina": "olej_olivovy",
+     "nazev": "Extra panenský olivový olej",
+     "g": 10,
+     "poznamka": null
+    },
+    {
+     "surovina": "maslo",
+     "nazev": "Máslo",
+     "g": 8,
+     "poznamka": "na konci"
+    },
+    {
+     "surovina": "citron",
+     "nazev": "Citronová šťáva",
+     "g": 15,
+     "poznamka": "+ kůra"
+    },
+    {
+     "surovina": "salat",
+     "nazev": "Hlávkový/ledový salát",
+     "g": 60,
+     "poznamka": "rukola vedle"
+    }
+   ],
+   "hodnoty_porce": {
+    "kcal": 949,
+    "bilkoviny_g": 53.1,
+    "sacharidy_g": 128.5,
+    "tuky_g": 23.1,
+    "vlaknina_g": 7.6,
+    "nasycene_g": 8.5
+   },
+   "priprava": "Cibuli a česnek orestovat, přidat rýži, postupně zalévat horkým vývarem (18 min). Posledních 5 min přidat hrášek a krevety. Mimo plotnu vmíchat máslo, parmazán, citronovou šťávu a kůru.",
+   "skladovani": "Čerstvě; zbytek 1 den v lednici.",
+   "poznamka": null,
+   "modul_prilohy": {
+    "surovina": "arborio",
+    "g": 30
+   }
+  },
+  {
+   "kod": "H11",
+   "slot": "Hlavní jídlo",
+   "nazev": "Vepřová panenka s pečenými batáty a dušeným červeným zelím",
+   "suroviny": [
+    {
+     "surovina": "vep_panenka",
+     "nazev": "Vepřová panenka (syrová)",
+     "g": 170,
+     "poznamka": "syrová"
+    },
+    {
+     "surovina": "bataty",
+     "nazev": "Batáty (syrové)",
+     "g": 480,
+     "poznamka": "syrové"
+    },
+    {
+     "surovina": "zeli_cervene",
+     "nazev": "Červené zelí",
+     "g": 200,
+     "poznamka": null
+    },
+    {
+     "surovina": "jablko",
+     "nazev": "Jablko (jedlá část)",
+     "g": 80,
+     "poznamka": "do zelí"
+    },
+    {
+     "surovina": "cibule",
+     "nazev": "Cibule",
+     "g": 40,
+     "poznamka": null
+    },
+    {
+     "surovina": "olej_olivovy",
+     "nazev": "Extra panenský olivový olej",
+     "g": 15,
+     "poznamka": null
+    },
+    {
+     "surovina": "horcice",
+     "nazev": "Dijonská hořčice",
+     "g": 10,
+     "poznamka": null
+    },
+    {
+     "surovina": "vlasske",
+     "nazev": "Vlašské ořechy",
+     "g": 10,
+     "poznamka": "do zelí"
+    }
+   ],
+   "hodnoty_porce": {
+    "kcal": 923,
+    "bilkoviny_g": 49.0,
+    "sacharidy_g": 105.8,
+    "tuky_g": 28.8,
+    "vlaknina_g": 22.2,
+    "nasycene_g": 4.8
+   },
+   "priprava": "Panenku potřít hořčicí, opéct ze všech stran, dopéct v troubě (180 °C, 15 min, uvnitř 63–65 °C). Batáty péct 30 min na 200 °C. Zelí dusit s cibulí, jablkem, kmínem a lžící octa 30 min, posypat nasekanými vlašskými ořechy.",
+   "skladovani": "3 dny v lednici; zelí lze připravit na 3 porce.",
+   "poznamka": null,
+   "modul_prilohy": {
+    "surovina": "bataty",
+    "g": 120
+   }
+  },
+  {
+   "kod": "H12",
+   "slot": "Hlavní jídlo",
+   "nazev": "Čočkový dal s vejci, špenátem a basmati",
+   "suroviny": [
+    {
+     "surovina": "cocka_cervena",
+     "nazev": "Červená čočka (suchá)",
+     "g": 80,
+     "poznamka": "suchá"
+    },
+    {
+     "surovina": "vejce",
+     "nazev": "Vejce celá (bez skořápky)",
+     "g": 110,
+     "poznamka": "2 ks natvrdo"
+    },
+    {
+     "surovina": "rajcata_kons",
+     "nazev": "Rajčata krájená (konzerva)",
+     "g": 200,
+     "poznamka": null
+    },
+    {
+     "surovina": "spenat",
+     "nazev": "Špenát (čerstvý/mražený)",
+     "g": 100,
+     "poznamka": null
+    },
+    {
+     "surovina": "cibule",
+     "nazev": "Cibule",
+     "g": 60,
+     "poznamka": null
+    },
+    {
+     "surovina": "cesnek",
+     "nazev": "Česnek",
+     "g": 5,
+     "poznamka": null
+    },
+    {
+     "surovina": "zazvor",
+     "nazev": "Zázvor",
+     "g": 5,
+     "poznamka": null
+    },
+    {
+     "surovina": "olej_olivovy",
+     "nazev": "Extra panenský olivový olej",
+     "g": 10,
+     "poznamka": null
+    },
+    {
+     "surovina": "recky_jogurt_0",
+     "nazev": "Řecký jogurt 0 % (Milko)",
+     "g": 60,
+     "poznamka": null
+    },
+    {
+     "surovina": "basmati",
+     "nazev": "Rýže basmati (suchá)",
+     "g": 80,
+     "poznamka": "suchá"
+    }
+   ],
+   "hodnoty_porce": {
+    "kcal": 933,
+    "bilkoviny_g": 51.4,
+    "sacharidy_g": 122.2,
+    "tuky_g": 23.1,
+    "vlaknina_g": 15.3,
+    "nasycene_g": 5.4
+   },
+   "priprava": "Cibuli, česnek, zázvor, kurkumu, kmín a garam masalu orestovat. Přidat propláchnutou čočku, rajčata a 400 ml vody, vařit 20 min. Vmíchat špenát. Podávat s rýží, vejci natvrdo a jogurtem.",
+   "skladovani": "Dal 3 dny v lednici, mrazit lze; vejce natvrdo 3 dny.",
+   "poznamka": null,
+   "modul_prilohy": {
+    "surovina": "basmati",
+    "g": 30
+   }
+  },
+  {
+   "kod": "H13",
+   "slot": "Hlavní jídlo",
+   "nazev": "Hovězí pho",
+   "suroviny": [
+    {
+     "surovina": "hov_zadni",
+     "nazev": "Hovězí zadní (syrové)",
+     "g": 120,
+     "poznamka": "syrové, na tenké plátky"
+    },
+    {
+     "surovina": "ryzove_nudle",
+     "nazev": "Rýžové nudle (suché)",
+     "g": 170,
+     "poznamka": "suché"
+    },
+    {
+     "surovina": "vyvar_hovezi",
+     "nazev": "Hovězí vývar domácí",
+     "g": 500,
+     "poznamka": "ml"
+    },
+    {
+     "surovina": "cibule",
+     "nazev": "Cibule",
+     "g": 50,
+     "poznamka": null
+    },
+    {
+     "surovina": "zazvor",
+     "nazev": "Zázvor",
+     "g": 10,
+     "poznamka": null
+    },
+    {
+     "surovina": "klicky_mungo",
+     "nazev": "Mungo klíčky",
+     "g": 80,
+     "poznamka": null
+    },
+    {
+     "surovina": "cibule_jarni",
+     "nazev": "Jarní cibulka",
+     "g": 20,
+     "poznamka": null
+    },
+    {
+     "surovina": "limetka",
+     "nazev": "Limetková šťáva",
+     "g": 15,
+     "poznamka": null
+    },
+    {
+     "surovina": "rybi_omacka",
+     "nazev": "Rybí omáčka",
+     "g": 10,
+     "poznamka": null
+    },
+    {
+     "surovina": "brokolice",
+     "nazev": "Brokolice",
+     "g": 100,
+     "poznamka": "do vývaru"
+    }
+   ],
+   "hodnoty_porce": {
+    "kcal": 923,
+    "bilkoviny_g": 52.9,
+    "sacharidy_g": 151.9,
+    "tuky_g": 9.7,
+    "vlaknina_g": 8.4,
+    "nasycene_g": 3.6
+   },
+   "priprava": "Vývar: hovězí kosti a cibuli se zázvorem opálit, vařit s badyánem, skořicí a hřebíčkem 3–6 h (pomalý hrnec), přecedit. Nudle namočit. Do misky nudle, syrové plátky masa, zalít vroucím vývarem, přidat klíčky, bylinky, limetku a rybí omáčku.",
+   "skladovani": "Vývar 3 dny v lednici, mrazit do 3 měsíců; maso a nudle vždy čerstvě.",
+   "poznamka": "Hodnoty vývaru jsou odhad.",
+   "modul_prilohy": {
+    "surovina": "ryzove_nudle",
+    "g": 30
+   }
+  },
+  {
+   "kod": "H14",
+   "slot": "Hlavní jídlo",
+   "nazev": "Špagety se sardinkami, cherry rajčaty a citronem",
+   "suroviny": [
+    {
+     "surovina": "sardinky",
+     "nazev": "Sardinky Vilgain ve vlastní šťávě (slité)",
+     "g": 85,
+     "poznamka": "1 plechovka 120 g, slitá"
+    },
+    {
+     "surovina": "testoviny_cz",
+     "nazev": "Celozrnné těstoviny (suché)",
+     "g": 160,
+     "poznamka": "suché"
+    },
+    {
+     "surovina": "rajcata",
+     "nazev": "Rajčata",
+     "g": 200,
+     "poznamka": "cherry"
+    },
+    {
+     "surovina": "cesnek",
+     "nazev": "Česnek",
+     "g": 6,
+     "poznamka": null
+    },
+    {
+     "surovina": "olej_olivovy",
+     "nazev": "Extra panenský olivový olej",
+     "g": 15,
+     "poznamka": null
+    },
+    {
+     "surovina": "citron",
+     "nazev": "Citronová šťáva",
+     "g": 15,
+     "poznamka": "+ kůra"
+    },
+    {
+     "surovina": "spenat",
+     "nazev": "Špenát (čerstvý/mražený)",
+     "g": 80,
+     "poznamka": null
+    },
+    {
+     "surovina": "parmazan",
+     "nazev": "Parmazán",
+     "g": 10,
+     "poznamka": null
+    }
+   ],
+   "hodnoty_porce": {
+    "kcal": 936,
+    "bilkoviny_g": 52.6,
+    "sacharidy_g": 108.7,
+    "tuky_g": 28.5,
+    "vlaknina_g": 17.1,
+    "nasycene_g": 6.3
+   },
+   "priprava": "Česnek a rajčata krátce orestovat, přidat špenát a sardinky rozdělené vidličkou. Promíchat se špagetami, citronem, kůrou a petrželkou.",
+   "skladovani": "Čerstvě (15 min).",
+   "poznamka": null,
+   "modul_prilohy": {
+    "surovina": "testoviny_cz",
+    "g": 30
+   }
+  }
+ ],
+ "cyklus": {
+  "A": {
+   "varka_nedele": "H2",
+   "varka_streda": "H5",
+   "dny": [
+    {
+     "den": "Po",
+     "trenink": true,
+     "jidla": {
+      "snidane": "S1",
+      "svacina": "P4",
+      "obed": "H2",
+      "vecere": "H14"
+     },
+     "z_varky": [
+      "obed"
+     ],
+     "upravy": [
+      {
+       "typ": "ferment",
+       "surovina": "kysane_zeli",
+       "g": 75,
+       "text": "kysané zelí 75 g k libovolnému jídlu"
+      },
+      {
+       "typ": "orechy",
+       "surovina": "vlasske",
+       "g": 15,
+       "text": "Vlašské ořechy 15 g"
+      },
+      {
+       "typ": "ubrat_k_obedu",
+       "surovina": "testoviny",
+       "g": -30,
+       "text": "k obědu o 30 g méně: Semolinové těstoviny (suché)"
+      }
+     ],
+     "soucet_dne": {
+      "kcal": 3409,
+      "bilkoviny_g": 193.8,
+      "sacharidy_g": 402.5,
+      "tuky_g": 99.2,
+      "vlaknina_g": 65.5,
+      "nasycene_g": 24.2
+     }
+    },
+    {
+     "den": "Út",
+     "trenink": true,
+     "jidla": {
+      "snidane": "S3",
+      "svacina": "P1",
+      "obed": "H2",
+      "vecere": "H8"
+     },
+     "z_varky": [
+      "obed"
+     ],
+     "upravy": [
+      {
+       "typ": "ferment",
+       "surovina": "kysane_zeli",
+       "g": 75,
+       "text": "kysané zelí 75 g k libovolnému jídlu"
+      },
+      {
+       "typ": "orechy",
+       "surovina": "mandle",
+       "g": 15,
+       "text": "Mandle 15 g"
+      },
+      {
+       "typ": "ubrat_k_obedu",
+       "surovina": "testoviny",
+       "g": -30,
+       "text": "k obědu o 30 g méně: Semolinové těstoviny (suché)"
+      }
+     ],
+     "soucet_dne": {
+      "kcal": 3410,
+      "bilkoviny_g": 194.8,
+      "sacharidy_g": 400.7,
+      "tuky_g": 101.9,
+      "vlaknina_g": 55.6,
+      "nasycene_g": 29.1
+     }
+    },
+    {
+     "den": "St",
+     "trenink": false,
+     "jidla": {
+      "snidane": "S6",
+      "svacina": "P6",
+      "obed": "H2",
+      "vecere": "H5"
+     },
+     "z_varky": [
+      "obed",
+      "vecere"
+     ],
+     "upravy": [
+      {
+       "typ": "ferment",
+       "surovina": "kysane_zeli",
+       "g": 75,
+       "text": "kysané zelí 75 g k libovolnému jídlu"
+      },
+      {
+       "typ": "orechy",
+       "surovina": "dynova_seminka",
+       "g": 15,
+       "text": "Dýňová semínka 15 g"
+      },
+      {
+       "typ": "ubrat_k_obedu",
+       "surovina": "testoviny",
+       "g": -30,
+       "text": "k obědu o 30 g méně: Semolinové těstoviny (suché)"
+      }
+     ],
+     "soucet_dne": {
+      "kcal": 3443,
+      "bilkoviny_g": 199.9,
+      "sacharidy_g": 454.0,
+      "tuky_g": 80.4,
+      "vlaknina_g": 51.6,
+      "nasycene_g": 20.7
+     }
+    },
+    {
+     "den": "Čt",
+     "trenink": true,
+     "jidla": {
+      "snidane": "S7",
+      "svacina": "P5",
+      "obed": "H5",
+      "vecere": "H13"
+     },
+     "z_varky": [
+      "obed"
+     ],
+     "upravy": [
+      {
+       "typ": "orechy",
+       "surovina": "vlasske",
+       "g": 15,
+       "text": "Vlašské ořechy 15 g"
+      },
+      {
+       "typ": "ubrat_k_obedu",
+       "surovina": "basmati",
+       "g": -30,
+       "text": "k obědu o 30 g méně: Rýže basmati (suchá)"
+      }
+     ],
+     "soucet_dne": {
+      "kcal": 3386,
+      "bilkoviny_g": 193.6,
+      "sacharidy_g": 440.2,
+      "tuky_g": 82.7,
+      "vlaknina_g": 53.4,
+      "nasycene_g": 24.6
+     }
+    },
+    {
+     "den": "Pá",
+     "trenink": false,
+     "jidla": {
+      "snidane": "S2",
+      "svacina": "P3",
+      "obed": "H5",
+      "vecere": "H10"
+     },
+     "z_varky": [
+      "obed"
+     ],
+     "upravy": [
+      {
+       "typ": "orechy",
+       "surovina": "mandle",
+       "g": 15,
+       "text": "Mandle 15 g"
+      },
+      {
+       "typ": "ubrat_k_obedu",
+       "surovina": "basmati",
+       "g": -30,
+       "text": "k obědu o 30 g méně: Rýže basmati (suchá)"
+      }
+     ],
+     "soucet_dne": {
+      "kcal": 3411,
+      "bilkoviny_g": 192.4,
+      "sacharidy_g": 450.4,
+      "tuky_g": 81.4,
+      "vlaknina_g": 53.6,
+      "nasycene_g": 21.4
+     }
+    },
+    {
+     "den": "So",
+     "trenink": true,
+     "jidla": {
+      "snidane": "S5",
+      "svacina": "P5",
+      "obed": "H5",
+      "vecere": "H9"
+     },
+     "z_varky": [
+      "obed"
+     ],
+     "upravy": [
+      {
+       "typ": "orechy",
+       "surovina": "dynova_seminka",
+       "g": 15,
+       "text": "Dýňová semínka 15 g"
+      },
+      {
+       "typ": "ubrat_k_obedu",
+       "surovina": "basmati",
+       "g": -30,
+       "text": "k obědu o 30 g méně: Rýže basmati (suchá)"
+      }
+     ],
+     "soucet_dne": {
+      "kcal": 3449,
+      "bilkoviny_g": 195.3,
+      "sacharidy_g": 413.8,
+      "tuky_g": 99.7,
+      "vlaknina_g": 58.0,
+      "nasycene_g": 27.4
+     }
+    },
+    {
+     "den": "Ne",
+     "trenink": false,
+     "jidla": {
+      "snidane": "S4",
+      "svacina": "P3",
+      "obed": "H7",
+      "vecere": "H3"
+     },
+     "z_varky": [],
+     "upravy": [
+      {
+       "typ": "ferment",
+       "surovina": "kysane_zeli",
+       "g": 75,
+       "text": "kysané zelí 75 g k libovolnému jídlu"
+      },
+      {
+       "typ": "orechy",
+       "surovina": "vlasske",
+       "g": 15,
+       "text": "Vlašské ořechy 15 g"
+      },
+      {
+       "typ": "ubrat_k_obedu",
+       "surovina": "ryzove_nudle",
+       "g": -30,
+       "text": "k obědu o 30 g méně: Rýžové nudle (suché)"
+      }
+     ],
+     "soucet_dne": {
+      "kcal": 3361,
+      "bilkoviny_g": 188.1,
+      "sacharidy_g": 432.5,
+      "tuky_g": 85.0,
+      "vlaknina_g": 56.7,
+      "nasycene_g": 22.5
+     }
+    }
+   ],
+   "nakup": {
+    "N1_vikend": [
+     {
+      "surovina": "banan",
+      "nazev": "Banán (bez slupky)",
+      "mnozstvi": "370 g (~3 ks)",
+      "g": 370,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "brambory",
+      "nazev": "Brambory (syrové, loupané)",
+      "mnozstvi": "550 g",
+      "g": 550,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "celer",
+      "nazev": "Celer bulva",
+      "mnozstvi": "200 g",
+      "g": 200,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "tortilla_cz",
+      "nazev": "Celozrnná tortilla",
+      "mnozstvi": "124 g",
+      "g": 124,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "testoviny_cz",
+      "nazev": "Celozrnné těstoviny (suché)",
+      "mnozstvi": "160 g",
+      "g": 160,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "cibule",
+      "nazev": "Cibule",
+      "mnozstvi": "240 g",
+      "g": 240,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "citron",
+      "nazev": "Citronová šťáva",
+      "mnozstvi": "35 g (~1 ks)",
+      "g": 35,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "cottage",
+      "nazev": "Cottage sýr (~4 % tuku)",
+      "mnozstvi": "160 g",
+      "g": 160,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "cuketa",
+      "nazev": "Cuketa",
+      "mnozstvi": "100 g (~1 ks)",
+      "g": 100,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "dynova_seminka",
+      "nazev": "Dýňová semínka",
+      "mnozstvi": "15 g",
+      "g": 15,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "olej_olivovy",
+      "nazev": "Extra panenský olivový olej",
+      "mnozstvi": "85 g",
+      "g": 85,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "feta",
+      "nazev": "Feta (ovčí/kozí)",
+      "mnozstvi": "30 g",
+      "g": 30,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "gnocchi",
+      "nazev": "Gnocchi bramborové (balené)",
+      "mnozstvi": "300 g",
+      "g": 300,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "salat",
+      "nazev": "Hlávkový/ledový salát",
+      "mnozstvi": "40 g",
+      "g": 40,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "hov_klizka",
+      "nazev": "Hovězí kližka (syrová)",
+      "mnozstvi": "480 g",
+      "g": 480,
+      "kategorie": "Maso a ryby"
+     },
+     {
+      "surovina": "kakao",
+      "nazev": "Kakao nealkalizované, neslazené",
+      "mnozstvi": "10 g",
+      "g": 10,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "kiwi",
+      "nazev": "Kiwi (jedlá část)",
+      "mnozstvi": "150 g (~2 ks)",
+      "g": 150,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "kukurice",
+      "nazev": "Kukuřice sladká (konzerva, slitá)",
+      "mnozstvi": "1× (60 g slitých)",
+      "g": 60,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "kur_prsa",
+      "nazev": "Kuřecí prsa (syrová)",
+      "mnozstvi": "130 g",
+      "g": 130,
+      "kategorie": "Maso a ryby"
+     },
+     {
+      "surovina": "kysane_zeli",
+      "nazev": "Kysané zelí (domácí)",
+      "mnozstvi": "225 g",
+      "g": 225,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "losos",
+      "nazev": "Losos atlantický chovaný (syrový)",
+      "mnozstvi": "150 g",
+      "g": 150,
+      "kategorie": "Maso a ryby"
+     },
+     {
+      "surovina": "mandle",
+      "nazev": "Mandle",
+      "mnozstvi": "15 g",
+      "g": 15,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "med",
+      "nazev": "Med",
+      "mnozstvi": "20 g",
+      "g": 20,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "mleko",
+      "nazev": "Mléko polotučné 1,5 %",
+      "mnozstvi": "600 g",
+      "g": 600,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "mrkev",
+      "nazev": "Mrkev",
+      "mnozstvi": "320 g",
+      "g": 320,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "paprika",
+      "nazev": "Paprika červená",
+      "mnozstvi": "100 g (~1 ks)",
+      "g": 100,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "parmazan",
+      "nazev": "Parmazán",
+      "mnozstvi": "30 g",
+      "g": 30,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "passata",
+      "nazev": "Passata",
+      "mnozstvi": "800 g",
+      "g": 800,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "pomeranc",
+      "nazev": "Pomeranč (bez slupky)",
+      "mnozstvi": "200 g (~1 ks)",
+      "g": 200,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "rajcata",
+      "nazev": "Rajčata",
+      "mnozstvi": "530 g",
+      "g": 530,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "ryzova_kase",
+      "nazev": "Rýžová kaše Grizly (suchá)",
+      "mnozstvi": "175 g",
+      "g": 175,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "sardinky",
+      "nazev": "Sardinky Vilgain ve vlastní šťávě (slité)",
+      "mnozstvi": "1× (85 g slitých)",
+      "g": 85,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "testoviny",
+      "nazev": "Semolinové těstoviny (suché)",
+      "mnozstvi": "470 g",
+      "g": 470,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "whey",
+      "nazev": "Syrovátkový protein Veiny Galaxy (vanilka)",
+      "mnozstvi": "60 g",
+      "g": 60,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "tunak",
+      "nazev": "Tuňák ve vlastní šťávě (slitý)",
+      "mnozstvi": "1× (110 g slitých)",
+      "g": 110,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "vejce",
+      "nazev": "Vejce celá (bez skořápky)",
+      "mnozstvi": "6 ks",
+      "g": 330,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "vlasske",
+      "nazev": "Vlašské ořechy",
+      "mnozstvi": "35 g",
+      "g": 35,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "fazolky",
+      "nazev": "Zelené fazolky",
+      "mnozstvi": "200 g",
+      "g": 200,
+      "kategorie": "Mražené"
+     },
+     {
+      "surovina": "cesnek",
+      "nazev": "Česnek",
+      "mnozstvi": "26 g",
+      "g": 26,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "recky_jogurt_0",
+      "nazev": "Řecký jogurt 0 % (Milko)",
+      "mnozstvi": "100 g",
+      "g": 100,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "spenat",
+      "nazev": "Špenát (čerstvý/mražený)",
+      "mnozstvi": "500 g",
+      "g": 500,
+      "kategorie": "Mražené"
+     },
+     {
+      "surovina": "zampiony",
+      "nazev": "Žampiony",
+      "mnozstvi": "100 g",
+      "g": 100,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "chleb_zitny",
+      "nazev": "Žitný kváskový chléb celozrnný",
+      "mnozstvi": "300 g",
+      "g": 300,
+      "kategorie": "Lednice"
+     }
+    ],
+    "N2_streda": [
+     {
+      "surovina": "avokado",
+      "nazev": "Avokádo (dužina)",
+      "mnozstvi": "90 g (~1 ks)",
+      "g": 90,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "banan",
+      "nazev": "Banán (bez slupky)",
+      "mnozstvi": "640 g (~5 ks)",
+      "g": 640,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "boruvky",
+      "nazev": "Borůvky",
+      "mnozstvi": "350 g",
+      "g": 350,
+      "kategorie": "Mražené"
+     },
+     {
+      "surovina": "brokolice",
+      "nazev": "Brokolice",
+      "mnozstvi": "250 g",
+      "g": 250,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "jogurt_bily_3",
+      "nazev": "Bílý jogurt 3 % s živými kulturami",
+      "mnozstvi": "400 g",
+      "g": 400,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "tortilla_cz",
+      "nazev": "Celozrnná tortilla",
+      "mnozstvi": "124 g",
+      "g": 124,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "chia",
+      "nazev": "Chia semínka",
+      "mnozstvi": "10 g",
+      "g": 10,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "cibule",
+      "nazev": "Cibule",
+      "mnozstvi": "340 g",
+      "g": 340,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "citron",
+      "nazev": "Citronová šťáva",
+      "mnozstvi": "25 g (~1 ks)",
+      "g": 25,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "cizrna",
+      "nazev": "Cizrna (konzerva, slitá)",
+      "mnozstvi": "2× (400 g slitých)",
+      "g": 400,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "cottage",
+      "nazev": "Cottage sýr (~4 % tuku)",
+      "mnozstvi": "150 g",
+      "g": 150,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "cukr",
+      "nazev": "Cukr",
+      "mnozstvi": "6 g",
+      "g": 6,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "datle",
+      "nazev": "Datle (bez pecek)",
+      "mnozstvi": "70 g",
+      "g": 70,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "dynova_seminka",
+      "nazev": "Dýňová semínka",
+      "mnozstvi": "15 g",
+      "g": 15,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "edamame",
+      "nazev": "Edamame vyloupané (mražené)",
+      "mnozstvi": "120 g",
+      "g": 120,
+      "kategorie": "Mražené"
+     },
+     {
+      "surovina": "olej_olivovy",
+      "nazev": "Extra panenský olivový olej",
+      "mnozstvi": "65 g",
+      "g": 65,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "salat",
+      "nazev": "Hlávkový/ledový salát",
+      "mnozstvi": "60 g",
+      "g": 60,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "vyvar_hovezi",
+      "nazev": "Hovězí vývar domácí",
+      "mnozstvi": "500 ml",
+      "g": 500,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "hov_zadni",
+      "nazev": "Hovězí zadní (syrové)",
+      "mnozstvi": "120 g",
+      "g": 120,
+      "kategorie": "Maso a ryby"
+     },
+     {
+      "surovina": "hrasek",
+      "nazev": "Hrášek mražený",
+      "mnozstvi": "100 g",
+      "g": 100,
+      "kategorie": "Mražené"
+     },
+     {
+      "surovina": "jablko",
+      "nazev": "Jablko (jedlá část)",
+      "mnozstvi": "200 g (~1 ks)",
+      "g": 200,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "cibule_jarni",
+      "nazev": "Jarní cibulka",
+      "mnozstvi": "20 g",
+      "g": 20,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "kefir",
+      "nazev": "Kefír 1,5 %",
+      "mnozstvi": "1 100 g",
+      "g": 1100,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "krevety",
+      "nazev": "Krevety oloupané (syrové)",
+      "mnozstvi": "150 g",
+      "g": 150,
+      "kategorie": "Mražené"
+     },
+     {
+      "surovina": "krut_prsa",
+      "nazev": "Krůtí prsa (syrová)",
+      "mnozstvi": "120 g",
+      "g": 120,
+      "kategorie": "Maso a ryby"
+     },
+     {
+      "surovina": "kur_prsa",
+      "nazev": "Kuřecí prsa (syrová)",
+      "mnozstvi": "440 g",
+      "g": 440,
+      "kategorie": "Maso a ryby"
+     },
+     {
+      "surovina": "kysane_zeli",
+      "nazev": "Kysané zelí (domácí)",
+      "mnozstvi": "75 g",
+      "g": 75,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "limetka",
+      "nazev": "Limetková šťáva",
+      "mnozstvi": "35 g (~1 ks)",
+      "g": 35,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "losos",
+      "nazev": "Losos atlantický chovaný (syrový)",
+      "mnozstvi": "150 g",
+      "g": 150,
+      "kategorie": "Maso a ryby"
+     },
+     {
+      "surovina": "maliny",
+      "nazev": "Maliny",
+      "mnozstvi": "150 g",
+      "g": 150,
+      "kategorie": "Mražené"
+     },
+     {
+      "surovina": "mandle",
+      "nazev": "Mandle",
+      "mnozstvi": "15 g",
+      "g": 15,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "med",
+      "nazev": "Med",
+      "mnozstvi": "75 g",
+      "g": 75,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "mleko",
+      "nazev": "Mléko polotučné 1,5 %",
+      "mnozstvi": "100 g",
+      "g": 100,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "mrkev",
+      "nazev": "Mrkev",
+      "mnozstvi": "140 g",
+      "g": 140,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "klicky_mungo",
+      "nazev": "Mungo klíčky",
+      "mnozstvi": "80 g",
+      "g": 80,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "maslo",
+      "nazev": "Máslo",
+      "mnozstvi": "8 g",
+      "g": 8,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "nori",
+      "nazev": "Nori (sušené)",
+      "mnozstvi": "3 g",
+      "g": 3,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "okurka",
+      "nazev": "Okurka",
+      "mnozstvi": "200 g (~1 ks)",
+      "g": 200,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "vlocky",
+      "nazev": "Ovesné vločky",
+      "mnozstvi": "435 g",
+      "g": 435,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "paprika",
+      "nazev": "Paprika červená",
+      "mnozstvi": "160 g (~1 ks)",
+      "g": 160,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "parmazan",
+      "nazev": "Parmazán",
+      "mnozstvi": "15 g",
+      "g": 15,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "rajcata",
+      "nazev": "Rajčata",
+      "mnozstvi": "200 g",
+      "g": 200,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "rajcata_kons",
+      "nazev": "Rajčata krájená (konzerva)",
+      "mnozstvi": "2× (800 g slitých)",
+      "g": 800,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "rybi_omacka",
+      "nazev": "Rybí omáčka",
+      "mnozstvi": "10 g",
+      "g": 10,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "arborio",
+      "nazev": "Rýže arborio (suchá)",
+      "mnozstvi": "135 g",
+      "g": 135,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "basmati",
+      "nazev": "Rýže basmati (suchá)",
+      "mnozstvi": "410 g",
+      "g": 410,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "sushi_ryze",
+      "nazev": "Rýže na sushi (suchá)",
+      "mnozstvi": "110 g",
+      "g": 110,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "ryzove_nudle",
+      "nazev": "Rýžové nudle (suché)",
+      "mnozstvi": "275 g",
+      "g": 275,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "ryzovy_ocet",
+      "nazev": "Rýžový ocet (neochucený)",
+      "mnozstvi": "20 g",
+      "g": 20,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "sardinky",
+      "nazev": "Sardinky Vilgain ve vlastní šťávě (slité)",
+      "mnozstvi": "1× (85 g slitých)",
+      "g": 85,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "sezam",
+      "nazev": "Sezam",
+      "mnozstvi": "10 g",
+      "g": 10,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "olej_sezamovy",
+      "nazev": "Sezamový olej",
+      "mnozstvi": "5 g",
+      "g": 5,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "whey",
+      "nazev": "Syrovátkový protein Veiny Galaxy (vanilka)",
+      "mnozstvi": "75 g",
+      "g": 75,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "sojova_omacka",
+      "nazev": "Sójová omáčka (se sníženým obsahem soli)",
+      "mnozstvi": "30 g",
+      "g": 30,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "tvaroh",
+      "nazev": "Tvaroh polotučný",
+      "mnozstvi": "100 g",
+      "g": 100,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "vejce",
+      "nazev": "Vejce celá (bez skořápky)",
+      "mnozstvi": "5 ks",
+      "g": 275,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "vlasske",
+      "nazev": "Vlašské ořechy",
+      "mnozstvi": "45 g",
+      "g": 45,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "vyvar_zel",
+      "nazev": "Zeleninový vývar",
+      "mnozstvi": "600 ml",
+      "g": 600,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "zazvor",
+      "nazev": "Zázvor",
+      "mnozstvi": "35 g",
+      "g": 35,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "fazole_cerne",
+      "nazev": "Černé fazole (konzerva, slité)",
+      "mnozstvi": "1× (80 g slitých)",
+      "g": 80,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "cesnek",
+      "nazev": "Česnek",
+      "mnozstvi": "30 g",
+      "g": 30,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "recky_jogurt_0",
+      "nazev": "Řecký jogurt 0 % (Milko)",
+      "mnozstvi": "600 g",
+      "g": 600,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "spenat",
+      "nazev": "Špenát (čerstvý/mražený)",
+      "mnozstvi": "400 g",
+      "g": 400,
+      "kategorie": "Mražené"
+     },
+     {
+      "surovina": "chleb_zitny",
+      "nazev": "Žitný kváskový chléb celozrnný",
+      "mnozstvi": "170 g",
+      "g": 170,
+      "kategorie": "Lednice"
+     }
+    ]
+   }
+  },
+  "B": {
+   "varka_nedele": "H3",
+   "varka_streda": "H6",
+   "dny": [
+    {
+     "den": "Po",
+     "trenink": true,
+     "jidla": {
+      "snidane": "S3",
+      "svacina": "P5",
+      "obed": "H3",
+      "vecere": "H7"
+     },
+     "z_varky": [
+      "obed"
+     ],
+     "upravy": [
+      {
+       "typ": "orechy",
+       "surovina": "vlasske",
+       "g": 15,
+       "text": "Vlašské ořechy 15 g"
+      },
+      {
+       "typ": "ubrat_k_obedu",
+       "surovina": "basmati",
+       "g": -30,
+       "text": "k obědu o 30 g méně: Rýže basmati (suchá)"
+      }
+     ],
+     "soucet_dne": {
+      "kcal": 3408,
+      "bilkoviny_g": 191.6,
+      "sacharidy_g": 401.5,
+      "tuky_g": 103.5,
+      "vlaknina_g": 52.2,
+      "nasycene_g": 33.0
+     }
+    },
+    {
+     "den": "Út",
+     "trenink": true,
+     "jidla": {
+      "snidane": "S1",
+      "svacina": "P1",
+      "obed": "H3",
+      "vecere": "H8"
+     },
+     "z_varky": [
+      "obed"
+     ],
+     "upravy": [
+      {
+       "typ": "ferment",
+       "surovina": "kysane_zeli",
+       "g": 75,
+       "text": "kysané zelí 75 g k libovolnému jídlu"
+      },
+      {
+       "typ": "orechy",
+       "surovina": "mandle",
+       "g": 15,
+       "text": "Mandle 15 g"
+      },
+      {
+       "typ": "ubrat_k_obedu",
+       "surovina": "basmati",
+       "g": -30,
+       "text": "k obědu o 30 g méně: Rýže basmati (suchá)"
+      }
+     ],
+     "soucet_dne": {
+      "kcal": 3422,
+      "bilkoviny_g": 190.5,
+      "sacharidy_g": 396.1,
+      "tuky_g": 107.7,
+      "vlaknina_g": 53.0,
+      "nasycene_g": 31.7
+     }
+    },
+    {
+     "den": "St",
+     "trenink": false,
+     "jidla": {
+      "snidane": "S4",
+      "svacina": "P3",
+      "obed": "H3",
+      "vecere": "H6"
+     },
+     "z_varky": [
+      "obed",
+      "vecere"
+     ],
+     "upravy": [
+      {
+       "typ": "ferment",
+       "surovina": "kysane_zeli",
+       "g": 75,
+       "text": "kysané zelí 75 g k libovolnému jídlu"
+      },
+      {
+       "typ": "orechy",
+       "surovina": "dynova_seminka",
+       "g": 15,
+       "text": "Dýňová semínka 15 g"
+      },
+      {
+       "typ": "ubrat_k_obedu",
+       "surovina": "basmati",
+       "g": -30,
+       "text": "k obědu o 30 g méně: Rýže basmati (suchá)"
+      }
+     ],
+     "soucet_dne": {
+      "kcal": 3352,
+      "bilkoviny_g": 190.7,
+      "sacharidy_g": 423.4,
+      "tuky_g": 87.9,
+      "vlaknina_g": 52.4,
+      "nasycene_g": 26.1
+     }
+    },
+    {
+     "den": "Čt",
+     "trenink": true,
+     "jidla": {
+      "snidane": "S7",
+      "svacina": "P1",
+      "obed": "H6",
+      "vecere": "H9"
+     },
+     "z_varky": [
+      "obed"
+     ],
+     "upravy": [
+      {
+       "typ": "ferment",
+       "surovina": "kysane_zeli",
+       "g": 75,
+       "text": "kysané zelí 75 g k libovolnému jídlu"
+      },
+      {
+       "typ": "orechy",
+       "surovina": "vlasske",
+       "g": 15,
+       "text": "Vlašské ořechy 15 g"
+      },
+      {
+       "typ": "ubrat_k_obedu",
+       "surovina": "testoviny",
+       "g": -30,
+       "text": "k obědu o 30 g méně: Semolinové těstoviny (suché)"
+      }
+     ],
+     "soucet_dne": {
+      "kcal": 3425,
+      "bilkoviny_g": 191.1,
+      "sacharidy_g": 395.3,
+      "tuky_g": 109.4,
+      "vlaknina_g": 47.5,
+      "nasycene_g": 28.1
+     }
+    },
+    {
+     "den": "Pá",
+     "trenink": false,
+     "jidla": {
+      "snidane": "S6",
+      "svacina": "P6",
+      "obed": "H6",
+      "vecere": "H12"
+     },
+     "z_varky": [
+      "obed"
+     ],
+     "upravy": [
+      {
+       "typ": "ferment",
+       "surovina": "kysane_zeli",
+       "g": 75,
+       "text": "kysané zelí 75 g k libovolnému jídlu"
+      },
+      {
+       "typ": "orechy",
+       "surovina": "mandle",
+       "g": 15,
+       "text": "Mandle 15 g"
+      },
+      {
+       "typ": "ubrat_k_obedu",
+       "surovina": "testoviny",
+       "g": -30,
+       "text": "k obědu o 30 g méně: Semolinové těstoviny (suché)"
+      }
+     ],
+     "soucet_dne": {
+      "kcal": 3439,
+      "bilkoviny_g": 198.1,
+      "sacharidy_g": 436.8,
+      "tuky_g": 88.5,
+      "vlaknina_g": 51.3,
+      "nasycene_g": 21.8
+     }
+    },
+    {
+     "den": "So",
+     "trenink": true,
+     "jidla": {
+      "snidane": "S5",
+      "svacina": "P4",
+      "obed": "H6",
+      "vecere": "H14"
+     },
+     "z_varky": [
+      "obed"
+     ],
+     "upravy": [
+      {
+       "typ": "ferment",
+       "surovina": "kysane_zeli",
+       "g": 75,
+       "text": "kysané zelí 75 g k libovolnému jídlu"
+      },
+      {
+       "typ": "orechy",
+       "surovina": "dynova_seminka",
+       "g": 15,
+       "text": "Dýňová semínka 15 g"
+      },
+      {
+       "typ": "ubrat_k_obedu",
+       "surovina": "testoviny",
+       "g": -30,
+       "text": "k obědu o 30 g méně: Semolinové těstoviny (suché)"
+      }
+     ],
+     "soucet_dne": {
+      "kcal": 3428,
+      "bilkoviny_g": 198.4,
+      "sacharidy_g": 402.3,
+      "tuky_g": 100.0,
+      "vlaknina_g": 63.1,
+      "nasycene_g": 25.6
+     }
+    },
+    {
+     "den": "Ne",
+     "trenink": false,
+     "jidla": {
+      "snidane": "S2",
+      "svacina": "P3",
+      "obed": "H10",
+      "vecere": "H1"
+     },
+     "z_varky": [],
+     "upravy": [
+      {
+       "typ": "orechy",
+       "surovina": "vlasske",
+       "g": 15,
+       "text": "Vlašské ořechy 15 g"
+      },
+      {
+       "typ": "ubrat_k_obedu",
+       "surovina": "arborio",
+       "g": -30,
+       "text": "k obědu o 30 g méně: Rýže arborio (suchá)"
+      }
+     ],
+     "soucet_dne": {
+      "kcal": 3428,
+      "bilkoviny_g": 193.3,
+      "sacharidy_g": 451.1,
+      "tuky_g": 82.2,
+      "vlaknina_g": 55.3,
+      "nasycene_g": 21.8
+     }
+    }
+   ],
+   "nakup": {
+    "N1_vikend": [
+     {
+      "surovina": "banan",
+      "nazev": "Banán (bez slupky)",
+      "mnozstvi": "400 g (~3 ks)",
+      "g": 400,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "boruvky",
+      "nazev": "Borůvky",
+      "mnozstvi": "100 g",
+      "g": 100,
+      "kategorie": "Mražené"
+     },
+     {
+      "surovina": "brambory",
+      "nazev": "Brambory (syrové, loupané)",
+      "mnozstvi": "550 g",
+      "g": 550,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "brokolice",
+      "nazev": "Brokolice",
+      "mnozstvi": "150 g",
+      "g": 150,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "celer",
+      "nazev": "Celer bulva",
+      "mnozstvi": "240 g",
+      "g": 240,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "cibule",
+      "nazev": "Cibule",
+      "mnozstvi": "200 g",
+      "g": 200,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "citron",
+      "nazev": "Citronová šťáva",
+      "mnozstvi": "40 g (~1 ks)",
+      "g": 40,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "cottage",
+      "nazev": "Cottage sýr (~4 % tuku)",
+      "mnozstvi": "260 g",
+      "g": 260,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "datle",
+      "nazev": "Datle (bez pecek)",
+      "mnozstvi": "35 g",
+      "g": 35,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "horcice",
+      "nazev": "Dijonská hořčice",
+      "mnozstvi": "20 g",
+      "g": 20,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "dynova_seminka",
+      "nazev": "Dýňová semínka",
+      "mnozstvi": "15 g",
+      "g": 15,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "edamame",
+      "nazev": "Edamame vyloupané (mražené)",
+      "mnozstvi": "60 g",
+      "g": 60,
+      "kategorie": "Mražené"
+     },
+     {
+      "surovina": "olej_olivovy",
+      "nazev": "Extra panenský olivový olej",
+      "mnozstvi": "80 g",
+      "g": 80,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "feta",
+      "nazev": "Feta (ovčí/kozí)",
+      "mnozstvi": "30 g",
+      "g": 30,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "hov_zadni",
+      "nazev": "Hovězí zadní (syrové)",
+      "mnozstvi": "640 g",
+      "g": 640,
+      "kategorie": "Maso a ryby"
+     },
+     {
+      "surovina": "jablko",
+      "nazev": "Jablko (jedlá část)",
+      "mnozstvi": "200 g (~1 ks)",
+      "g": 200,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "kefir",
+      "nazev": "Kefír 1,5 %",
+      "mnozstvi": "400 g",
+      "g": 400,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "kiwi",
+      "nazev": "Kiwi (jedlá část)",
+      "mnozstvi": "150 g (~2 ks)",
+      "g": 150,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "krut_prsa",
+      "nazev": "Krůtí prsa (syrová)",
+      "mnozstvi": "120 g",
+      "g": 120,
+      "kategorie": "Maso a ryby"
+     },
+     {
+      "surovina": "kysane_zeli",
+      "nazev": "Kysané zelí (domácí)",
+      "mnozstvi": "150 g",
+      "g": 150,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "limetka",
+      "nazev": "Limetková šťáva",
+      "mnozstvi": "10 g (~1 ks)",
+      "g": 10,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "losos",
+      "nazev": "Losos atlantický chovaný (syrový)",
+      "mnozstvi": "150 g",
+      "g": 150,
+      "kategorie": "Maso a ryby"
+     },
+     {
+      "surovina": "mandle",
+      "nazev": "Mandle",
+      "mnozstvi": "15 g",
+      "g": 15,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "med",
+      "nazev": "Med",
+      "mnozstvi": "35 g",
+      "g": 35,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "mleko",
+      "nazev": "Mléko polotučné 1,5 %",
+      "mnozstvi": "300 g",
+      "g": 300,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "mrkev",
+      "nazev": "Mrkev",
+      "mnozstvi": "480 g",
+      "g": 480,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "okurka",
+      "nazev": "Okurka",
+      "mnozstvi": "100 g (~1 ks)",
+      "g": 100,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "vlocky",
+      "nazev": "Ovesné vločky",
+      "mnozstvi": "130 g",
+      "g": 130,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "paprika",
+      "nazev": "Paprika červená",
+      "mnozstvi": "180 g (~1 ks)",
+      "g": 180,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "petrzel_koren",
+      "nazev": "Petržel kořen",
+      "mnozstvi": "160 g",
+      "g": 160,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "pomeranc",
+      "nazev": "Pomeranč (bez slupky)",
+      "mnozstvi": "200 g (~1 ks)",
+      "g": 200,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "rajcata",
+      "nazev": "Rajčata",
+      "mnozstvi": "250 g",
+      "g": 250,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "basmati",
+      "nazev": "Rýže basmati (suchá)",
+      "mnozstvi": "370 g",
+      "g": 370,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "ryzova_kase",
+      "nazev": "Rýžová kaše Grizly (suchá)",
+      "mnozstvi": "85 g",
+      "g": 85,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "ryzove_nudle",
+      "nazev": "Rýžové nudle (suché)",
+      "mnozstvi": "135 g",
+      "g": 135,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "sardinky",
+      "nazev": "Sardinky Vilgain ve vlastní šťávě (slité)",
+      "mnozstvi": "1× (85 g slitých)",
+      "g": 85,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "sezam",
+      "nazev": "Sezam",
+      "mnozstvi": "5 g",
+      "g": 5,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "olej_sezamovy",
+      "nazev": "Sezamový olej",
+      "mnozstvi": "5 g",
+      "g": 5,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "smetana12",
+      "nazev": "Smetana na vaření 12 %",
+      "mnozstvi": "320 g",
+      "g": 320,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "whey",
+      "nazev": "Syrovátkový protein Veiny Galaxy (vanilka)",
+      "mnozstvi": "55 g",
+      "g": 55,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "sojova_omacka",
+      "nazev": "Sójová omáčka (se sníženým obsahem soli)",
+      "mnozstvi": "15 g",
+      "g": 15,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "vejce",
+      "nazev": "Vejce celá (bez skořápky)",
+      "mnozstvi": "6 ks",
+      "g": 330,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "vlasske",
+      "nazev": "Vlašské ořechy",
+      "mnozstvi": "15 g",
+      "g": 15,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "fazolky",
+      "nazev": "Zelené fazolky",
+      "mnozstvi": "200 g",
+      "g": 200,
+      "kategorie": "Mražené"
+     },
+     {
+      "surovina": "zazvor",
+      "nazev": "Zázvor",
+      "mnozstvi": "5 g",
+      "g": 5,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "cesnek",
+      "nazev": "Česnek",
+      "mnozstvi": "5 g",
+      "g": 5,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "recky_jogurt_0",
+      "nazev": "Řecký jogurt 0 % (Milko)",
+      "mnozstvi": "330 g",
+      "g": 330,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "spenat",
+      "nazev": "Špenát (čerstvý/mražený)",
+      "mnozstvi": "100 g",
+      "g": 100,
+      "kategorie": "Mražené"
+     },
+     {
+      "surovina": "zampiony",
+      "nazev": "Žampiony",
+      "mnozstvi": "100 g",
+      "g": 100,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "chleb_zitny",
+      "nazev": "Žitný kváskový chléb celozrnný",
+      "mnozstvi": "470 g",
+      "g": 470,
+      "kategorie": "Lednice"
+     }
+    ],
+    "N2_streda": [
+     {
+      "surovina": "avokado",
+      "nazev": "Avokádo (dužina)",
+      "mnozstvi": "90 g (~1 ks)",
+      "g": 90,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "banan",
+      "nazev": "Banán (bez slupky)",
+      "mnozstvi": "590 g (~5 ks)",
+      "g": 590,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "boruvky",
+      "nazev": "Borůvky",
+      "mnozstvi": "250 g",
+      "g": 250,
+      "kategorie": "Mražené"
+     },
+     {
+      "surovina": "tortilla_cz",
+      "nazev": "Celozrnná tortilla",
+      "mnozstvi": "248 g",
+      "g": 248,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "testoviny_cz",
+      "nazev": "Celozrnné těstoviny (suché)",
+      "mnozstvi": "160 g",
+      "g": 160,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "chia",
+      "nazev": "Chia semínka",
+      "mnozstvi": "10 g",
+      "g": 10,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "cibule",
+      "nazev": "Cibule",
+      "mnozstvi": "270 g",
+      "g": 270,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "citron",
+      "nazev": "Citronová šťáva",
+      "mnozstvi": "40 g (~1 ks)",
+      "g": 40,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "cottage",
+      "nazev": "Cottage sýr (~4 % tuku)",
+      "mnozstvi": "50 g",
+      "g": 50,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "cuketa",
+      "nazev": "Cuketa",
+      "mnozstvi": "700 g (~2 ks)",
+      "g": 700,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "cukr",
+      "nazev": "Cukr",
+      "mnozstvi": "6 g",
+      "g": 6,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "dynova_seminka",
+      "nazev": "Dýňová semínka",
+      "mnozstvi": "15 g",
+      "g": 15,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "edamame",
+      "nazev": "Edamame vyloupané (mražené)",
+      "mnozstvi": "60 g",
+      "g": 60,
+      "kategorie": "Mražené"
+     },
+     {
+      "surovina": "olej_olivovy",
+      "nazev": "Extra panenský olivový olej",
+      "mnozstvi": "88 g",
+      "g": 88,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "gnocchi",
+      "nazev": "Gnocchi bramborové (balené)",
+      "mnozstvi": "300 g",
+      "g": 300,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "salat",
+      "nazev": "Hlávkový/ledový salát",
+      "mnozstvi": "100 g",
+      "g": 100,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "hrasek",
+      "nazev": "Hrášek mražený",
+      "mnozstvi": "100 g",
+      "g": 100,
+      "kategorie": "Mražené"
+     },
+     {
+      "surovina": "kakao",
+      "nazev": "Kakao nealkalizované, neslazené",
+      "mnozstvi": "10 g",
+      "g": 10,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "kefir",
+      "nazev": "Kefír 1,5 %",
+      "mnozstvi": "300 g",
+      "g": 300,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "krevety",
+      "nazev": "Krevety oloupané (syrové)",
+      "mnozstvi": "150 g",
+      "g": 150,
+      "kategorie": "Mražené"
+     },
+     {
+      "surovina": "krut_mlete",
+      "nazev": "Krůtí mleté (~7 % tuku, syrové)",
+      "mnozstvi": "520 g",
+      "g": 520,
+      "kategorie": "Maso a ryby"
+     },
+     {
+      "surovina": "kukurice",
+      "nazev": "Kukuřice sladká (konzerva, slitá)",
+      "mnozstvi": "1× (60 g slitých)",
+      "g": 60,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "kur_prsa",
+      "nazev": "Kuřecí prsa (syrová)",
+      "mnozstvi": "130 g",
+      "g": 130,
+      "kategorie": "Maso a ryby"
+     },
+     {
+      "surovina": "kysane_zeli",
+      "nazev": "Kysané zelí (domácí)",
+      "mnozstvi": "225 g",
+      "g": 225,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "limetka",
+      "nazev": "Limetková šťáva",
+      "mnozstvi": "10 g (~1 ks)",
+      "g": 10,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "losos",
+      "nazev": "Losos atlantický chovaný (syrový)",
+      "mnozstvi": "150 g",
+      "g": 150,
+      "kategorie": "Maso a ryby"
+     },
+     {
+      "surovina": "maliny",
+      "nazev": "Maliny",
+      "mnozstvi": "150 g",
+      "g": 150,
+      "kategorie": "Mražené"
+     },
+     {
+      "surovina": "mandle",
+      "nazev": "Mandle",
+      "mnozstvi": "15 g",
+      "g": 15,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "med",
+      "nazev": "Med",
+      "mnozstvi": "70 g",
+      "g": 70,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "mleko",
+      "nazev": "Mléko polotučné 1,5 %",
+      "mnozstvi": "700 g",
+      "g": 700,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "mrkev",
+      "nazev": "Mrkev",
+      "mnozstvi": "60 g",
+      "g": 60,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "maslo",
+      "nazev": "Máslo",
+      "mnozstvi": "8 g",
+      "g": 8,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "nori",
+      "nazev": "Nori (sušené)",
+      "mnozstvi": "3 g",
+      "g": 3,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "okurka",
+      "nazev": "Okurka",
+      "mnozstvi": "100 g (~1 ks)",
+      "g": 100,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "vlocky",
+      "nazev": "Ovesné vločky",
+      "mnozstvi": "255 g",
+      "g": 255,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "paprika",
+      "nazev": "Paprika červená",
+      "mnozstvi": "80 g (~1 ks)",
+      "g": 80,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "parmazan",
+      "nazev": "Parmazán",
+      "mnozstvi": "65 g",
+      "g": 65,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "passata",
+      "nazev": "Passata",
+      "mnozstvi": "1 000 g",
+      "g": 1000,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "rajcata",
+      "nazev": "Rajčata",
+      "mnozstvi": "480 g",
+      "g": 480,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "rajcata_kons",
+      "nazev": "Rajčata krájená (konzerva)",
+      "mnozstvi": "1× (200 g slitých)",
+      "g": 200,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "arborio",
+      "nazev": "Rýže arborio (suchá)",
+      "mnozstvi": "105 g",
+      "g": 105,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "basmati",
+      "nazev": "Rýže basmati (suchá)",
+      "mnozstvi": "80 g",
+      "g": 80,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "sushi_ryze",
+      "nazev": "Rýže na sushi (suchá)",
+      "mnozstvi": "110 g",
+      "g": 110,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "ryzova_kase",
+      "nazev": "Rýžová kaše Grizly (suchá)",
+      "mnozstvi": "175 g",
+      "g": 175,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "ryzovy_ocet",
+      "nazev": "Rýžový ocet (neochucený)",
+      "mnozstvi": "20 g",
+      "g": 20,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "sardinky",
+      "nazev": "Sardinky Vilgain ve vlastní šťávě (slité)",
+      "mnozstvi": "1× (85 g slitých)",
+      "g": 85,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "testoviny",
+      "nazev": "Semolinové těstoviny (suché)",
+      "mnozstvi": "470 g",
+      "g": 470,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "sezam",
+      "nazev": "Sezam",
+      "mnozstvi": "5 g",
+      "g": 5,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "whey",
+      "nazev": "Syrovátkový protein Veiny Galaxy (vanilka)",
+      "mnozstvi": "85 g",
+      "g": 85,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "sojova_omacka",
+      "nazev": "Sójová omáčka (se sníženým obsahem soli)",
+      "mnozstvi": "15 g",
+      "g": 15,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "tunak",
+      "nazev": "Tuňák ve vlastní šťávě (slitý)",
+      "mnozstvi": "1× (110 g slitých)",
+      "g": 110,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "tvaroh",
+      "nazev": "Tvaroh polotučný",
+      "mnozstvi": "100 g",
+      "g": 100,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "vejce",
+      "nazev": "Vejce celá (bez skořápky)",
+      "mnozstvi": "7 ks",
+      "g": 385,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "vlasske",
+      "nazev": "Vlašské ořechy",
+      "mnozstvi": "65 g",
+      "g": 65,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "vyvar_zel",
+      "nazev": "Zeleninový vývar",
+      "mnozstvi": "600 ml",
+      "g": 600,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "zazvor",
+      "nazev": "Zázvor",
+      "mnozstvi": "5 g",
+      "g": 5,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "fazole_cerne",
+      "nazev": "Černé fazole (konzerva, slité)",
+      "mnozstvi": "1× (80 g slitých)",
+      "g": 80,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "cocka_cervena",
+      "nazev": "Červená čočka (suchá)",
+      "mnozstvi": "80 g",
+      "g": 80,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "cesnek",
+      "nazev": "Česnek",
+      "mnozstvi": "36 g",
+      "g": 36,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "recky_jogurt_0",
+      "nazev": "Řecký jogurt 0 % (Milko)",
+      "mnozstvi": "430 g",
+      "g": 430,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "spenat",
+      "nazev": "Špenát (čerstvý/mražený)",
+      "mnozstvi": "180 g",
+      "g": 180,
+      "kategorie": "Mražené"
+     }
+    ]
+   }
+  },
+  "C": {
+   "varka_nedele": "H1",
+   "varka_streda": "H4",
+   "dny": [
+    {
+     "den": "Po",
+     "trenink": true,
+     "jidla": {
+      "snidane": "S7",
+      "svacina": "P1",
+      "obed": "H1",
+      "vecere": "H8"
+     },
+     "z_varky": [
+      "obed"
+     ],
+     "upravy": [
+      {
+       "typ": "ferment",
+       "surovina": "kysane_zeli",
+       "g": 75,
+       "text": "kysané zelí 75 g k libovolnému jídlu"
+      },
+      {
+       "typ": "orechy",
+       "surovina": "vlasske",
+       "g": 15,
+       "text": "Vlašské ořechy 15 g"
+      },
+      {
+       "typ": "ubrat_k_obedu",
+       "surovina": "basmati",
+       "g": -30,
+       "text": "k obědu o 30 g méně: Rýže basmati (suchá)"
+      }
+     ],
+     "soucet_dne": {
+      "kcal": 3418,
+      "bilkoviny_g": 194.7,
+      "sacharidy_g": 402.1,
+      "tuky_g": 101.2,
+      "vlaknina_g": 59.8,
+      "nasycene_g": 26.2
+     }
+    },
+    {
+     "den": "Út",
+     "trenink": true,
+     "jidla": {
+      "snidane": "S2",
+      "svacina": "P4",
+      "obed": "H1",
+      "vecere": "H14"
+     },
+     "z_varky": [
+      "obed"
+     ],
+     "upravy": [
+      {
+       "typ": "orechy",
+       "surovina": "mandle",
+       "g": 15,
+       "text": "Mandle 15 g"
+      },
+      {
+       "typ": "ubrat_k_obedu",
+       "surovina": "basmati",
+       "g": -30,
+       "text": "k obědu o 30 g méně: Rýže basmati (suchá)"
+      }
+     ],
+     "soucet_dne": {
+      "kcal": 3391,
+      "bilkoviny_g": 197.3,
+      "sacharidy_g": 414.9,
+      "tuky_g": 90.1,
+      "vlaknina_g": 65.8,
+      "nasycene_g": 20.2
+     }
+    },
+    {
+     "den": "St",
+     "trenink": false,
+     "jidla": {
+      "snidane": "S1",
+      "svacina": "P3",
+      "obed": "H1",
+      "vecere": "H4"
+     },
+     "z_varky": [
+      "obed",
+      "vecere"
+     ],
+     "upravy": [
+      {
+       "typ": "ferment",
+       "surovina": "kysane_zeli",
+       "g": 75,
+       "text": "kysané zelí 75 g k libovolnému jídlu"
+      },
+      {
+       "typ": "orechy",
+       "surovina": "dynova_seminka",
+       "g": 15,
+       "text": "Dýňová semínka 15 g"
+      },
+      {
+       "typ": "ubrat_k_obedu",
+       "surovina": "basmati",
+       "g": -30,
+       "text": "k obědu o 30 g méně: Rýže basmati (suchá)"
+      }
+     ],
+     "soucet_dne": {
+      "kcal": 3408,
+      "bilkoviny_g": 200.1,
+      "sacharidy_g": 428.6,
+      "tuky_g": 84.2,
+      "vlaknina_g": 67.4,
+      "nasycene_g": 22.7
+     }
+    },
+    {
+     "den": "Čt",
+     "trenink": true,
+     "jidla": {
+      "snidane": "S4",
+      "svacina": "P1",
+      "obed": "H4",
+      "vecere": "H11"
+     },
+     "z_varky": [
+      "obed"
+     ],
+     "upravy": [
+      {
+       "typ": "ferment",
+       "surovina": "kysane_zeli",
+       "g": 75,
+       "text": "kysané zelí 75 g k libovolnému jídlu"
+      },
+      {
+       "typ": "orechy",
+       "surovina": "vlasske",
+       "g": 15,
+       "text": "Vlašské ořechy 15 g"
+      },
+      {
+       "typ": "ubrat_k_obedu",
+       "surovina": "bulgur",
+       "g": -30,
+       "text": "k obědu o 30 g méně: Bulgur (suchý)"
+      }
+     ],
+     "soucet_dne": {
+      "kcal": 3358,
+      "bilkoviny_g": 194.7,
+      "sacharidy_g": 413.9,
+      "tuky_g": 89.0,
+      "vlaknina_g": 61.3,
+      "nasycene_g": 22.4
+     }
+    },
+    {
+     "den": "Pá",
+     "trenink": false,
+     "jidla": {
+      "snidane": "S3",
+      "svacina": "P3",
+      "obed": "H4",
+      "vecere": "H12"
+     },
+     "z_varky": [
+      "obed"
+     ],
+     "upravy": [
+      {
+       "typ": "ferment",
+       "surovina": "kysane_zeli",
+       "g": 75,
+       "text": "kysané zelí 75 g k libovolnému jídlu"
+      },
+      {
+       "typ": "orechy",
+       "surovina": "mandle",
+       "g": 15,
+       "text": "Mandle 15 g"
+      },
+      {
+       "typ": "ubrat_k_obedu",
+       "surovina": "bulgur",
+       "g": -30,
+       "text": "k obědu o 30 g méně: Bulgur (suchý)"
+      }
+     ],
+     "soucet_dne": {
+      "kcal": 3399,
+      "bilkoviny_g": 198.0,
+      "sacharidy_g": 408.9,
+      "tuky_g": 93.8,
+      "vlaknina_g": 64.0,
+      "nasycene_g": 26.1
+     }
+    },
+    {
+     "den": "So",
+     "trenink": true,
+     "jidla": {
+      "snidane": "S5",
+      "svacina": "P5",
+      "obed": "H4",
+      "vecere": "H10"
+     },
+     "z_varky": [
+      "obed"
+     ],
+     "upravy": [
+      {
+       "typ": "orechy",
+       "surovina": "dynova_seminka",
+       "g": 15,
+       "text": "Dýňová semínka 15 g"
+      },
+      {
+       "typ": "ubrat_k_obedu",
+       "surovina": "bulgur",
+       "g": -30,
+       "text": "k obědu o 30 g méně: Bulgur (suchý)"
+      }
+     ],
+     "soucet_dne": {
+      "kcal": 3433,
+      "bilkoviny_g": 201.6,
+      "sacharidy_g": 418.3,
+      "tuky_g": 93.9,
+      "vlaknina_g": 53.8,
+      "nasycene_g": 31.1
+     }
+    },
+    {
+     "den": "Ne",
+     "trenink": false,
+     "jidla": {
+      "snidane": "S6",
+      "svacina": "P6",
+      "obed": "H7",
+      "vecere": "H2"
+     },
+     "z_varky": [],
+     "upravy": [
+      {
+       "typ": "ferment",
+       "surovina": "kysane_zeli",
+       "g": 75,
+       "text": "kysané zelí 75 g k libovolnému jídlu"
+      },
+      {
+       "typ": "orechy",
+       "surovina": "vlasske",
+       "g": 15,
+       "text": "Vlašské ořechy 15 g"
+      },
+      {
+       "typ": "ubrat_k_obedu",
+       "surovina": "ryzove_nudle",
+       "g": -30,
+       "text": "k obědu o 30 g méně: Rýžové nudle (suché)"
+      }
+     ],
+     "soucet_dne": {
+      "kcal": 3443,
+      "bilkoviny_g": 199.2,
+      "sacharidy_g": 446.8,
+      "tuky_g": 83.7,
+      "vlaknina_g": 52.8,
+      "nasycene_g": 19.0
+     }
+    }
+   ],
+   "nakup": {
+    "N1_vikend": [
+     {
+      "surovina": "avokado",
+      "nazev": "Avokádo (dužina)",
+      "mnozstvi": "40 g (~1 ks)",
+      "g": 40,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "banan",
+      "nazev": "Banán (bez slupky)",
+      "mnozstvi": "250 g (~2 ks)",
+      "g": 250,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "boruvky",
+      "nazev": "Borůvky",
+      "mnozstvi": "250 g",
+      "g": 250,
+      "kategorie": "Mražené"
+     },
+     {
+      "surovina": "brambory",
+      "nazev": "Brambory (syrové, loupané)",
+      "mnozstvi": "550 g",
+      "g": 550,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "tortilla_cz",
+      "nazev": "Celozrnná tortilla",
+      "mnozstvi": "124 g",
+      "g": 124,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "testoviny_cz",
+      "nazev": "Celozrnné těstoviny (suché)",
+      "mnozstvi": "160 g",
+      "g": 160,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "chia",
+      "nazev": "Chia semínka",
+      "mnozstvi": "10 g",
+      "g": 10,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "cibule",
+      "nazev": "Cibule",
+      "mnozstvi": "240 g",
+      "g": 240,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "citron",
+      "nazev": "Citronová šťáva",
+      "mnozstvi": "25 g (~1 ks)",
+      "g": 25,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "cottage",
+      "nazev": "Cottage sýr (~4 % tuku)",
+      "mnozstvi": "150 g",
+      "g": 150,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "cuketa",
+      "nazev": "Cuketa",
+      "mnozstvi": "100 g (~1 ks)",
+      "g": 100,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "dynova_seminka",
+      "nazev": "Dýňová semínka",
+      "mnozstvi": "15 g",
+      "g": 15,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "olej_olivovy",
+      "nazev": "Extra panenský olivový olej",
+      "mnozstvi": "72 g",
+      "g": 72,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "gnocchi",
+      "nazev": "Gnocchi bramborové (balené)",
+      "mnozstvi": "300 g",
+      "g": 300,
+      "kategorie": "Lednice",
+      "poznamka": "nekupovat – vzít z mrazáku (zbytky z týdne A a B)"
+     },
+     {
+      "surovina": "hov_mlete5",
+      "nazev": "Hovězí mleté 5 % (syrové)",
+      "mnozstvi": "500 g",
+      "g": 500,
+      "kategorie": "Maso a ryby"
+     },
+     {
+      "surovina": "kefir",
+      "nazev": "Kefír 1,5 %",
+      "mnozstvi": "300 g",
+      "g": 300,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "kiwi",
+      "nazev": "Kiwi (jedlá část)",
+      "mnozstvi": "150 g (~2 ks)",
+      "g": 150,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "kukurice",
+      "nazev": "Kukuřice sladká (konzerva, slitá)",
+      "mnozstvi": "1× (200 g slitých)",
+      "g": 200,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "kur_prsa",
+      "nazev": "Kuřecí prsa (syrová)",
+      "mnozstvi": "130 g",
+      "g": 130,
+      "kategorie": "Maso a ryby"
+     },
+     {
+      "surovina": "kysane_zeli",
+      "nazev": "Kysané zelí (domácí)",
+      "mnozstvi": "150 g",
+      "g": 150,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "limetka",
+      "nazev": "Limetková šťáva",
+      "mnozstvi": "10 g (~1 ks)",
+      "g": 10,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "losos",
+      "nazev": "Losos atlantický chovaný (syrový)",
+      "mnozstvi": "150 g",
+      "g": 150,
+      "kategorie": "Maso a ryby"
+     },
+     {
+      "surovina": "mandle",
+      "nazev": "Mandle",
+      "mnozstvi": "15 g",
+      "g": 15,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "med",
+      "nazev": "Med",
+      "mnozstvi": "45 g",
+      "g": 45,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "mleko",
+      "nazev": "Mléko polotučné 1,5 %",
+      "mnozstvi": "300 g",
+      "g": 300,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "vlocky",
+      "nazev": "Ovesné vločky",
+      "mnozstvi": "175 g",
+      "g": 175,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "paprika",
+      "nazev": "Paprika červená",
+      "mnozstvi": "580 g (~4 ks)",
+      "g": 580,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "parmazan",
+      "nazev": "Parmazán",
+      "mnozstvi": "10 g",
+      "g": 10,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "passata",
+      "nazev": "Passata",
+      "mnozstvi": "800 g",
+      "g": 800,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "rajcata",
+      "nazev": "Rajčata",
+      "mnozstvi": "530 g",
+      "g": 530,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "basmati",
+      "nazev": "Rýže basmati (suchá)",
+      "mnozstvi": "370 g",
+      "g": 370,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "ryzova_kase",
+      "nazev": "Rýžová kaše Grizly (suchá)",
+      "mnozstvi": "85 g",
+      "g": 85,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "sardinky",
+      "nazev": "Sardinky Vilgain ve vlastní šťávě (slité)",
+      "mnozstvi": "1× (85 g slitých)",
+      "g": 85,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "whey",
+      "nazev": "Syrovátkový protein Veiny Galaxy (vanilka)",
+      "mnozstvi": "55 g",
+      "g": 55,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "vejce",
+      "nazev": "Vejce celá (bez skořápky)",
+      "mnozstvi": "6 ks",
+      "g": 330,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "vlasske",
+      "nazev": "Vlašské ořechy",
+      "mnozstvi": "30 g",
+      "g": 30,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "fazolky",
+      "nazev": "Zelené fazolky",
+      "mnozstvi": "200 g",
+      "g": 200,
+      "kategorie": "Mražené"
+     },
+     {
+      "surovina": "fazole_cerne",
+      "nazev": "Černé fazole (konzerva, slité)",
+      "mnozstvi": "1× (80 g slitých)",
+      "g": 80,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "fazole_cervene",
+      "nazev": "Červené fazole (konzerva, slité)",
+      "mnozstvi": "2× (480 g slitých)",
+      "g": 480,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "cesnek",
+      "nazev": "Česnek",
+      "mnozstvi": "26 g",
+      "g": 26,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "recky_jogurt_0",
+      "nazev": "Řecký jogurt 0 % (Milko)",
+      "mnozstvi": "490 g",
+      "g": 490,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "spenat",
+      "nazev": "Špenát (čerstvý/mražený)",
+      "mnozstvi": "80 g",
+      "g": 80,
+      "kategorie": "Mražené"
+     },
+     {
+      "surovina": "chleb_zitny",
+      "nazev": "Žitný kváskový chléb celozrnný",
+      "mnozstvi": "160 g",
+      "g": 160,
+      "kategorie": "Lednice"
+     }
+    ],
+    "N2_streda": [
+     {
+      "surovina": "banan",
+      "nazev": "Banán (bez slupky)",
+      "mnozstvi": "740 g (~6 ks)",
+      "g": 740,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "bataty",
+      "nazev": "Batáty (syrové)",
+      "mnozstvi": "480 g",
+      "g": 480,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "boruvky",
+      "nazev": "Borůvky",
+      "mnozstvi": "100 g",
+      "g": 100,
+      "kategorie": "Mražené"
+     },
+     {
+      "surovina": "brokolice",
+      "nazev": "Brokolice",
+      "mnozstvi": "150 g",
+      "g": 150,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "bulgur",
+      "nazev": "Bulgur (suchý)",
+      "mnozstvi": "430 g",
+      "g": 430,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "tortilla_cz",
+      "nazev": "Celozrnná tortilla",
+      "mnozstvi": "124 g",
+      "g": 124,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "cibule",
+      "nazev": "Cibule",
+      "mnozstvi": "270 g",
+      "g": 270,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "citron",
+      "nazev": "Citronová šťáva",
+      "mnozstvi": "75 g (~2 ks)",
+      "g": 75,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "cottage",
+      "nazev": "Cottage sýr (~4 % tuku)",
+      "mnozstvi": "160 g",
+      "g": 160,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "datle",
+      "nazev": "Datle (bez pecek)",
+      "mnozstvi": "35 g",
+      "g": 35,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "horcice",
+      "nazev": "Dijonská hořčice",
+      "mnozstvi": "10 g",
+      "g": 10,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "dynova_seminka",
+      "nazev": "Dýňová semínka",
+      "mnozstvi": "15 g",
+      "g": 15,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "edamame",
+      "nazev": "Edamame vyloupané (mražené)",
+      "mnozstvi": "60 g",
+      "g": 60,
+      "kategorie": "Mražené"
+     },
+     {
+      "surovina": "olej_olivovy",
+      "nazev": "Extra panenský olivový olej",
+      "mnozstvi": "103 g",
+      "g": 103,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "feta",
+      "nazev": "Feta (ovčí/kozí)",
+      "mnozstvi": "110 g",
+      "g": 110,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "salat",
+      "nazev": "Hlávkový/ledový salát",
+      "mnozstvi": "100 g",
+      "g": 100,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "hrasek",
+      "nazev": "Hrášek mražený",
+      "mnozstvi": "100 g",
+      "g": 100,
+      "kategorie": "Mražené"
+     },
+     {
+      "surovina": "jablko",
+      "nazev": "Jablko (jedlá část)",
+      "mnozstvi": "280 g (~2 ks)",
+      "g": 280,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "kakao",
+      "nazev": "Kakao nealkalizované, neslazené",
+      "mnozstvi": "10 g",
+      "g": 10,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "kefir",
+      "nazev": "Kefír 1,5 %",
+      "mnozstvi": "400 g",
+      "g": 400,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "krevety",
+      "nazev": "Krevety oloupané (syrové)",
+      "mnozstvi": "150 g",
+      "g": 150,
+      "kategorie": "Mražené"
+     },
+     {
+      "surovina": "krut_prsa",
+      "nazev": "Krůtí prsa (syrová)",
+      "mnozstvi": "120 g",
+      "g": 120,
+      "kategorie": "Maso a ryby"
+     },
+     {
+      "surovina": "kukurice",
+      "nazev": "Kukuřice sladká (konzerva, slitá)",
+      "mnozstvi": "1× (60 g slitých)",
+      "g": 60,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "kur_stehna",
+      "nazev": "Kuřecí stehna vykostěná bez kůže (syrová)",
+      "mnozstvi": "520 g",
+      "g": 520,
+      "kategorie": "Maso a ryby"
+     },
+     {
+      "surovina": "kysane_zeli",
+      "nazev": "Kysané zelí (domácí)",
+      "mnozstvi": "225 g",
+      "g": 225,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "limetka",
+      "nazev": "Limetková šťáva",
+      "mnozstvi": "10 g (~1 ks)",
+      "g": 10,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "maliny",
+      "nazev": "Maliny",
+      "mnozstvi": "150 g",
+      "g": 150,
+      "kategorie": "Mražené"
+     },
+     {
+      "surovina": "mandle",
+      "nazev": "Mandle",
+      "mnozstvi": "15 g",
+      "g": 15,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "med",
+      "nazev": "Med",
+      "mnozstvi": "60 g",
+      "g": 60,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "mleko",
+      "nazev": "Mléko polotučné 1,5 %",
+      "mnozstvi": "700 g",
+      "g": 700,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "mrkev",
+      "nazev": "Mrkev",
+      "mnozstvi": "80 g",
+      "g": 80,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "maslo",
+      "nazev": "Máslo",
+      "mnozstvi": "8 g",
+      "g": 8,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "okurka",
+      "nazev": "Okurka",
+      "mnozstvi": "700 g (~2 ks)",
+      "g": 700,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "vlocky",
+      "nazev": "Ovesné vločky",
+      "mnozstvi": "210 g",
+      "g": 210,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "paprika",
+      "nazev": "Paprika červená",
+      "mnozstvi": "480 g (~3 ks)",
+      "g": 480,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "parmazan",
+      "nazev": "Parmazán",
+      "mnozstvi": "15 g",
+      "g": 15,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "pomeranc",
+      "nazev": "Pomeranč (bez slupky)",
+      "mnozstvi": "200 g (~1 ks)",
+      "g": 200,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "rajcata",
+      "nazev": "Rajčata",
+      "mnozstvi": "800 g",
+      "g": 800,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "rajcata_kons",
+      "nazev": "Rajčata krájená (konzerva)",
+      "mnozstvi": "1× (200 g slitých)",
+      "g": 200,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "arborio",
+      "nazev": "Rýže arborio (suchá)",
+      "mnozstvi": "135 g",
+      "g": 135,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "basmati",
+      "nazev": "Rýže basmati (suchá)",
+      "mnozstvi": "80 g",
+      "g": 80,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "ryzova_kase",
+      "nazev": "Rýžová kaše Grizly (suchá)",
+      "mnozstvi": "175 g",
+      "g": 175,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "ryzove_nudle",
+      "nazev": "Rýžové nudle (suché)",
+      "mnozstvi": "105 g",
+      "g": 105,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "sardinky",
+      "nazev": "Sardinky Vilgain ve vlastní šťávě (slité)",
+      "mnozstvi": "1× (85 g slitých)",
+      "g": 85,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "sezam",
+      "nazev": "Sezam",
+      "mnozstvi": "5 g",
+      "g": 5,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "olej_sezamovy",
+      "nazev": "Sezamový olej",
+      "mnozstvi": "5 g",
+      "g": 5,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "whey",
+      "nazev": "Syrovátkový protein Veiny Galaxy (vanilka)",
+      "mnozstvi": "85 g",
+      "g": 85,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "sojova_omacka",
+      "nazev": "Sójová omáčka (se sníženým obsahem soli)",
+      "mnozstvi": "15 g",
+      "g": 15,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "tunak",
+      "nazev": "Tuňák ve vlastní šťávě (slitý)",
+      "mnozstvi": "1× (110 g slitých)",
+      "g": 110,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "tvaroh",
+      "nazev": "Tvaroh polotučný",
+      "mnozstvi": "100 g",
+      "g": 100,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "vejce",
+      "nazev": "Vejce celá (bez skořápky)",
+      "mnozstvi": "7 ks",
+      "g": 385,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "vep_panenka",
+      "nazev": "Vepřová panenka (syrová)",
+      "mnozstvi": "170 g",
+      "g": 170,
+      "kategorie": "Maso a ryby"
+     },
+     {
+      "surovina": "vlasske",
+      "nazev": "Vlašské ořechy",
+      "mnozstvi": "60 g",
+      "g": 60,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "vyvar_zel",
+      "nazev": "Zeleninový vývar",
+      "mnozstvi": "600 ml",
+      "g": 600,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "zazvor",
+      "nazev": "Zázvor",
+      "mnozstvi": "10 g",
+      "g": 10,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "cocka_cervena",
+      "nazev": "Červená čočka (suchá)",
+      "mnozstvi": "80 g",
+      "g": 80,
+      "kategorie": "Zásoba"
+     },
+     {
+      "surovina": "zeli_cervene",
+      "nazev": "Červené zelí",
+      "mnozstvi": "200 g",
+      "g": 200,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "cesnek",
+      "nazev": "Česnek",
+      "mnozstvi": "31 g",
+      "g": 31,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "recky_jogurt_0",
+      "nazev": "Řecký jogurt 0 % (Milko)",
+      "mnozstvi": "830 g",
+      "g": 830,
+      "kategorie": "Lednice"
+     },
+     {
+      "surovina": "spenat",
+      "nazev": "Špenát (čerstvý/mražený)",
+      "mnozstvi": "200 g",
+      "g": 200,
+      "kategorie": "Mražené"
+     },
+     {
+      "surovina": "zampiony",
+      "nazev": "Žampiony",
+      "mnozstvi": "100 g",
+      "g": 100,
+      "kategorie": "Ovoce a zelenina"
+     },
+     {
+      "surovina": "chleb_zitny",
+      "nazev": "Žitný kváskový chléb celozrnný",
+      "mnozstvi": "310 g",
+      "g": 310,
+      "kategorie": "Lednice"
+     }
+    ]
+   }
+  }
+ },
+ "zasoba_na_cyklus": [
+  {
+   "surovina": "bulgur",
+   "nazev": "Bulgur (suchý)",
+   "spotreba_3_tydny_g": 430,
+   "baleni": "500 g"
+  },
+  {
+   "surovina": "testoviny_cz",
+   "nazev": "Celozrnné těstoviny (suché)",
+   "spotreba_3_tydny_g": 480,
+   "baleni": "500 g"
+  },
+  {
+   "surovina": "chia",
+   "nazev": "Chia semínka",
+   "spotreba_3_tydny_g": 30,
+   "baleni": "300 g"
+  },
+  {
+   "surovina": "cizrna",
+   "nazev": "Cizrna (konzerva, slitá)",
+   "spotreba_3_tydny_g": 400,
+   "baleni": "konzerva 400 g (240 g slitá)"
+  },
+  {
+   "surovina": "cukr",
+   "nazev": "Cukr",
+   "spotreba_3_tydny_g": 12,
+   "baleni": "1 kg"
+  },
+  {
+   "surovina": "datle",
+   "nazev": "Datle (bez pecek)",
+   "spotreba_3_tydny_g": 140,
+   "baleni": "200 g"
+  },
+  {
+   "surovina": "horcice",
+   "nazev": "Dijonská hořčice",
+   "spotreba_3_tydny_g": 30,
+   "baleni": "200 g"
+  },
+  {
+   "surovina": "dynova_seminka",
+   "nazev": "Dýňová semínka",
+   "spotreba_3_tydny_g": 90,
+   "baleni": "200 g"
+  },
+  {
+   "surovina": "olej_olivovy",
+   "nazev": "Extra panenský olivový olej",
+   "spotreba_3_tydny_g": 493,
+   "baleni": "750 ml"
+  },
+  {
+   "surovina": "kakao",
+   "nazev": "Kakao nealkalizované, neslazené",
+   "spotreba_3_tydny_g": 30,
+   "baleni": "150 g"
+  },
+  {
+   "surovina": "kukurice",
+   "nazev": "Kukuřice sladká (konzerva, slitá)",
+   "spotreba_3_tydny_g": 380,
+   "baleni": "konzerva 340 g (285 g slitá)"
+  },
+  {
+   "surovina": "mandle",
+   "nazev": "Mandle",
+   "spotreba_3_tydny_g": 90,
+   "baleni": "200 g"
+  },
+  {
+   "surovina": "med",
+   "nazev": "Med",
+   "spotreba_3_tydny_g": 305,
+   "baleni": "500 g"
+  },
+  {
+   "surovina": "nori",
+   "nazev": "Nori (sušené)",
+   "spotreba_3_tydny_g": 6,
+   "baleni": "10 plátů"
+  },
+  {
+   "surovina": "vlocky",
+   "nazev": "Ovesné vločky",
+   "spotreba_3_tydny_g": 1205,
+   "baleni": "500 g"
+  },
+  {
+   "surovina": "passata",
+   "nazev": "Passata",
+   "spotreba_3_tydny_g": 2600,
+   "baleni": "500 g"
+  },
+  {
+   "surovina": "rajcata_kons",
+   "nazev": "Rajčata krájená (konzerva)",
+   "spotreba_3_tydny_g": 1200,
+   "baleni": "konzerva 400 g"
+  },
+  {
+   "surovina": "rybi_omacka",
+   "nazev": "Rybí omáčka",
+   "spotreba_3_tydny_g": 10,
+   "baleni": "200 ml"
+  },
+  {
+   "surovina": "arborio",
+   "nazev": "Rýže arborio (suchá)",
+   "spotreba_3_tydny_g": 375,
+   "baleni": "500 g"
+  },
+  {
+   "surovina": "basmati",
+   "nazev": "Rýže basmati (suchá)",
+   "spotreba_3_tydny_g": 1310,
+   "baleni": "1 kg"
+  },
+  {
+   "surovina": "sushi_ryze",
+   "nazev": "Rýže na sushi (suchá)",
+   "spotreba_3_tydny_g": 220,
+   "baleni": "500 g–1 kg"
+  },
+  {
+   "surovina": "ryzova_kase",
+   "nazev": "Rýžová kaše Grizly (suchá)",
+   "spotreba_3_tydny_g": 695,
+   "baleni": "1 kg"
+  },
+  {
+   "surovina": "ryzove_nudle",
+   "nazev": "Rýžové nudle (suché)",
+   "spotreba_3_tydny_g": 515,
+   "baleni": "200 g"
+  },
+  {
+   "surovina": "ryzovy_ocet",
+   "nazev": "Rýžový ocet (neochucený)",
+   "spotreba_3_tydny_g": 40,
+   "baleni": "250 ml"
+  },
+  {
+   "surovina": "sardinky",
+   "nazev": "Sardinky Vilgain ve vlastní šťávě (slité)",
+   "spotreba_3_tydny_g": 510,
+   "baleni": "konzerva 120 g (~85 g ryby)"
+  },
+  {
+   "surovina": "testoviny",
+   "nazev": "Semolinové těstoviny (suché)",
+   "spotreba_3_tydny_g": 940,
+   "baleni": "500 g"
+  },
+  {
+   "surovina": "sezam",
+   "nazev": "Sezam",
+   "spotreba_3_tydny_g": 25,
+   "baleni": "100 g"
+  },
+  {
+   "surovina": "olej_sezamovy",
+   "nazev": "Sezamový olej",
+   "spotreba_3_tydny_g": 15,
+   "baleni": "250 ml"
+  },
+  {
+   "surovina": "whey",
+   "nazev": "Syrovátkový protein Veiny Galaxy (vanilka)",
+   "spotreba_3_tydny_g": 415,
+   "baleni": "1 kg"
+  },
+  {
+   "surovina": "sojova_omacka",
+   "nazev": "Sójová omáčka (se sníženým obsahem soli)",
+   "spotreba_3_tydny_g": 75,
+   "baleni": "250 ml"
+  },
+  {
+   "surovina": "tunak",
+   "nazev": "Tuňák ve vlastní šťávě (slitý)",
+   "spotreba_3_tydny_g": 330,
+   "baleni": "konzerva 160 g (110 g slitá)"
+  },
+  {
+   "surovina": "vlasske",
+   "nazev": "Vlašské ořechy",
+   "spotreba_3_tydny_g": 250,
+   "baleni": "200 g"
+  },
+  {
+   "surovina": "vyvar_zel",
+   "nazev": "Zeleninový vývar",
+   "spotreba_3_tydny_g": 1800,
+   "baleni": "bujon se sníženým obsahem soli"
+  },
+  {
+   "surovina": "fazole_cerne",
+   "nazev": "Černé fazole (konzerva, slité)",
+   "spotreba_3_tydny_g": 240,
+   "baleni": "konzerva 400 g (240 g slitá)"
+  },
+  {
+   "surovina": "cocka_cervena",
+   "nazev": "Červená čočka (suchá)",
+   "spotreba_3_tydny_g": 160,
+   "baleni": "500 g"
+  },
+  {
+   "surovina": "fazole_cervene",
+   "nazev": "Červené fazole (konzerva, slité)",
+   "spotreba_3_tydny_g": 480,
+   "baleni": "konzerva 400 g (240 g slitá)"
+  }
+ ],
+ "urovne_prijmu": {
+  "pravidlo": "1 krok = ~100 kcal = 1 modul. Kroky se sčítají v daném pořadí.",
+  "poradi_nahoru": [
+   {
+    "slot": "vecere",
+    "typ": "priloha"
+   },
+   {
+    "slot": "obed",
+    "typ": "priloha"
+   },
+   {
+    "slot": "snidane",
+    "typ": "tuk"
+   },
+   {
+    "slot": "svacina",
+    "typ": "priloha"
+   },
+   {
+    "slot": "vecere",
+    "typ": "priloha"
+   },
+   {
+    "slot": "obed",
+    "typ": "tuk"
+   },
+   {
+    "slot": "snidane",
+    "typ": "priloha"
+   },
+   {
+    "slot": "vecere",
+    "typ": "tuk"
+   },
+   {
+    "slot": "obed",
+    "typ": "priloha"
+   },
+   {
+    "slot": "svacina",
+    "typ": "priloha"
+   }
+  ],
+  "poradi_dolu": [
+   {
+    "slot": "obed",
+    "typ": "priloha"
+   },
+   {
+    "slot": "vecere",
+    "typ": "priloha"
+   },
+   {
+    "slot": "snidane",
+    "typ": "priloha"
+   },
+   {
+    "slot": "svacina",
+    "typ": "priloha"
+   }
+  ],
+  "modul_tuku": {
+   "snidane": {
+    "surovina": "vlasske",
+    "g": 15
+   },
+   "obed_vecere": {
+    "surovina": "olej_olivovy",
+    "g": 11
+   }
+  },
+  "kroky": [
+   {
+    "krok": -4,
+    "prumer_den": {
+     "kcal": 3007,
+     "bilkoviny_g": 184,
+     "sacharidy_g": 339,
+     "tuky_g": 90,
+     "vlaknina_g": 50
+    }
+   },
+   {
+    "krok": -3,
+    "prumer_den": {
+     "kcal": 3105,
+     "bilkoviny_g": 187,
+     "sacharidy_g": 359,
+     "tuky_g": 91,
+     "vlaknina_g": 52
+    }
+   },
+   {
+    "krok": -2,
+    "prumer_den": {
+     "kcal": 3200,
+     "bilkoviny_g": 190,
+     "sacharidy_g": 376,
+     "tuky_g": 92,
+     "vlaknina_g": 55
+    }
+   },
+   {
+    "krok": -1,
+    "prumer_den": {
+     "kcal": 3305,
+     "bilkoviny_g": 192,
+     "sacharidy_g": 398,
+     "tuky_g": 92,
+     "vlaknina_g": 56
+    }
+   },
+   {
+    "krok": 0,
+    "prumer_den": {
+     "kcal": 3411,
+     "bilkoviny_g": 195,
+     "sacharidy_g": 421,
+     "tuky_g": 93,
+     "vlaknina_g": 57
+    }
+   },
+   {
+    "krok": 1,
+    "prumer_den": {
+     "kcal": 3515,
+     "bilkoviny_g": 198,
+     "sacharidy_g": 443,
+     "tuky_g": 93,
+     "vlaknina_g": 58
+    }
+   },
+   {
+    "krok": 2,
+    "prumer_den": {
+     "kcal": 3620,
+     "bilkoviny_g": 201,
+     "sacharidy_g": 465,
+     "tuky_g": 93,
+     "vlaknina_g": 59
+    }
+   },
+   {
+    "krok": 3,
+    "prumer_den": {
+     "kcal": 3724,
+     "bilkoviny_g": 203,
+     "sacharidy_g": 466,
+     "tuky_g": 103,
+     "vlaknina_g": 60
+    }
+   },
+   {
+    "krok": 4,
+    "prumer_den": {
+     "kcal": 3822,
+     "bilkoviny_g": 205,
+     "sacharidy_g": 486,
+     "tuky_g": 104,
+     "vlaknina_g": 62
+    }
+   },
+   {
+    "krok": 5,
+    "prumer_den": {
+     "kcal": 3926,
+     "bilkoviny_g": 208,
+     "sacharidy_g": 508,
+     "tuky_g": 104,
+     "vlaknina_g": 64
+    }
+   },
+   {
+    "krok": 6,
+    "prumer_den": {
+     "kcal": 4025,
+     "bilkoviny_g": 208,
+     "sacharidy_g": 508,
+     "tuky_g": 115,
+     "vlaknina_g": 64
+    }
+   },
+   {
+    "krok": 7,
+    "prumer_den": {
+     "kcal": 4120,
+     "bilkoviny_g": 211,
+     "sacharidy_g": 525,
+     "tuky_g": 116,
+     "vlaknina_g": 66
+    }
+   },
+   {
+    "krok": 8,
+    "prumer_den": {
+     "kcal": 4219,
+     "bilkoviny_g": 211,
+     "sacharidy_g": 525,
+     "tuky_g": 127,
+     "vlaknina_g": 66
+    }
+   },
+   {
+    "krok": 9,
+    "prumer_den": {
+     "kcal": 4325,
+     "bilkoviny_g": 214,
+     "sacharidy_g": 547,
+     "tuky_g": 127,
+     "vlaknina_g": 67
+    }
+   },
+   {
+    "krok": 10,
+    "prumer_den": {
+     "kcal": 4423,
+     "bilkoviny_g": 216,
+     "sacharidy_g": 567,
+     "tuky_g": 128,
+     "vlaknina_g": 69
+    }
+   }
+  ]
+ }
+}
