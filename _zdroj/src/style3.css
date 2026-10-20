@@ -336,3 +336,5 @@ html.food .hdr h1{color:#FFFFFF}
 .wofs .chip{padding:9px 13px;font-size:14px;border:1px solid var(--line);background:none;color:var(--mut)}.wofs .chip.on{background:var(--fg);color:#0A0A0A;border-color:var(--fg)}
 .wgrid.four span{font-size:11px;white-space:nowrap}
 .scard.whoop .gplay{background:var(--fg);color:#0A0A0A}
+.fing>div.chg b{color:var(--hot);text-align:right}.fing>div.chg b small{display:block;font-size:11px;color:var(--mut);font-weight:500}
+.fing>div.chg span small{color:var(--hot)}

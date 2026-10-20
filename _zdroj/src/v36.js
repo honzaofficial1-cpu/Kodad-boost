@@ -124,3 +124,41 @@ vSettings = function () { return _17vSet2().replace('Tréninky z WHOOPu půjdou 
     <p class="mut" style="margin:0 0 8px">Když tam WHOOP nebude, vlož v Nastavení tento kód:</p><div class="fadd"><input id="wo-show" readonly value="${esc(k)}"><button class="btn white" data-a="wo-copy">Kopírovat</button></div>`), 700);
 })();
 A['wo-copy'] = () => { const i = $('#wo-show'); i.select(); (navigator.clipboard ? navigator.clipboard.writeText(i.value) : Promise.reject()).then(() => toast('Zkopírováno'), () => { document.execCommand('copy'); toast('Zkopírováno'); }); };
+
+// ===================== v2.17.1: „k obědu o X g méně“ rovnou v receptu =====================
+const UP_SLOT = { snidani: 'snidane', obedu: 'obed', svacine: 'svacina', veceri: 'vecere' };
+let _UPM = 0; // jen při vykreslení jídel, ne pro nákup a součty
+const _17pd = planDayF;
+planDayF = function (w, di, k) {
+  const d = _17pd(w, di, k); if (!d || !_UPM) return d; const R = RX(); d.upMeal = [];
+  d.upravy = (d.upravy || []).filter(u => { const m = /^ubrat_k_(\w+)/.exec(u.typ || ''); const s = m && UP_SLOT[m[1]]; const r = s && R[d.jidla[s]];
+    if (r && u.surovina && r.suroviny.some(i => i.surovina === u.surovina)) { d.upMeal.push({ slot: s, surovina: u.surovina, g: u.g, typ: 'vyrovnání', u: 1 }); return false; } return true; });
+  return d;
+};
+const _17sm = stepMods;
+stepMods = function (step, day) { const o = _17sm(step, day); if (_UPM && day.upMeal) day.upMeal.forEach(m => o[m.slot] = [...o[m.slot], m]); return o; };
+dayTotals = function (day, step) { const t = { ...day.soucet_dne }; Object.values(_17sm(step, day)).flat().forEach(m => addN(t, nutOf(m.surovina, m.g))); return t; };
+const withUP = f => function (...a) { _UPM++; try { return f.apply(this, a); } finally { _UPM--; } };
+// na Dnes místo „-30 g těstovin“ rovnou výsledná gramáž
+const _17fden = XV['f-den'];
+XV['f-den'] = withUP(function () {
+  let h = _17fden(); const k = view.d || today(); const c = cyc(k); if (!c || c.before) return h; const day = planDayF(c.w, c.di, k); const R = RX();
+  (day.upMeal || []).forEach(m => { const r = R[day.jidla[m.slot]]; const base = r.suroviny.find(i => i.surovina === m.surovina); const nm = SUR(m.surovina).nazev.split(' (')[0].toLowerCase();
+    h = h.replace(`${m.g} g ${nm}`, `${nm} ${base.g + m.g} g`); });
+  return h;
+});
+XV['f-tyden'] = withUP(XV['f-tyden']);
+// v receptu: upravená gramáž přímo u suroviny + proč
+const _17fmeal = A['f-meal'];
+A['f-meal'] = withUP(function (b) {
+  _17fmeal(b);
+  $$s('#sheet .fing .add').forEach(row => {
+    const name = row.querySelector('span').firstChild.textContent.trim(); const g = parseFloat(row.querySelector('b').textContent.replace('+', ''));
+    const why = row.querySelector('small').textContent.includes('vyrovnání') ? 'ubráno kvůli ořechům navíc ten den' : row.querySelector('small').textContent.replace(/^(navíc|méně) – /, '');
+    const ing = $$s('#sheet .fing > div:not(.add)').find(d => d.querySelector('span').firstChild.textContent.trim() === name); if (!ing) return;
+    const bb = ing.querySelector('b'); const was = parseFloat(bb.textContent); if (isNaN(was)) return;
+    bb.innerHTML = `${was + g} g<small>${was} ${g > 0 ? '+' : '−'} ${Math.abs(g)}</small>`; ing.classList.add('chg');
+    const sp = ing.querySelector('span'); sp.insertAdjacentHTML('beforeend', `<small>${esc(why)}</small>`); row.remove();
+  });
+});
+function $$s(q) { return [...document.querySelectorAll(q)]; }
