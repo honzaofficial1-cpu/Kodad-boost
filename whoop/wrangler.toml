@@ -1,0 +1,9 @@
+name = "kodad-whoop"
+main = "worker.js"
+compatibility_date = "2024-09-01"
+account_id = "__ACC__"
+workers_dev = true
+
+[[kv_namespaces]]
+binding = "KV"
+id = "__KV_ID__"

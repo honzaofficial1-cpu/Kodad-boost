@@ -1,0 +1,50 @@
+name: WHOOP worker
+on:
+  workflow_dispatch:
+  push:
+    paths: ['whoop/**', '.github/workflows/whoop.yml']
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - name: Kontrola tajných údajů
+        id: chk
+        env:
+          T: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          A: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          I: ${{ secrets.WHOOP_CLIENT_ID }}
+          S: ${{ secrets.WHOOP_CLIENT_SECRET }}
+        run: |
+          miss=""; [ -z "$T" ] && miss="$miss CLOUDFLARE_API_TOKEN"; [ -z "$A" ] && miss="$miss CLOUDFLARE_ACCOUNT_ID"; [ -z "$I" ] && miss="$miss WHOOP_CLIENT_ID"; [ -z "$S" ] && miss="$miss WHOOP_CLIENT_SECRET"
+          if [ -n "$miss" ]; then echo "::notice::Zatím chybí GitHub secrets:$miss – nasazení přeskočeno"; echo "skip=1" >> "$GITHUB_OUTPUT"; fi
+      - name: KV úložiště
+        if: steps.chk.outputs.skip != '1'
+        env:
+          T: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          A: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          API="https://api.cloudflare.com/client/v4/accounts/$A/storage/kv/namespaces"
+          ID=$(curl -s -H "Authorization: Bearer $T" "$API?per_page=100" | jq -r '.result[]? | select(.title=="kodad-whoop") | .id' | head -1)
+          if [ -z "$ID" ]; then
+            R=$(curl -s -X POST -H "Authorization: Bearer $T" -H "Content-Type: application/json" -d '{"title":"kodad-whoop"}' "$API"); echo "$R" | jq '.success,.errors'
+            ID=$(echo "$R" | jq -r '.result.id')
+          fi
+          if [ -z "$ID" ] || [ "$ID" = "null" ]; then echo "::error::KV se nepodařilo vytvořit – zkontroluj oprávnění API tokenu"; exit 1; fi
+          sed -i "s/__KV_ID__/$ID/; s/__ACC__/$A/" whoop/wrangler.toml
+          echo "::notice::KV $ID"
+      - name: Nasazení
+        if: steps.chk.outputs.skip != '1'
+        working-directory: whoop
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          WHOOP_CLIENT_ID: ${{ secrets.WHOOP_CLIENT_ID }}
+          WHOOP_CLIENT_SECRET: ${{ secrets.WHOOP_CLIENT_SECRET }}
+        run: |
+          npx -y wrangler@3.99.0 deploy
+          printf '%s' "$WHOOP_CLIENT_ID" | npx -y wrangler@3.99.0 secret put WHOOP_CLIENT_ID
+          printf '%s' "$WHOOP_CLIENT_SECRET" | npx -y wrangler@3.99.0 secret put WHOOP_CLIENT_SECRET
+          echo "::notice::Hotovo – worker běží"
