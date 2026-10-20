@@ -933,11 +933,26 @@ html.food .hdr h1{color:#FFFFFF}
 .fjl.on{box-shadow:inset 0 0 0 1.5px var(--hot)}.fjl.on .rd{border-color:var(--hot);background:radial-gradient(circle,var(--hot) 45%,transparent 50%)}
 .fjcur{display:flex;justify-content:space-between;align-items:center;width:100%;margin-top:18px;padding:12px 2px;border-top:1px solid var(--line);color:var(--mut);font-size:13px;text-align:left}
 .fjcur b{color:var(--hot);font-size:14px}
+.fmk{display:flex;flex-direction:column;align-items:flex-end}.fmk em{font-family:var(--f);font-style:normal;font-weight:600;font-size:12px;color:var(--hot);margin-top:2px}
+.fsum2{margin-top:22px;padding:16px;background:var(--card);border-radius:20px}
+.fsk{display:flex;align-items:baseline;gap:8px;margin:6px 0 12px}.fsk b{font-family:var(--fd);font-style:italic;font-weight:800;font-size:64px;line-height:.85}.fsk span{font-size:16px;color:var(--mut)}
+.fmrs{display:flex;flex-direction:column}
+.fmr{display:grid;grid-template-columns:96px 1fr 70px 40px;gap:10px;align-items:center;padding:9px 0;border-top:1px solid var(--line)}
+.fmr .l{display:flex;flex-direction:column;font-size:15px;font-weight:600}.fmr .l small{font-size:11px;font-weight:500;color:var(--hot)}
+.fmr .bar{height:6px;border-radius:3px;background:#26272B;overflow:hidden}.fmr .bar i{display:block;height:100%;background:#8E8E93;border-radius:3px}
+.fmr.pro .bar i{background:var(--hot)}
+.fmr b{font-family:var(--fd);font-weight:700;font-size:24px;text-align:right}.fmr b small{font-size:13px;color:var(--mut);font-family:var(--f);font-weight:500}
+.fmr.pro b{color:var(--hot)}.fmr em{font-style:normal;font-size:12px;color:var(--mut);text-align:right}
+.fmnote{margin:8px 0 0;font-size:11px;color:var(--mut)}
+.fshi{display:grid;grid-template-columns:1fr 1fr;gap:1px;margin-top:12px;background:var(--line);border-radius:16px;overflow:hidden}
+.fshi>div{display:flex;flex-direction:column;gap:2px;padding:12px 14px;background:var(--card)}.fshi>div.w{grid-column:1/-1}
+.fshi span{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);font-weight:600}.fshi b{font-size:16px}.fshi small{font-size:12px;color:var(--hot)}
+.fmk>span{white-space:nowrap}
 </style>
 </head>
 <body>
 <div id="app"></div><div id="sheet" hidden></div><div id="toast" role="status" aria-live="polite"></div>
-<script>const APP_VERSION = "2.14.0";
+<script>const APP_VERSION = "2.14.1";
 const MARK = "<svg aria-hidden=\"true\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 994 296\"><path fill=\"currentColor\" d=\"M612 5L611 4L571 4L570 5L567 5L566 4L561 4L560 5L448 5L447 6L442 6L441 5L439 6L438 5L435 5L434 6L430 6L429 5L426 5L425 6L414 6L413 5L409 5L408 6L385 5L378 11L366 27L355 39L352 44L335 63L323 79L316 86L312 92L282 127L274 138L267 145L263 151L233 186L233 187L219 203L219 204L210 213L210 214L202 222L202 223L192 232L186 236L171 243L169 243L162 246L155 247L154 248L149 248L148 249L140 249L139 250L85 250L84 251L78 251L77 250L37 250L29 258L29 259L24 264L19 271L13 277L13 278L4 288L0 294L1 295L48 295L49 296L51 295L58 295L59 296L94 296L95 295L97 295L98 296L100 296L101 295L154 295L155 294L184 294L185 293L202 293L203 292L232 291L233 290L241 290L242 289L253 289L254 288L263 288L264 287L271 287L272 286L281 286L282 285L288 285L289 284L294 284L295 283L301 283L302 282L313 281L314 280L328 278L332 276L336 276L337 275L352 272L358 269L361 269L362 268L367 267L369 265L379 262L393 255L408 245L433 221L436 216L448 203L456 192L477 168L485 157L492 150L494 146L506 133L506 132L521 115L525 109L544 88L548 82L560 69L563 64L570 57L570 56L578 48L578 47L589 35L594 28L602 20L604 16L611 9ZM994 1L993 0L974 0L973 1L967 1L966 0L964 0L963 1L866 1L865 2L860 2L859 1L842 2L840 1L839 2L804 2L794 7L792 7L786 11L784 11L777 15L775 15L760 23L758 23L749 28L747 28L734 35L732 35L717 43L715 43L706 48L704 48L696 53L694 53L689 56L685 57L683 59L681 59L670 65L668 65L658 70L656 72L647 76L645 78L636 82L634 84L629 86L624 90L619 92L614 96L606 100L586 115L579 119L575 123L559 135L554 140L553 140L537 155L536 155L502 190L502 193L509 191L512 189L529 184L532 182L538 181L549 176L555 175L558 173L566 171L569 169L586 164L589 162L597 160L606 168L606 169L620 185L632 201L655 228L663 239L677 255L680 260L686 266L694 277L704 288L749 288L750 287L755 287L756 288L760 288L761 287L914 287L916 286L916 284L896 264L895 264L827 199L826 199L797 171L796 171L776 151L775 151L766 142L765 142L757 133L749 127L736 113L736 109L742 104L747 103L757 98L762 97L767 94L777 91L782 88L784 88L787 86L789 86L792 84L794 84L797 82L802 81L807 78L809 78L812 76L814 76L817 74L824 72L829 69L831 69L844 63L849 62L854 59L856 59L861 56L863 56L866 54L873 52L878 49L880 49L883 47L885 47L898 41L903 40L910 36L912 36L920 32L925 31L937 25L939 25L942 23L944 23L947 21L949 21L952 19L954 19L957 17L959 17L962 15L969 13L974 10L976 10L979 8L981 8L984 6L993 3Z\"/></svg>";
 // ===== Výchozí knihovna cviků (informace jsou skryté pod „Info o cviku“) =====
 const R = (min, max, fail = true) => ({ min, max, fail });
@@ -4158,15 +4173,14 @@ XV['f-den'] = function () {
   const day = planDayF(c.w, c.di), R = RX(), M = stepMods(f.step, day), tot = dayTotals(day, f.step);
   const meals = SLOTS.map(([s, l, t]) => { const r = R[day.jidla[s]]; if (!r) return ''; const box = (day.z_varky || []).includes(s); const mods = M[s];
     const kc = r.hodnoty_porce.kcal + mods.reduce((a, m) => a + nutOf(m.surovina, m.g).kcal, 0);
-    return `<button class="fmeal" data-a="f-meal" data-id="${r.kod}" data-s="${s}" data-k="${k}"><span class="fmt"><i>${l}</i><small>${t}</small></span><span class="fmn"><b>${esc(r.nazev)}</b><small>${box ? '<em class="tag">z krabičky</em>' : ''}${s === 'svacina' && day.trenink ? '<em class="tag o">před tréninkem</em>' : ''}${mods.length ? `<em class="tag o">${mods.map(m => `${m.g > 0 ? '+' : ''}${m.g} g ${SUR(m.surovina).nazev.split(' (')[0].toLowerCase()}`).join(', ')}</em>` : ''}</small></span><span class="fmk">${r0(kc)}<small> kcal</small></span></button>`; }).join('');
+    return `<button class="fmeal" data-a="f-meal" data-id="${r.kod}" data-s="${s}" data-k="${k}"><span class="fmt"><i>${l}</i><small>${t}</small></span><span class="fmn"><b>${esc(r.nazev)}</b><small>${box ? '<em class="tag">z krabičky</em>' : ''}${s === 'svacina' && day.trenink ? '<em class="tag o">před tréninkem</em>' : ''}${mods.length ? `<em class="tag o">${mods.map(m => `${m.g > 0 ? '+' : ''}${m.g} g ${SUR(m.surovina).nazev.split(' (')[0].toLowerCase()}`).join(', ')}</em>` : ''}</small></span><span class="fmk"><span>${r0(kc)}<small> kcal</small></span><em>B ${r0(r.hodnoty_porce.bilkoviny_g + mods.reduce((a, m) => a + nutOf(m.surovina, m.g).bilkoviny_g, 0))} g</em></span></button>`; }).join('');
   const up = (day.upravy || []).map(u => `<li>${esc(u.text)}</li>`).join('');
   const W = JD.cyklus[c.w]; const cook = c.di === 6 && W ? JD.cyklus[(JD.meta.poradi_cyklu || ['A', 'B', 'C'])[(c.wi + 1) % 3]]?.varka_nedele : c.di === 2 ? W.varka_streda : null;
   return `<div class="wrap">${fHdr('Jídlo')}${remindersF(k)}${nav}
     <div class="fmeals">${meals}</div>
     ${up ? `<div class="fsec"><div class="lbl">Navíc k dnešku</div><ul class="fup">${up}</ul></div>` : ''}
     ${cook && R[cook] ? `<div class="fsec"><div class="lbl">Vaření do zásoby</div><p class="fcook">${c.di === 6 ? 'Dnes večer' : 'Dnes'}: <b>${esc(R[cook].nazev)}</b> × 4 porce</p></div>` : ''}
-    <div class="fsum"><div class="lbl">Celý den${f.step ? ` · krok ${sg(f.step, 0)}` : ''}</div><div class="fsn"><b>${thou(r0(tot.kcal))}</b><small>kcal</small></div>
-      <div class="fsm">${NUT.slice(1).map(([kk, l]) => `<span><i>${r0(tot[kk])}</i><small>${l === 'B' ? 'bílkoviny' : l === 'S' ? 'sacharidy' : l === 'T' ? 'tuky' : 'vláknina'} g</small></span>`).join('')}</div></div>
+    ${daySumHTML(tot, f.step)}
     ${day.swapped ? '<p class="mut" style="font-size:13px">Svačina prohozená podle tvých tréninkových dnů.</p>' : ''}
   </div>${tabs()}`;
 };
@@ -4226,10 +4240,11 @@ XV['f-nakup'] = function () {
   const done = items.filter(i => st[i.id]).length;
   const groups = CATS.map(cat => { const its = items.filter(i => i.kat === cat).sort((a, b) => (st[a.id] ? 1 : 0) - (st[b.id] ? 1 : 0)); if (!its.length) return '';
     return `<div class="fsg"><div class="lbl">${cat}</div>${its.map(i => `<button class="fsi ${st[i.id] ? 'on' : ''}" data-a="f-chk" data-key="${key}" data-id="${esc(i.id)}"><span class="cb">${st[i.id] ? ico('check') : ''}</span><span class="t"><b>${esc(i.nazev)}</b>${i.pozn ? `<small>${esc(i.pozn)}</small>` : ''}</span><span class="q">${esc(i.mnozstvi)}</span>${i.own != null ? `<span class="x" data-a="f-cdel" data-key="${key}" data-i="${i.own}">${ico('x')}</span>` : ''}</button>`).join('')}</div>`; }).join('');
-  const when = list === 'N1' ? `sobota ${fday(dkey(addDays(pdate(mon), -2)))} · na Po–St` : list === 'N2' ? `středa ${fday(dkey(addDays(pdate(mon), 2)))} · na Čt–Ne` : 'jednou za 3 týdny';
+  const when = list === 'N1' ? `na ne ${fday(dkey(addDays(pdate(mon), -1))).replace(/^\S+ /, '')} – st ${fday(dkey(addDays(pdate(mon), 2))).replace(/^\S+ /, '')}` : `na st ${fday(dkey(addDays(pdate(mon), 2))).replace(/^\S+ /, '')} – ne ${fday(dkey(addDays(pdate(mon), 6))).replace(/^\S+ /, '')}`;
+  const info = shopInfo(list, wi, mon, w);
   return `<div class="wrap">${fHdr('Nákup')}
     <div class="seg">${[['N1', 'Víkend (N1)'], ['N2', 'Středa (N2)'], ['Z', 'Zásoba']].map(([v, l]) => `<button data-a="f-list" data-v="${v}" class="${v === list ? 'on' : ''}">${l}</button>`).join('')}</div>
-    ${list !== 'Z' ? `<div class="fdnav" style="margin-top:12px"><button class="round" data-a="f-swk" data-v="-1" aria-label="Předchozí týden" ${wi > 0 ? '' : 'disabled'}>${ico('back')}</button><div><b>Týden ${w}</b><small>${when}</small></div><button class="round" data-a="f-swk" data-v="1" aria-label="Další týden">${ico('chev')}</button></div>` : `<p class="mut" style="font-size:13px;margin:12px 2px">Trvanlivé věci na celý cyklus A–B–C.</p>`}
+    ${list !== 'Z' ? `<div class="fdnav" style="margin-top:12px"><button class="round" data-a="f-swk" data-v="-1" aria-label="Předchozí týden" ${wi > 0 ? '' : 'disabled'}>${ico('back')}</button><div><b>Týden ${w}</b><small>${when}</small></div><button class="round" data-a="f-swk" data-v="1" aria-label="Další týden">${ico('chev')}</button></div>` : ''}${info}
     <div class="fsbar"><span>${done} / ${items.length} v košíku</span><button class="btn" data-a="f-reset" data-key="${key}">Nový nákup</button></div>
     ${groups}
     <div class="fadd"><input id="f-own" placeholder="Přidat vlastní položku"><button class="btn white" data-a="f-cadd" data-key="${key}">Přidat</button></div>
@@ -4417,6 +4432,31 @@ vHome = function () {
   supAlerts().filter(({ st }) => st.daysLeft <= 2).forEach(({ s, st }) => ban.push(`<button class="fban crit" data-a="tab" data-v="f-sup"><b>${esc(s.name)} skoro došel</b><small>${st.end ? 'vydrží do ' + fday(st.end) : 'došel'} – doplň zásobu</small></button>`));
   return h.replace('<div class="hgrid">', ban.join('') + '<div class="hgrid">' + row);
 };
+
+// přehledný součet dne: energie velkým číslem, makra v řádcích s podílem na energii
+function daySumHTML(tot, step) {
+  const wts = Object.entries(BD().days).filter(([, d]) => d.weight != null).sort((a, b) => a[0] < b[0] ? 1 : -1); const kgw = wts.length ? wts[0][1].weight : null;
+  const en = { bilkoviny_g: 4, sacharidy_g: 4, tuky_g: 9 }; const K = tot.kcal || 1;
+  const row = (k, l, sub) => { const g = tot[k]; const pct = en[k] ? Math.round(g * en[k] / K * 100) : null;
+    return `<div class="fmr ${k === 'bilkoviny_g' ? 'pro' : ''}"><span class="l">${l}${sub ? `<small>${sub}</small>` : ''}</span><span class="bar">${pct != null ? `<i style="width:${Math.min(100, pct * 1.6)}%"></i>` : ''}</span><b>${r0(g)}<small> g</small></b><em>${pct != null ? pct + ' %' : ''}</em></div>`; };
+  return `<div class="fsum2"><div class="lbl">Celý den${step ? ` · krok ${sg(step, 0)}` : ''}</div>
+    <div class="fsk"><b>${thou(r0(tot.kcal))}</b><span>kcal</span></div>
+    <div class="fmrs">${row('bilkoviny_g', 'Bílkoviny', kgw ? `${nf(tot.bilkoviny_g / kgw, 1)} g na kg` : '')}${row('sacharidy_g', 'Sacharidy')}${row('tuky_g', 'Tuky')}${row('vlaknina_g', 'Vláknina')}</div>
+    <p class="fmnote">% = podíl na energii dne</p></div>`;
+}
+
+const inDays = k => { const d = Math.round((toU(k) - toU(today())) / DMS); return d === 0 ? 'dnes' : d === 1 ? 'zítra' : d === -1 ? 'včera' : d > 0 ? `za ${d} ${d < 5 ? 'dny' : 'dní'}` : `před ${-d} ${-d < 5 ? 'dny' : 'dny'}`; };
+function shopInfo(list, wi, mon, w) {
+  const R = RX(); const W = JD.cyklus[w]; const fl = k => flong(k).replace(/^./, c => c.toUpperCase());
+  if (list === 'Z') { const c0 = dkey(addDays(pdate(F().start), Math.floor(wi / 3) * 21)); const c1 = dkey(addDays(pdate(c0), 20)); const nx = dkey(addDays(pdate(c1), -1));
+    return `<div class="fshi"><div><span>Na období</span><b>${fday(c0)} – ${fday(c1)}</b><small>celý cyklus A → B → C (3 týdny)</small></div><div><span>Další zásoba</span><b>${fday(nx)}</b><small>${inDays(nx)}</small></div></div>`; }
+  const buy = list === 'N1' ? dkey(addDays(pdate(mon), -2)) : dkey(addDays(pdate(mon), 2));
+  const from = list === 'N1' ? dkey(addDays(pdate(mon), -1)) : buy, to = list === 'N1' ? dkey(addDays(pdate(mon), 2)) : dkey(addDays(pdate(mon), 6));
+  const cookK = list === 'N1' ? W.varka_nedele : W.varka_streda; const cookD = list === 'N1' ? from : buy;
+  return `<div class="fshi"><div><span>Nakoupit</span><b>${fl(buy)}</b><small>${inDays(buy)}</small></div>
+    <div><span>Vystačí</span><b>${fday(from)} – ${fday(to)}</b><small>${list === 'N1' ? 'nedělní vaření + jídla Po–St' : 'středeční vaření + jídla Čt–Ne'}</small></div>
+    ${R[cookK] ? `<div class="w"><span>Vaří se do zásoby</span><b>${esc(R[cookK].nazev)} × 4</b><small>${fl(cookD)}</small></div>` : ''}</div>`;
+}
 
 
 // ===================== v2.14: Jídlo v zelené · víc jídelníčků =====================
