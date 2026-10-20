@@ -26,10 +26,15 @@ jobs:
           T: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           A: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
+          V=$(curl -s -H "Authorization: Bearer $T" "https://api.cloudflare.com/client/v4/user/tokens/verify")
+          echo "::notice::Token: $(echo "$V" | jq -c '{success,status:.result.status,errors:[.errors[]?.message]}')"
+          ACC=$(curl -s -H "Authorization: Bearer $T" "https://api.cloudflare.com/client/v4/accounts/$A")
+          echo "::notice::Účet: $(echo "$ACC" | jq -c '{success,name:.result.name,errors:[.errors[]?.message]}')"
           API="https://api.cloudflare.com/client/v4/accounts/$A/storage/kv/namespaces"
-          ID=$(curl -s -H "Authorization: Bearer $T" "$API?per_page=100" | jq -r '.result[]? | select(.title=="kodad-whoop") | .id' | head -1)
+          L=$(curl -s -H "Authorization: Bearer $T" "$API?per_page=100"); echo "::notice::KV seznam: $(echo "$L" | jq -c '{success,count:(.result|length?),errors:[.errors[]?|"\(.code) \(.message)"]}')"
+          ID=$(echo "$L" | jq -r '.result[]? | select(.title=="kodad-whoop") | .id' | head -1)
           if [ -z "$ID" ]; then
-            R=$(curl -s -X POST -H "Authorization: Bearer $T" -H "Content-Type: application/json" -d '{"title":"kodad-whoop"}' "$API"); echo "$R" | jq '.success,.errors'
+            R=$(curl -s -X POST -H "Authorization: Bearer $T" -H "Content-Type: application/json" -d '{"title":"kodad-whoop"}' "$API"); echo "::notice::KV vytvoření: $(echo "$R" | jq -c '{success,errors:[.errors[]?|"\(.code) \(.message)"]}')"
             ID=$(echo "$R" | jq -r '.result.id')
           fi
           if [ -z "$ID" ] || [ "$ID" = "null" ]; then echo "::error::KV se nepodařilo vytvořit – zkontroluj oprávnění API tokenu"; exit 1; fi
