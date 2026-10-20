@@ -338,3 +338,31 @@ html.food .hdr h1{color:#FFFFFF}
 .scard.whoop .gplay{background:var(--fg);color:#0A0A0A}
 .fing>div.chg b{color:var(--hot);text-align:right}.fing>div.chg b small{display:block;font-size:11px;color:var(--mut);font-weight:500}
 .fing>div.chg span small{color:var(--hot)}
+/* v2.18 cyklování · bez alkoholu · krev */
+.cyct{display:block;font-style:normal;font-size:12px;font-weight:600;color:var(--mut);margin-top:2px}.cyct.on{color:var(--hot)}
+.fpz{display:flex;justify-content:space-between;gap:10px;margin:8px 2px 0;font-size:14px;color:var(--mut)}.fpz b{color:var(--fg);font-weight:600}
+.fsob{background:var(--card);border-radius:22px;padding:18px 18px 16px;margin:4px 0 16px}
+.fsob .lbl{color:var(--hot)}
+.fsobn{display:flex;align-items:baseline;gap:8px;margin-top:6px}
+.fsobn b{font-family:var(--fd);font-style:italic;font-weight:800;font-size:76px;line-height:.9}
+.fsobn span{font-family:var(--fd);font-style:italic;font-weight:800;font-size:26px;text-transform:uppercase;color:var(--mut)}
+.fsobbar{height:8px;border-radius:4px;background:#232326;margin-top:14px;overflow:hidden}.fsobbar i{display:block;height:100%;background:var(--hot);border-radius:4px}
+.fsobnx{font-size:13px;color:var(--mut);margin:6px 2px 0}
+.fsobr{display:flex;justify-content:space-between;align-items:baseline;width:100%;padding:14px 2px;border-bottom:1px solid var(--line);font-size:15px}
+.fsobr span{color:var(--mut)}.fsobr b{font-family:var(--fd);font-style:italic;font-weight:800;font-size:22px;color:var(--hot)}.fsobr b small{font-size:14px}
+.krlink{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;background:var(--card);border-radius:18px;padding:15px 16px;text-align:left}
+.krlink span{display:flex;flex-direction:column;gap:2px}.krlink small{color:var(--mut);font-size:13px}
+.kstat{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.kstat>div{background:var(--card);border-radius:14px;padding:12px}.kstat span{display:block;font-size:12px;color:var(--mut)}
+.kstat b{font-family:var(--fd);font-style:italic;font-weight:800;font-size:24px}.kstat .bad b{color:#FF8A3D}
+.klist{display:flex;flex-direction:column}
+.krow2{display:flex;align-items:center;gap:12px;width:100%;padding:12px 2px;border-bottom:1px solid var(--line);text-align:left}
+.krow2 .t{flex:1;display:flex;flex-direction:column;gap:2px;min-width:0}.krow2 .t small{color:var(--mut);font-size:12px}
+.krow2 .v{display:flex;flex-direction:column;align-items:flex-end}.krow2 .v b{font-family:var(--fd);font-style:italic;font-weight:800;font-size:22px}
+.krow2 .v small{font-size:12px;color:var(--mut)}.krow2.lo .v b,.krow2.hi .v b,.krow2.lo .v small,.krow2.hi .v small{color:#FF8A3D}
+.kspark{width:60px;height:22px;color:var(--mut);flex:none}
+.kgrp{margin-bottom:14px}.kgh{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--mut);margin:0 2px 4px}
+.kin{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 2px;border-bottom:1px solid var(--line)}
+.kin span{display:flex;flex-direction:column;min-width:0}.kin b{font-weight:600;font-size:15px}.kin small{color:var(--mut);font-size:12px}
+.kin input{width:96px;flex:none;text-align:right;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;color:var(--fg);font-size:16px}
+.kin.ok input{border-color:var(--hot)}.kin.lo input,.kin.hi input{border-color:#FF8A3D;color:#FF8A3D}
