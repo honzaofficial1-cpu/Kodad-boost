@@ -280,3 +280,5 @@ html.food .hdr h1{color:#FFFFFF}
 .fshi>div{display:flex;flex-direction:column;gap:2px;padding:12px 14px;background:var(--card)}.fshi>div.w{grid-column:1/-1}
 .fshi span{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);font-weight:600}.fshi b{font-size:16px}.fshi small{font-size:12px;color:var(--hot)}
 .fmk>span{white-space:nowrap}
+.swhen .chip{padding:9px 13px;font-size:14px}.swhen .chip.on{background:var(--hot);color:#0B0B0C}
+.fsupd .fsi .t small{color:var(--mut)}

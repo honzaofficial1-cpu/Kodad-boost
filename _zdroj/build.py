@@ -4,7 +4,7 @@ from PIL import Image, ImageDraw, ImageFont
 B = os.path.dirname(os.path.abspath(__file__))
 src = lambda f: open(os.path.join(B, 'src', f), encoding='utf-8').read()
 mark = open(os.path.join(B,'assets','mark.svg'),encoding='utf-8').read().replace('<svg ','<svg aria-hidden="true" ')
-VERSION = '2.14.1'
+VERSION = '2.14.2'
 WHOOP_URL = ''
 import base64 as _b64
 _ff = ''.join(f"@font-face{{font-family:'BC';font-weight:{w};font-style:{st};font-display:block;src:url(data:font/woff;base64,{_b64.b64encode(open(os.path.join(B,'assets','fonts',f),'rb').read()).decode()}) format('woff')}}" for f, w, st in [('bc-SemiBold.woff', 600, 'normal'), ('bc-Bold.woff', 700, 'normal'), ('bc-ExtraBoldItalic.woff', 800, 'italic')])

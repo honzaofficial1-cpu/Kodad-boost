@@ -948,11 +948,13 @@ html.food .hdr h1{color:#FFFFFF}
 .fshi>div{display:flex;flex-direction:column;gap:2px;padding:12px 14px;background:var(--card)}.fshi>div.w{grid-column:1/-1}
 .fshi span{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);font-weight:600}.fshi b{font-size:16px}.fshi small{font-size:12px;color:var(--hot)}
 .fmk>span{white-space:nowrap}
+.swhen .chip{padding:9px 13px;font-size:14px}.swhen .chip.on{background:var(--hot);color:#0B0B0C}
+.fsupd .fsi .t small{color:var(--mut)}
 </style>
 </head>
 <body>
 <div id="app"></div><div id="sheet" hidden></div><div id="toast" role="status" aria-live="polite"></div>
-<script>const APP_VERSION = "2.14.1";
+<script>const APP_VERSION = "2.14.2";
 const MARK = "<svg aria-hidden=\"true\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 994 296\"><path fill=\"currentColor\" d=\"M612 5L611 4L571 4L570 5L567 5L566 4L561 4L560 5L448 5L447 6L442 6L441 5L439 6L438 5L435 5L434 6L430 6L429 5L426 5L425 6L414 6L413 5L409 5L408 6L385 5L378 11L366 27L355 39L352 44L335 63L323 79L316 86L312 92L282 127L274 138L267 145L263 151L233 186L233 187L219 203L219 204L210 213L210 214L202 222L202 223L192 232L186 236L171 243L169 243L162 246L155 247L154 248L149 248L148 249L140 249L139 250L85 250L84 251L78 251L77 250L37 250L29 258L29 259L24 264L19 271L13 277L13 278L4 288L0 294L1 295L48 295L49 296L51 295L58 295L59 296L94 296L95 295L97 295L98 296L100 296L101 295L154 295L155 294L184 294L185 293L202 293L203 292L232 291L233 290L241 290L242 289L253 289L254 288L263 288L264 287L271 287L272 286L281 286L282 285L288 285L289 284L294 284L295 283L301 283L302 282L313 281L314 280L328 278L332 276L336 276L337 275L352 272L358 269L361 269L362 268L367 267L369 265L379 262L393 255L408 245L433 221L436 216L448 203L456 192L477 168L485 157L492 150L494 146L506 133L506 132L521 115L525 109L544 88L548 82L560 69L563 64L570 57L570 56L578 48L578 47L589 35L594 28L602 20L604 16L611 9ZM994 1L993 0L974 0L973 1L967 1L966 0L964 0L963 1L866 1L865 2L860 2L859 1L842 2L840 1L839 2L804 2L794 7L792 7L786 11L784 11L777 15L775 15L760 23L758 23L749 28L747 28L734 35L732 35L717 43L715 43L706 48L704 48L696 53L694 53L689 56L685 57L683 59L681 59L670 65L668 65L658 70L656 72L647 76L645 78L636 82L634 84L629 86L624 90L619 92L614 96L606 100L586 115L579 119L575 123L559 135L554 140L553 140L537 155L536 155L502 190L502 193L509 191L512 189L529 184L532 182L538 181L549 176L555 175L558 173L566 171L569 169L586 164L589 162L597 160L606 168L606 169L620 185L632 201L655 228L663 239L677 255L680 260L686 266L694 277L704 288L749 288L750 287L755 287L756 288L760 288L761 287L914 287L916 286L916 284L896 264L895 264L827 199L826 199L797 171L796 171L776 151L775 151L766 142L765 142L757 133L749 127L736 113L736 109L742 104L747 103L757 98L762 97L767 94L777 91L782 88L784 88L787 86L789 86L792 84L794 84L797 82L802 81L807 78L809 78L812 76L814 76L817 74L824 72L829 69L831 69L844 63L849 62L854 59L856 59L861 56L863 56L866 54L873 52L878 49L880 49L883 47L885 47L898 41L903 40L910 36L912 36L920 32L925 31L937 25L939 25L942 23L944 23L947 21L949 21L952 19L954 19L957 17L959 17L962 15L969 13L974 10L976 10L979 8L981 8L984 6L993 3Z\"/></svg>";
 // ===== Výchozí knihovna cviků (informace jsou skryté pod „Info o cviku“) =====
 const R = (min, max, fail = true) => ({ min, max, fail });
@@ -4177,7 +4179,7 @@ XV['f-den'] = function () {
   const up = (day.upravy || []).map(u => `<li>${esc(u.text)}</li>`).join('');
   const W = JD.cyklus[c.w]; const cook = c.di === 6 && W ? JD.cyklus[(JD.meta.poradi_cyklu || ['A', 'B', 'C'])[(c.wi + 1) % 3]]?.varka_nedele : c.di === 2 ? W.varka_streda : null;
   return `<div class="wrap">${fHdr('Jídlo')}${remindersF(k)}${nav}
-    <div class="fmeals">${meals}</div>
+    <div class="fmeals">${meals}</div>${supToday(k, day.trenink)}
     ${up ? `<div class="fsec"><div class="lbl">Navíc k dnešku</div><ul class="fup">${up}</ul></div>` : ''}
     ${cook && R[cook] ? `<div class="fsec"><div class="lbl">Vaření do zásoby</div><p class="fcook">${c.di === 6 ? 'Dnes večer' : 'Dnes'}: <b>${esc(R[cook].nazev)}</b> × 4 porce</p></div>` : ''}
     ${daySumHTML(tot, f.step)}
@@ -4275,7 +4277,7 @@ XV['f-sup'] = function () {
   const f = F(); const L = f.sup || [];
   return `<div class="wrap">${fHdr('Suplementy')}
     ${L.length ? `<div class="list">${L.map((s, i) => { const st = supState(s); const warn = st.daysLeft != null && st.daysLeft <= (f.supWarn || 7);
-      return `<div class="fsup ${warn ? (st.daysLeft <= 2 ? 'crit' : 'warn') : ''}"><button class="t" data-a="f-supedit" data-i="${i}"><b>${esc(s.name)}</b><small>${s.dose} ${esc(s.unit)} ${s.days === 'trenink' ? 'v tréninkové dny' : 'denně'} · zbývá ${nf(st.left, st.left % 1 ? 1 : 0)} ${esc(s.unit)}</small></button>
+      return `<div class="fsup ${warn ? (st.daysLeft <= 2 ? 'crit' : 'warn') : ''}"><button class="t" data-a="f-supedit" data-i="${i}"><b>${esc(s.name)}</b><small>${s.dose} ${esc(s.unit)} ${s.days === 'trenink' ? 'v tréninkové dny' : 'denně'}${(s.when || []).length || s.whenNote ? ' · ' + esc([...(s.when || []), s.whenNote].filter(Boolean).join(', ').toLowerCase()) : ''} · zbývá ${nf(st.left, st.left % 1 ? 1 : 0)} ${esc(s.unit)}</small></button>
         <div class="fsr"><span>${st.end ? `vydrží do <b>${fday(st.end)}</b>` : 'došlo'}${st.daysLeft != null ? `<small>${st.daysLeft <= 0 ? 'dnes poslední' : `ještě ${st.daysLeft} ${st.daysLeft === 1 ? 'den' : st.daysLeft < 5 ? 'dny' : 'dní'}`}</small>` : ''}</span><button class="btn" data-a="f-supadd" data-i="${i}">Doplnil jsem</button></div></div>`; }).join('')}</div>`
       : '<div class="empty"><b>Zatím žádný suplement</b><span>Přidej kreatin, protein, vitamin D… Aplikace sama odečítá spotřebu a ozve se, než dojdou.</span></div>'}
     <button class="btn block" style="margin-top:14px" data-a="f-supedit" data-i="-1">${ico('plus')} Přidat suplement</button>
@@ -4288,14 +4290,16 @@ A['f-supedit'] = b => {
   sheet(`<h2>${i >= 0 ? 'Upravit suplement' : 'Nový suplement'}</h2><div class="form">
     <label class="f">Název<input id="su-n" value="${esc(s.name)}" placeholder="např. Kreatin"></label>
     <div class="seg" data-seg="unit">${['g', 'ks', 'dávek'].map(u => `<button data-a="seg" data-v="${u}" class="${s.unit === u ? 'on' : ''}">${u}</button>`).join('')}</div>
-    <div class="three"><label class="f">Mám teď<input id="su-q" inputmode="decimal" value="${i >= 0 ? nf(supState(s).left, 1).replace(',0', '') : ''}" placeholder="500"></label><label class="f">Denní dávka<input id="su-d" inputmode="decimal" value="${kg(s.dose)}" placeholder="5"></label><label class="f">Balení<input id="su-p" inputmode="decimal" value="${kg(s.pkg)}" placeholder="500"></label></div>
-    <div class="seg" data-seg="days">${[['denne', 'Denně'], ['trenink', 'Jen tréninkové dny']].map(([v, l]) => `<button data-a="seg" data-v="${v}" class="${s.days === v ? 'on' : ''}">${l}</button>`).join('')}</div></div>
+    <div class="three"><label class="f">Mám teď<input id="su-q" inputmode="decimal" value="${i >= 0 ? nf(supState(s).left, 1).replace(',0', '') : ''}" placeholder="500"></label><label class="f">Denní dávka<input id="su-d" inputmode="decimal" value="${s.dose ? kg(s.dose) : ''}" placeholder="5"></label><label class="f">Balení<input id="su-p" inputmode="decimal" value="${s.pkg ? kg(s.pkg) : ''}" placeholder="500"></label></div>
+    <div class="seg" data-seg="days">${[['denne', 'Denně'], ['trenink', 'Jen tréninkové dny']].map(([v, l]) => `<button data-a="seg" data-v="${v}" class="${s.days === v ? 'on' : ''}">${l}</button>`).join('')}</div>
+    <div><div class="lbl" style="margin:4px 2px 8px">Kdy beru</div><div class="chips swhen">${SUP_WHEN.map(w => `<button class="chip ${(s.when || []).includes(w) ? 'on' : ''}" data-a="part-tog" data-v="${w}">${w}</button>`).join('')}</div></div>
+    <label class="f">Jinak / poznámka<input id="su-o" value="${esc(s.whenNote || '')}" placeholder="např. s jídlem, rozdělit na 2×"></label></div>
     <div class="actions">${i >= 0 ? `<button class="btn danger" data-a="f-supdel" data-i="${i}" aria-label="Smazat">${ico('trash')}</button>` : ''}<button class="btn" data-a="close">Zrušit</button><button class="btn white" data-a="f-supsave" data-i="${i}">Uložit</button></div>`);
 };
 A['f-supsave'] = b => {
   const i = +b.dataset.i; const name = $('#su-n').value.trim(), q = num($('#su-q').value), d = num($('#su-d').value), p = num($('#su-p').value);
   if (!name || q == null || !d) return toast('Vyplň název, kolik máš a denní dávku');
-  const o = { name, qty: q, dose: d, pkg: p || null, unit: $('[data-seg=unit] .on')?.dataset.v || 'g', days: $('[data-seg=days] .on')?.dataset.v || 'denne', since: dkey(addDays(new Date(), 1)) };
+  const o = { name, qty: q, dose: d, pkg: p || null, unit: $('[data-seg=unit] .on')?.dataset.v || 'g', days: $('[data-seg=days] .on')?.dataset.v || 'denne', since: dkey(addDays(new Date(), 1)), when: $$('#sheet .swhen .chip.on').map(x => x.dataset.v), whenNote: $('#su-o').value.trim() };
   const L = F().sup = F().sup || []; if (i >= 0) L[i] = o; else L.push(o); save(true); closeSheet(); render(); toast('Uloženo');
 };
 A['f-supdel'] = b => { F().sup.splice(+b.dataset.i, 1); save(true); closeSheet(); render(); };
@@ -4457,6 +4461,19 @@ function shopInfo(list, wi, mon, w) {
     <div><span>Vystačí</span><b>${fday(from)} – ${fday(to)}</b><small>${list === 'N1' ? 'nedělní vaření + jídla Po–St' : 'středeční vaření + jídla Čt–Ne'}</small></div>
     ${R[cookK] ? `<div class="w"><span>Vaří se do zásoby</span><b>${esc(R[cookK].nazev)} × 4</b><small>${fl(cookD)}</small></div>` : ''}</div>`;
 }
+
+const SUP_WHEN = ['Ráno nalačno', 'Po 1. jídle', 'K obědu', 'Před tréninkem', 'Po tréninku', 'Večer', 'Před spaním'];
+// dnešní suplementy podle času, odškrtnutí „vzato“
+function supToday(k, isT) {
+  const f = F(); const L = (f.sup || []).map((s, i) => ({ s, i })).filter(({ s }) => s.days !== 'trenink' || isT); if (!L.length) return '';
+  const tk = (f.supTaken = f.supTaken || {})[k] || {};
+  const slot = s => { const w = (s.when || []).filter(x => x !== 'Před tréninkem' || isT); return w.length ? w : ['Kdykoli']; };
+  const order = [...SUP_WHEN, 'Kdykoli']; const rows = [];
+  order.forEach(w => L.forEach(({ s, i }) => { if (slot(s).includes(w)) rows.push({ w, s, i }); }));
+  return `<div class="fsec"><div class="lbl">Suplementy</div><div class="fsupd">${rows.map(({ w, s, i }) => { const id = i + ':' + w; return `<button class="fsi ${tk[id] ? 'on' : ''}" data-a="f-took" data-k="${k}" data-id="${id}"><span class="cb">${tk[id] ? ico('check') : ''}</span><span class="t"><b>${esc(s.name)}</b><small>${w}${s.whenNote ? ' · ' + esc(s.whenNote) : ''}</small></span><span class="q">${kg(s.dose)} ${esc(s.unit)}</span></button>`; }).join('')}</div></div>`;
+}
+A['f-took'] = b => { const f = F(); const T = (f.supTaken = f.supTaken || {}); const d = T[b.dataset.k] = T[b.dataset.k] || {}; if (d[b.dataset.id]) delete d[b.dataset.id]; else d[b.dataset.id] = 1;
+  Object.keys(T).forEach(x => { if (toU(x) < toU(today()) - 14 * DMS) delete T[x]; }); save(); const y = $('#app').scrollTop; render(); $('#app').scrollTop = y; };
 
 
 // ===================== v2.14: Jídlo v zelené · víc jídelníčků =====================

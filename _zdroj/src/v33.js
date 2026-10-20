@@ -82,7 +82,7 @@ XV['f-den'] = function () {
   const up = (day.upravy || []).map(u => `<li>${esc(u.text)}</li>`).join('');
   const W = JD.cyklus[c.w]; const cook = c.di === 6 && W ? JD.cyklus[(JD.meta.poradi_cyklu || ['A', 'B', 'C'])[(c.wi + 1) % 3]]?.varka_nedele : c.di === 2 ? W.varka_streda : null;
   return `<div class="wrap">${fHdr('Jídlo')}${remindersF(k)}${nav}
-    <div class="fmeals">${meals}</div>
+    <div class="fmeals">${meals}</div>${supToday(k, day.trenink)}
     ${up ? `<div class="fsec"><div class="lbl">Navíc k dnešku</div><ul class="fup">${up}</ul></div>` : ''}
     ${cook && R[cook] ? `<div class="fsec"><div class="lbl">Vaření do zásoby</div><p class="fcook">${c.di === 6 ? 'Dnes večer' : 'Dnes'}: <b>${esc(R[cook].nazev)}</b> × 4 porce</p></div>` : ''}
     ${daySumHTML(tot, f.step)}
@@ -180,7 +180,7 @@ XV['f-sup'] = function () {
   const f = F(); const L = f.sup || [];
   return `<div class="wrap">${fHdr('Suplementy')}
     ${L.length ? `<div class="list">${L.map((s, i) => { const st = supState(s); const warn = st.daysLeft != null && st.daysLeft <= (f.supWarn || 7);
-      return `<div class="fsup ${warn ? (st.daysLeft <= 2 ? 'crit' : 'warn') : ''}"><button class="t" data-a="f-supedit" data-i="${i}"><b>${esc(s.name)}</b><small>${s.dose} ${esc(s.unit)} ${s.days === 'trenink' ? 'v tréninkové dny' : 'denně'} · zbývá ${nf(st.left, st.left % 1 ? 1 : 0)} ${esc(s.unit)}</small></button>
+      return `<div class="fsup ${warn ? (st.daysLeft <= 2 ? 'crit' : 'warn') : ''}"><button class="t" data-a="f-supedit" data-i="${i}"><b>${esc(s.name)}</b><small>${s.dose} ${esc(s.unit)} ${s.days === 'trenink' ? 'v tréninkové dny' : 'denně'}${(s.when || []).length || s.whenNote ? ' · ' + esc([...(s.when || []), s.whenNote].filter(Boolean).join(', ').toLowerCase()) : ''} · zbývá ${nf(st.left, st.left % 1 ? 1 : 0)} ${esc(s.unit)}</small></button>
         <div class="fsr"><span>${st.end ? `vydrží do <b>${fday(st.end)}</b>` : 'došlo'}${st.daysLeft != null ? `<small>${st.daysLeft <= 0 ? 'dnes poslední' : `ještě ${st.daysLeft} ${st.daysLeft === 1 ? 'den' : st.daysLeft < 5 ? 'dny' : 'dní'}`}</small>` : ''}</span><button class="btn" data-a="f-supadd" data-i="${i}">Doplnil jsem</button></div></div>`; }).join('')}</div>`
       : '<div class="empty"><b>Zatím žádný suplement</b><span>Přidej kreatin, protein, vitamin D… Aplikace sama odečítá spotřebu a ozve se, než dojdou.</span></div>'}
     <button class="btn block" style="margin-top:14px" data-a="f-supedit" data-i="-1">${ico('plus')} Přidat suplement</button>
@@ -193,14 +193,16 @@ A['f-supedit'] = b => {
   sheet(`<h2>${i >= 0 ? 'Upravit suplement' : 'Nový suplement'}</h2><div class="form">
     <label class="f">Název<input id="su-n" value="${esc(s.name)}" placeholder="např. Kreatin"></label>
     <div class="seg" data-seg="unit">${['g', 'ks', 'dávek'].map(u => `<button data-a="seg" data-v="${u}" class="${s.unit === u ? 'on' : ''}">${u}</button>`).join('')}</div>
-    <div class="three"><label class="f">Mám teď<input id="su-q" inputmode="decimal" value="${i >= 0 ? nf(supState(s).left, 1).replace(',0', '') : ''}" placeholder="500"></label><label class="f">Denní dávka<input id="su-d" inputmode="decimal" value="${kg(s.dose)}" placeholder="5"></label><label class="f">Balení<input id="su-p" inputmode="decimal" value="${kg(s.pkg)}" placeholder="500"></label></div>
-    <div class="seg" data-seg="days">${[['denne', 'Denně'], ['trenink', 'Jen tréninkové dny']].map(([v, l]) => `<button data-a="seg" data-v="${v}" class="${s.days === v ? 'on' : ''}">${l}</button>`).join('')}</div></div>
+    <div class="three"><label class="f">Mám teď<input id="su-q" inputmode="decimal" value="${i >= 0 ? nf(supState(s).left, 1).replace(',0', '') : ''}" placeholder="500"></label><label class="f">Denní dávka<input id="su-d" inputmode="decimal" value="${s.dose ? kg(s.dose) : ''}" placeholder="5"></label><label class="f">Balení<input id="su-p" inputmode="decimal" value="${s.pkg ? kg(s.pkg) : ''}" placeholder="500"></label></div>
+    <div class="seg" data-seg="days">${[['denne', 'Denně'], ['trenink', 'Jen tréninkové dny']].map(([v, l]) => `<button data-a="seg" data-v="${v}" class="${s.days === v ? 'on' : ''}">${l}</button>`).join('')}</div>
+    <div><div class="lbl" style="margin:4px 2px 8px">Kdy beru</div><div class="chips swhen">${SUP_WHEN.map(w => `<button class="chip ${(s.when || []).includes(w) ? 'on' : ''}" data-a="part-tog" data-v="${w}">${w}</button>`).join('')}</div></div>
+    <label class="f">Jinak / poznámka<input id="su-o" value="${esc(s.whenNote || '')}" placeholder="např. s jídlem, rozdělit na 2×"></label></div>
     <div class="actions">${i >= 0 ? `<button class="btn danger" data-a="f-supdel" data-i="${i}" aria-label="Smazat">${ico('trash')}</button>` : ''}<button class="btn" data-a="close">Zrušit</button><button class="btn white" data-a="f-supsave" data-i="${i}">Uložit</button></div>`);
 };
 A['f-supsave'] = b => {
   const i = +b.dataset.i; const name = $('#su-n').value.trim(), q = num($('#su-q').value), d = num($('#su-d').value), p = num($('#su-p').value);
   if (!name || q == null || !d) return toast('Vyplň název, kolik máš a denní dávku');
-  const o = { name, qty: q, dose: d, pkg: p || null, unit: $('[data-seg=unit] .on')?.dataset.v || 'g', days: $('[data-seg=days] .on')?.dataset.v || 'denne', since: dkey(addDays(new Date(), 1)) };
+  const o = { name, qty: q, dose: d, pkg: p || null, unit: $('[data-seg=unit] .on')?.dataset.v || 'g', days: $('[data-seg=days] .on')?.dataset.v || 'denne', since: dkey(addDays(new Date(), 1)), when: $$('#sheet .swhen .chip.on').map(x => x.dataset.v), whenNote: $('#su-o').value.trim() };
   const L = F().sup = F().sup || []; if (i >= 0) L[i] = o; else L.push(o); save(true); closeSheet(); render(); toast('Uloženo');
 };
 A['f-supdel'] = b => { F().sup.splice(+b.dataset.i, 1); save(true); closeSheet(); render(); };
@@ -362,3 +364,16 @@ function shopInfo(list, wi, mon, w) {
     <div><span>Vystačí</span><b>${fday(from)} – ${fday(to)}</b><small>${list === 'N1' ? 'nedělní vaření + jídla Po–St' : 'středeční vaření + jídla Čt–Ne'}</small></div>
     ${R[cookK] ? `<div class="w"><span>Vaří se do zásoby</span><b>${esc(R[cookK].nazev)} × 4</b><small>${fl(cookD)}</small></div>` : ''}</div>`;
 }
+
+const SUP_WHEN = ['Ráno nalačno', 'Po 1. jídle', 'K obědu', 'Před tréninkem', 'Po tréninku', 'Večer', 'Před spaním'];
+// dnešní suplementy podle času, odškrtnutí „vzato“
+function supToday(k, isT) {
+  const f = F(); const L = (f.sup || []).map((s, i) => ({ s, i })).filter(({ s }) => s.days !== 'trenink' || isT); if (!L.length) return '';
+  const tk = (f.supTaken = f.supTaken || {})[k] || {};
+  const slot = s => { const w = (s.when || []).filter(x => x !== 'Před tréninkem' || isT); return w.length ? w : ['Kdykoli']; };
+  const order = [...SUP_WHEN, 'Kdykoli']; const rows = [];
+  order.forEach(w => L.forEach(({ s, i }) => { if (slot(s).includes(w)) rows.push({ w, s, i }); }));
+  return `<div class="fsec"><div class="lbl">Suplementy</div><div class="fsupd">${rows.map(({ w, s, i }) => { const id = i + ':' + w; return `<button class="fsi ${tk[id] ? 'on' : ''}" data-a="f-took" data-k="${k}" data-id="${id}"><span class="cb">${tk[id] ? ico('check') : ''}</span><span class="t"><b>${esc(s.name)}</b><small>${w}${s.whenNote ? ' · ' + esc(s.whenNote) : ''}</small></span><span class="q">${kg(s.dose)} ${esc(s.unit)}</span></button>`; }).join('')}</div></div>`;
+}
+A['f-took'] = b => { const f = F(); const T = (f.supTaken = f.supTaken || {}); const d = T[b.dataset.k] = T[b.dataset.k] || {}; if (d[b.dataset.id]) delete d[b.dataset.id]; else d[b.dataset.id] = 1;
+  Object.keys(T).forEach(x => { if (toU(x) < toU(today()) - 14 * DMS) delete T[x]; }); save(); const y = $('#app').scrollTop; render(); $('#app').scrollTop = y; };
