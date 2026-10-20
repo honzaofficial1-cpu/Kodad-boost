@@ -383,3 +383,16 @@ nav.tabs button{position:relative}
 .seg.rate button.in{background:var(--hot);color:#0A0A0A}
 .seg.rate button.on{border-radius:0 999px 999px 0}.seg.rate button.on:first-child{border-radius:999px}
 .card .seg.rate button.in{background:var(--hot)}
+.sobt{text-align:center;color:var(--mut);margin:6px 0 0;font-size:15px}
+.sobcar{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin:0 -20px;-webkit-overflow-scrolling:touch}
+.sobcar::-webkit-scrollbar{display:none}
+.sobp{flex:0 0 100%;scroll-snap-align:center;min-height:300px;display:grid;place-items:center;padding:10px 20px}
+.sobbig{display:flex;flex-direction:column;align-items:center}
+.sobbig b{font-family:var(--fd);font-style:italic;font-weight:800;font-size:120px;line-height:.9;color:var(--fg)}
+.sobbig span{font-family:var(--fd);font-style:italic;font-weight:800;font-size:28px;text-transform:uppercase;color:var(--hot);margin-top:6px}
+.sobcs{position:relative;width:270px;height:270px}
+.sobc{position:absolute;width:160px;height:160px;border-radius:50%;border:6px solid var(--hot);background:var(--card);display:flex;flex-direction:column;align-items:center;justify-content:center}
+.sobc:first-child{left:0;top:0}.sobc:last-child{right:0;bottom:0;background:#0E1A12}
+.sobc b{font-family:var(--fd);font-style:italic;font-weight:800;font-size:64px;line-height:.9}
+.sobc span{font-family:var(--fd);font-style:italic;font-weight:800;font-size:18px;text-transform:uppercase;color:var(--hot);margin-top:2px}
+.sobdots{display:flex;justify-content:center;gap:8px;margin-top:4px}.sobdots i{width:8px;height:8px;border-radius:50%;background:#3A3A3D}.sobdots i.on{background:var(--hot)}

@@ -52,3 +52,31 @@ document.addEventListener('change', e => {
   if (e.target.id !== 'a-type') return; const id = $('#sheet [data-a=act-save]')?.dataset.id; const a = id && S.activities.find(x => x.id === id); if (!a) return;
   a.type = e.target.value; if (a.type === 'bike' && !a.kind) a.kind = 'Rotoped'; save(true); actSheet(a.type, a.date, id); render(); toast('Změněno na ' + ACT_TYPES[a.type].name);
 });
+
+// ---------- bez alkoholu: listovací stránky (dny · měsíce a dny · týdny a dny · hodiny) ----------
+function sobPages(o, n) {
+  const a = pdate(o.since), b = new Date(); let m = (b.getFullYear() - a.getFullYear()) * 12 + b.getMonth() - a.getMonth(); if (b.getDate() < a.getDate()) m--;
+  const dm = daysBetween(addMo(o.since, m), today()); const h = Math.floor((Date.now() - a.getTime()) / 36e5);
+  const circ = (x, l) => `<div class="sobc"><b>${thou(x)}</b><span>${l}</span></div>`;
+  const two = (v1, l1, v2, l2) => `<div class="sobcs">${circ(v1, l1)}${circ(v2, l2)}</div>`;
+  return [
+    `<div class="sobbig"><b>${thou(n)}</b><span>${nDays(n)}</span></div>`,
+    two(m, pl(m, 'měsíc', 'měsíce', 'měsíců').split(' ')[1], dm, nDays(dm)),
+    two(Math.floor(n / 7), pl(Math.floor(n / 7), 'týden', 'týdny', 'týdnů').split(' ')[1], n % 7, nDays(n % 7)),
+    `<div class="sobbig"><b>${thou(h)}</b><span>${pl(h, 'hodina', 'hodiny', 'hodin').split(' ')[1]}</span></div>`,
+  ];
+}
+A['sob-open'] = () => {
+  const o = SOB(); const n = sobDays(); if (n == null) return A['sob-set']();
+  const P = sobPages(o, n); const pg = Math.min(P.length - 1, S.settings.sobPg || 0); const nx = SOB_T.find(t => t > n), pv = [...SOB_T].reverse().find(t => t <= n) || 0;
+  sheet(`<div class="sobs"><p class="sobt">Bez alkoholu už</p>
+    <div class="sobcar">${P.map(p => `<div class="sobp">${p}</div>`).join('')}</div>
+    <div class="sobdots">${P.map((_, i) => `<i class="${i === pg ? 'on' : ''}"></i>`).join('')}</div>
+    <p class="mut" style="margin:14px 2px 0;text-align:center">od ${fdate(o.since)}${o.best > n ? ` · nejdelší série ${o.best} ${nDays(o.best)}` : ''}</p>
+    ${nx ? `<div class="fsobbar"><i style="width:${Math.round((n - pv) / (nx - pv) * 100)}%"></i></div><p class="fsobnx">Odznak ${nx} dní – zbývá ${nx - n} ${nDays(nx - n)}</p>` : '<p class="fsobnx">Všechny odznaky máš.</p>'}</div>
+    <div class="actions"><button class="btn" data-a="sob-set">Upravit datum</button><button class="btn" data-a="sob-reset">Napil jsem se</button></div>`, el => {
+    const c = el.querySelector('.sobcar'); const dots = [...el.querySelectorAll('.sobdots i')];
+    requestAnimationFrame(() => { c.scrollLeft = pg * c.clientWidth; });
+    c.addEventListener('scroll', () => { const i = Math.round(c.scrollLeft / c.clientWidth); dots.forEach((d, j) => d.classList.toggle('on', j === i)); if (S.settings.sobPg !== i) { S.settings.sobPg = i; save(); } }, { passive: true });
+  });
+};
