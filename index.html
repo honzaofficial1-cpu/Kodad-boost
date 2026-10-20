@@ -1034,6 +1034,9 @@ html.food .hdr h1{color:#FFFFFF}
 .kin span{display:flex;flex-direction:column;min-width:0}.kin b{font-weight:600;font-size:15px}.kin small{color:var(--mut);font-size:12px}
 .kin input{width:96px;flex:none;text-align:right;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;color:var(--fg);font-size:16px}
 .kin.ok input{border-color:var(--hot)}.kin.lo input,.kin.hi input{border-color:#FF8A3D;color:#FF8A3D}
+.kmore{margin-top:6px}.kmore summary{list-style:none;cursor:pointer;padding:14px 2px;color:var(--mut);font-size:14px;font-weight:600;border-bottom:1px solid var(--line)}
+.kmore summary::-webkit-details-marker{display:none}.kmore summary::after{content:" +";color:var(--hot)}.kmore[open] summary::after{content:" –"}
+.kol{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:9px;font-size:15px;line-height:1.35}.kol li::marker{color:var(--hot);font-weight:700}
 </style>
 </head>
 <body>
@@ -5018,21 +5021,27 @@ A['sob-reset2'] = () => { const o = SOB(); const v = $('#sob-r').value || today(
 setTimeout(() => { if (SOB().since) checkBadges(); }, 2500);
 
 // ---------- krevní testy ----------
+// tvůj seznam vyšetření (podle „Krevní testy – seznam“) + další běžné ukazatele
 const BM = [
-  ['Krevní obraz', [['hb', 'Hemoglobin', 'g/l', 135, 175], ['hct', 'Hematokrit', '', 0.4, 0.5], ['ery', 'Erytrocyty', '10¹²/l', 4.3, 5.7], ['leu', 'Leukocyty', '10⁹/l', 4, 10], ['trom', 'Trombocyty', '10⁹/l', 150, 400]]],
-  ['Železo', [['fer', 'Feritin', 'µg/l', 30, 400], ['fe', 'Železo', 'µmol/l', 10.6, 28.3], ['trf', 'Transferin', 'g/l', 2, 3.6]]],
-  ['Vitaminy', [['vitd', 'Vitamin D (25-OH)', 'nmol/l', 75, 250], ['b12', 'Vitamin B12', 'pmol/l', 145, 569], ['fol', 'Folát', 'nmol/l', 10.4, 42.4]]],
-  ['Cukr', [['glu', 'Glukóza', 'mmol/l', 3.9, 5.6], ['hba1c', 'HbA1c', 'mmol/mol', 20, 42], ['ins', 'Inzulin', 'mU/l', 2.6, 24.9]]],
-  ['Tuky', [['chol', 'Cholesterol', 'mmol/l', 2.9, 5], ['ldl', 'LDL', 'mmol/l', 1.2, 3], ['hdl', 'HDL', 'mmol/l', 1, 2.1], ['tag', 'Triglyceridy', 'mmol/l', 0.45, 1.7]]],
-  ['Játra', [['alt', 'ALT', 'µkat/l', 0.1, 0.78], ['ast', 'AST', 'µkat/l', 0.05, 0.72], ['ggt', 'GGT', 'µkat/l', 0.14, 0.84], ['bil', 'Bilirubin', 'µmol/l', 2, 17]]],
-  ['Ledviny', [['krea', 'Kreatinin', 'µmol/l', 64, 104], ['egfr', 'eGFR', 'ml/s/1,73 m²', 1.5, null], ['urea', 'Urea', 'mmol/l', 2.8, 8], ['kmoc', 'Kyselina močová', 'µmol/l', 202, 416]]],
-  ['Štítná žláza', [['tsh', 'TSH', 'mU/l', 0.27, 4.2], ['ft4', 'fT4', 'pmol/l', 12, 22]]],
-  ['Hormony', [['testo', 'Testosteron', 'nmol/l', 8.6, 29], ['shbg', 'SHBG', 'nmol/l', 18.3, 54.1], ['kort', 'Kortizol (ráno)', 'nmol/l', 166, 507]]],
-  ['Minerály', [['mg', 'Hořčík', 'mmol/l', 0.66, 1.07], ['zn', 'Zinek', 'µmol/l', 11, 18], ['na', 'Sodík', 'mmol/l', 136, 145], ['k', 'Draslík', 'mmol/l', 3.5, 5.1], ['ca', 'Vápník', 'mmol/l', 2.15, 2.55]]],
-  ['Zánět a svaly', [['crp', 'CRP', 'mg/l', 0, 5], ['ck', 'Kreatinkináza (CK)', 'µkat/l', 0.65, 3.2]]],
+  ['Vitamin D', [['vitd', 'Vitamin D (25-OH)', 'nmol/l', 75, 250]]],
+  ['Tuky', [['chol', 'Celkový cholesterol', 'mmol/l', 2.9, 5], ['ldl', 'LDL', 'mmol/l', 1.2, 3], ['hdl', 'HDL', 'mmol/l', 1, 2.1], ['tag', 'Triglyceridy (TAG)', 'mmol/l', 0.45, 1.7]]],
+  ['Zánět', [['crp', 'CRP', 'mg/l', 0, 5]]],
+  ['Štítná žláza', [['tsh', 'TSH', 'mU/l', 0.27, 4.2], ['ft4', 'fT4', 'pmol/l', 12, 22], ['ft3', 'fT3', 'pmol/l', 3.1, 6.8]]],
+  ['Jaterní enzymy', [['alt', 'ALT', 'µkat/l', 0.1, 0.78], ['ast', 'AST', 'µkat/l', 0.05, 0.72], ['alp', 'ALP', 'µkat/l', 0.67, 2.15]]],
+  ['Železo', [['fer', 'Feritin', 'µg/l', 30, 400], ['trf', 'Transferin', 'g/l', 2, 3.6], ['tsat', 'Saturace transferinu', '%', 20, 50], ['fe', 'Železo v séru', 'µmol/l', 10.6, 28.3]]],
+  ['Cukr', [['hba1c', 'Glykovaný hemoglobin HbA1c', 'mmol/mol', 20, 42]]],
+  ['Krevní obraz', [['leu', 'Leukocyty (bílé krvinky)', '10⁹/l', 4, 10], ['ery', 'Erytrocyty (červené krvinky)', '10¹²/l', 4.3, 5.7], ['hb', 'Hemoglobin', 'g/l', 135, 175], ['hct', 'Hematokrit', '', 0.4, 0.5], ['trom', 'Trombocyty (destičky)', '10⁹/l', 150, 400], ['mcv', 'MCV', 'fl', 82, 98], ['mch', 'MCH', 'pg', 28, 34], ['mchc', 'MCHC', 'g/l', 320, 360]]],
+  ['Diferenciál', [['neu', 'Neutrofily', '10⁹/l', 2, 7], ['lym', 'Lymfocyty', '10⁹/l', 0.8, 4], ['mono', 'Monocyty', '10⁹/l', 0.08, 1.2], ['eos', 'Eozinofily', '10⁹/l', 0, 0.5], ['baso', 'Bazofily', '10⁹/l', 0, 0.2]]],
+  ['Ledviny', [['krea', 'Kreatinin', 'µmol/l', 64, 104], ['urea', 'Močovina', 'mmol/l', 2.8, 8]]],
+  ['Minerály v séru', [['na', 'Sodík (Na)', 'mmol/l', 136, 145], ['k', 'Draslík (K)', 'mmol/l', 3.5, 5.1], ['cl', 'Chloridy (Cl)', 'mmol/l', 97, 108], ['mg', 'Hořčík (Mg)', 'mmol/l', 0.66, 1.07], ['zn', 'Zinek (Zn)', 'µmol/l', 11, 18]]],
+  ['Hormony', [['testo', 'Testosteron', 'nmol/l', 8.6, 29], ['shbg', 'SHBG', 'nmol/l', 18.3, 54.1], ['alb', 'Albumin', 'g/l', 35, 53], ['fsh', 'FSH (případně)', 'IU/l', 1.5, 12.4], ['lh', 'LH (případně)', 'IU/l', 1.7, 8.6]]],
 ];
+const BM_MORE = [['b12', 'Vitamin B12', 'pmol/l', 145, 569], ['fol', 'Folát', 'nmol/l', 10.4, 42.4], ['glu', 'Glukóza', 'mmol/l', 3.9, 5.6], ['ins', 'Inzulin', 'mU/l', 2.6, 24.9], ['ggt', 'GGT', 'µkat/l', 0.14, 0.84], ['bil', 'Bilirubin', 'µmol/l', 2, 17],
+  ['egfr', 'eGFR', 'ml/s/1,73 m²', 1.5, null], ['kmoc', 'Kyselina močová', 'µmol/l', 202, 416], ['kort', 'Kortizol (ráno)', 'nmol/l', 166, 507], ['ca', 'Vápník', 'mmol/l', 2.15, 2.55], ['ck', 'Kreatinkináza (CK)', 'µkat/l', 0.65, 3.2]];
+const BM_LIST = ['Vitamín D', 'Celkový cholesterol, LDL, HDL, TAG', 'CRP', 'Hormony štítné žlázy (TSH, fT4, fT3)', 'Jaterní enzymy ALT, AST, ALP', 'Ferritin, transferin, saturace transferinu a železo v séru', 'Glykovaný hemoglobin HbA1c',
+  'Krevní obraz + diferenciál (bílé krvinky, červené krvinky, hemoglobin, hematokrit, krevní destičky, MCV, MCH, MCHC)', 'Kreatinin a močovina', 'Minerály v séru (Na, K, Cl, Mg, Zn)', 'Testosteron, SHBG, albumin (případně FSH, LH)'];
 const BL = () => (S.blood = S.blood || { tests: [], mk: {}, custom: [] });
-const bmAll = () => [...BM.flatMap(([, l]) => l), ...BL().custom];
+const bmAll = () => [...BM.flatMap(([, l]) => l), ...BM_MORE, ...BL().custom];
 const bmGet = id => { const m = bmAll().find(x => x[0] === id); if (!m) return null; const o = BL().mk[id] || {}; return { id, name: m[1], unit: m[2], lo: o.lo !== undefined ? o.lo : m[3], hi: o.hi !== undefined ? o.hi : m[4] }; };
 const bFlag = (m, v) => v == null || !m ? '' : m.lo != null && v < m.lo ? 'lo' : m.hi != null && v > m.hi ? 'hi' : 'ok';
 const bRef = m => m.lo != null && m.hi != null ? `${kg(m.lo)}–${kg(m.hi)}` : m.lo != null ? `nad ${kg(m.lo)}` : m.hi != null ? `pod ${kg(m.hi)}` : 'bez rozmezí';
@@ -5060,7 +5069,7 @@ XV['f-krev'] = function () {
   const out = last ? Object.keys(last.v || {}).filter(id => ['lo', 'hi'].includes(bFlag(bmGet(id), last.v[id]))).length : 0;
   return `<div class="wrap">${hdr(backBtn('f-vyvoj'), '<h1>Krevní testy</h1>', '<span></span>')}
     ${last ? `<div class="kstat"><div><span>Poslední odběr</span><b>${fday(last.date)}</b></div><div><span>Hodnot</span><b>${Object.keys(last.v || {}).length}</b></div><div class="${out ? 'bad' : ''}"><span>Mimo rozmezí</span><b>${out}</b></div></div>` : '<div class="empty"><b>Zatím žádný odběr</b><span>Přidej odběr, nahraj PDF nebo fotku výsledků a opiš hodnoty, které tě zajímají. Aplikace ukáže, co je mimo rozmezí a jak se to mění.</span></div>'}
-    <button class="btn white block" style="margin-top:14px" data-a="kr-new">${ico('plus')} Nový odběr</button>
+    <div class="two" style="margin-top:14px"><button class="btn white" data-a="kr-new">${ico('plus')} Nový odběr</button><button class="btn" data-a="kr-list">Co vyšetřit</button></div>
     ${vals ? `<div class="fsec"><div class="lbl">Hodnoty · poslední výsledek</div><div class="klist">${vals}</div></div>` : ''}
     ${T.length ? `<div class="fsec"><div class="lbl">Odběry</div><div class="list">${T.map(t => { const n = Object.keys(t.v || {}).length, o = Object.keys(t.v || {}).filter(id => ['lo', 'hi'].includes(bFlag(bmGet(id), t.v[id]))).length;
       return `<button class="li" data-a="kr-open" data-id="${t.id}"><span class="ic">${ico('cal')}</span><div class="t"><b>${fdate(t.date)}</b><small>${t.lab ? esc(t.lab) + ' · ' : ''}${n} ${pl(n, 'hodnota', 'hodnoty', 'hodnot').split(' ')[1]}${o ? ` · ${o} mimo` : ''}${(t.files || []).length ? ` · ${t.files.length} ${pl(t.files.length, 'soubor', 'soubory', 'souborů').split(' ')[1]}` : ''}</small></div>${ico('chev')}</button>`; }).join('')}</div></div>` : ''}
@@ -5073,7 +5082,7 @@ XV['f-krevt'] = function () {
   const t = BL().tests.find(x => x.id === view.id); if (!t) return XV['f-krev']();
   const row = m => { const x = bmGet(m[0]); const v = t.v[m[0]]; const fl = bFlag(x, v);
     return `<label class="kin ${v != null ? fl : ''}"><span><b>${esc(x.name)}</b><small>${bRef(x)} ${esc(x.unit)}</small></span><input data-km="${m[0]}" inputmode="decimal" value="${v != null ? kg(v) : ''}" placeholder="–"></label>`; };
-  const groups = [...BM, ...(BL().custom.length ? [['Vlastní', BL().custom]] : [])];
+  const groups = [...BM, ...(BL().custom.length ? [['Vlastní', BL().custom]] : [])]; const moreOpen = BM_MORE.some(m => t.v[m[0]] != null);
   return `<div class="wrap">${hdr(backBtn('f-krev'), '<h1>Odběr</h1>', `<button class="round" data-a="kr-del" aria-label="Smazat odběr">${ico('trash')}</button>`)}
     <div class="form" style="margin-top:0"><div class="two"><label class="f">Datum odběru<input type="date" id="kr-date" value="${t.date}" max="${today()}"></label><label class="f">Laboratoř<input id="kr-lab" value="${esc(t.lab || '')}" placeholder="např. Synlab"></label></div></div>
     <div class="fsec"><div class="lbl">Výsledky (PDF nebo foto)</div>
@@ -5081,6 +5090,7 @@ XV['f-krevt'] = function () {
       <label class="btn block" style="margin-top:10px">${ico('plus')} Nahrát soubor<input type="file" id="kr-file" accept="application/pdf,image/*" multiple hidden></label></div>
     <div class="fsec"><div class="lbl">Hodnoty</div><p class="mut" style="font-size:13px;margin:0 2px 10px">Vyplň jen to, co máš ve výsledcích. Ukládá se samo.</p>
       ${groups.map(([g, l]) => `<div class="kgrp"><div class="kgh">${esc(g)}</div>${l.map(row).join('')}</div>`).join('')}
+      <details class="kmore" ${moreOpen ? 'open' : ''}><summary>Další ukazatele mimo tvůj seznam</summary><div class="kgrp">${BM_MORE.map(row).join('')}</div></details>
       <button class="btn block" style="margin-top:12px" data-a="kr-cadd">${ico('plus')} Vlastní ukazatel</button></div>
   </div>${tabs()}`;
 };
@@ -5139,6 +5149,12 @@ XV['f-den'] = function () {
   const T = document.createElement('template'); T.innerHTML = h; const m = T.content.querySelector('.fmeals'); if (!m) return h;
   m.insertAdjacentHTML('afterend', `<button class="fsobr" data-a="tab" data-v="f-vyvoj"><span>Bez alkoholu</span><b>${thou(n)} <small>${nDays(n)}</small></b></button>`); return T.innerHTML;
 };
+
+A['kr-list'] = () => sheet(`<h2>Co nechat vyšetřit</h2><p class="mut" style="margin:4px 0 12px">Tvůj seznam – ukaž ho lékaři nebo v laboratoři.</p><ol class="kol">${BM_LIST.map(x => `<li>${esc(x)}</li>`).join('')}</ol>
+  <div class="actions"><button class="btn" data-a="kr-lcopy">Kopírovat</button><button class="btn white" data-a="close">Zavřít</button></div>`);
+A['kr-lcopy'] = async () => { const t = 'Krevní testy:\n' + BM_LIST.map((x, i) => `${i + 1}. ${x}`).join('\n');
+  try { if (navigator.share) { await navigator.share({ text: t }); return; } } catch (e) { return; }
+  try { await navigator.clipboard.writeText(t); toast('Zkopírováno'); } catch (e) { toast('Nepodařilo se zkopírovat'); } };
 
 render();
 </script>

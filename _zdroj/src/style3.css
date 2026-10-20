@@ -366,3 +366,6 @@ html.food .hdr h1{color:#FFFFFF}
 .kin span{display:flex;flex-direction:column;min-width:0}.kin b{font-weight:600;font-size:15px}.kin small{color:var(--mut);font-size:12px}
 .kin input{width:96px;flex:none;text-align:right;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;color:var(--fg);font-size:16px}
 .kin.ok input{border-color:var(--hot)}.kin.lo input,.kin.hi input{border-color:#FF8A3D;color:#FF8A3D}
+.kmore{margin-top:6px}.kmore summary{list-style:none;cursor:pointer;padding:14px 2px;color:var(--mut);font-size:14px;font-weight:600;border-bottom:1px solid var(--line)}
+.kmore summary::-webkit-details-marker{display:none}.kmore summary::after{content:" +";color:var(--hot)}.kmore[open] summary::after{content:" –"}
+.kol{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:9px;font-size:15px;line-height:1.35}.kol li::marker{color:var(--hot);font-weight:700}
