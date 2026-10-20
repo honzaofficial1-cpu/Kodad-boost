@@ -33,9 +33,17 @@ jobs:
           API="https://api.cloudflare.com/client/v4/accounts/$A/storage/kv/namespaces"
           L=$(curl -s -H "Authorization: Bearer $T" "$API?per_page=100"); echo "::notice::KV seznam: $(echo "$L" | jq -c '{success,count:(.result|length?),errors:[.errors[]?|"\(.code) \(.message)"]}')"
           ID=$(echo "$L" | jq -r '.result[]? | select(.title=="kodad-whoop") | .id' | head -1)
+          ID=${ID:-$(echo "$L" | jq -r '.result[]? | select(.title=="kodad-whoop-KV") | .id' | head -1)}
           if [ -z "$ID" ]; then
-            R=$(curl -s -X POST -H "Authorization: Bearer $T" -H "Content-Type: application/json" -d '{"title":"kodad-whoop"}' "$API"); echo "::notice::KV vytvoření: $(echo "$R" | jq -c '{success,errors:[.errors[]?|"\(.code) \(.message)"]}')"
-            ID=$(echo "$R" | jq -r '.result.id')
+            printf '{"title":"kodad-whoop"}' > /tmp/kv.json
+            R=$(curl -s -X POST -H "Authorization: Bearer $T" -H "Content-Type: application/json" --data-binary @/tmp/kv.json "$API"); echo "::notice::KV vytvoření (API): $(echo "$R" | jq -c '{success,errors:[.errors[]?|"\(.code) \(.message)"]}')"
+            ID=$(echo "$R" | jq -r '.result.id // empty')
+          fi
+          if [ -z "$ID" ]; then
+            sed -i "s/__ACC__/$A/" whoop/wrangler.toml; sed -i '/\[\[kv_namespaces\]\]/,$d' whoop/wrangler.toml
+            OUT=$(cd whoop && CLOUDFLARE_API_TOKEN=$T CLOUDFLARE_ACCOUNT_ID=$A npx -y wrangler@3.99.0 kv namespace create KV 2>&1); echo "$OUT" | tail -5
+            ID=$(echo "$OUT" | grep -oE 'id"? ?[=:] ?"[0-9a-f]{32}"' | grep -oE '[0-9a-f]{32}' | head -1)
+            git checkout whoop/wrangler.toml
           fi
           if [ -z "$ID" ] || [ "$ID" = "null" ]; then echo "::error::KV se nepodařilo vytvořit – zkontroluj oprávnění API tokenu"; exit 1; fi
           sed -i "s/__KV_ID__/$ID/; s/__ACC__/$A/" whoop/wrangler.toml
