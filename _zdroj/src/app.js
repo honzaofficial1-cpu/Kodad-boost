@@ -724,7 +724,8 @@ function vSettings() {
   </div>${tabs()}`;
 }
 async function exportData() {
-  const json = JSON.stringify(S); const name = `kodad-boost-zaloha-${today()}.json`;
+  let jl = null; try { jl = JSON.parse(localStorage.getItem('kodadboost.jdlib') || 'null'); } catch (e) { }
+  const json = JSON.stringify(jl ? Object.assign({}, S, { _jdlib: jl }) : S); const name = `kodad-boost-zaloha-${today()}.json`;
   try { const file = new File([json], name, { type: 'application/json' }); if (navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], title: 'Záloha Kodad boost' }); S.settings.lastBackup = Date.now(); save(true); render(); return; } } catch (e) { if (e.name === 'AbortError') return; }
   try { await navigator.clipboard.writeText(json); S.settings.lastBackup = Date.now(); save(true); toast('Záloha zkopírována do schránky'); render(); }
   catch (e) { sheet(`<h2>Záloha</h2><p class="mut">Zkopíruj celý text a ulož si ho do Poznámek nebo Souborů.</p><textarea class="inp" style="min-height:240px;font-size:12px" readonly>${esc(json)}</textarea>`); }
@@ -1036,7 +1037,7 @@ document.addEventListener('change', async e => {
   try {
     const d = JSON.parse(await f.text()); if (!d || !Array.isArray(d.exercises) || !Array.isArray(d.sessions)) throw new Error('bad');
     sheet(`<h2>Obnovit zálohu?</h2><p class="mut">Záloha obsahuje ${d.sessions.length} tréninků a ${d.exercises.length} cviků. Současná data v telefonu se nahradí.</p><div class="actions"><button class="btn" data-a="close">Zrušit</button><button class="btn white" id="imp-ok">Obnovit</button></div>`,
-      () => { $('#imp-ok').onclick = () => { S = Object.assign(blank(), d); S.settings = Object.assign(blank().settings, d.settings); save(true); closeSheet(); go('home'); toast('Záloha obnovena'); }; });
+      () => { $('#imp-ok').onclick = () => { if (d._jdlib) { try { localStorage.setItem('kodadboost.jdlib', JSON.stringify(d._jdlib)); } catch (er) { } delete d._jdlib; } S = Object.assign(blank(), d); if (typeof jlApply === 'function') jlApply(); S.settings = Object.assign(blank().settings, d.settings); save(true); closeSheet(); go('home'); toast('Záloha obnovena'); }; });
   } catch (err) { toast('Soubor není záloha Kodad boost'); }
   e.target.value = '';
 });

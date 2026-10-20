@@ -73,9 +73,9 @@ XV['f-den'] = function () {
   const f = F(); const k = view.d || today(); const c = cyc(k);
   if (!f.start) return `<div class="wrap">${fHdr('Jídlo')}<div class="empty" style="margin-top:8px"><b>Nastav start jídelníčku</b><span>Zadej pondělí, kdy začíná týden A. Aplikace pak sama ví, který je týden cyklu (A → B → C) a co je dnes k jídlu.</span>
     <label class="f" style="width:100%;margin-top:10px">Pondělí týdne A<input type="date" id="fs-start" value="${dkey(monday(new Date()))}"></label><button class="btn white" data-a="f-start">Začít</button></div></div>${tabs()}`;
-  const nav = `<div class="fdnav"><button class="round" data-a="f-day" data-v="-1" aria-label="Předchozí den">${ico('back')}</button><div><b>${k === today() ? 'Dnes' : flong(k)}</b><small>${c && !c.before ? `Týden ${c.w} · ${DNY[c.di]} · ${planDayF(c.w, c.di).trenink ? 'trénink' : 'volno'} · krok ${sg(f.step, 0).replace('–', '0')}` : 'před startem jídelníčku'}</small></div><button class="round" data-a="f-day" data-v="1" aria-label="Další den">${ico('chev')}</button></div>`;
+  const nav = `<div class="fdnav"><button class="round" data-a="f-day" data-v="-1" aria-label="Předchozí den">${ico('back')}</button><div><b>${k === today() ? 'Dnes' : flong(k)}</b><small>${c && !c.before ? `Týden ${c.w} · ${DNY[c.di]} · ${planDayF(c.w, c.di, k).trenink ? 'trénink' : 'volno'} · krok ${sg(f.step, 0).replace('–', '0')}` : 'před startem jídelníčku'}</small></div><button class="round" data-a="f-day" data-v="1" aria-label="Další den">${ico('chev')}</button></div>`;
   if (!c || c.before) return `<div class="wrap">${fHdr('Jídlo')}${nav}<p class="mut">Jídelníček začíná ${fday(f.start)}.</p></div>${tabs()}`;
-  const day = planDayF(c.w, c.di), R = RX(), M = stepMods(f.step, day), tot = dayTotals(day, f.step);
+  const day = planDayF(c.w, c.di, k), R = RX(), M = stepMods(f.step, day), tot = dayTotals(day, f.step);
   const meals = SLOTS.map(([s, l, t]) => { const r = R[day.jidla[s]]; if (!r) return ''; const box = (day.z_varky || []).includes(s); const mods = M[s];
     const kc = r.hodnoty_porce.kcal + mods.reduce((a, m) => a + nutOf(m.surovina, m.g).kcal, 0);
     return `<button class="fmeal" data-a="f-meal" data-id="${r.kod}" data-s="${s}" data-k="${k}"><span class="fmt"><i>${l}</i><small>${t}</small></span><span class="fmn"><b>${esc(r.nazev)}</b><small>${box ? '<em class="tag">z krabičky</em>' : ''}${s === 'svacina' && day.trenink ? '<em class="tag o">před tréninkem</em>' : ''}${mods.length ? `<em class="tag o">${mods.map(m => `${m.g > 0 ? '+' : ''}${m.g} g ${SUR(m.surovina).nazev.split(' (')[0].toLowerCase()}`).join(', ')}</em>` : ''}</small></span><span class="fmk"><span>${r0(kc)}<small> kcal</small></span><em>B ${r0(r.hodnoty_porce.bilkoviny_g + mods.reduce((a, m) => a + nutOf(m.surovina, m.g).bilkoviny_g, 0))} g</em></span></button>`; }).join('');
@@ -92,7 +92,7 @@ XV['f-den'] = function () {
 A['f-start'] = () => { const v = $('#fs-start').value; if (!v) return; const m = dkey(monday(pdate(v))); F().start = m; save(true); render(); toast(m !== v ? 'Start posunut na pondělí ' + fday(m) : 'Jídelníček nastaven'); };
 A['f-day'] = b => { const k = view.d || today(); view.d = dkey(addDays(pdate(k), +b.dataset.v)); render(); };
 A['f-meal'] = b => {
-  const r = RX()[b.dataset.id]; if (!r) return; const s = b.dataset.s; const k = b.dataset.k || today(); const c = cyc(k); const day = c && !c.before ? planDayF(c.w, c.di) : null; const mods = day ? stepMods(F().step, day)[s] || [] : [];
+  const r = RX()[b.dataset.id]; if (!r) return; const s = b.dataset.s; const k = b.dataset.k || today(); const c = cyc(k); const day = c && !c.before ? planDayF(c.w, c.di, k) : null; const mods = day ? stepMods(F().step, day)[s] || [] : [];
   const tot = addN({ ...r.hodnoty_porce }, {}); mods.forEach(m => addN(tot, nutOf(m.surovina, m.g)));
   sheet(`<h2>${esc(r.nazev)}</h2><p class="mut" style="margin:4px 0 0">${esc(r.slot)} · ${r.kod}</p>
     <p class="fsheet-n">${nutLine(tot)}</p>
@@ -110,9 +110,9 @@ XV['f-tyden'] = function () {
   const f = F(); if (!f.start) return XV['f-den']();
   const c = cyc(today()); const order = JD.meta.poradi_cyklu || ['A', 'B', 'C']; const w = view.w || (c && !c.before ? c.w : 'A'); const R = RX();
   const days = JD.cyklus[w].dny.map((_, di) => {
-    const day = planDayF(w, di), tot = dayTotals(day, f.step); const isT = c && !c.before && c.w === w && c.di === di;
+    const wk = weekDateFor(w, di); const day = planDayF(w, di, wk), tot = dayTotals(day, f.step); const isT = c && !c.before && c.w === w && c.di === di;
     return `<div class="fwd ${isT ? 'today' : ''}"><div class="fwh"><b>${DNY[di]}</b><small>${day.trenink ? 'trénink' : 'volno'}</small><span>${thou(r0(tot.kcal))} kcal · B ${r0(tot.bilkoviny_g)} g</span></div>
-      ${SLOTS.map(([s, l]) => { const r = R[day.jidla[s]]; return r ? `<button class="fwm" data-a="f-meal" data-id="${r.kod}" data-s="${s}"><i>${l}</i><span>${esc(r.nazev)}${(day.z_varky || []).includes(s) ? ' <em class="tag">krabička</em>' : ''}</span></button>` : ''; }).join('')}
+      ${SLOTS.map(([s, l]) => { const r = R[day.jidla[s]]; return r ? `<button class="fwm" data-a="f-meal" data-id="${r.kod}" data-s="${s}" data-k="${wk}"><i>${l}</i><span>${esc(r.nazev)}${(day.z_varky || []).includes(s) ? ' <em class="tag">krabička</em>' : ''}</span></button>` : ''; }).join('')}
       ${(day.upravy || []).length ? `<p class="fwu">+ ${day.upravy.map(u => esc(u.text)).join(' · ')}</p>` : ''}</div>`; }).join('');
   const W = JD.cyklus[w];
   return `<div class="wrap">${fHdr('Týden ' + w)}
@@ -132,7 +132,7 @@ function shopItems(wi, list) {
   const items = src.filter(i => i.kategorie !== 'Zásoba').map(i => ({ id: i.surovina, nazev: i.nazev, mnozstvi: i.mnozstvi, pozn: i.poznamka || '', kat: i.kategorie }));
   // navíc kvůli kroku: N1 = Po–St, N2 = Čt–Ne
   if (f.step) { const add = {}; const rng = list === 'N1' ? [0, 1, 2] : [3, 4, 5, 6];
-    rng.forEach(di => { const day = planDayF(w, di); Object.values(stepMods(f.step, day)).flat().forEach(m => add[m.surovina] = (add[m.surovina] || 0) + m.g); });
+    rng.forEach(di => { const day = planDayF(w, di, dkey(addDays(pdate(f.start), wi * 7 + di))); Object.values(stepMods(f.step, day)).flat().forEach(m => add[m.surovina] = (add[m.surovina] || 0) + m.g); });
     Object.entries(add).forEach(([s, g]) => { if (g) items.push({ id: 'step:' + s, nazev: SUR(s).nazev, mnozstvi: `${g > 0 ? '+' : ''}${g} g`, pozn: g > 0 ? `krok ${sg(f.step, 0)}` : `krok ${sg(f.step, 0)} – kup o tolik méně`, kat: 'Navíc kvůli kroku' }); }); }
   (f.custom[`${wi}:${list}`] || []).forEach((n, i) => items.push({ id: 'c:' + i, nazev: n, mnozstvi: '', pozn: '', kat: 'Vlastní', own: i }));
   return items;
@@ -332,7 +332,7 @@ const _13vHome = vHome;
 vHome = function () {
   let h = _13vHome(); const f = F(); const c = cyc(today()); const R = RX();
   let sub = 'Jídelníček, nákup, suplementy';
-  if (c && !c.before) { const day = planDayF(c.w, c.di); const next = SLOTS.find(([s, , t]) => { const [hh, mm] = t.split(':').map(Number); return new Date().getHours() * 60 + new Date().getMinutes() < hh * 60 + mm + 60; }); if (next) sub = `${next[1]}: ${R[day.jidla[next[0]]]?.nazev || ''}`; else sub = `Týden ${c.w} · zítra ${R[planDayF(c.w, (c.di + 1) % 7).jidla.snidane]?.nazev || ''}`; }
+  if (c && !c.before) { const day = planDayF(c.w, c.di, today()); const next = SLOTS.find(([s, , t]) => { const [hh, mm] = t.split(':').map(Number); return new Date().getHours() * 60 + new Date().getMinutes() < hh * 60 + mm + 60; }); if (next) sub = `${next[1]}: ${R[day.jidla[next[0]]]?.nazev || ''}`; else sub = `Týden ${c.w} · zítra ${R[planDayF(c.w, (c.di + 1) % 7).jidla.snidane]?.nazev || ''}`; }
   const row = `<button class="hcard frow" data-a="tab" data-v="f-den"><span class="hic">${ico('fork')}</span><b>Jídlo</b><small>${esc(sub)}</small></button>`;
   const ban = []; const E = f.start ? evalData() : null; const RR = E ? recommend(E) : [];
   (Array.isArray(RR) ? RR : []).filter(r => ['up', 'down', 'check', 'big'].includes(r.k)).forEach(r => { const id = (E.evals.at(-1)?.mon || '') + r.k; if (!f.dismiss[id]) ban.push(`<button class="fban" data-a="tab" data-v="f-vyvoj"><b>${r.t}</b><small>${r.d}</small></button>`); });
@@ -377,3 +377,6 @@ function supToday(k, isT) {
 }
 A['f-took'] = b => { const f = F(); const T = (f.supTaken = f.supTaken || {}); const d = T[b.dataset.k] = T[b.dataset.k] || {}; if (d[b.dataset.id]) delete d[b.dataset.id]; else d[b.dataset.id] = 1;
   Object.keys(T).forEach(x => { if (toU(x) < toU(today()) - 14 * DMS) delete T[x]; }); save(); const y = $('#app').scrollTop; render(); $('#app').scrollTop = y; };
+
+// datum dne v aktuálním cyklu pro daný týden (A/B/C) a den
+function weekDateFor(w, di) { const c = cyc(today()); if (!c || c.before) return dkey(addDays(pdate(F().start), (JD.meta.poradi_cyklu || ['A', 'B', 'C']).indexOf(w) * 7 + di)); const order = JD.meta.poradi_cyklu || ['A', 'B', 'C']; const base = c.wi - (c.wi % order.length); return dkey(addDays(pdate(F().start), (base + order.indexOf(w)) * 7 + di)); }

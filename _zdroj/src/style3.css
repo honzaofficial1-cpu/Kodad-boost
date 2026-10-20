@@ -282,3 +282,12 @@ html.food .hdr h1{color:#FFFFFF}
 .fmk>span{white-space:nowrap}
 .swhen .chip{padding:9px 13px;font-size:14px}.swhen .chip.on{background:var(--hot);color:#0B0B0C}
 .fsupd .fsi .t small{color:var(--mut)}
+/* snědeno, štítky */
+.fmeal:has(.feat){grid-template-columns:30px 64px 1fr auto;gap:10px}
+.feat{width:28px;height:28px;border-radius:50%;border:2px solid #4A4B51;display:grid;place-items:center;color:#0A0A0A}
+.feat svg{width:16px;height:16px;stroke-width:3}
+.feat.ok{background:var(--hot);border-color:var(--hot)}.feat.jinak{background:#3A3B40;border-color:#6C6C70;color:#E6E6EA}
+.feath{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin:0 2px 8px;font-size:12px;color:var(--mut)}.feath b{font-family:var(--fd);font-weight:700;font-size:18px;color:var(--fg);white-space:nowrap}
+.fban.bk{border-left-color:#8E8E93}
+.tagbox{margin:14px 0 4px}.tagbox .lbl small{text-transform:none;letter-spacing:0;font-weight:500}
+.tagbox .chip{padding:9px 13px;font-size:14px}.tagbox .chip.on{background:var(--hot);color:#0A0A0A}
