@@ -1,4 +1,4 @@
-// Kodad boost × WHOOP – prostředník pro přihlášení a stahování dat (Cloudflare Worker)
+// Kodad boost × WHOOP – prostředník pro přihlášení a stahování dat (Cloudflare Worker) · nasazení 2026-10-20
 const AUTH = 'https://api.prod.whoop.com/oauth/oauth2/auth';
 const TOKEN = 'https://api.prod.whoop.com/oauth/oauth2/token';
 const API = 'https://api.prod.whoop.com/developer';
