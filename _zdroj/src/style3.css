@@ -415,3 +415,6 @@ nav.tabs button{position:relative}
 .tipx{flex:none;width:28px;height:28px;display:grid;place-items:center;color:var(--mut)}.tipx svg{width:16px;height:16px}
 .form input[type=date]{min-width:0;width:100%;max-width:100%;box-sizing:border-box}
 html.food .chips .chip.on{background:#1F3A2A;color:var(--hot)}
+.hbdg{position:relative;color:#F4C542}.hbdg i{position:absolute;top:2px;right:0;min-width:17px;height:17px;padding:0 4px;border-radius:9px;background:#F4C542;color:#0A0A0A;font-style:normal;font-size:11px;font-weight:800;display:grid;place-items:center}
+.lnk{color:var(--hot);font-weight:600;font-size:13px;padding:0}
+.htop .hbtns{display:flex;gap:6px}

@@ -163,3 +163,9 @@ const _20vSettings = vSettings;
 vSettings = function () { const h = _20vSettings(); const sw = `<button class="sw ${S.settings.tipsOff ? '' : 'on'}" data-a="tips-tog" style="margin-top:12px"><span>Tipy během dne<small>Občas se z boku ukáže krátký tip – ráno, přes den, večer</small></span><span class="k"></span></button>`;
   return h.replace(/(<\/div>)(<nav class="tabs)/, sw + '$1$2'); };
 A['tips-tog'] = () => { S.settings.tipsOff = !S.settings.tipsOff; save(true); render(); };
+
+// odznaky: rychlý přístup z Domů (vedle nastavení) a z okna počítadla
+const _20vHome = vHome;
+vHome = function () { return _20vHome().replace('<button class="round ghost" data-a="tab" data-v="settings" aria-label="Nastavení">', `<span class="hbtns"><button class="round ghost hbdg" data-a="tab" data-v="badges" aria-label="Odznaky">${ico('medal')}<i>${badgeCount()}</i></button><button class="round ghost" data-a="tab" data-v="settings" aria-label="Nastavení">`).replace(/(aria-label="Nastavení">[\s\S]*?<\/button>)(<\/header>)/, '$1</span>$2'); };
+const _20sobOpen = A['sob-open'];
+A['sob-open'] = () => { _20sobOpen(); const a = $('#sheet .fsobnx'); if (a) a.insertAdjacentHTML('beforeend', ` · <button class="lnk" data-a="tab" data-v="badges">Všechny odznaky</button>`); };
