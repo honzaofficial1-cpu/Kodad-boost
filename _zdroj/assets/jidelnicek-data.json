@@ -1,7 +1,10 @@
 {
  "meta": {
-  "nazev": "Nabírací systém v1",
-  "verze": "2026-10-20",
+  "format": "nabiraci-system",
+  "schema": 2,
+  "nazev": "Nabírací systém v1.1",
+  "verze": "1.1",
+  "datum": "2026-10-21",
   "vychozi_krok": 0,
   "jednotky": "gramy; maso syrové, přílohy suché, ovoce jedlá část, konzervy slité",
   "energie": "EU faktory 4/4/9 kcal/g, vláknina 2 kcal/g",
@@ -16,7 +19,242 @@
    "Čt",
    "So"
   ],
-  "upozorneni": "Hodnoty jsou převážně databázové odhady; výrobky bez etikety ověřit."
+  "upozorneni": "Energie je odhad; přesnost je pracovní předpoklad zhruba ±5–10 % (nejde o změřenou chybu). O příjmu rozhoduje trend váhy podle plan_nabirani.",
+  "obsah": [
+   "plan_nabirani",
+   "suroviny",
+   "recepty",
+   "cyklus",
+   "zasoba_na_cyklus",
+   "urovne_prijmu"
+  ]
+ },
+ "plan_nabirani": {
+  "verze": "1.1 (21. 10. 2026)",
+  "shrnuti": "Metoda z PDF: zjistit udržovací příjem, k němu +200–300 kcal a pak upravovat po 100–200 kcal podle dvoutýdenního hodnocení. Jídla zůstávají stejná, mění se jen přílohy a tuky po krocích (~100 kcal). O změně rozhoduje celkový obraz: tempo hmotnosti (hlavní číslo), fotky, pas a výkon. Pas sám nikdy nerozhoduje.",
+  "faze": [
+   {
+    "id": "kalibrace",
+    "nazev": "Kalibrace",
+    "delka_tydnu": 4,
+    "krok": 0,
+    "popis": "Jíš přesně krok 0 a vážíš se každé ráno. Týden 1 se nehodnotí. Po týdnu 4 se spočítá udržovací příjem."
+   },
+   {
+    "id": "nabirani",
+    "nazev": "Nabírání",
+    "delka_tydnu": null,
+    "krok": "podle výpočtu",
+    "popis": "Start = udržovací + 250 kcal (nejbližší krok). Hodnocení každé 2 týdny, velké přehodnocení každých 12 týdnů."
+   }
+  ],
+  "kalibrace": {
+   "delka_tydnu": 4,
+   "nehodnoceny_tyden": 1,
+   "porovnat_tydny": [
+    2,
+    4
+   ],
+   "dni_mezi_porovnanymi_tydny": 14,
+   "kcal_na_kg": 7700,
+   "zaokrouhlit_na_kcal": 50,
+   "vzorec": "udrzovaci_kcal = prumerny_denni_prijem_kcal − (prumer_tydne_4_kg − prumer_tydne_2_kg) × 7700 ÷ 14",
+   "prumerny_denni_prijem": "Průměrná energie kroku, podle kterého jsi jedl (urovne_prijmu.kroky, krok 0 ≈ 3 440 kcal). Týden s větší odchylkou od plánu označ jako výjimku.",
+   "proc_4_tydny": "Týdny 2 a 4 jsou od sebe 14 dní. Rozdíl dvou sousedních týdnů je jen 7 dní a voda ho zkreslí víc.",
+   "priklad": "Krok 0 = 3 440 kcal, průměr týdne 2 = 90,00 kg, týdne 4 = 90,25 kg → 3 440 − 0,25 × 7 700 ÷ 14 = 3 440 − 138 ≈ 3 300 kcal udržovací → cíl 3 550 kcal → krok +1 (3 540 kcal).",
+   "poznamka": "7 700 kcal/kg je hrubý převod, proto se výsledek zaokrouhlí na 50 kcal a ověří dalšími týdny."
+  },
+  "start_nabirani": {
+   "nadbytek_kcal": 250,
+   "rozsah_nadbytku_kcal": [
+    200,
+    300
+   ],
+   "postup": "cíl = udržovací + 250 kcal; zvol krok, jehož průměrná kcal je cíli nejblíž (urovne_prijmu.kroky)."
+  },
+  "hodnoceni": {
+   "interval_tydnu": 2,
+   "tyden": "pondělí–neděle",
+   "min_vazeni_za_tyden": 5,
+   "malo_dat": "Týden s méně než 5 váženími je neplatný – upozornit „málo dat“ a hodnocení posunout o týden.",
+   "zmena_kg": "průměr posledního týdne − průměr týdne o 2 týdny dřív",
+   "pasmo_procent_hmotnosti_za_2_tydny": [
+    0.3,
+    0.5
+   ],
+   "pasmo_priklad": "při 90 kg 0,27–0,45 kg za 2 týdny (≈ 0,15–0,25 % týdně)",
+   "pravidla": [
+    {
+     "id": "pod",
+     "kdyz": "změna pod pásmem ve 2 hodnoceních po sobě a pas za 4 týdny < +1 cm",
+     "doporuceni": "Zvaž +1 až 2 kroky (+100–200 kcal).",
+     "zmena_kroku": [
+      1,
+      2
+     ]
+    },
+    {
+     "id": "v_pasmu",
+     "kdyz": "změna v pásmu",
+     "doporuceni": "Beze změny, jde to dobře.",
+     "zmena_kroku": [
+      0,
+      0
+     ]
+    },
+    {
+     "id": "nad",
+     "kdyz": "změna nad pásmem ve 2 hodnoceních po sobě",
+     "doporuceni": "Zvaž −1 až 2 kroky (−100–200 kcal).",
+     "zmena_kroku": [
+      -2,
+      -1
+     ]
+    },
+    {
+     "id": "pas_roste",
+     "kdyz": "změna v pásmu a pas ≥ +1 cm za 4 týdny",
+     "doporuceni": "Příjem neměnit. Zkontroluj fotky a výkon.",
+     "otazky": [
+      "Vypadám na fotkách tučněji? (ano/ne)",
+      "Výkon roste? (ano/stagnuje/klesá)",
+      "Hlad a energie v pořádku? (ano/ne)"
+     ],
+     "vyhodnoceni": {
+      "fotky_ano_a_vykon_stagnuje_nebo_klesa": "Zvaž −1 krok.",
+      "jinak": "Beze změny, sleduj další 2 týdny."
+     },
+     "zmena_kroku": [
+      -1,
+      0
+     ]
+    },
+    {
+     "id": "vykon_stoji",
+     "kdyz": "výkon stojí 4 a více týdnů při tempu v pásmu",
+     "doporuceni": "Nejdřív spánek a trénink (s trenérem), ne kalorie.",
+     "zmena_kroku": [
+      0,
+      0
+     ]
+    }
+   ],
+   "nikdy": "Nikdy nedoporučovat změnu podle jednoho vážení. Aplikace příjem sama nemění – jen doporučí; změna kroku až po potvrzení."
+  },
+  "pas": {
+   "mereni": "1× týdně ve stejný den, ráno nalačno, ve výši pupku, po výdechu, nezatahovat",
+   "prah_cm_za_4_tydny": 1,
+   "prah_velke_prehodnoceni_cm_od_startu": 4,
+   "pravidlo": "Pas sám nikdy nerozhoduje o změně příjmu, jen spouští kontrolu fotek a výkonu.",
+   "zdroj_prahu": "praktický práh, ne výsledek studie"
+  },
+  "vyjimky": {
+   "duvody": [
+    "nemoc",
+    "cesta",
+    "výrazně slané jídlo",
+    "změna tréninku",
+    "jiné"
+   ],
+   "pravidlo": "Týden označený jako výjimka se do hodnocení nepočítá a hodnocení se posune o týden."
+  },
+  "velke_prehodnoceni": {
+   "kazdych_tydnu": 12,
+   "nebo_pas_cm_od_startu": 4,
+   "co_zkontrolovat": [
+    "fotky a pocit z vizuálu",
+    "trend hmotnosti",
+    "pas",
+    "výkon"
+   ],
+   "moznosti": [
+    "pokračovat",
+    "udržovací fáze 4–8 týdnů",
+    "krátká redukce"
+   ],
+   "poznamka": "Signál k přehodnocení, ne automatický konec nabírání."
+  },
+  "zmena_rezimu": "Jiný objem tréninku, víc boxu nebo méně kroků: příjem se předem nemění, rozhodne další 2týdenní hodnocení. Výjimka je velká trvalá změna (např. +5 000 kroků denně) – tu doladit modulem hned.",
+  "mereni": [
+   {
+    "co": "Hmotnost",
+    "jak": "ráno nalačno po toaletě, stejná váha",
+    "kdy": "denně → týdenní průměr"
+   },
+   {
+    "co": "Pas",
+    "jak": "ráno nalačno, ve výši pupku, po výdechu",
+    "kdy": "1× týdně, stejný den"
+   },
+   {
+    "co": "Ostatní obvody",
+    "jak": "ramena, hrudník, paže, předloktí, stehna, lýtka",
+    "kdy": "1× za 4 týdny"
+   },
+   {
+    "co": "Fotky",
+    "jak": "zepředu, z boku, zezadu; stejné světlo a místo",
+    "kdy": "1× za 4 týdny"
+   },
+   {
+    "co": "Výkon",
+    "jak": "hlavní cviky (váha × opakování)",
+    "kdy": "každý trénink, trend za 4 týdny"
+   },
+   {
+    "co": "Hlad, trávení, spánek, energie",
+    "jak": "škála 1–5",
+    "kdy": "1× týdně"
+   },
+   {
+    "co": "InBody (pokud máš přístup)",
+    "jak": "stejné podmínky",
+    "kdy": "1× za 1–2 měsíce, jen doplněk"
+   }
+  ],
+  "pripominky": [
+   {
+    "kdy": "denně ráno",
+    "co": "zvážit se"
+   },
+   {
+    "kdy": "neděle",
+    "co": "pas + týdenní hodnocení (hlad, trávení, spánek, energie)"
+   },
+   {
+    "kdy": "každé 4 týdny",
+    "co": "obvody a fotky"
+   },
+   {
+    "kdy": "sobota",
+    "co": "nákup N1 (víkend)"
+   },
+   {
+    "kdy": "středa",
+    "co": "nákup N2"
+   },
+   {
+    "kdy": "neděle a středa večer",
+    "co": "vaření várky (4 porce)"
+   }
+  ],
+  "ferment": {
+   "denne": true,
+   "zdroje": "kefír v S2 nebo P5; jinak 75 g kysaného zelí k obědu nebo večeři",
+   "nahrada": {
+    "kefir_ml": 100,
+    "kcal_navic": 50
+   },
+   "poznamka": "Součty dnů se zelím platí pro 75 g kysaného zelí; když místo něj vypiješ 100 ml kefíru, přičti ~50 kcal."
+  },
+  "presnost": "Hodnoty surovin mají kategorii zdroje (1 etiketa, 2 databáze konkrétního výrobku, 3 obecný odhad). Energie je odhad; přesnost je pracovní předpoklad zhruba ±5–10 % (nejde o změřenou chybu). Skutečný příjem doladí kalibrace podle váhy.",
+  "texty": {
+   "strategie_a_struktura": "Strategie, nutriční struktura a pravidla úprav pro pomalé nabírání při ~90 kg. Banka jídel, cyklus, nákup a výpočet mikroživin jsou hotové v dalších záložkách. Finální příjem určí kalibrace podle ranního vážení a záznamu příjmu před nasazením.\n\n## Strategie\n\nKostra je metoda z PDF: udržovací příjem, k němu +200–300 kcal a úpravy po 100–200 kcal. Doplnění přidávají kalibraci, cílové tempo a horní hranici. Sloupec „Původ“ říká, co je z PDF a co je můj návrh.\n\n| Oblast | Návrh | Původ | Důkazy a jejich síla |\n| --- | --- | --- | --- |\n| Metoda | Udržovací příjem → +200–300 kcal → podle vývoje ±100–200 kcal | PDF | RCT na elitních sportovcích (Garthe 2013): větší nadbytek přidal tuk, ne svaly. Přesný ideální nadbytek věda nezná (Slater 2019). **Střední.** |\n| Výchozí odhad | Klidový výdej ~2 250 kcal (rovnice De Lorenzo i ten Haaf pro 90 kg / 197 cm); udržovací příjem odhadem 3 300–3 700 kcal. Cyklus je navržený na ~3 440 kcal (krok 0) | Doplnění | Obecné rovnice u sportovců často neodpovídají měření; nejlépe vychází De Lorenzo a ten Haaf (systematický přehled Martinho 2023). Proto odhad jen jako start. **Středně silné.** |\n| Ověření | 4 týdny kalibrace: známý příjem + ranní vážení; 1. týden se nehodnotí, porovná se průměr týdne 2 a týdne 4. Udržovací příjem = příjem, při kterém stojí týdenní průměr | Doplnění (dohodnuto) | Tvoje přesná data jsou spolehlivější než jakákoli rovnice. **Praktická volba.** |\n| Tempo | Cíl ~0,15–0,25 % hmotnosti týdně, tj. při 90 kg ~0,6–0,9 kg za měsíc | Doplnění | Přehled pro naturální kulturisty: 0,25–0,5 % týdně pro začátečníky a středně pokročilé, pokročilí méně (Iraki 2019). Konkrétní pásmo je moje volba pro 4–5 let tréninku. **Doporučení odborníků.** |\n| Bílkoviny | 2,0–2,2 g/kg (~180–200 g), 4 porce po ~0,4–0,55 g/kg | PDF + doplnění | Nad ~1,6 g/kg už metaanalýza další přírůstek neprokázala (Morton 2018); 4 jídla po 0,4–0,55 g/kg (Schoenfeld & Aragon 2018). 2,0–2,2 je rezerva. **Dobře podložené.** |\n| Tuky | ~80–95 g (20–30 % energie, ~1 g/kg); hlavně olivový olej, ořechy, ryby, vejce; nasycené pod 10 % energie | PDF + doplnění | Přehled doporučuje 0,5–1,5 g/kg (Iraki 2019); PDF min. 20 % energie; nasycené co nejníž v rámci vyvážené stravy (EFSA). **Doporučení.** |\n| Sacharidy | Zbytek energie, ~4,5–5,5 g/kg; víc v jídle před tréninkem a po něm | PDF + doplnění | Při stejné energii vyšší sacharidy výkon v posilovně nezlepšují (systematický přehled v PDF) – načasování je praktické, ne kritické. **Systematický přehled.** |\n| Vláknina | 40–60 g denně (jednotlivé dny do ~65 g jsou v pořádku, když trávení sedí), navyšovat postupně; v jídle před tréninkem méně | PDF + doplnění | PDF: 30 g na 2 000 kcal; EFSA: min. 25 g. Horní mez určuje tvoje snášenlivost. **Doporučení.** |\n| Jídla a časy | 4 jídla: snídaně ~7:30, oběd ~11:30 (krabička), svačina před tréninkem ~15:00, večeře po tréninku ~18:30 | Doplnění | Min. 4 jídla s ~0,4 g/kg bílkovin (Schoenfeld & Aragon 2018); jídlo 1–2 h před a po tréninku (Iraki 2019). **Doporučení.** |\n| Tréninkové vs. volné dny | Stejný příjem každý den. Ve dnech bez tréninku se jen vymění svačina | Doplnění | Rozdíl ve výdeji se srovná v týdenním průměru; periodizace sacharidů nemá prokázaný přínos (viz sacharidy). Jednodušší kalibrace. **Praktická volba.** |\n| Večerní jídlo | Ne (rozhodnuto). Zůstávají 4 jídla po ~0,5 g bílkovin/kg. Když bude večer hlad, posune se večeře později nebo se přidá ladicí modul k večeři | Doplnění | RCT: protein před spaním zvýšil přírůstek svalů a síly za 12 týdnů (Snijders 2015). Skupina ale zároveň měla vyšší celkový příjem bílkovin. **Omezené.** |\n| Ranní trénink | Snídaně se změní na lehkou svačinu 60–90 min před tréninkem; plnohodnotné jídlo po tréninku; denní součet stejný | Doplnění | Stejná logika jako u odpoledního tréninku. **Praktická volba.** |\n| Kolem tréninku | Bez vysokých dávek vit. C a E a bez ledové koupele hned po silovém tréninku | PDF | Mohou tlumit adaptaci; důkazy hlavně z menších studií a mechanismů. **Omezené.** |\n| Kofein | Max. ~270 mg (3 mg/kg), co nejdřív před tréninkem, jen když je potřeba | PDF | Metaanalýza v PDF: večerní kofein zhoršuje spánek. **Metaanalýza.** |\n\n## Nutriční struktura\n\nCyklus má ve výchozím kroku ~3 440 kcal, ~195–200 g bílkovin (2,2 g/kg), ~95 g tuků a ~420 g sacharidů. Je to start kalibrace, ne finální číslo. Nadbytek +200–300 kcal se po kalibraci přidá ladicími moduly, ne novým jídelníčkem.\n\n**Denní cíle (návrh pro 90 kg)**\n\n| Parametr | Cíl | Na kg / podíl |\n| --- | --- | --- |\n| Energie | ~3 440 kcal (krok 0) na start kalibrace | podle kalibrace |\n| Bílkoviny | 180–200 g | 2,0–2,2 g/kg |\n| Tuky | 80–95 g | ~1 g/kg, 20–30 % energie |\n| Nasycené tuky | pod 38 g | pod 10 % energie (banka vychází 5–7 %) |\n| Sacharidy | ~400–470 g | ~4,5–5,2 g/kg |\n| Vláknina | 40–60 g (dny do ~65 g OK) | – |\n| Ferment | 1 porce denně: kysané zelí 50–100 g, nebo kefír 200–300 ml | – |\n\n**Cíle pro jednotlivá jídla**\n\n| Jídlo | Čas | kcal | B (g) | T (g) | Skladba |\n| --- | --- | --- | --- | --- | --- |\n| Snídaně | ~7:30 | ~850 | 45–50 | 20–35 | Vejce, mléčné nebo ryba + celozrnná příloha + ovoce či zelenina |\n| Oběd | ~11:30 | ~950 | 50–55 | 20–30 | Krabička z meal prepu, min. 200 g zeleniny |\n| Svačina před tréninkem | ~15:00 | ~700 | 40–45 | do 12 | Hlavně sacharidy; málo tuku a vlákniny (do ~10 g) |\n| Večeře po tréninku | ~18:30 | ~950 | 50–55 | 20–35 | Čerstvé jídlo (ryby), sacharidy na doplnění glykogenu |\n\n**Jak se nadbytek přidá po kalibraci:** po krocích ze záložky Úrovně příjmu (1 krok ≈ 100 kcal = 1 modul přílohy nebo tuku). Příklad: udržovací 3 300 kcal → cíl ~3 550 kcal → krok +1 (+30 g suché přílohy k večeři).\n\n## Skupiny potravin, mikroživiny a hydratace\n\nMikroživiny se hlídají přes skladbu týdne, ne přes jednotlivé jídlo. Orientační výpočet nad celým cyklem je v záložce Mikroživiny, vstupní hodnoty v záložce Hodnoty surovin.\n\n**Týdenní cíle skupin potravin**\n\n| Skupina | Cíl | Proč | Opora |\n| --- | --- | --- | --- |\n| Ryby | 2–3× týdně, z toho min. 2× tučné (losos, sardinky) | EPA+DHA, vitamin D, jód, selen | EFSA: EPA+DHA 250 mg denně; PDF: ryby 2–3× týdně |\n| Tuňák | max. 1× týdně | rtuť | Obecné doporučení k velkým dravým rybám |\n| Červené maso | max. ~500 g tepelně upraveného (~700 g syrového) týdně | železo, zinek, B12 vs. riziko rakoviny tlustého střeva | WCRF |\n| Uzeniny, šunka | minimum | silná vazba na rakovinu tlustého střeva | WCRF |\n| Vejce | ~10–20 ks týdně | cholin, B12, vitamin D, praktičnost | PDF: 8–25 ks týdně; upravíme podle lipidů z krevních testů |\n| Mléčné výrobky | 2–3 porce denně, část fermentovaná | vápník (pro 18–24 let 1 000 mg denně) | EFSA |\n| Luštěniny | 3–4× týdně | vláknina, folát, hořčík, železo | PDF + doplnění |\n| Zelenina | min. 400–500 g denně, různé barvy | vláknina, draslík, folát, vitamin C a K | PDF: 300–500 g |\n| Ovoce | 2–3 porce denně, často bobule | vitamin C, polyfenoly | PDF |\n| Celozrnné obiloviny | denně (žitný chléb, vločky); rýže a těstoviny jako hlavní energie | vláknina, hořčík, vitaminy B | PDF |\n| Ořechy a semínka | 20–30 g denně | vitamin E, hořčík, zdravé tuky | PDF |\n| Ferment | denně | mikrobiom; kysané zelí i vitamin C | PDF (bez přeceňování) |\n\n**Na co dát pozor**\n\n- **Vitamin D:** v orientačním výpočtu vychází pod referenční hodnotou. Dávku případného doplňku určí krevní test, ne tabulka.\n- **Jód:** vař s jodidovanou solí; nepoužívej jen nejodidovanou mořskou sůl. Další zdroje jsou mléčné výrobky a ryby.\n- **Selen:** stačí ryby a vejce. Para ořechy jen občas – 2 denně posunuly autora PDF nad horní limit.\n- **Železo:** strava ho pokryje (maso, luštěniny, špenát). Doplněk až podle ferritinu a saturace transferinu.\n- **Sůl:** kysané zelí, sójová a rybí omáčka a vývary jsou slané. Používej sójovou omáčku se sníženým obsahem soli a dosoluj až na konci.\n\n**Hydratace**\n\nTvé 4–5 l denně je při tréninku v pořádku a víc není potřeba. PDF uvádí 0,5–0,7 l na každých 15 kg, tedy ~3–4,2 l. Řiď se barvou moči (světle žlutá) a žízní. Ráno 300–600 ml, poslední 1–2 h před spaním méně. Sůl do vody jen při silném pocení.\n\n## Sledování a pravidla úprav\n\nRozhoduje trend týdenních průměrů hmotnosti spolu s pasem a výkonem, nikdy jedno vážení. Denní váha kolísá o 1–2 kg kvůli vodě, glykogenu, soli a obsahu střev.\n\n**Co sledovat**\n\n| Ukazatel | Jak | Kdy |\n| --- | --- | --- |\n| Hmotnost | Ráno nalačno po toaletě, stejná váha | Denně → týdenní průměr |\n| Příjem | Vážit vše (už děláš) | Denně |\n| Pas | Ráno nalačno, ve výši pupku, po výdechu | 1× týdně, stejný den |\n| Ostatní obvody | Ramena, hrudník, paže, předloktí, stehna, lýtka | 1× za 4 týdny |\n| Fotky | Zepředu, z boku, zezadu; stejné světlo a místo | 1× za 4 týdny |\n| Výkon | Hlavní cviky (váha × opakování) | Každý trénink, hodnotit trend za 4 týdny |\n| Hlad, trávení, spánek, energie | Škála 1–5 | 1× týdně |\n| InBody (pokud máš přístup) | Stejné podmínky | 1× za 1–2 měsíce, jen doplněk |\n\n**Postup**\n\n1. **Kalibrace (týdny 1–4):** jíš přesně návrhový příjem (krok 0) a vážíš se každé ráno. První týden nehodnotíme (voda, glykogen, nová strava). Porovnává se průměr týdne 2 a týdne 4 – jsou od sebe přesně 14 dní (proto kalibrace trvá 4 týdny; rozdíl dvou sousedních týdnů je jen 7 dní a je moc zkreslený vodou). Pak spočítám orientačně: udržovací příjem ≈ průměrný denní příjem − (změna týdenního průměru v kg × 7 700 kcal ÷ počet dní). Příklad: 3 400 kcal a +0,3 kg za 14 dní → 3 400 − 165 ≈ 3 235 kcal. Hodnota 7 700 kcal/kg je hrubý převod, proto výsledek zaokrouhlím na ~50 kcal a ověřím dalšími týdny.\n2. **Start nabírání:** udržovací příjem + 250 kcal (střed metody 200–300), přidané ladicími moduly.\n3. **Hodnocení každé 2 týdny** (cílové pásmo při 90 kg: ~0,27–0,45 kg za 2 týdny):\n   - Pod pásmem ve 2 hodnoceních po sobě a pas stabilní → **+100–200 kcal** (PDF).\n   - V pásmu, výkon roste, pas jen pomalu → **beze změny** (PDF: ideál). Když při tempu v pásmu roste pas o 1 cm a víc za 4 týdny, sám nic nemění: zkontroluj fotky a výkon; −1 krok jen tehdy, když fotky ukazují víc tuku a výkon stojí nebo klesá (praktický práh, ne studie).\n   - Nad pásmem ve 2 hodnoceních po sobě → **−100–200 kcal** (PDF).\n   - Výkon stojí 4 a více týdnů při tempu v pásmu → nejdřív spánek a trénink (s trenérem), ne kalorie.\n4. **Výjimky:** po nemoci, cestě, výrazně slaném jídle nebo změně tréninku se hodnocení posouvá o týden.\n5. **Velké přehodnocení** zhruba každých 12 týdnů, nebo dřív, když přibývá víc tuku, než chceš. Rozhoduje celkový obraz, ne jedno číslo: hlavně fotky a tvůj pocit z vizuálu, k tomu tempo hmotnosti a pas jako objektivní kontrola (postupnou změnu v zrcadle snadno přehlédneš). Pas +4 cm oproti výchozímu měření je jen signál k přehodnocení, ne automatický konec nabírání. Pak podle stavu pokračujeme, nebo zařadíme udržovací fázi 4–8 týdnů, případně krátkou redukci (praktická volba, ne studie).\n6. **Změna režimu** (jiný objem tréninku, víc boxu, méně kroků): příjem se nemění předem, ale podle dalšího 2týdenního hodnocení. Výjimkou je velká a trvalá změna (např. +5 000 kroků denně) – tu doladíme modulem hned.\n\n## Zdroje\n\n- [Garthe et al. 2013 – nadbytek energie u elitních sportovců (abstrakt)](https://lida.sport-iat.de/ta/Record/4028311?lng=en)\n- [Slater et al. 2019 – Is an Energy Surplus Required to Maximize Skeletal Muscle Hypertrophy](https://research.usc.edu.au/esploro/outputs/journalArticle/Is-an-Energy-Surplus-Required-to/99451384502621)\n- [Iraki et al. 2019 – Nutrition Recommendations for Bodybuilders in the Off-Season (PubMed)](https://pubmed.ncbi.nlm.nih.gov/31247944/)\n- [Morton et al. 2018 – metaanalýza bílkovin a silového tréninku (PubMed)](https://pubmed.ncbi.nlm.nih.gov/28698222/)\n- [Schoenfeld & Aragon 2018 – bílkoviny na jedno jídlo (PubMed)](https://pubmed.ncbi.nlm.nih.gov/29497353/)\n- [Snijders et al. 2015 – protein před spaním (PubMed)](https://pubmed.ncbi.nlm.nih.gov/25926415/)\n- [Snijders et al. 2019 – přehled k proteinu před spaním](https://pmc.ncbi.nlm.nih.gov/articles/PMC6415027)\n- [Martinho et al. 2023 – predikce klidového výdeje u sportovců (systematický přehled)](https://pmc.ncbi.nlm.nih.gov/articles/PMC10286600)\n- [EFSA – souhrn referenčních hodnot živin (2017)](https://www.efsa.europa.eu:443/sites/default/files/2017_09_DRVs_summary_report.pdf)\n- [WCRF – červené a zpracované maso](https://www.wcrf.org/diet-activity-and-cancer/cancer-prevention-recommendations/limit-red-and-processed-meat/)\n- [Food Standards Scotland – bezpečné skladování rýže](https://foodstandards.gov.scot/consumers/food-safety/at-home/rice)\n- [FSAI – povařit dovážené mražené bobuloviny](https://www.fsai.ie/consumer-advice/food-safety-and-hygiene/berries-advice-to-boil-imported-frozen-berries)\n- PDF z projektu: hlavně „Dirty bulking je bullshit“, „Nejčastější chyby při nabírání svalů“, „Potřebuješ při silovém tréninku sacharidy?“, „Pre-workout s kofeinem“; čísla stran v dokumentu Evidence podkladů.\n",
+   "urovne_prijmu": "Cyklus je postavený na **kroku 0 (~3 440 kcal)**. Jeden **krok = ~100 kcal = 1 modul**. Jídla zůstávají stejná, mění se jen přílohy a tuky; bílkoviny zůstávají ~190–210 g. Výpočty jsou ověřené kódem nad celým 3týdenním cyklem.\n\n## Jak kroky použít\n\n1. **Start nabírání** (podle PDF udržovací příjem + 200–300 kcal): po kalibraci zjistíme udržovací příjem a zvolíš krok, který mu odpovídá + 2 až 3 kroky. Příklad: udržovací 3 300 kcal → cíl ~3 550 → krok +1. Udržovací 3 600 kcal → cíl ~3 850 → krok +4.\n2. **Úpravy** (PDF ±100–200 kcal): podle 2týdenního hodnocení ze záložky Strategie a struktura se posuneš o 1–2 kroky nahoru nebo dolů. Nikdy podle jednoho vážení.\n3. Kroky se přidávají **v uvedeném pořadí a sčítají se** – krok +4 obsahuje i kroky +1 až +3.\n\n## Moduly (~100 kcal)\n\n**Modul přílohy (A)** – přidá se k příloze daného jídla:\n\n| Jídlo | +1 modul | kcal |\n| --- | --- | --- |\n| S1, S3, S4 | +50 g žitného chleba | 97 |\n| S2, S5 | +25 g ovesných vloček | 91 |\n| S6, P1 | +30 g rýžové kaše (suché) | 105 |\n| S7 | +1 tortilla (40 g) | 112 |\n| P2 | +50 g žitného chleba | 97 |\n| P3 | +25 g ovesných vloček | 91 |\n| P4 | +70 g gnocchi | 108 |\n| P5, P6 | +1 menší banán (105 g bez slupky) | 98 |\n| H1, H3, H5, H12 | +30 g basmati (suché) | 106 |\n| H4 | +30 g bulguru (suchého) | 101 |\n| H2, H6 | +30 g semolinových těstovin (suchých) | 107 |\n| H14 | +30 g celozrnných těstovin | 103 |\n| H7, H13 | +30 g rýžových nudlí (suchých) | 105 |\n| H9 | +30 g sushi rýže | 104 |\n| H10 | +30 g arborio | 105 |\n| H8 | +135 g brambor (syrových) | 102 |\n| H11 | +120 g batátů (syrových) | 98 |\n\n**Modul tuku (T):** ke snídani +15 g vlašských ořechů (103 kcal), k obědu nebo večeři +11 g olivového oleje (99 kcal).\n\n## Kroky\n\n| Krok | Co se přidá oproti předchozímu kroku | kcal/den | B (g/kg) | S (g/kg) | T (% energie) | Vláknina (g) |\n| --- | --- | --- | --- | --- | --- | --- |\n| −4 | −1 modul přílohy – svačina | 3 030 | 2,1 | 3,7 | 28 % | 48 |\n| −3 | −1 modul přílohy – snídaně | 3 130 | 2,1 | 4,0 | 27 % | 50 |\n| −2 | −1 modul přílohy – večeře | 3 230 | 2,1 | 4,1 | 27 % | 52 |\n| −1 | −1 modul přílohy – oběd | 3 330 | 2,2 | 4,4 | 26 % | 53 |\n| **0** | výchozí cyklus | **3 440** | 2,2 | 4,6 | 25 % | 54 |\n| +1 | +1 modul přílohy – večeře | 3 540 | 2,2 | 4,9 | 25 % | 55 |\n| +2 | +1 modul přílohy – oběd | 3 650 | 2,3 | 5,1 | 24 % | 56 |\n| +3 | +1 modul tuku – snídaně | 3 750 | 2,3 | 5,1 | 26 % | 57 |\n| +4 | +1 modul přílohy – svačina | 3 850 | 2,3 | 5,4 | 25 % | 59 |\n| +5 | +1 modul přílohy – večeře | 3 950 | 2,3 | 5,6 | 25 % | 60 |\n| +6 | +1 modul tuku – oběd | 4 050 | 2,3 | 5,6 | 26 % | 60 |\n| +7 | +1 modul přílohy – snídaně | 4 150 | 2,4 | 5,8 | 26 % | 62 |\n| +8 | +1 modul tuku – večeře | 4 250 | 2,4 | 5,8 | 28 % | 62 |\n| +9 | +1 modul přílohy – oběd | 4 360 | 2,4 | 6,0 | 27 % | 63 |\n| +10 | +1 modul přílohy – svačina | 4 460 | 2,4 | 6,3 | 27 % | 65 |\n\nBílkoviny na kg jsou počítané na 90 kg. S rostoucí hmotností klesají (např. 205 g při 95 kg = 2,2 g/kg), což je v pořádku.\n\n## Praktické poznámky\n\n- **Velikost porcí:** od kroku +5 má večeře o 2 moduly přílohy víc (+60 g suché rýže nebo těstovin), od kroku +9 i oběd. Když to bude objemově moc, přesuň 1–2 moduly do malé svačiny navíc (např. 250 ml kefíru + 15 g ořechů ≈ 260 kcal). Energie zůstane stejná.\n- **Svačina před tréninkem** dostává přílohu až v kroku +4 a +10, aby zůstala lehká.\n- **Tuky** se drží mezi 24 a 28 % energie ve všech krocích.\n- **Nad krokem +10** (~4 400 kcal) změníme strukturu (víc tuků, případně 5. jídlo), ne jen porce.\n- **Snížení** (kroky −1 až −4) použij jen tehdy, když kalibrace ukáže nižší udržovací příjem než ~3 300 kcal, nebo když podle pravidel přibíráš příliš rychle.\n",
+   "zameny_a_mimoradne_dny": "Cyklus je výchozí plán, ne povinnost. Tady jsou pravidla, jak ho měnit, aniž by se rozbila energie, bílkoviny nebo pestrost.\n\n## Záměny celých jídel\n\nJídla ve stejném slotu jsou mezi sebou zaměnitelná. Rozdíl je nejvýš ~±50 kcal a ~±6 g bílkovin, což se v týdenním průměru ztratí.\n\n| Slot | Jídla | Rozpětí energie | Bílkoviny |\n| --- | --- | --- | --- |\n| Snídaně | S1–S7 | 818–893 kcal | 45–55 g |\n| Svačina | P1–P6 | 665–772 kcal | 40–45 g |\n| Hlavní jídlo | H1–H14 | 918–965 kcal | 49–60 g |\n\nPři záměně hlídej:\n\n1. **V jednom dni ne dvakrát stejné maso nebo ryba** (např. hovězí k obědu i večeři).\n2. **Před tréninkem jen P1, P4 nebo P5** (dobře stravitelné; P4 je teplé jídlo, dej si ho aspoň 1,5 h předem).\n3. **Tuňák max 1× týdně**, **červené maso max ~700 g syrového týdně**.\n4. **Ferment**: když vypadne S2 nebo P5 s kefírem, přidej 75 g kysaného zelí (nebo 100 ml kefíru).\n5. **Vaření do zásoby** měň v rámci skupiny: hovězí H1, H2, H3 mezi sebou, drůbež H4, H5, H6 mezi sebou.\n\n## Záměny surovin\n\n| Surovina | Náhrada | Dopad |\n| --- | --- | --- |\n| Losos | makrela (stejná gramáž) | podobný tuk i omega-3 |\n| Krevety 150 g | vyloupané slávky ~200–250 g (podle etikety, cíl ~30 g bílkovin) | slávky mají víc železa |\n| Sardinky v konzervě | makrela nebo šproty ve vlastní šťávě | podobné; hlídej sůl na etiketě |\n| Kuřecí prsa | krůtí prsa 1 : 1 | prakticky stejné |\n| Hovězí mleté 5 % | krůtí mleté 1 : 1 | méně červeného masa, ~+2 g tuku na 100 g |\n| Hovězí zadní | svíčková nebo kližka 1 : 1 | svíčková o něco tučnější |\n| Basmati | bulgur nebo kuskus 1 : 1 (suché) | víc vlákniny a **výrazně méně arsenu** – dobrá volba k chilli a curry (gyros už bulgur má) |\n| Bulgur v H4 | kuskus 1 : 1, nebo basmati 1 : 1 (suché) | méně vlákniny (kuskus ~−4 g, basmati ~−9 g na porci) – když bude vlákniny moc |\n| Gnocchi 300 g v P4 | basmati 115 g (suchá) + 80 g mrkve místo rajčat | ~−40 kcal a ~−5 g vlákniny; lehčí těsně před tréninkem |\n| Semolinové těstoviny | celozrnné těstoviny 1 : 1 | víc vlákniny |\n| Brambory 135 g | batáty 120 g, nebo dýně hokkaido ~200 g | batáty víc vitaminu A; hokkaido má méně energie |\n| Žitný kváskový chléb | celozrnný pšeničný kváskový 1 : 1 | o něco méně vlákniny |\n| Cottage | tvaroh polotučný 1 : 1 | prakticky stejné |\n| Řecký jogurt 0 % | skyr 1 : 1 | o něco víc bílkovin |\n| Kefír | acidofilní mléko nebo zakysaný nápoj 1 : 1 | podobné |\n| Vlašské ořechy | mandle, lískové ořechy, dýňová semínka 1 : 1 | vlašské mají nejvíc omega-3 (ALA) |\n| Borůvky, maliny | jahody, ostružiny, rybíz 1 : 1 | podobné |\n| Edamame | hrášek 1 : 1 | ~−4 g bílkovin na 100 g |\n| Zelené fazolky | brokolice nebo chřest 1 : 1 | podobné |\n\n## Sezónní obměna\n\n- **Léto (VI–IX):** čerstvé bobuloviny místo mražených (bez povaření), rajčata, papriky, okurky a cukety z místní sezóny, broskve a meruňky místo kiwi nebo pomeranče (1 kus za 1 kus).\n- **Podzim a zima (X–III):** mražené bobuloviny (povařit), citrusy, kiwi, jablka a hrušky; kořenová zelenina, zelí, dýně hokkaido místo batátů.\n- **Jaro (IV–V):** čerstvý špenát, ředkvičky, jarní cibulka, chřest místo fazolek.\n\nOvoce a zelenina se mohou měnit volně ve stejné gramáži. Energie se změní jen o desítky kcal.\n\n## Den bez vaření\n\nMít v mrazáku vždy **2 porce hlavního jídla** (jednou za čas uvař 6 porcí místo 4). Pak je den bez vaření jednoduchý:\n\n- **Snídaně:** S2 (připravená večer) nebo S4.\n- **Svačina:** P3 nebo P6.\n- **Oběd:** porce z mrazáku + příloha (bulgur nebo kuskus jen zalít vodou).\n- **Večeře – studená varianta:**\n\n| Studená večeře | Složení | kcal | B | S | T | Vl. |\n| --- | --- | --- | --- | --- | --- | --- |\n| Tortilly s tuňákem a cottage | 4 tortilly Santa Maria (160 g), tuňák 110 g slitý, cottage 100 g, rajčata 150 g, okurka 150 g, kukuřice 60 g, avokádo 80 g, citron | 900 | 57 | 98 | 27 | 17 |\n| Sardinky s chlebem a cottage | žitný chléb 200 g (½ bochníku), sardinky 85 g slité, cottage 200 g (celé balení), rajčata 150 g, okurka 150 g, olivový olej 5 g, jablko 160 g | 910 | 62 | 101 | 25 | 15 |\n\nTortilly s tuňákem jen v týdnu, kdy jsi neměl P6 (tuňák max 1×).\n\n## Cestování a dny mimo domov\n\n- **Do tašky:** P2 krůtí sendvič (vznikl právě pro tohle), S2 v uzavřené nádobě, P5 v termolahvi, ovoce, porce ořechů, protein v shakeru (zalít vodou nebo mlékem na místě).\n- **Na dovolené** (podle PDF „Jak se stravuji na dovolené“): nestresovat se přesností, držet bílkoviny ~1,8–2 g/kg a skládat talíř z bílkoviny, přílohy a ovoce nebo zeleniny. Pár dní mimo plán výsledek nezmění.\n- Hodnocení vývoje se po cestě posouvá o týden (voda a sůl zkreslí váhu).\n\n## Restaurace (~1× měsíčně)\n\n- Vyber jídlo s porcí masa nebo ryby, přílohou a zeleninou; méně smaženého a omáček (PDF „Ukázkový jídelníček fotbalisty“ doporučuje i asijskou kuchyni a poke). Sushi, pho nebo steak s přílohou jsou dobrá volba.\n- **Nic nekompenzuj** (žádné škrtání další den). Jedno jídlo v týdenním průměru nehraje roli.\n- Váha druhý den bývá vyšší kvůli soli a sacharidům – do rozhodování se nepočítá.\n\n## Změna tréninku a denního režimu\n\n| Situace | Co udělat |\n| --- | --- |\n| Trénink v jiné dny | Prohoď jen svačiny: P1/P4/P5 do tréninkových dnů, P3/P6 do volných. Energie dnů je stejná. |\n| Ranní trénink (např. o víkendu) | ~60–90 min před tréninkem lehká svačina (P1 nebo P5), po tréninku snídaně z banky, pak oběd a večeře podle plánu. Denní součet stejný. |\n| Trénink později večer | Svačina P ~1–2 h před, večeře po tréninku; kofein max ~3 mg/kg a co nejdřív (PDF: kofein po 16:00 zhoršuje spánek). |\n| Víc boxu, kardia nebo kroků | Příjem neměň předem; rozhodne další 2týdenní hodnocení. Výjimka: velká trvalá změna (např. +5 000 kroků denně) – přidej 2–3 kroky hned (záložka Úrovně příjmu). |\n| Týden volna od tréninku | Příjem neměň. |\n| Nemoc | Jez podle chuti a dodrž hlavně bílkoviny a tekutiny. Hodnocení vývoje se posouvá o týden. |\n| Méně času na vaření | Víc porcí z mrazáku, studená večeře, bulgur nebo kuskus místo rýže. |\n",
+   "nakup_a_priprava": "Dva nákupy týdně: **N1 o víkendu** (neděle vaření do zásoby + jídla Po–St) a **N2 ve středu** (středeční vaření + jídla Čt–Ne kromě nedělní večeře, ta patří k dalšímu týdnu). Množství jsou přesně podle cyklu v kroku 0, ve stavu jako v receptech (syrové maso, suché přílohy, ovoce bez slupky). Velikosti balení jsou typické – v obchodě je ověř. Ryby kupuj nejdéle den předem, nebo mražené. **Co je v plánu, to se jí** – zbytky balení nepřidávej k jídlům navíc, řešení je v tabulce Zbytky.\n\n## Zásoba na celý cyklus (3 týdny)\n\nTrvanlivé věci kup jednou za 3 týdny:\n\n| Surovina | Spotřeba za 3 týdny | Balení | Kolik koupit |\n| --- | --- | --- | --- |\n| Bulgur Golden Sun (suchý) | 430 g | 500 g | 1× |\n| Celozrnné těstoviny (suché) | 480 g | 500 g | 1× |\n| Cizrna (konzerva, slitá) | 400 g | konzerva 400 g (240 g slitá) | 2× |\n| Cukr | 12 g | 1 kg | 1× |\n| Černé fazole (konzerva, slité) | 240 g | konzerva 400 g (240 g slitá) | 1× |\n| Červená čočka (suchá) | 160 g | 500 g | 1× |\n| Červené fazole (konzerva, slité) | 480 g | konzerva 400 g (240 g slitá) | 2× |\n| Datle (bez pecek) | 140 g | 200 g | 1× |\n| Dijonská hořčice | 30 g | 200 g | 1× |\n| Dýňová semínka | 90 g | 200 g | 1× |\n| Extra panenský olivový olej | 493 g | 750 ml | 1× |\n| Chia semínka | 30 g | 300 g | 1× |\n| Kakao nealkalizované, neslazené | 30 g | 150 g | 1× |\n| Kukuřice sladká (konzerva, slitá) | 380 g | konzerva 340 g (285 g slitá) | 2× |\n| Mandle | 90 g | 200 g | 1× |\n| Med | 305 g | 500 g | 1× |\n| Nori (sušené) | 6 g | 10 plátů | 1× |\n| Ovesné vločky | 1 175 g | 500 g | 3× |\n| Passata | 2 600 g | 500 g | 6× |\n| Rajčata krájená (konzerva) | 1 200 g | konzerva 400 g | 3× |\n| Rybí omáčka | 10 g | 200 ml | 1× |\n| Rýže arborio (suchá) | 375 g | 500 g | 1× |\n| Rýže basmati (suchá) | 1 310 g | 1 kg | 2× |\n| Rýže na sushi (suchá) | 220 g | 500 g–1 kg | 1× |\n| Rýžová kaše Grizly (suchá) | 695 g | 1 kg | 1× |\n| Rýžové nudle (suché) | 515 g | 200 g | 3× |\n| Rýžový ocet (neochucený) | 40 g | 250 ml | 1× |\n| Sardinky Vilgain ve vlastní šťávě (slité) | 510 g | konzerva 120 g (~85 g ryby) | 6× |\n| Semolinové těstoviny (suché) | 940 g | 500 g | 2× |\n| Sezam | 25 g | 100 g | 1× |\n| Sezamový olej | 15 g | 250 ml | 1× |\n| Sójová omáčka (se sníženým obsahem soli) | 75 g | 250 ml | 1× |\n| Syrovátkový protein Veiny Galaxy (vanilka) | 415 g | 1 kg | 1× |\n| Tuňák ve vlastní šťávě (slitý) | 330 g | konzerva 160 g (110 g slitá) | 3× |\n| Vlašské ořechy | 250 g | 200 g | 2× |\n| Zeleninový vývar | 1 800 ml | bujon se sníženým obsahem soli | na ~2 l |\n\nKoření a bylinky (kmín, sladká paprika, oregano, tymián, bobkový list, nové koření, kari koření, garam masala, badyán, skořice, hřebíček, kopr, pažitka, petrželka, koriandr), jodidovaná sůl a pepř doplňuj podle potřeby.\n\n## Týden A\n\n**N1 – víkend** (neděle: H2 Hovězí ragú × 4 porce + Po–St)\n\n| Skupina | Suroviny |\n| --- | --- |\n| Maso a ryby | Hovězí kližka (syrová) 480 g; Kuřecí prsa (syrová) 130 g; Losos atlantický chovaný (syrový) 150 g |\n| Lednice | Celozrnná tortilla Santa Maria 120 g; Cottage sýr Pilos 200 g; Feta (ovčí/kozí) 30 g; Gnocchi Combino (Lidl) 300 g; Kysané zelí (domácí) 225 g; Mléko polotučné 1,5 % 600 g; Parmazán 30 g; Vejce celá (bez skořápky) 6 ks; Řecký jogurt 0 % (Milko) 100 g; Žitný kváskový chléb Breadway (Lidl) 300 g |\n| Ovoce a zelenina | Banán (bez slupky) 370 g (~3 ks); Brambory (syrové, loupané) 550 g; Celer bulva 200 g; Cibule 240 g; Citronová šťáva 35 g (~1 ks); Cuketa 100 g (~1 ks); Hlávkový/ledový salát 40 g; Kiwi (jedlá část) 150 g (~2 ks); Mrkev 320 g; Paprika červená 100 g (~1 ks); Pomeranč (bez slupky) 200 g (~1 ks); Rajčata 530 g; Česnek 26 g; Žampiony 100 g |\n| Mražené | Zelené fazolky 200 g; Špenát (čerstvý/mražený) 500 g |\n\n**N2 – středa** (středa: H5 Kuřecí curry × 4 porce + Čt–Ne)\n\n| Skupina | Suroviny |\n| --- | --- |\n| Maso a ryby | Hovězí zadní (syrové) 120 g; Krůtí prsa (syrová) 120 g; Kuřecí prsa (syrová) 440 g; Losos atlantický chovaný (syrový) 150 g |\n| Lednice | Bílý jogurt 3 % s živými kulturami 400 g; Celozrnná tortilla Santa Maria 120 g; Cottage sýr Pilos 200 g; Hovězí vývar domácí (z mrazáku, viz příprava) 500 ml; Kefírové mléko Pilos 4 % 1 100 g; Kysané zelí (domácí) 75 g; Mléko polotučné 1,5 % 100 g; Máslo 8 g; Parmazán 15 g; Tvaroh polotučný Pilos 125 g; Vejce celá (bez skořápky) 5 ks; Řecký jogurt 0 % (Milko) 620 g; Žitný kváskový chléb Breadway (Lidl) 200 g |\n| Ovoce a zelenina | Avokádo (dužina) 90 g (~1 ks); Banán (bez slupky) 640 g (~5 ks); Brokolice 250 g; Cibule 340 g; Citronová šťáva 25 g (~1 ks); Hlávkový/ledový salát 60 g; Jablko (jedlá část) 200 g (~1 ks); Jarní cibulka 20 g; Limetková šťáva 35 g (~1 ks); Mrkev 140 g; Mungo klíčky 80 g; Okurka 200 g (~1 ks); Paprika červená 160 g (~1 ks); Rajčata 200 g; Zázvor 35 g; Česnek 30 g |\n| Mražené | Borůvky 350 g; Edamame vyloupané (mražené) 120 g; Hrášek mražený 100 g; Krevety oloupané (syrové) 150 g; Maliny 150 g; Špenát (čerstvý/mražený) 400 g |\n\n## Týden B\n\n**N1 – víkend** (neděle: H3 Svíčková s rýží × 4 porce + Po–St)\n\n| Skupina | Suroviny |\n| --- | --- |\n| Maso a ryby | Hovězí zadní (syrové) 640 g; Krůtí prsa (syrová) 120 g; Losos atlantický chovaný (syrový) 150 g |\n| Lednice | Cottage sýr Pilos 300 g; Feta (ovčí/kozí) 30 g; Kefírové mléko Pilos 4 % 400 g; Kysané zelí (domácí) 150 g; Mléko polotučné 1,5 % 300 g; Smetana na vaření 12 % 400 g; Vejce celá (bez skořápky) 6 ks; Řecký jogurt 0 % (Milko) 340 g; Žitný kváskový chléb Breadway (Lidl) 500 g |\n| Ovoce a zelenina | Banán (bez slupky) 400 g (~3 ks); Brambory (syrové, loupané) 550 g; Brokolice 150 g; Celer bulva 240 g; Cibule 200 g; Citronová šťáva 40 g (~1 ks); Jablko (jedlá část) 200 g (~1 ks); Kiwi (jedlá část) 150 g (~2 ks); Limetková šťáva 10 g (~1 ks); Mrkev 480 g; Okurka 100 g (~1 ks); Paprika červená 180 g (~1 ks); Petržel kořen 160 g; Pomeranč (bez slupky) 200 g (~1 ks); Rajčata 250 g; Zázvor 5 g; Česnek 5 g; Žampiony 100 g |\n| Mražené | Borůvky 100 g; Edamame vyloupané (mražené) 60 g; Zelené fazolky 200 g; Špenát (čerstvý/mražený) 100 g |\n\n**N2 – středa** (středa: H6 Krůtí kuličky × 4 porce + Čt–Ne)\n\n| Skupina | Suroviny |\n| --- | --- |\n| Maso a ryby | Krůtí mleté (~7 % tuku, syrové) 520 g; Kuřecí prsa (syrová) 130 g; Losos atlantický chovaný (syrový) 150 g |\n| Lednice | Celozrnná tortilla Santa Maria 240 g; Cottage sýr Pilos 100 g; Gnocchi Combino (Lidl) 300 g; Kefírové mléko Pilos 4 % 300 g; Kysané zelí (domácí) 225 g; Mléko polotučné 1,5 % 700 g; Máslo 8 g; Parmazán 65 g; Tvaroh polotučný Pilos 125 g; Vejce celá (bez skořápky) 7 ks; Řecký jogurt 0 % (Milko) 440 g |\n| Ovoce a zelenina | Avokádo (dužina) 90 g (~1 ks); Banán (bez slupky) 590 g (~5 ks); Cibule 270 g; Citronová šťáva 40 g (~1 ks); Cuketa 700 g (~2 ks); Hlávkový/ledový salát 100 g; Limetková šťáva 10 g (~1 ks); Mrkev 60 g; Okurka 100 g (~1 ks); Paprika červená 80 g (~1 ks); Rajčata 480 g; Zázvor 5 g; Česnek 36 g |\n| Mražené | Borůvky 250 g; Edamame vyloupané (mražené) 60 g; Hrášek mražený 100 g; Krevety oloupané (syrové) 150 g; Maliny 150 g; Špenát (čerstvý/mražený) 180 g |\n\n## Týden C\n\n**N1 – víkend** (neděle: H1 Chilli con carne × 4 porce + Po–St)\n\n| Skupina | Suroviny |\n| --- | --- |\n| Maso a ryby | Hovězí mleté 5 % (syrové) 500 g; Kuřecí prsa (syrová) 130 g; Losos atlantický chovaný (syrový) 150 g |\n| Lednice | Celozrnná tortilla Santa Maria 120 g; Cottage sýr Pilos 200 g; Gnocchi bramborové (z mrazáku, viz zbytky – nekupovat) 300 g; Kefírové mléko Pilos 4 % 300 g; Kysané zelí (domácí) 150 g; Mléko polotučné 1,5 % 300 g; Parmazán 10 g; Vejce celá (bez skořápky) 6 ks; Řecký jogurt 0 % (Milko) 500 g; Žitný kváskový chléb Breadway (Lidl) 160 g |\n| Ovoce a zelenina | Avokádo (dužina) 40 g (~1 ks); Banán (bez slupky) 250 g (~2 ks); Brambory (syrové, loupané) 550 g; Cibule 240 g; Citronová šťáva 25 g (~1 ks); Cuketa 100 g (~1 ks); Kiwi (jedlá část) 150 g (~2 ks); Limetková šťáva 10 g (~1 ks); Paprika červená 580 g (~4 ks); Rajčata 530 g; Česnek 26 g |\n| Mražené | Borůvky 250 g; Zelené fazolky 200 g; Špenát (čerstvý/mražený) 80 g |\n\n**N2 – středa** (středa: H4 Kuřecí gyros s bulgurem × 4 porce + Čt–Ne)\n\n| Skupina | Suroviny |\n| --- | --- |\n| Maso a ryby | Krůtí prsa (syrová) 120 g; Kuřecí stehna vykostěná bez kůže (syrová) 520 g; Vepřová panenka (syrová) 170 g |\n| Lednice | Celozrnná tortilla Santa Maria 120 g; Cottage sýr Pilos 200 g; Feta (ovčí/kozí) 130 g; Kefírové mléko Pilos 4 % 400 g; Kysané zelí (domácí) 225 g; Mléko polotučné 1,5 % 700 g; Máslo 8 g; Parmazán 15 g; Tvaroh polotučný Pilos 125 g; Vejce celá (bez skořápky) 7 ks; Řecký jogurt 0 % (Milko) 840 g; Žitný kváskový chléb Breadway (Lidl) 340 g |\n| Ovoce a zelenina | Banán (bez slupky) 740 g (~6 ks); Batáty (syrové) 480 g; Brokolice 150 g; Cibule 270 g; Citronová šťáva 75 g (~2 ks); Hlávkový/ledový salát 100 g; Jablko (jedlá část) 280 g (~2 ks); Limetková šťáva 10 g (~1 ks); Mrkev 80 g; Okurka 700 g (~2 ks); Paprika červená 480 g (~3 ks); Pomeranč (bez slupky) 200 g (~1 ks); Rajčata 800 g; Zázvor 10 g; Červené zelí 200 g; Česnek 31 g; Žampiony 100 g |\n| Mražené | Borůvky 100 g; Edamame vyloupané (mražené) 60 g; Hrášek mražený 100 g; Krevety oloupané (syrové) 150 g; Maliny 150 g; Špenát (čerstvý/mražený) 200 g |\n\n## Týdenní rytmus přípravy\n\n| Kdy | Co udělat |\n| --- | --- |\n| Sobota | N1. Zkontrolovat zásobu a mrazák. |\n| Neděle | Vaření do zásoby B1 × 4 (pomalý hrnec). Večeře = 1. porce, 3 porce do krabiček na obědy Po–St (bez přílohy). |\n| Každý večer | Čerstvá večeře. Příloha do krabičky na další den: rýži uvařit předvařením (5 min povařit ve velkém množství vody, slít, dovařit v čerstvé vodě), rozprostřít do mělké krabičky, do 1 h do lednice a sníst do 24 h; ohřát jen jednou do horka. Těstoviny klidně vařit večer předem. Když je druhý den S2, namíchat ovesnou kaši přes noc. |\n| Středa | N2. Vaření do zásoby B2 × 4. Večeře = 1. porce, 3 porce na obědy Čt–So. |\n| Ráno | Snídaně (5–15 min), krabička s obědem a svačinou do tašky. Svačinu s jogurtem nebo tuňákem drž v chladu, mimo lednici max. 2 h. |\n\n| Týden | Neděle předem (B1) | Středa (B2) | Navíc v týdnu |\n| --- | --- | --- | --- |\n| A | H2 Hovězí ragú – pomalý hrnec 7–8 h, začít v poledne | H5 Kuřecí curry | Vývar na pho (čtvrtek): z mrazáku, nebo uvař 2 l v pomalém hrnci v Po/Út a 3 × 500 ml zamraz na další cykly. Krůtí prsa z balení rozporcuj po 120 g a zamraz (H7 je 1× týdně). |\n| B | H3 Svíčková s rýží – pomalý hrnec 6 h | H6 Krůtí kuličky | Pátek: dal uvař na 2 porce, druhou zamraz na pátek týdne C (vejce vař čerstvá). |\n| C | H1 Chilli con carne | H4 Kuřecí gyros s bulgurem – maso marinovat od rána (min. 2 h) | Čtvrtek: celou hlávku červeného zelí podus a zamraz po 200 g na další cykly. Dal na pátek z mrazáku. |\n\n## Karta várky (vaření do zásoby × 4)\n\nVárka je vždy **4 porce**: 1 večeře v den vaření + 3 obědy. Základ se uvaří najednou a rozdělí do 4 stejných krabiček. **Přílohu vař zvlášť** – k obědu je o 1 modul menší (výměna za denních 15 g ořechů), rýži vař každý den čerstvou, těstoviny nejvýš na 2 dny.\n\n| Várka | Základ × 4 (celkem, syrové/slité) | Příloha k večeři | Příloha k obědu (3×) | Ke každé porci zvlášť |\n| --- | --- | --- | --- | --- |\n| H2 Hovězí ragú | Hovězí kližka 480 g; Passata 800 g; Mrkev 320 g; Celer bulva 200 g; Cibule 240 g; Česnek 20 g; Extra panenský olivový olej 40 g; Špenát 320 g | Semolinové těstoviny 140 g | Semolinové těstoviny 110 g | parmazán 5 g |\n| H5 Kuřecí curry | Kuřecí prsa 440 g; Cizrna 400 g; Špenát 400 g; Rajčata krájená 800 g; Cibule 240 g; Česnek 20 g; Zázvor 20 g; Bílý jogurt 3 % s živými kulturami 400 g; Extra panenský olivový olej 40 g | Rýže basmati 125 g | Rýže basmati 95 g | – |\n| H3 Svíčková s rýží | Hovězí zadní 640 g; Mrkev 400 g; Celer bulva 240 g; Petržel kořen 160 g; Cibule 200 g; Smetana na vaření 12 % 400 g; Extra panenský olivový olej 48 g; Dijonská hořčice 20 g; Citronová šťáva 20 g | Rýže basmati 115 g | Rýže basmati 85 g | – |\n| H6 Krůtí kuličky | Krůtí mleté 520 g; Passata 1 000 g; Cuketa 600 g; Cibule 160 g; Česnek 20 g; Extra panenský olivový olej 40 g | Semolinové těstoviny 140 g | Semolinové těstoviny 110 g | parmazán 10 g |\n| H1 Chilli con carne | Hovězí mleté 5 % 500 g; Červené fazole 480 g; Passata 800 g; Paprika červená 400 g; Cibule 240 g; Česnek 20 g; Kukuřice sladká 200 g; Extra panenský olivový olej 32 g | Rýže basmati 115 g | Rýže basmati 85 g | řecký jogurt 0 % 40 g |\n| H4 Kuřecí gyros s bulgurem | Kuřecí stehna vykostěná bez kůže 520 g; Česnek 16 g; Extra panenský olivový olej 48 g | Bulgur Golden Sun 130 g | Bulgur Golden Sun 100 g | tzatziki (jogurt 100 g, část okurky, česnek) a salát (rajčata 150 g, paprika 100 g, okurka, červená cibule 30 g, feta 25 g, citron) – krájet čerstvě nebo nejvýš na 2 dny |\n\n**Chlazení a skladování várky:** hotové jídlo hned rozděl do mělkých krabiček (sklo, nerez), nech odpařit 15–20 min a do 1–2 h dej do lednice. V lednici max. 3 dny (porce na 3. oběd klidně hned zamraz a večer předem přendej do lednice). Ohřívat jednou, do horka v celém objemu. Rýži nikdy neskladuj déle než 24 h.\n\n## Zbytky, porcování a mrazák\n\n| Surovina | Kde vzniká zbytek | Řešení |\n| --- | --- | --- |\n| Maso obecně | balení neodpovídá porcím | Hned po nákupu rozporcuj podle receptu; co nesníš do 2 dnů, zamraz. Rozmrazuj v lednici přes noc. |\n| Hovězí mleté 5 % | týden C potřebuje 500 g, balení bývá 400 g | Nech namlít 500 g na pultu, nebo kup 2 balení a 300 g zamraz na příští cyklus. |\n| Kuřecí prsa | P4 potřebuje 130 g | Porce po 130 g zamraz. |\n| Gnocchi | P4 potřebuje 300 g, balení 500 g | Za cyklus 900 g = 2 balení (týden A a B). Zbytky 2 × 200 g zamraz a v týdnu C gnocchi nekupuj – vezmi 300 g z mrazáku. Vaří se a opékají rovnou zmražené. |\n| Bulgur | 430 g za cyklus z balení 500 g | Gyros × 4: bulgur uvař rovnou na všechny porce, rychle zchlaď, v lednici 3 dny. Zbylých ~70 g se použije v dalším cyklu. |\n| Krevety | 150 g z balení 200 g | Zbytek zůstane zmražený pro další týden. |\n| Kefír 4 % (sklo 750 ml) | P5 = 400 ml, S2 = 300 ml | Otevřenou láhev spotřebuj podle etikety (obvykle do 3–4 dnů). V týdnu A vystačí jedna láhev na Čt + Pá, na So druhá. Zbytek vypij jako denní ferment místo kysaného zelí (100 ml, rozdíl ~+50 kcal), nebo ho dej přítelkyni – jen ho nepřidávej k jídlům navíc. |\n| Tvaroh (250 g) | S5 = 125 g | Lívance peč na 2 porce (celé balení), druhou porci zamraz na příští sobotu. Beze zbytku. |\n| Cottage Pilos (200 g) | 4 snídaně týdně po 100 g | Přesně 2 balení týdně: každé otevřené balení na 2 snídaně v rozmezí 2–3 dnů. |\n| Smetana 12 % (200 g) | svíčková × 4 = 400 g | Přesně 2 balení, beze zbytku. |\n| Feta (200 g) | 30 g v S3, 25 g v H4 – ~190 g za cyklus | Zhruba 1 balení na cyklus. V nálevu vydrží po otevření 1–2 týdny (podle etikety), zbytek lze zamrazit na vaření. |\n| Parmazán | 5–15 g na jídlo, ~135 g za cyklus | 1 kus 150 g na cyklus, zabalený vydrží týdny. |\n| Žitný chléb Breadway (400 g) | 160–500 g týdně | Hned nakrájet a zamrazit, rozmrazovat po porcích (toustovač). |\n| Tortilly Santa Maria (8 ks) | 6 ks týdně (S7 a P6 po 3 ks) | 3 balení na cyklus; otevřené balení do mrazáku, rozmrazit na pánvi. Zbylé ks jdou do dalšího cyklu. |\n| Avokádo | 40–90 g týdně | Rozkrojené pokapat citronem, sníst do 1 dne; v týdnu C zbytek do salátu. |\n| Klíčky mungo | pho potřebuje 80 g | Zbytek přidej do stir-fry H7 v témže týdnu. |\n| Salát | 40–100 g týdně | Menší balení (100–125 g) nebo zbytek jako zelenina navíc. |\n| Řecký jogurt Milko 0 % (140 g) | P3 = 2 kelímky; jinde 40–100 g na dresink nebo omáčku | Otevřený kelímek do 3 dnů – zbytek použij v dalším jídle s jogurtem ten týden, nebo ho dej přítelkyni. |\n| Mléko 1,5 % | 700–1 000 ml týdně | 1 l týdně; otevřené do 3–4 dnů. |\n\n## Bezpečnost\n\n- Uvařená jídla rozdělit do mělkých krabiček, nechat zchladnout a do 1–2 h dát do lednice. V lednici 3 dny, déle zamrazit.\n- Ohřívat do horka v celém objemu (alespoň 75 °C uprostřed), jen jednou.\n- Rýže: zchladit do 1 h, sníst do 24 h, ohřát jen jednou (Food Standards Scotland).\n- Syrový losos do sushi bowl jen v kvalitě k syrové konzumaci (předem zmražený); jinak upéct.\n- Mražené bobuloviny povařit 2 minuty (doporučení irského úřadu FSAI).\n\n## Zdroje\n\n- [Food Standards Scotland – bezpečné skladování rýže](https://foodstandards.gov.scot/consumers/food-safety/at-home/rice)\n- [FSAI – povařit dovážené mražené bobuloviny](https://www.fsai.ie/consumer-advice/food-safety-and-hygiene/berries-advice-to-boil-imported-frozen-berries)\n",
+   "mikrozivy": "Průměr na den v každém týdnu cyklu (krok 0) proti referenčním hodnotám EFSA pro muže 18–24 let. Hodnoty surovin jsou databázové odhady (USDA FoodData Central, evropské tabulky; u selenu a jódu evropské, nižší hodnoty), u vařené zeleniny je odečtena běžná ztráta vitaminu C. Proto hodnotím jen v pásmech: **s rezervou / hraniční / nízko / vysoko**. Vstupní hodnoty všech surovin jsou v záložce Hodnoty surovin, takže se výpočet dá zopakovat. Výpočet ze stravy není diagnóza – skutečný stav ukážou krevní testy.\n\n| Živina | Referenční hodnota | Horní limit | Týden A | Týden B | Týden C | Hodnocení |\n| --- | --- | --- | --- | --- | --- | --- |\n| Vitamin A (µg) | 750 (PRI) | 3 000 | 1 708 | 1 354 | 1 685 | s rezervou (hlavně beta-karoten) |\n| Vitamin C (mg) | 110 (PRI) | – | 216 | 225 | 325 | s rezervou |\n| Vitamin D (µg) | 15 (AI) | 100 | 8,4 | 8,9 | 6,5 | **pod referenční hodnotou** (orientačně) |\n| Vitamin E (mg) | 13 (AI) | 300 | 18,9 | 17,8 | 18,0 | s rezervou |\n| Vitamin K (µg) | 70 (AI) | – | 740 | 346 | 419 | s rezervou |\n| Thiamin (B1) (mg) | 1,4 (PRI) | – | 2,1 | 2,1 | 2,5 | s rezervou |\n| Riboflavin (B2) (mg) | 1,6 (PRI) | – | 3,5 | 3,5 | 3,9 | s rezervou |\n| Niacin (B3) (mg NE) | 23 (PRI) | – | 40 | 39 | 39 | s rezervou |\n| Vitamin B6 (mg) | 1,7 (PRI) | 12 | 5,2 | 4,8 | 5,1 | s rezervou, pod limitem |\n| Vitamin B12 (µg) | 4 (AI) | – | 10,3 | 10,4 | 10,2 | s rezervou |\n| Folát (µg) | 330 (PRI) | 1 000 | 685 | 620 | 658 | s rezervou |\n| Vápník (mg) | 1 000 (PRI) | 2 500 | 1 491 | 1 405 | 1 471 | s rezervou |\n| Hořčík (mg) | 350 (AI) | – | 808 | 752 | 847 | s rezervou |\n| Draslík (mg) | 3 500 (AI) | – | 6 805 | 6 603 | 6 963 | s rezervou |\n| Sodík bez přidané soli (mg) | 2 000 (bezpečný příjem) | – | 3 166 | 2 973 | 3 107 | **vysoko** už bez solení |\n| Železo (mg) | 11 (PRI) | – | 26,7 | 25,7 | 26,8 | s rezervou |\n| Zinek (mg) | 14 (PRI) | 25 | 22,3 | 22,3 | 23,5 | s rezervou, blízko limitu |\n| Selen (µg) | 70 (AI) | 255 | 158 | 163 | 156 | vysoko, pod limitem |\n| Jód (µg) | 150 (AI) | 600 | 213 | 213 | 210 | hraniční – závisí na soli |\n| EPA + DHA (mg) | 250 (AI) | – | 993 | 1 004 | 705 | s rezervou |\n| ALA, rostlinná omega-3 (g) | 1,9 (AI) | – | 2,5 | 2,5 | 2,5 | pokryto |\n\nPoznámky k tabulce: niacin je jen hotový niacin (k tomu se přidává ~35 mg z tryptofanu v bílkovinách). Referenční hodnota zinku 14 mg platí pro stravu s vyšším obsahem fytátů (celozrnné obiloviny, luštěniny). Horní limit vitaminu A platí jen pro retinol z živočišných zdrojů, ne pro beta-karoten. Horní limit kyseliny listové platí jen pro syntetickou formu z doplňků.\n\n## Co z toho plyne\n\n- **V tomto orientačním výpočtu vychází pod referenční hodnotou vitamin D** (~7–9 µg denně, ~50 % referenční hodnoty). V zimě dává smysl doplněk; dávku nastavíme podle hladiny 25(OH)D z krve.\n- **Jód** vychází ~200 µg denně, ale odhad je nejistý (obsah v mléce a vejcích kolísá). Vař s **jodidovanou solí**, ne jen s mořskou nebo himálajskou.\n- **Sodík** je vysoko už bez solení (~3 g). Rady jsou v záložce Cyklus 3 týdny.\n- **Selen (~160 µg) a zinek (~22 mg)** jsou vysoko, ale pod horním limitem (255 µg a 25 mg). Proto **žádné doplňky se selenem nebo zinkem a žádné para ořechy** – s doplňkem by se limit snadno překročil.\n- **Železo (~26 mg), B12 (~10 µg), hořčík (~750 mg) a omega-3 EPA+DHA (~0,7–1,0 g)** pokryje strava s velkou rezervou.\n- **Vitamin K** je vysoko kvůli špenátu. Nemá horní limit; důležité by to bylo jen při léčbě warfarinem.\n\n## Podklad pro doplňky\n\nFinální plán doplňků uděláme po krevních testech. Z pohledu hotové stravy:\n\n| Doplněk | Užíváš teď | Co dá strava | Návrh |\n| --- | --- | --- | --- |\n| Železo | ano | ~26 mg denně (2,3× doporučení) | **Nejvyšší priorita k probrání.** U mužů bez prokázaného nedostatku hrozí přetížení železem. Pokud ho nepředepsal lékař kvůli nízkému ferritinu, nech si změřit ferritin a saturaci transferinu a rozhodni s lékařem. |\n| Vitamin D3 | ano | ~8 µg | Pokračovat. Dávka podle 25(OH)D; běžná udržovací dávka dospělých je 25–50 µg (1 000–2 000 IU), horní limit EFSA 100 µg. |\n| B12 | ano | ~10 µg (2,5× doporučení) | Ze stravy není potřeba. Ponechat jen pokud krevní test ukáže nízkou hladinu. |\n| Hořčík | ano | ~750 mg (2× doporučení) | Ze stravy není potřeba. Pokud ho chceš kvůli spánku, max 250 mg z doplňku (limit EFSA pro doplňky). |\n| Omega-3 | zvažoval | 0,7–1,0 g EPA+DHA | Při rybách podle cyklu není potřeba. |\n| Ashwagandha, MSM | ano | – (nejsou to živiny) | Posoudíme zvlášť v plánu doplňků. |\n\n## Kontaminanty\n\n- **Arsen v rýži:** rýže je v cyklu hlavní příloha. EFSA (2024): expozice anorganickému arsenu je pro Evropany zdravotní riziko a rýže je hlavní zdroj. Řešení: basmati, vaření předvařením (postup v záložce Cyklus 3 týdny) a část příloh z bulguru a gnocchi.\n- **Rtuť:** tuňák max 1× týdně; losos, sardinky a krevety jsou na rtuť chudé.\n\n## Zdroje\n\n- [EFSA – souhrn referenčních hodnot živin](https://www.efsa.europa.eu:443/sites/default/files/2017_09_DRVs_summary_report.pdf)\n- [EFSA 2023 – horní limit selenu](https://pmc.ncbi.nlm.nih.gov/articles/pmid/36698500)\n- [EFSA 2023 – nové horní limity vitaminu B6 a selenu (shrnutí)](https://www.nutritioninsight.com/news/efsa-changes-vitamin-b6-and-selenium-safety-limits-but-critics-question-the-science.html)\n- [EFSA 2024 – anorganický arsen v potravinách](https://doaj.org/article/d4014f0c32b747e1a22dd5b22c842fef)\n"
+  }
  },
  "suroviny": {
   "vejce": {
@@ -30,34 +268,40 @@
     "nasycene_g": 3.1
    },
    "poznamka": "1 vejce M/L ≈ 55 g bez skořápky",
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Lednice",
    "baleni": "550 g"
   },
   "cottage": {
-   "nazev": "Cottage sýr (~4 % tuku)",
+   "nazev": "Cottage sýr Pilos",
    "na_100g": {
-    "kcal": 97,
-    "bilkoviny_g": 11.5,
+    "kcal": 99,
+    "bilkoviny_g": 12.0,
     "sacharidy_g": 3.0,
     "tuky_g": 4.3,
     "vlaknina_g": 0.0,
     "nasycene_g": 2.8
    },
-   "poznamka": "etiketa: ověřit",
+   "poznamka": "bílkoviny z obalu (24 g/200 g); tuk odhad",
+   "zdroj_kategorie": 1,
+   "zdroj_kategorie_text": "etiketa / výrobce",
    "kategorie_nakupu": "Lednice",
    "baleni": "180 g"
   },
   "tvaroh": {
-   "nazev": "Tvaroh polotučný",
+   "nazev": "Tvaroh polotučný Pilos",
    "na_100g": {
-    "kcal": 102,
-    "bilkoviny_g": 12.0,
-    "sacharidy_g": 3.5,
-    "tuky_g": 4.5,
+    "kcal": 90,
+    "bilkoviny_g": 10.0,
+    "sacharidy_g": 4.0,
+    "tuky_g": 3.8,
     "vlaknina_g": 0.0,
-    "nasycene_g": 3.0
+    "nasycene_g": 2.5
    },
-   "poznamka": "etiketa: ověřit",
+   "poznamka": "Open Food Facts (Pilos 250 g)",
+   "zdroj_kategorie": 2,
+   "zdroj_kategorie_text": "databáze konkrétního výrobku",
    "kategorie_nakupu": "Lednice",
    "baleni": "250 g"
   },
@@ -72,6 +316,8 @@
     "nasycene_g": 0.2
    },
    "poznamka": "etiketa výrobce ověřena",
+   "zdroj_kategorie": 2,
+   "zdroj_kategorie_text": "databáze konkrétního výrobku",
    "kategorie_nakupu": "Lednice",
    "baleni": "140 g"
   },
@@ -86,22 +332,26 @@
     "nasycene_g": 2.0
    },
    "poznamka": "etiketa: ověřit",
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Lednice",
    "baleni": "150 g"
   },
   "kefir": {
-   "nazev": "Kefír 1,5 %",
+   "nazev": "Kefírové mléko Pilos 4 %",
    "na_100g": {
-    "kcal": 43,
+    "kcal": 62,
     "bilkoviny_g": 3.3,
-    "sacharidy_g": 4.0,
-    "tuky_g": 1.5,
+    "sacharidy_g": 3.1,
+    "tuky_g": 4.0,
     "vlaknina_g": 0.0,
-    "nasycene_g": 1.0
+    "nasycene_g": 2.3
    },
-   "poznamka": "etiketa: ověřit",
+   "poznamka": "Open Food Facts (Pilos tradiční 750 ml)",
+   "zdroj_kategorie": 2,
+   "zdroj_kategorie_text": "databáze konkrétního výrobku",
    "kategorie_nakupu": "Lednice",
-   "baleni": "500 g"
+   "baleni": "750 g"
   },
   "mleko": {
    "nazev": "Mléko polotučné 1,5 %",
@@ -114,6 +364,8 @@
     "nasycene_g": 1.0
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Lednice",
    "baleni": "1000 g"
   },
@@ -128,6 +380,8 @@
     "nasycene_g": 14.0
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Lednice",
    "baleni": "200 g"
   },
@@ -142,6 +396,8 @@
     "nasycene_g": 16.4
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Lednice",
    "baleni": "150 g"
   },
@@ -156,6 +412,8 @@
     "nasycene_g": 6.0
    },
    "poznamka": "etiketa: ověřit",
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Lednice",
    "baleni": "125 g"
   },
@@ -170,6 +428,8 @@
     "nasycene_g": 7.8
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Lednice",
    "baleni": "200 g"
   },
@@ -184,6 +444,8 @@
     "nasycene_g": 4.1
    },
    "poznamka": "Kalorické tabulky – ověřit etiketou",
+   "zdroj_kategorie": 2,
+   "zdroj_kategorie_text": "databáze konkrétního výrobku",
    "kategorie_nakupu": "Zásoba",
    "baleni": "1 kg"
   },
@@ -198,6 +460,8 @@
     "nasycene_g": 0.3
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Maso a ryby",
    "baleni": "500 g"
   },
@@ -212,6 +476,8 @@
     "nasycene_g": 1.0
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Maso a ryby",
    "baleni": "500 g"
   },
@@ -226,6 +492,8 @@
     "nasycene_g": 0.4
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Maso a ryby",
    "baleni": "500 g"
   },
@@ -240,6 +508,8 @@
     "nasycene_g": 0.6
    },
    "poznamka": "domácí, ne šunka",
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Maso a ryby",
    "baleni": null
   },
@@ -254,6 +524,8 @@
     "nasycene_g": 2.0
    },
    "poznamka": "etiketa: ověřit",
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Maso a ryby",
    "baleni": "500 g"
   },
@@ -268,6 +540,8 @@
     "nasycene_g": 2.2
    },
    "poznamka": "etiketa: ověřit",
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Maso a ryby",
    "baleni": "400 g"
   },
@@ -282,6 +556,8 @@
     "nasycene_g": 1.8
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Maso a ryby",
    "baleni": null
   },
@@ -296,6 +572,8 @@
     "nasycene_g": 2.2
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Maso a ryby",
    "baleni": null
   },
@@ -310,6 +588,8 @@
     "nasycene_g": 1.2
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Maso a ryby",
    "baleni": null
   },
@@ -324,6 +604,8 @@
     "nasycene_g": 3.1
    },
    "poznamka": "EPA+DHA cca 2 g/100 g, kolísá",
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Maso a ryby",
    "baleni": null
   },
@@ -338,6 +620,8 @@
     "nasycene_g": 2.2
    },
    "poznamka": "údaje výrobce; 1 plechovka 120 g ≈ 85 g ryby",
+   "zdroj_kategorie": 1,
+   "zdroj_kategorie_text": "etiketa / výrobce",
    "kategorie_nakupu": "Zásoba",
    "baleni": "konzerva 120 g (~85 g ryby)"
   },
@@ -352,6 +636,8 @@
     "nasycene_g": 0.3
    },
    "poznamka": "1 konzerva ≈ 110 g slitého",
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Zásoba",
    "baleni": "konzerva 160 g (110 g slitá)"
   },
@@ -366,36 +652,42 @@
     "nasycene_g": 0.1
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Mražené",
    "baleni": "200 g"
   },
   "chleb_zitny": {
-   "nazev": "Žitný kváskový chléb celozrnný",
+   "nazev": "Žitný kváskový chléb Breadway (Lidl)",
    "na_100g": {
-    "kcal": 214,
-    "bilkoviny_g": 6.5,
-    "sacharidy_g": 40.0,
-    "tuky_g": 1.5,
-    "vlaknina_g": 7.0,
-    "nasycene_g": 0.3
+    "kcal": 193,
+    "bilkoviny_g": 6.6,
+    "sacharidy_g": 34.0,
+    "tuky_g": 2.5,
+    "vlaknina_g": 4.1,
+    "nasycene_g": 0.2
    },
-   "poznamka": "etiketa: ověřit",
+   "poznamka": "Kalorické tabulky (Breadway)",
+   "zdroj_kategorie": 2,
+   "zdroj_kategorie_text": "databáze konkrétního výrobku",
    "kategorie_nakupu": "Lednice",
    "baleni": "500 g"
   },
   "tortilla_cz": {
-   "nazev": "Celozrnná tortilla",
+   "nazev": "Celozrnná tortilla Santa Maria",
    "na_100g": {
-    "kcal": 290,
-    "bilkoviny_g": 9.5,
-    "sacharidy_g": 44.0,
-    "tuky_g": 7.0,
-    "vlaknina_g": 6.5,
-    "nasycene_g": 2.0
+    "kcal": 280,
+    "bilkoviny_g": 8.0,
+    "sacharidy_g": 47.0,
+    "tuky_g": 5.5,
+    "vlaknina_g": 5.2,
+    "nasycene_g": 1.5
    },
-   "poznamka": "1 ks ≈ 62 g; etiketa: ověřit",
+   "poznamka": "Grizly; balení 320 g = 8 ks po 40 g",
+   "zdroj_kategorie": 2,
+   "zdroj_kategorie_text": "databáze konkrétního výrobku",
    "kategorie_nakupu": "Lednice",
-   "baleni": "372 g"
+   "baleni": "320 g"
   },
   "vlocky": {
    "nazev": "Ovesné vločky",
@@ -408,6 +700,8 @@
     "nasycene_g": 1.2
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Zásoba",
    "baleni": "500 g"
   },
@@ -422,6 +716,8 @@
     "nasycene_g": 0.2
    },
    "poznamka": "údaje výrobce; vláknina neuvedena (odhad)",
+   "zdroj_kategorie": 1,
+   "zdroj_kategorie_text": "etiketa / výrobce",
    "kategorie_nakupu": "Zásoba",
    "baleni": "1 kg"
   },
@@ -436,6 +732,8 @@
     "nasycene_g": 0.2
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Zásoba",
    "baleni": "1 kg"
   },
@@ -450,6 +748,8 @@
     "nasycene_g": 0.2
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Zásoba",
    "baleni": "500 g–1 kg"
   },
@@ -464,6 +764,8 @@
     "nasycene_g": 0.2
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Zásoba",
    "baleni": "500 g"
   },
@@ -478,6 +780,8 @@
     "nasycene_g": 0.3
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Zásoba",
    "baleni": "500 g"
   },
@@ -492,6 +796,8 @@
     "nasycene_g": 0.4
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Zásoba",
    "baleni": "500 g"
   },
@@ -506,6 +812,8 @@
     "nasycene_g": 0.2
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Zásoba",
    "baleni": "200 g"
   },
@@ -520,6 +828,8 @@
     "nasycene_g": 0.0
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Ovoce a zelenina",
    "baleni": null
   },
@@ -534,6 +844,8 @@
     "nasycene_g": 0.0
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Ovoce a zelenina",
    "baleni": null
   },
@@ -548,6 +860,8 @@
     "nasycene_g": 0.2
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Zásoba",
    "baleni": "500 g"
   },
@@ -562,6 +876,8 @@
     "nasycene_g": 0.1
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Zásoba",
    "baleni": "konzerva 400 g (240 g slitá)"
   },
@@ -576,6 +892,8 @@
     "nasycene_g": 0.1
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Zásoba",
    "baleni": "konzerva 400 g (240 g slitá)"
   },
@@ -590,6 +908,8 @@
     "nasycene_g": 0.3
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Zásoba",
    "baleni": "konzerva 400 g (240 g slitá)"
   },
@@ -604,6 +924,8 @@
     "nasycene_g": 0.6
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Mražené",
    "baleni": "400 g"
   },
@@ -618,6 +940,8 @@
     "nasycene_g": 0.1
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Mražené",
    "baleni": "450 g"
   },
@@ -632,6 +956,8 @@
     "nasycene_g": 0.2
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Zásoba",
    "baleni": "konzerva 340 g (285 g slitá)"
   },
@@ -646,6 +972,8 @@
     "nasycene_g": 0.0
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Ovoce a zelenina",
    "baleni": null
   },
@@ -660,6 +988,8 @@
     "nasycene_g": 0.0
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Zásoba",
    "baleni": "konzerva 400 g"
   },
@@ -674,6 +1004,8 @@
     "nasycene_g": 0.0
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Zásoba",
    "baleni": "500 g"
   },
@@ -688,6 +1020,8 @@
     "nasycene_g": 0.0
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Ovoce a zelenina",
    "baleni": null
   },
@@ -702,6 +1036,8 @@
     "nasycene_g": 0.0
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Ovoce a zelenina",
    "baleni": null
   },
@@ -716,6 +1052,8 @@
     "nasycene_g": 0.1
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Mražené",
    "baleni": "450 g"
   },
@@ -730,6 +1068,8 @@
     "nasycene_g": 0.0
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Ovoce a zelenina",
    "baleni": null
   },
@@ -744,6 +1084,8 @@
     "nasycene_g": 0.1
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Ovoce a zelenina",
    "baleni": null
   },
@@ -758,6 +1100,8 @@
     "nasycene_g": 0.0
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Ovoce a zelenina",
    "baleni": null
   },
@@ -772,6 +1116,8 @@
     "nasycene_g": 0.1
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Ovoce a zelenina",
    "baleni": null
   },
@@ -786,6 +1132,8 @@
     "nasycene_g": 0.1
    },
    "poznamka": "odhad",
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Ovoce a zelenina",
    "baleni": null
   },
@@ -800,6 +1148,8 @@
     "nasycene_g": 0.0
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Ovoce a zelenina",
    "baleni": null
   },
@@ -814,6 +1164,8 @@
     "nasycene_g": 0.0
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Ovoce a zelenina",
    "baleni": null
   },
@@ -828,6 +1180,8 @@
     "nasycene_g": 0.1
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Ovoce a zelenina",
    "baleni": null
   },
@@ -842,6 +1196,8 @@
     "nasycene_g": 0.2
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Ovoce a zelenina",
    "baleni": null
   },
@@ -856,6 +1212,8 @@
     "nasycene_g": 0.1
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Ovoce a zelenina",
    "baleni": null
   },
@@ -870,6 +1228,8 @@
     "nasycene_g": 0.0
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Mražené",
    "baleni": "450 g"
   },
@@ -884,6 +1244,8 @@
     "nasycene_g": 0.0
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Ovoce a zelenina",
    "baleni": null
   },
@@ -898,6 +1260,8 @@
     "nasycene_g": 0.0
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Ovoce a zelenina",
    "baleni": null
   },
@@ -912,6 +1276,8 @@
     "nasycene_g": 0.0
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Ovoce a zelenina",
    "baleni": null
   },
@@ -926,6 +1292,8 @@
     "nasycene_g": 0.0
    },
    "poznamka": "hodně soli",
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Lednice",
    "baleni": null
   },
@@ -940,6 +1308,8 @@
     "nasycene_g": 2.1
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Ovoce a zelenina",
    "baleni": null
   },
@@ -954,6 +1324,8 @@
     "nasycene_g": 0.0
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Ovoce a zelenina",
    "baleni": null
   },
@@ -968,6 +1340,8 @@
     "nasycene_g": 0.1
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Ovoce a zelenina",
    "baleni": null
   },
@@ -982,6 +1356,8 @@
     "nasycene_g": 0.0
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Ovoce a zelenina",
    "baleni": null
   },
@@ -996,6 +1372,8 @@
     "nasycene_g": 0.0
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Ovoce a zelenina",
    "baleni": null
   },
@@ -1010,6 +1388,8 @@
     "nasycene_g": 0.0
    },
    "poznamka": "mražené před jídlem povařit 2 min",
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Mražené",
    "baleni": "300 g"
   },
@@ -1024,6 +1404,8 @@
     "nasycene_g": 0.0
    },
    "poznamka": "mražené před jídlem povařit 2 min",
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Mražené",
    "baleni": "300 g"
   },
@@ -1038,6 +1420,8 @@
     "nasycene_g": 0.1
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Ovoce a zelenina",
    "baleni": null
   },
@@ -1052,6 +1436,8 @@
     "nasycene_g": 0.0
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Zásoba",
    "baleni": "200 g"
   },
@@ -1066,6 +1452,8 @@
     "nasycene_g": 0.0
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Ovoce a zelenina",
    "baleni": null
   },
@@ -1080,6 +1468,8 @@
     "nasycene_g": 0.0
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Ovoce a zelenina",
    "baleni": null
   },
@@ -1094,6 +1484,8 @@
     "nasycene_g": 0.0
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Zásoba",
    "baleni": "500 g"
   },
@@ -1108,6 +1500,8 @@
     "nasycene_g": 0.0
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Zásoba",
    "baleni": "1 kg"
   },
@@ -1122,6 +1516,8 @@
     "nasycene_g": 8.1
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Zásoba",
    "baleni": "150 g"
   },
@@ -1136,6 +1532,8 @@
     "nasycene_g": 6.1
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Zásoba",
    "baleni": "200 g"
   },
@@ -1150,6 +1548,8 @@
     "nasycene_g": 3.8
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Zásoba",
    "baleni": "200 g"
   },
@@ -1164,6 +1564,8 @@
     "nasycene_g": 3.3
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Zásoba",
    "baleni": "300 g"
   },
@@ -1178,6 +1580,8 @@
     "nasycene_g": 7.0
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Zásoba",
    "baleni": "100 g"
   },
@@ -1192,6 +1596,8 @@
     "nasycene_g": 8.7
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Zásoba",
    "baleni": "200 g"
   },
@@ -1206,6 +1612,8 @@
     "nasycene_g": 14.0
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Zásoba",
    "baleni": "750 ml"
   },
@@ -1220,6 +1628,8 @@
     "nasycene_g": 14.0
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Zásoba",
    "baleni": "250 ml"
   },
@@ -1234,6 +1644,8 @@
     "nasycene_g": 51.0
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Lednice",
    "baleni": "250 g"
   },
@@ -1248,6 +1660,8 @@
     "nasycene_g": 0.1
    },
    "poznamka": "hodně sodíku",
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Zásoba",
    "baleni": "250 ml"
   },
@@ -1262,6 +1676,8 @@
     "nasycene_g": 0.0
    },
    "poznamka": "hodně sodíku",
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Zásoba",
    "baleni": "200 ml"
   },
@@ -1276,6 +1692,8 @@
     "nasycene_g": 0.3
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Zásoba",
    "baleni": "200 g"
   },
@@ -1290,6 +1708,8 @@
     "nasycene_g": 0.2
    },
    "poznamka": "odhad – složení vývaru se liší",
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Lednice",
    "baleni": null
   },
@@ -1304,6 +1724,8 @@
     "nasycene_g": 0.0
    },
    "poznamka": "odhad; hodně soli, pokud z bujonu",
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Zásoba",
    "baleni": "bujon se sníženým obsahem soli"
   },
@@ -1318,6 +1740,8 @@
     "nasycene_g": 0.5
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Zásoba",
    "baleni": "10 plátů"
   },
@@ -1332,34 +1756,40 @@
     "nasycene_g": 0.0
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Zásoba",
    "baleni": "250 ml"
   },
   "bulgur": {
-   "nazev": "Bulgur (suchý)",
+   "nazev": "Bulgur Golden Sun (suchý)",
    "na_100g": {
-    "kcal": 350,
-    "bilkoviny_g": 11.0,
-    "sacharidy_g": 69.0,
+    "kcal": 337,
+    "bilkoviny_g": 12.8,
+    "sacharidy_g": 64.0,
     "tuky_g": 1.5,
     "vlaknina_g": 8.0,
     "nasycene_g": 0.3
    },
-   "poznamka": "Lidl – FatSecret; vláknina odhad, ověřit etiketou",
+   "poznamka": "FatSecret (Golden Sun, Lidl); vláknina odhad",
+   "zdroj_kategorie": 2,
+   "zdroj_kategorie_text": "databáze konkrétního výrobku",
    "kategorie_nakupu": "Zásoba",
    "baleni": "500 g"
   },
   "gnocchi": {
-   "nazev": "Gnocchi bramborové (balené)",
+   "nazev": "Gnocchi Combino (Lidl)",
    "na_100g": {
-    "kcal": 150,
-    "bilkoviny_g": 3.8,
-    "sacharidy_g": 30.5,
-    "tuky_g": 0.5,
-    "vlaknina_g": 3.9,
-    "nasycene_g": 0.3
+    "kcal": 154,
+    "bilkoviny_g": 3.7,
+    "sacharidy_g": 33.0,
+    "tuky_g": 0.3,
+    "vlaknina_g": 2.5,
+    "nasycene_g": 0.2
    },
-   "poznamka": "podle etikety ja! (REWE); ověřit Lidl",
+   "poznamka": "Open Food Facts (Combino 500 g)",
+   "zdroj_kategorie": 2,
+   "zdroj_kategorie_text": "databáze konkrétního výrobku",
    "kategorie_nakupu": "Lednice",
    "baleni": "500 g"
   },
@@ -1374,6 +1804,8 @@
     "nasycene_g": 0.3
    },
    "poznamka": null,
+   "zdroj_kategorie": 3,
+   "zdroj_kategorie_text": "obecný databázový odhad",
    "kategorie_nakupu": "Ovoce a zelenina",
    "baleni": null
   }
@@ -1392,13 +1824,13 @@
     },
     {
      "surovina": "cottage",
-     "nazev": "Cottage sýr (~4 % tuku)",
+     "nazev": "Cottage sýr Pilos",
      "g": 100,
      "poznamka": null
     },
     {
      "surovina": "chleb_zitny",
-     "nazev": "Žitný kváskový chléb celozrnný",
+     "nazev": "Žitný kváskový chléb Breadway (Lidl)",
      "g": 160,
      "poznamka": null
     },
@@ -1428,19 +1860,19 @@
     }
    ],
    "hodnoty_porce": {
-    "kcal": 852,
-    "bilkoviny_g": 46.7,
-    "sacharidy_g": 91.8,
-    "tuky_g": 28.7,
-    "vlaknina_g": 19.6,
-    "nasycene_g": 9.1
+    "kcal": 821,
+    "bilkoviny_g": 47.4,
+    "sacharidy_g": 82.2,
+    "tuky_g": 30.3,
+    "vlaknina_g": 15.0,
+    "nasycene_g": 8.9
    },
    "priprava": "Vejce rozšlehat se špetkou soli, na oleji pomalu míchat na mírném ohni. Cottage podávat vedle nebo vmíchat na konci. Chléb, nakrájená zelenina, kiwi jako dezert.",
    "skladovani": "Připravovat čerstvě (5 min). Míchaná vejce dopředu nedělat.",
    "poznamka": null,
    "modul_prilohy": {
     "surovina": "chleb_zitny",
-    "g": 45
+    "g": 50
    }
   },
   {
@@ -1451,12 +1883,12 @@
     {
      "surovina": "vlocky",
      "nazev": "Ovesné vločky",
-     "g": 95,
+     "g": 85,
      "poznamka": "suché"
     },
     {
      "surovina": "kefir",
-     "nazev": "Kefír 1,5 %",
+     "nazev": "Kefírové mléko Pilos 4 %",
      "g": 300,
      "poznamka": null
     },
@@ -1492,15 +1924,15 @@
     }
    ],
    "hodnoty_porce": {
-    "kcal": 842,
-    "bilkoviny_g": 46.6,
-    "sacharidy_g": 97.5,
-    "tuky_g": 25.6,
-    "vlaknina_g": 17.6,
-    "nasycene_g": 6.4
+    "kcal": 862,
+    "bilkoviny_g": 45.3,
+    "sacharidy_g": 89.0,
+    "tuky_g": 32.4,
+    "vlaknina_g": 16.6,
+    "nasycene_g": 10.2
    },
    "priprava": "Večer smíchat vločky, chia, protein a kefír, nechat v lednici přes noc. Ráno přidat borůvky, ořechy a med.",
-   "skladovani": "V lednici max. 24 h. Hodí se připravit večer předem; lze udělat 2 porce najednou.",
+   "skladovani": "V lednici max. 24 h. Lze udělat 2 porce najednou.",
    "poznamka": null,
    "modul_prilohy": {
     "surovina": "vlocky",
@@ -1538,13 +1970,13 @@
     },
     {
      "surovina": "cottage",
-     "nazev": "Cottage sýr (~4 % tuku)",
-     "g": 60,
+     "nazev": "Cottage sýr Pilos",
+     "g": 100,
      "poznamka": "vedle"
     },
     {
      "surovina": "chleb_zitny",
-     "nazev": "Žitný kváskový chléb celozrnný",
+     "nazev": "Žitný kváskový chléb Breadway (Lidl)",
      "g": 140,
      "poznamka": null
     },
@@ -1562,19 +1994,19 @@
     }
    ],
    "hodnoty_porce": {
-    "kcal": 853,
-    "bilkoviny_g": 49.4,
-    "sacharidy_g": 81.7,
-    "tuky_g": 32.6,
-    "vlaknina_g": 17.8,
-    "nasycene_g": 12.2
+    "kcal": 865,
+    "bilkoviny_g": 54.6,
+    "sacharidy_g": 74.5,
+    "tuky_g": 35.7,
+    "vlaknina_g": 13.7,
+    "nasycene_g": 13.2
    },
    "priprava": "Žampiony a špenát krátce osmahnout, zalít rozšlehanými vejci, posypat fetou, dopéct pod pokličkou. Cottage a chléb vedle, pomeranč jako dezert.",
    "skladovani": "Čerstvě (10 min).",
    "poznamka": null,
    "modul_prilohy": {
     "surovina": "chleb_zitny",
-    "g": 45
+    "g": 50
    }
   },
   {
@@ -1590,15 +2022,15 @@
     },
     {
      "surovina": "cottage",
-     "nazev": "Cottage sýr (~4 % tuku)",
+     "nazev": "Cottage sýr Pilos",
      "g": 100,
      "poznamka": "s pažitkou, citronem, pepřem"
     },
     {
      "surovina": "chleb_zitny",
-     "nazev": "Žitný kváskový chléb celozrnný",
-     "g": 170,
-     "poznamka": null
+     "nazev": "Žitný kváskový chléb Breadway (Lidl)",
+     "g": 200,
+     "poznamka": "½ bochníku"
     },
     {
      "surovina": "okurka",
@@ -1632,19 +2064,19 @@
     }
    ],
    "hodnoty_porce": {
-    "kcal": 793,
-    "bilkoviny_g": 46.8,
+    "kcal": 818,
+    "bilkoviny_g": 49.5,
     "sacharidy_g": 100.2,
-    "tuky_g": 18.7,
-    "vlaknina_g": 18.4,
-    "nasycene_g": 5.9
+    "tuky_g": 21.1,
+    "vlaknina_g": 14.7,
+    "nasycene_g": 5.8
    },
    "priprava": "Cottage smíchat s pažitkou, citronem a pepřem, namazat na chléb, navrch sardinky, pokapat olejem. Zelenina vedle, jablko jako dezert.",
-   "skladovani": "Čerstvě (5 min). Otevřené sardinky v lednici do 24 h v uzavřené nádobě.",
+   "skladovani": "Čerstvě (5 min). Zbytek z otevřené konzervy do 24 h v uzavřené nádobě v lednici.",
    "poznamka": null,
    "modul_prilohy": {
     "surovina": "chleb_zitny",
-    "g": 45
+    "g": 50
    }
   },
   {
@@ -1666,9 +2098,9 @@
     },
     {
      "surovina": "tvaroh",
-     "nazev": "Tvaroh polotučný",
-     "g": 100,
-     "poznamka": "do těsta"
+     "nazev": "Tvaroh polotučný Pilos",
+     "g": 125,
+     "poznamka": "do těsta; ½ balení"
     },
     {
      "surovina": "mleko",
@@ -1708,15 +2140,15 @@
     }
    ],
    "hodnoty_porce": {
-    "kcal": 881,
-    "bilkoviny_g": 48.6,
-    "sacharidy_g": 98.2,
-    "tuky_g": 28.2,
+    "kcal": 892,
+    "bilkoviny_g": 49.1,
+    "sacharidy_g": 99.7,
+    "tuky_g": 28.4,
     "vlaknina_g": 20.4,
-    "nasycene_g": 9.3
+    "nasycene_g": 9.4
    },
    "priprava": "Vločky umlít, smíchat s vejci, tvarohem, mlékem a rozmačkaným banánem (+ 1/2 lžičky prášku do pečiva). Péct malé lívance na mírném ohni. Podávat s jogurtem, malinami a medem.",
-   "skladovani": "Čerstvě, nebo upéct 2–3 porce a skladovat v lednici do 2 dnů; lze zamrazit.",
+   "skladovani": "Upéct 2 porce najednou (celé balení tvarohu 250 g), druhou zamrazit na příští sobotu; v lednici vydrží 2 dny.",
    "poznamka": null,
    "modul_prilohy": {
     "surovina": "vlocky",
@@ -1794,9 +2226,9 @@
    "suroviny": [
     {
      "surovina": "tortilla_cz",
-     "nazev": "Celozrnná tortilla",
-     "g": 124,
-     "poznamka": "2 ks"
+     "nazev": "Celozrnná tortilla Santa Maria",
+     "g": 120,
+     "poznamka": "3 ks"
     },
     {
      "surovina": "vejce",
@@ -1812,8 +2244,8 @@
     },
     {
      "surovina": "cottage",
-     "nazev": "Cottage sýr (~4 % tuku)",
-     "g": 50,
+     "nazev": "Cottage sýr Pilos",
+     "g": 100,
      "poznamka": null
     },
     {
@@ -1842,19 +2274,19 @@
     }
    ],
    "hodnoty_porce": {
-    "kcal": 828,
-    "bilkoviny_g": 46.9,
-    "sacharidy_g": 75.8,
-    "tuky_g": 33.2,
-    "vlaknina_g": 19.3,
-    "nasycene_g": 9.9
+    "kcal": 855,
+    "bilkoviny_g": 50.9,
+    "sacharidy_g": 79.1,
+    "tuky_g": 33.3,
+    "vlaknina_g": 17.4,
+    "nasycene_g": 10.6
    },
    "priprava": "Vejce zamíchat s fazolemi na nepřilnavé pánvi bez oleje. Tortilly naplnit vejci, cottage, avokádem a salsou z rajčat, papriky a limetky (bez pálivého).",
    "skladovani": "Čerstvě (10 min).",
    "poznamka": null,
    "modul_prilohy": {
     "surovina": "tortilla_cz",
-    "g": 31
+    "g": 40
    }
   },
   {
@@ -1908,7 +2340,7 @@
     "nasycene_g": 4.5
    },
    "priprava": "Kaši zalít horkým mlékem, po chvíli vmíchat protein. Navrch banán, med a skořice.",
-   "skladovani": "Čerstvě nebo do termosky.",
+   "skladovani": "Čerstvě, nebo do termosky.",
    "poznamka": null,
    "modul_prilohy": {
     "surovina": "ryzova_kase",
@@ -1922,9 +2354,9 @@
    "suroviny": [
     {
      "surovina": "chleb_zitny",
-     "nazev": "Žitný kváskový chléb celozrnný",
-     "g": 170,
-     "poznamka": null
+     "nazev": "Žitný kváskový chléb Breadway (Lidl)",
+     "g": 200,
+     "poznamka": "½ bochníku"
     },
     {
      "surovina": "krut_prsa_pecena",
@@ -1964,19 +2396,19 @@
     }
    ],
    "hodnoty_porce": {
-    "kcal": 662,
-    "bilkoviny_g": 42.8,
+    "kcal": 685,
+    "bilkoviny_g": 45.0,
     "sacharidy_g": 90.8,
-    "tuky_g": 10.0,
-    "vlaknina_g": 18.6,
-    "nasycene_g": 4.5
+    "tuky_g": 12.4,
+    "vlaknina_g": 14.9,
+    "nasycene_g": 4.4
    },
    "priprava": "Krůtí prsa upéct dopředu (viz poznámka), nakrájet na plátky. Sendvič s mozzarellou, rajčaty, salátem a hořčicí. Pomeranč vedle.",
-   "skladovani": "Upečená krůtí prsa v lednici 3 dny; hotový sendvič téhož dne.",
-   "poznamka": "Krůtí prsa: 500 g syrových upéct na 180 °C cca 25 min (vnitřní teplota 74 °C) → cca 350 g upečených, vystačí na 5–6 sendvičů.",
+   "skladovani": "Upečená krůtí prsa 3 dny v lednici; hotový sendvič sníst týž den.",
+   "poznamka": "500 g syrových krůtích prsou upéct na 180 °C cca 25 min (uvnitř 74 °C) → cca 350 g upečených, vystačí na 5–6 sendvičů. Domácí pečené maso nahrazuje šunku (zpracované maso).",
    "modul_prilohy": {
     "surovina": "chleb_zitny",
-    "g": 45
+    "g": 50
    }
   },
   {
@@ -1987,8 +2419,8 @@
     {
      "surovina": "recky_jogurt_0",
      "nazev": "Řecký jogurt 0 % (Milko)",
-     "g": 270,
-     "poznamka": null
+     "g": 280,
+     "poznamka": "2 kelímky"
     },
     {
      "surovina": "vlocky",
@@ -2016,9 +2448,9 @@
     }
    ],
    "hodnoty_porce": {
-    "kcal": 696,
-    "bilkoviny_g": 39.5,
-    "sacharidy_g": 112.7,
+    "kcal": 702,
+    "bilkoviny_g": 40.5,
+    "sacharidy_g": 113.0,
     "tuky_g": 6.7,
     "vlaknina_g": 13.6,
     "nasycene_g": 1.6
@@ -2044,7 +2476,7 @@
     },
     {
      "surovina": "gnocchi",
-     "nazev": "Gnocchi bramborové (balené)",
+     "nazev": "Gnocchi Combino (Lidl)",
      "g": 300,
      "poznamka": "z balení"
     },
@@ -2068,16 +2500,16 @@
     }
    ],
    "hodnoty_porce": {
-    "kcal": 687,
-    "bilkoviny_g": 43.4,
-    "sacharidy_g": 95.7,
-    "tuky_g": 11.5,
-    "vlaknina_g": 13.7,
-    "nasycene_g": 2.5
+    "kcal": 702,
+    "bilkoviny_g": 43.1,
+    "sacharidy_g": 103.2,
+    "tuky_g": 10.9,
+    "vlaknina_g": 9.5,
+    "nasycene_g": 2.2
    },
    "priprava": "Kuře na kostky opéct na polovině oleje a vyndat. Na zbytku oleje opéct gnocchi dozlatova (rovnou z balení, 6–8 min), přidat cuketu a rajčata, 3 min podusit, vrátit kuře, dochutit česnekem, oreganem a pepřem.",
    "skladovani": "Čerstvě nebo do krabičky; v lednici 2 dny. Otevřené gnocchi do 2–3 dnů, zbytek zamrazit (vaří se rovnou zmražené).",
-   "poznamka": null,
+   "poznamka": "Teplé jídlo – před tréninkem si ho dej s odstupem aspoň 1,5 h.",
    "modul_prilohy": {
     "surovina": "gnocchi",
     "g": 70
@@ -2090,7 +2522,7 @@
    "suroviny": [
     {
      "surovina": "kefir",
-     "nazev": "Kefír 1,5 %",
+     "nazev": "Kefírové mléko Pilos 4 %",
      "g": 400,
      "poznamka": null
     },
@@ -2120,14 +2552,14 @@
     }
    ],
    "hodnoty_porce": {
-    "kcal": 696,
+    "kcal": 772,
     "bilkoviny_g": 41.5,
-    "sacharidy_g": 101.0,
-    "tuky_g": 11.4,
+    "sacharidy_g": 97.4,
+    "tuky_g": 21.4,
     "vlaknina_g": 11.7,
-    "nasycene_g": 5.8
+    "nasycene_g": 11.0
    },
-   "priprava": "Vše rozmixovat. Vločky lze předem namočit v kefíru na 10 min.",
+   "priprava": "Vše rozmixovat. Vločky lze předem na 10 min namočit v kefíru.",
    "skladovani": "Mixovat čerstvě; v uzavřené lahvi v chladu do 2 h.",
    "poznamka": null,
    "modul_prilohy": {
@@ -2142,9 +2574,9 @@
    "suroviny": [
     {
      "surovina": "tortilla_cz",
-     "nazev": "Celozrnná tortilla",
-     "g": 124,
-     "poznamka": "2 ks"
+     "nazev": "Celozrnná tortilla Santa Maria",
+     "g": 120,
+     "poznamka": "3 ks"
     },
     {
      "surovina": "tunak",
@@ -2190,12 +2622,12 @@
     }
    ],
    "hodnoty_porce": {
-    "kcal": 689,
-    "bilkoviny_g": 46.8,
-    "sacharidy_g": 93.2,
-    "tuky_g": 11.2,
-    "vlaknina_g": 14.1,
-    "nasycene_g": 3.1
+    "kcal": 665,
+    "bilkoviny_g": 44.6,
+    "sacharidy_g": 95.0,
+    "tuky_g": 9.2,
+    "vlaknina_g": 12.3,
+    "nasycene_g": 2.5
    },
    "priprava": "Tuňák smíchat s jogurtem, citronem, koprem a kukuřicí, zabalit do tortill se salátem a rajčaty. Banán vedle.",
    "skladovani": "Do školy v krabičce, v chladu; tuňákovou směs sníst týž den.",
@@ -2279,7 +2711,7 @@
     "vlaknina_g": 15.9,
     "nasycene_g": 4.4
    },
-   "priprava": "Cibuli a česnek orestovat, přidat maso, opéct. Přidat papriku, kmín, sladkou papriku, oregano, passatu a fazole, dusit 30 min. Podávat s rýží a lžící jogurtu.",
+   "priprava": "Cibuli a česnek orestovat, přidat maso a opéct. Přidat papriku, kmín, sladkou papriku, oregano, passatu a fazole, dusit 30 min. Podávat s rýží a lžící jogurtu.",
    "skladovani": "Chilli 3 dny v lednici, zamrazit do 3 měsíců. Rýži čerstvě, nebo zchladit do 1 h a sníst do 24 h.",
    "poznamka": null,
    "modul_prilohy": {
@@ -2407,7 +2839,7 @@
     {
      "surovina": "smetana12",
      "nazev": "Smetana na vaření 12 %",
-     "g": 80,
+     "g": 100,
      "poznamka": null
     },
     {
@@ -2436,15 +2868,15 @@
     }
    ],
    "hodnoty_porce": {
-    "kcal": 938,
-    "bilkoviny_g": 48.9,
-    "sacharidy_g": 112.8,
-    "tuky_g": 30.6,
+    "kcal": 965,
+    "bilkoviny_g": 49.5,
+    "sacharidy_g": 113.6,
+    "tuky_g": 33.0,
     "vlaknina_g": 8.0,
-    "nasycene_g": 11.1
+    "nasycene_g": 12.7
    },
-   "priprava": "Maso a zeleninu opéct, podlít vodou, přidat nové koření, bobkový list, dusit doměkka (pomalý hrnec 6 h). Maso vyndat, zeleninu rozmixovat se smetanou, dochutit hořčicí a citronem. Rýži uvařit v rýžovaru.",
-   "skladovani": "Omáčka s masem 3 dny v lednici, dobře se mrazí. Rýži čerstvě, nebo zchladit do 1 h a sníst do 24 h.",
+   "priprava": "Maso a zeleninu opéct, podlít vodou, přidat nové koření a bobkový list, dusit doměkka (pomalý hrnec 6 h). Maso vyndat, zeleninu rozmixovat se smetanou, dochutit hořčicí a citronem. Rýži uvařit v rýžovaru.",
+   "skladovani": "Omáčka s masem 3 dny v lednici, dobře se mrazí. Rýži vařit čerstvě, nebo zchladit do 1 h a sníst do 24 h.",
    "poznamka": null,
    "modul_prilohy": {
     "surovina": "basmati",
@@ -2464,7 +2896,7 @@
     },
     {
      "surovina": "bulgur",
-     "nazev": "Bulgur (suchý)",
+     "nazev": "Bulgur Golden Sun (suchý)",
      "g": 130,
      "poznamka": "suchý"
     },
@@ -2507,7 +2939,7 @@
     {
      "surovina": "feta",
      "nazev": "Feta (ovčí/kozí)",
-     "g": 20,
+     "g": 25,
      "poznamka": "do salátu"
     },
     {
@@ -2524,15 +2956,15 @@
     }
    ],
    "hodnoty_porce": {
-    "kcal": 922,
-    "bilkoviny_g": 57.1,
-    "sacharidy_g": 110.7,
-    "tuky_g": 24.3,
+    "kcal": 918,
+    "bilkoviny_g": 60.3,
+    "sacharidy_g": 104.2,
+    "tuky_g": 25.4,
     "vlaknina_g": 15.7,
-    "nasycene_g": 6.4
+    "nasycene_g": 7.1
    },
-   "priprava": "Stehna naložit do oleje, citronu, česneku, oregana, sladké papriky a kmínu (min. 2 h), opéct nebo upéct na 200 °C 20 min, nakrájet na nudličky. Tzatziki z jogurtu, nastrouhané okurky a česneku. Bulgur uvařit v dvojnásobku osolené vody (10–12 min) a nechat 5 min dojít pod pokličkou. Podávat se salátem z rajčat, papriky, okurky, cibule a fety.",
-   "skladovani": "Maso i bulgur 3 dny v lednici (bulgur rychle zchladit); tzatziki 2 dny zvlášť. Bulgur lze uvařit rovnou na všechny porce.",
+   "priprava": "Stehna naložit do oleje, citronu, česneku, oregana, sladké papriky a kmínu (min. 2 h). Opéct, nebo upéct na 200 °C 20 min, nakrájet na nudličky. Tzatziki z jogurtu, nastrouhané okurky a česneku. Bulgur uvařit v dvojnásobku osolené vody (10–12 min) a nechat 5 min dojít pod pokličkou. Podávat se salátem z rajčat, papriky, okurky, cibule a fety.",
+   "skladovani": "Maso i bulgur 3 dny v lednici (bulgur po uvaření rychle zchladit), tzatziki 2 dny zvlášť. Bulgur se dá uvařit rovnou na všechny porce. Když chceš méně vlákniny, nahraď bulgur kuskusem 1 : 1.",
    "poznamka": null,
    "modul_prilohy": {
     "surovina": "bulgur",
@@ -2614,7 +3046,7 @@
     "nasycene_g": 4.4
    },
    "priprava": "Cibuli, česnek a zázvor orestovat s garam masalou a kurkumou. Přidat kuře, rajčata a cizrnu, dusit 15 min. Vmíchat špenát a mimo plotnu jogurt. Podávat s rýží.",
-   "skladovani": "Curry 3 dny v lednici, mrazit lze. Rýže viz výše.",
+   "skladovani": "Curry 3 dny v lednici, lze mrazit. Rýže viz H1.",
    "poznamka": null,
    "modul_prilohy": {
     "surovina": "basmati",
@@ -2783,7 +3215,7 @@
     "vlaknina_g": 14.1,
     "nasycene_g": 3.0
    },
-   "priprava": "Krůtí nudličky prudce opéct, vyndat. Orestovat zeleninu a edamame, vrátit maso, přidat sójovou omáčku, zázvor, česnek, limetku. Smíchat s namočenými nudlemi, posypat sezamem.",
+   "priprava": "Krůtí nudličky prudce opéct a vyndat. Orestovat zeleninu a edamame, vrátit maso, přidat sójovou omáčku, zázvor, česnek a limetku. Smíchat s namočenými nudlemi, posypat sezamem.",
    "skladovani": "2 dny v lednici.",
    "poznamka": null,
    "modul_prilohy": {
@@ -2843,7 +3275,7 @@
    },
    "priprava": "Brambory nakrájet, pokapat olejem, péct 25 min na 200 °C. Přidat lososa, péct dalších 12–15 min. Fazolky uvařit nebo podusit. Jogurt s koprem a citronem jako omáčka.",
    "skladovani": "Nejlépe čerstvě. Upečený losos 1 den v lednici.",
-   "poznamka": "Porce lososa podle balení: rozdíl ±30 g ≈ ±70 kcal.",
+   "poznamka": "Porce lososa se řídí balením; rozdíl ±30 g ≈ ±70 kcal. Vyšší tuk tohoto jídla tvoří hlavně omega-3 a nenasycené tuky.",
    "modul_prilohy": {
     "surovina": "brambory",
     "g": 135
@@ -2929,8 +3361,8 @@
     "vlaknina_g": 12.0,
     "nasycene_g": 6.7
    },
-   "priprava": "Rýži uvařit, ochutit octem a cukrem. Lososa upéct (nebo nakrájet syrový, pokud je k syrové konzumaci). Sestavit misku s avokádem, edamame, okurkou, mrkví, nori a sezamem, zakápnout sójovou omáčkou.",
-   "skladovani": "Čerstvě. Syrovou rybu jen v kvalitě určené k syrové konzumaci (předem zmražená).",
+   "priprava": "Rýži uvařit, ochutit octem a cukrem. Lososa upéct, nebo nakrájet syrový, pokud je prodávaný k syrové konzumaci. Sestavit misku s avokádem, edamame, okurkou, mrkví, nori a sezamem, zakápnout sójovou omáčkou.",
+   "skladovani": "Čerstvě. Syrovou rybu jen v kvalitě určené k syrové konzumaci (předem zmraženou).",
    "poznamka": null,
    "modul_prilohy": {
     "surovina": "sushi_ryze",
@@ -3087,7 +3519,7 @@
     "vlaknina_g": 22.2,
     "nasycene_g": 4.8
    },
-   "priprava": "Panenku potřít hořčicí, opéct ze všech stran, dopéct v troubě (180 °C, 15 min, uvnitř 63–65 °C). Batáty péct 30 min na 200 °C. Zelí dusit s cibulí, jablkem, kmínem a lžící octa 30 min, posypat nasekanými vlašskými ořechy.",
+   "priprava": "Panenku potřít hořčicí, opéct ze všech stran a dopéct v troubě (180 °C, cca 15 min, uvnitř 63–65 °C, pak 3 min odpočinout). Batáty péct 30 min na 200 °C. Zelí dusit s cibulí, jablkem, kmínem a lžící octa 30 min, posypat nasekanými ořechy.",
    "skladovani": "3 dny v lednici; zelí lze připravit na 3 porce.",
    "poznamka": null,
    "modul_prilohy": {
@@ -3170,7 +3602,7 @@
     "nasycene_g": 5.4
    },
    "priprava": "Cibuli, česnek, zázvor, kurkumu, kmín a garam masalu orestovat. Přidat propláchnutou čočku, rajčata a 400 ml vody, vařit 20 min. Vmíchat špenát. Podávat s rýží, vejci natvrdo a jogurtem.",
-   "skladovani": "Dal 3 dny v lednici, mrazit lze; vejce natvrdo 3 dny.",
+   "skladovani": "Dal 3 dny v lednici, lze mrazit; vejce natvrdo 3 dny.",
    "poznamka": null,
    "modul_prilohy": {
     "surovina": "basmati",
@@ -3251,7 +3683,7 @@
     "vlaknina_g": 8.4,
     "nasycene_g": 3.6
    },
-   "priprava": "Vývar: hovězí kosti a cibuli se zázvorem opálit, vařit s badyánem, skořicí a hřebíčkem 3–6 h (pomalý hrnec), přecedit. Nudle namočit. Do misky nudle, syrové plátky masa, zalít vroucím vývarem, přidat klíčky, bylinky, limetku a rybí omáčku.",
+   "priprava": "Vývar: hovězí kosti, cibuli a zázvor opálit, vařit s badyánem, skořicí a hřebíčkem 3–6 h (pomalý hrnec), přecedit. Nudle namočit. Do misky dát nudle a syrové tenké plátky masa a zalít vroucím vývarem; pro jistotu lze plátky v hrnci 30 s povařit. Přidat klíčky, bylinky, limetku a rybí omáčku.",
    "skladovani": "Vývar 3 dny v lednici, mrazit do 3 měsíců; maso a nudle vždy čerstvě.",
    "poznamka": "Hodnoty vývaru jsou odhad.",
    "modul_prilohy": {
@@ -3321,7 +3753,7 @@
     "vlaknina_g": 17.1,
     "nasycene_g": 6.3
    },
-   "priprava": "Česnek a rajčata krátce orestovat, přidat špenát a sardinky rozdělené vidličkou. Promíchat se špagetami, citronem, kůrou a petrželkou.",
+   "priprava": "Česnek a rajčata krátce orestovat, přidat špenát a sardinky rozdělené vidličkou. Promíchat se špagetami, citronem, kůrou a petrželkou, posypat parmazánem.",
    "skladovani": "Čerstvě (15 min).",
    "poznamka": null,
    "modul_prilohy": {
@@ -3352,7 +3784,13 @@
        "typ": "ferment",
        "surovina": "kysane_zeli",
        "g": 75,
-       "text": "kysané zelí 75 g k libovolnému jídlu"
+       "text": "kysané zelí 75 g k libovolnému jídlu",
+       "alternativa": {
+        "surovina": "kefir",
+        "g": 100,
+        "kcal_navic": 50,
+        "text": "nebo 100 ml kefíru (+~50 kcal)"
+       }
       },
       {
        "typ": "orechy",
@@ -3368,12 +3806,12 @@
       }
      ],
      "soucet_dne": {
-      "kcal": 3409,
-      "bilkoviny_g": 193.8,
-      "sacharidy_g": 402.5,
-      "tuky_g": 99.2,
-      "vlaknina_g": 65.5,
-      "nasycene_g": 24.2
+      "kcal": 3394,
+      "bilkoviny_g": 194.2,
+      "sacharidy_g": 400.4,
+      "tuky_g": 100.2,
+      "vlaknina_g": 56.7,
+      "nasycene_g": 23.7
      }
     },
     {
@@ -3393,7 +3831,13 @@
        "typ": "ferment",
        "surovina": "kysane_zeli",
        "g": 75,
-       "text": "kysané zelí 75 g k libovolnému jídlu"
+       "text": "kysané zelí 75 g k libovolnému jídlu",
+       "alternativa": {
+        "surovina": "kefir",
+        "g": 100,
+        "kcal_navic": 50,
+        "text": "nebo 100 ml kefíru (+~50 kcal)"
+       }
       },
       {
        "typ": "orechy",
@@ -3409,12 +3853,12 @@
       }
      ],
      "soucet_dne": {
-      "kcal": 3410,
-      "bilkoviny_g": 194.8,
-      "sacharidy_g": 400.7,
-      "tuky_g": 101.9,
-      "vlaknina_g": 55.6,
-      "nasycene_g": 29.1
+      "kcal": 3422,
+      "bilkoviny_g": 200.1,
+      "sacharidy_g": 393.5,
+      "tuky_g": 105.0,
+      "vlaknina_g": 51.5,
+      "nasycene_g": 30.1
      }
     },
     {
@@ -3435,7 +3879,13 @@
        "typ": "ferment",
        "surovina": "kysane_zeli",
        "g": 75,
-       "text": "kysané zelí 75 g k libovolnému jídlu"
+       "text": "kysané zelí 75 g k libovolnému jídlu",
+       "alternativa": {
+        "surovina": "kefir",
+        "g": 100,
+        "kcal_navic": 50,
+        "text": "nebo 100 ml kefíru (+~50 kcal)"
+       }
       },
       {
        "typ": "orechy",
@@ -3451,12 +3901,12 @@
       }
      ],
      "soucet_dne": {
-      "kcal": 3443,
-      "bilkoviny_g": 199.9,
-      "sacharidy_g": 454.0,
-      "tuky_g": 80.4,
-      "vlaknina_g": 51.6,
-      "nasycene_g": 20.7
+      "kcal": 3419,
+      "bilkoviny_g": 197.7,
+      "sacharidy_g": 455.9,
+      "tuky_g": 78.4,
+      "vlaknina_g": 49.8,
+      "nasycene_g": 20.0
      }
     },
     {
@@ -3486,12 +3936,12 @@
       }
      ],
      "soucet_dne": {
-      "kcal": 3386,
-      "bilkoviny_g": 193.6,
-      "sacharidy_g": 440.2,
-      "tuky_g": 82.7,
-      "vlaknina_g": 53.4,
-      "nasycene_g": 24.6
+      "kcal": 3488,
+      "bilkoviny_g": 197.6,
+      "sacharidy_g": 439.9,
+      "tuky_g": 92.8,
+      "vlaknina_g": 51.6,
+      "nasycene_g": 30.5
      }
     },
     {
@@ -3521,12 +3971,12 @@
       }
      ],
      "soucet_dne": {
-      "kcal": 3411,
-      "bilkoviny_g": 192.4,
-      "sacharidy_g": 450.4,
-      "tuky_g": 81.4,
-      "vlaknina_g": 53.6,
-      "nasycene_g": 21.4
+      "kcal": 3437,
+      "bilkoviny_g": 192.1,
+      "sacharidy_g": 442.2,
+      "tuky_g": 88.3,
+      "vlaknina_g": 52.6,
+      "nasycene_g": 25.2
      }
     },
     {
@@ -3556,12 +4006,12 @@
       }
      ],
      "soucet_dne": {
-      "kcal": 3449,
-      "bilkoviny_g": 195.3,
-      "sacharidy_g": 413.8,
-      "tuky_g": 99.7,
+      "kcal": 3535,
+      "bilkoviny_g": 195.8,
+      "sacharidy_g": 411.7,
+      "tuky_g": 109.9,
       "vlaknina_g": 58.0,
-      "nasycene_g": 27.4
+      "nasycene_g": 32.7
      }
     },
     {
@@ -3579,7 +4029,13 @@
        "typ": "ferment",
        "surovina": "kysane_zeli",
        "g": 75,
-       "text": "kysané zelí 75 g k libovolnému jídlu"
+       "text": "kysané zelí 75 g k libovolnému jídlu",
+       "alternativa": {
+        "surovina": "kefir",
+        "g": 100,
+        "kcal_navic": 50,
+        "text": "nebo 100 ml kefíru (+~50 kcal)"
+       }
       },
       {
        "typ": "orechy",
@@ -3595,12 +4051,12 @@
       }
      ],
      "soucet_dne": {
-      "kcal": 3361,
-      "bilkoviny_g": 188.1,
-      "sacharidy_g": 432.5,
-      "tuky_g": 85.0,
-      "vlaknina_g": 56.7,
-      "nasycene_g": 22.5
+      "kcal": 3419,
+      "bilkoviny_g": 192.3,
+      "sacharidy_g": 433.7,
+      "tuky_g": 89.9,
+      "vlaknina_g": 53.0,
+      "nasycene_g": 24.0
      }
     }
    ],
@@ -3629,9 +4085,9 @@
      },
      {
       "surovina": "tortilla_cz",
-      "nazev": "Celozrnná tortilla",
-      "mnozstvi": "124 g",
-      "g": 124,
+      "nazev": "Celozrnná tortilla Santa Maria",
+      "mnozstvi": "120 g",
+      "g": 120,
       "kategorie": "Lednice"
      },
      {
@@ -3657,9 +4113,9 @@
      },
      {
       "surovina": "cottage",
-      "nazev": "Cottage sýr (~4 % tuku)",
-      "mnozstvi": "160 g",
-      "g": 160,
+      "nazev": "Cottage sýr Pilos",
+      "mnozstvi": "200 g",
+      "g": 200,
       "kategorie": "Lednice"
      },
      {
@@ -3692,7 +4148,7 @@
      },
      {
       "surovina": "gnocchi",
-      "nazev": "Gnocchi bramborové (balené)",
+      "nazev": "Gnocchi Combino (Lidl)",
       "mnozstvi": "300 g",
       "g": 300,
       "kategorie": "Lednice"
@@ -3902,7 +4358,7 @@
      },
      {
       "surovina": "chleb_zitny",
-      "nazev": "Žitný kváskový chléb celozrnný",
+      "nazev": "Žitný kváskový chléb Breadway (Lidl)",
       "mnozstvi": "300 g",
       "g": 300,
       "kategorie": "Lednice"
@@ -3946,9 +4402,9 @@
      },
      {
       "surovina": "tortilla_cz",
-      "nazev": "Celozrnná tortilla",
-      "mnozstvi": "124 g",
-      "g": 124,
+      "nazev": "Celozrnná tortilla Santa Maria",
+      "mnozstvi": "120 g",
+      "g": 120,
       "kategorie": "Lednice"
      },
      {
@@ -3981,9 +4437,9 @@
      },
      {
       "surovina": "cottage",
-      "nazev": "Cottage sýr (~4 % tuku)",
-      "mnozstvi": "150 g",
-      "g": 150,
+      "nazev": "Cottage sýr Pilos",
+      "mnozstvi": "200 g",
+      "g": 200,
       "kategorie": "Lednice"
      },
      {
@@ -4065,7 +4521,7 @@
      },
      {
       "surovina": "kefir",
-      "nazev": "Kefír 1,5 %",
+      "nazev": "Kefírové mléko Pilos 4 %",
       "mnozstvi": "1 100 g",
       "g": 1100,
       "kategorie": "Lednice"
@@ -4178,8 +4634,8 @@
      {
       "surovina": "vlocky",
       "nazev": "Ovesné vločky",
-      "mnozstvi": "435 g",
-      "g": 435,
+      "mnozstvi": "425 g",
+      "g": 425,
       "kategorie": "Zásoba"
      },
      {
@@ -4289,9 +4745,9 @@
      },
      {
       "surovina": "tvaroh",
-      "nazev": "Tvaroh polotučný",
-      "mnozstvi": "100 g",
-      "g": 100,
+      "nazev": "Tvaroh polotučný Pilos",
+      "mnozstvi": "125 g",
+      "g": 125,
       "kategorie": "Lednice"
      },
      {
@@ -4339,8 +4795,8 @@
      {
       "surovina": "recky_jogurt_0",
       "nazev": "Řecký jogurt 0 % (Milko)",
-      "mnozstvi": "600 g",
-      "g": 600,
+      "mnozstvi": "620 g",
+      "g": 620,
       "kategorie": "Lednice"
      },
      {
@@ -4352,9 +4808,9 @@
      },
      {
       "surovina": "chleb_zitny",
-      "nazev": "Žitný kváskový chléb celozrnný",
-      "mnozstvi": "170 g",
-      "g": 170,
+      "nazev": "Žitný kváskový chléb Breadway (Lidl)",
+      "mnozstvi": "200 g",
+      "g": 200,
       "kategorie": "Lednice"
      }
     ]
@@ -4391,12 +4847,12 @@
       }
      ],
      "soucet_dne": {
-      "kcal": 3408,
-      "bilkoviny_g": 191.6,
-      "sacharidy_g": 401.5,
-      "tuky_g": 103.5,
-      "vlaknina_g": 52.2,
-      "nasycene_g": 33.0
+      "kcal": 3523,
+      "bilkoviny_g": 197.4,
+      "sacharidy_g": 391.5,
+      "tuky_g": 119.0,
+      "vlaknina_g": 48.1,
+      "nasycene_g": 40.8
      }
     },
     {
@@ -4416,7 +4872,13 @@
        "typ": "ferment",
        "surovina": "kysane_zeli",
        "g": 75,
-       "text": "kysané zelí 75 g k libovolnému jídlu"
+       "text": "kysané zelí 75 g k libovolnému jídlu",
+       "alternativa": {
+        "surovina": "kefir",
+        "g": 100,
+        "kcal_navic": 50,
+        "text": "nebo 100 ml kefíru (+~50 kcal)"
+       }
       },
       {
        "typ": "orechy",
@@ -4432,12 +4894,12 @@
       }
      ],
      "soucet_dne": {
-      "kcal": 3422,
-      "bilkoviny_g": 190.5,
-      "sacharidy_g": 396.1,
-      "tuky_g": 107.7,
-      "vlaknina_g": 53.0,
-      "nasycene_g": 31.7
+      "kcal": 3418,
+      "bilkoviny_g": 191.8,
+      "sacharidy_g": 387.3,
+      "tuky_g": 111.7,
+      "vlaknina_g": 48.4,
+      "nasycene_g": 33.1
      }
     },
     {
@@ -4458,7 +4920,13 @@
        "typ": "ferment",
        "surovina": "kysane_zeli",
        "g": 75,
-       "text": "kysané zelí 75 g k libovolnému jídlu"
+       "text": "kysané zelí 75 g k libovolnému jídlu",
+       "alternativa": {
+        "surovina": "kefir",
+        "g": 100,
+        "kcal_navic": 50,
+        "text": "nebo 100 ml kefíru (+~50 kcal)"
+       }
       },
       {
        "typ": "orechy",
@@ -4474,12 +4942,12 @@
       }
      ],
      "soucet_dne": {
-      "kcal": 3352,
-      "bilkoviny_g": 190.7,
-      "sacharidy_g": 423.4,
-      "tuky_g": 87.9,
-      "vlaknina_g": 52.4,
-      "nasycene_g": 26.1
+      "kcal": 3411,
+      "bilkoviny_g": 194.9,
+      "sacharidy_g": 424.6,
+      "tuky_g": 92.8,
+      "vlaknina_g": 48.7,
+      "nasycene_g": 27.6
      }
     },
     {
@@ -4499,7 +4967,13 @@
        "typ": "ferment",
        "surovina": "kysane_zeli",
        "g": 75,
-       "text": "kysané zelí 75 g k libovolnému jídlu"
+       "text": "kysané zelí 75 g k libovolnému jídlu",
+       "alternativa": {
+        "surovina": "kefir",
+        "g": 100,
+        "kcal_navic": 50,
+        "text": "nebo 100 ml kefíru (+~50 kcal)"
+       }
       },
       {
        "typ": "orechy",
@@ -4515,12 +4989,12 @@
       }
      ],
      "soucet_dne": {
-      "kcal": 3425,
-      "bilkoviny_g": 191.1,
-      "sacharidy_g": 395.3,
+      "kcal": 3451,
+      "bilkoviny_g": 195.2,
+      "sacharidy_g": 398.6,
       "tuky_g": 109.4,
-      "vlaknina_g": 47.5,
-      "nasycene_g": 28.1
+      "vlaknina_g": 45.7,
+      "nasycene_g": 28.9
      }
     },
     {
@@ -4540,7 +5014,13 @@
        "typ": "ferment",
        "surovina": "kysane_zeli",
        "g": 75,
-       "text": "kysané zelí 75 g k libovolnému jídlu"
+       "text": "kysané zelí 75 g k libovolnému jídlu",
+       "alternativa": {
+        "surovina": "kefir",
+        "g": 100,
+        "kcal_navic": 50,
+        "text": "nebo 100 ml kefíru (+~50 kcal)"
+       }
       },
       {
        "typ": "orechy",
@@ -4556,12 +5036,12 @@
       }
      ],
      "soucet_dne": {
-      "kcal": 3439,
-      "bilkoviny_g": 198.1,
-      "sacharidy_g": 436.8,
-      "tuky_g": 88.5,
-      "vlaknina_g": 51.3,
-      "nasycene_g": 21.8
+      "kcal": 3415,
+      "bilkoviny_g": 195.9,
+      "sacharidy_g": 438.7,
+      "tuky_g": 86.4,
+      "vlaknina_g": 49.5,
+      "nasycene_g": 21.1
      }
     },
     {
@@ -4581,7 +5061,13 @@
        "typ": "ferment",
        "surovina": "kysane_zeli",
        "g": 75,
-       "text": "kysané zelí 75 g k libovolnému jídlu"
+       "text": "kysané zelí 75 g k libovolnému jídlu",
+       "alternativa": {
+        "surovina": "kefir",
+        "g": 100,
+        "kcal_navic": 50,
+        "text": "nebo 100 ml kefíru (+~50 kcal)"
+       }
       },
       {
        "typ": "orechy",
@@ -4597,12 +5083,12 @@
       }
      ],
      "soucet_dne": {
-      "kcal": 3428,
-      "bilkoviny_g": 198.4,
-      "sacharidy_g": 402.3,
-      "tuky_g": 100.0,
-      "vlaknina_g": 63.1,
-      "nasycene_g": 25.6
+      "kcal": 3453,
+      "bilkoviny_g": 198.6,
+      "sacharidy_g": 411.3,
+      "tuky_g": 99.6,
+      "vlaknina_g": 58.9,
+      "nasycene_g": 25.4
      }
     },
     {
@@ -4630,12 +5116,12 @@
       }
      ],
      "soucet_dne": {
-      "kcal": 3428,
-      "bilkoviny_g": 193.3,
-      "sacharidy_g": 451.1,
-      "tuky_g": 82.2,
-      "vlaknina_g": 55.3,
-      "nasycene_g": 21.8
+      "kcal": 3454,
+      "bilkoviny_g": 193.0,
+      "sacharidy_g": 442.9,
+      "tuky_g": 89.1,
+      "vlaknina_g": 54.3,
+      "nasycene_g": 25.6
      }
     }
    ],
@@ -4692,9 +5178,9 @@
      },
      {
       "surovina": "cottage",
-      "nazev": "Cottage sýr (~4 % tuku)",
-      "mnozstvi": "260 g",
-      "g": 260,
+      "nazev": "Cottage sýr Pilos",
+      "mnozstvi": "300 g",
+      "g": 300,
       "kategorie": "Lednice"
      },
      {
@@ -4755,7 +5241,7 @@
      },
      {
       "surovina": "kefir",
-      "nazev": "Kefír 1,5 %",
+      "nazev": "Kefírové mléko Pilos 4 %",
       "mnozstvi": "400 g",
       "g": 400,
       "kategorie": "Lednice"
@@ -4910,8 +5396,8 @@
      {
       "surovina": "smetana12",
       "nazev": "Smetana na vaření 12 %",
-      "mnozstvi": "320 g",
-      "g": 320,
+      "mnozstvi": "400 g",
+      "g": 400,
       "kategorie": "Lednice"
      },
      {
@@ -4966,8 +5452,8 @@
      {
       "surovina": "recky_jogurt_0",
       "nazev": "Řecký jogurt 0 % (Milko)",
-      "mnozstvi": "330 g",
-      "g": 330,
+      "mnozstvi": "340 g",
+      "g": 340,
       "kategorie": "Lednice"
      },
      {
@@ -4986,9 +5472,9 @@
      },
      {
       "surovina": "chleb_zitny",
-      "nazev": "Žitný kváskový chléb celozrnný",
-      "mnozstvi": "470 g",
-      "g": 470,
+      "nazev": "Žitný kváskový chléb Breadway (Lidl)",
+      "mnozstvi": "500 g",
+      "g": 500,
       "kategorie": "Lednice"
      }
     ],
@@ -5016,9 +5502,9 @@
      },
      {
       "surovina": "tortilla_cz",
-      "nazev": "Celozrnná tortilla",
-      "mnozstvi": "248 g",
-      "g": 248,
+      "nazev": "Celozrnná tortilla Santa Maria",
+      "mnozstvi": "240 g",
+      "g": 240,
       "kategorie": "Lednice"
      },
      {
@@ -5051,9 +5537,9 @@
      },
      {
       "surovina": "cottage",
-      "nazev": "Cottage sýr (~4 % tuku)",
-      "mnozstvi": "50 g",
-      "g": 50,
+      "nazev": "Cottage sýr Pilos",
+      "mnozstvi": "100 g",
+      "g": 100,
       "kategorie": "Lednice"
      },
      {
@@ -5093,7 +5579,7 @@
      },
      {
       "surovina": "gnocchi",
-      "nazev": "Gnocchi bramborové (balené)",
+      "nazev": "Gnocchi Combino (Lidl)",
       "mnozstvi": "300 g",
       "g": 300,
       "kategorie": "Lednice"
@@ -5121,7 +5607,7 @@
      },
      {
       "surovina": "kefir",
-      "nazev": "Kefír 1,5 %",
+      "nazev": "Kefírové mléko Pilos 4 %",
       "mnozstvi": "300 g",
       "g": 300,
       "kategorie": "Lednice"
@@ -5234,8 +5720,8 @@
      {
       "surovina": "vlocky",
       "nazev": "Ovesné vločky",
-      "mnozstvi": "255 g",
-      "g": 255,
+      "mnozstvi": "245 g",
+      "g": 245,
       "kategorie": "Zásoba"
      },
      {
@@ -5352,9 +5838,9 @@
      },
      {
       "surovina": "tvaroh",
-      "nazev": "Tvaroh polotučný",
-      "mnozstvi": "100 g",
-      "g": 100,
+      "nazev": "Tvaroh polotučný Pilos",
+      "mnozstvi": "125 g",
+      "g": 125,
       "kategorie": "Lednice"
      },
      {
@@ -5409,8 +5895,8 @@
      {
       "surovina": "recky_jogurt_0",
       "nazev": "Řecký jogurt 0 % (Milko)",
-      "mnozstvi": "430 g",
-      "g": 430,
+      "mnozstvi": "440 g",
+      "g": 440,
       "kategorie": "Lednice"
      },
      {
@@ -5444,7 +5930,13 @@
        "typ": "ferment",
        "surovina": "kysane_zeli",
        "g": 75,
-       "text": "kysané zelí 75 g k libovolnému jídlu"
+       "text": "kysané zelí 75 g k libovolnému jídlu",
+       "alternativa": {
+        "surovina": "kefir",
+        "g": 100,
+        "kcal_navic": 50,
+        "text": "nebo 100 ml kefíru (+~50 kcal)"
+       }
       },
       {
        "typ": "orechy",
@@ -5460,12 +5952,12 @@
       }
      ],
      "soucet_dne": {
-      "kcal": 3418,
-      "bilkoviny_g": 194.7,
-      "sacharidy_g": 402.1,
-      "tuky_g": 101.2,
-      "vlaknina_g": 59.8,
-      "nasycene_g": 26.2
+      "kcal": 3444,
+      "bilkoviny_g": 198.8,
+      "sacharidy_g": 405.4,
+      "tuky_g": 101.3,
+      "vlaknina_g": 57.9,
+      "nasycene_g": 26.9
      }
     },
     {
@@ -5495,12 +5987,12 @@
       }
      ],
      "soucet_dne": {
-      "kcal": 3391,
-      "bilkoviny_g": 197.3,
-      "sacharidy_g": 414.9,
-      "tuky_g": 90.1,
-      "vlaknina_g": 65.8,
-      "nasycene_g": 20.2
+      "kcal": 3427,
+      "bilkoviny_g": 195.7,
+      "sacharidy_g": 413.9,
+      "tuky_g": 96.3,
+      "vlaknina_g": 60.6,
+      "nasycene_g": 23.7
      }
     },
     {
@@ -5521,7 +6013,13 @@
        "typ": "ferment",
        "surovina": "kysane_zeli",
        "g": 75,
-       "text": "kysané zelí 75 g k libovolnému jídlu"
+       "text": "kysané zelí 75 g k libovolnému jídlu",
+       "alternativa": {
+        "surovina": "kefir",
+        "g": 100,
+        "kcal_navic": 50,
+        "text": "nebo 100 ml kefíru (+~50 kcal)"
+       }
       },
       {
        "typ": "orechy",
@@ -5537,12 +6035,12 @@
       }
      ],
      "soucet_dne": {
-      "kcal": 3408,
-      "bilkoviny_g": 200.1,
-      "sacharidy_g": 428.6,
-      "tuky_g": 84.2,
-      "vlaknina_g": 67.4,
-      "nasycene_g": 22.7
+      "kcal": 3379,
+      "bilkoviny_g": 204.9,
+      "sacharidy_g": 412.9,
+      "tuky_g": 86.9,
+      "vlaknina_g": 62.8,
+      "nasycene_g": 23.3
      }
     },
     {
@@ -5562,7 +6060,13 @@
        "typ": "ferment",
        "surovina": "kysane_zeli",
        "g": 75,
-       "text": "kysané zelí 75 g k libovolnému jídlu"
+       "text": "kysané zelí 75 g k libovolnému jídlu",
+       "alternativa": {
+        "surovina": "kefir",
+        "g": 100,
+        "kcal_navic": 50,
+        "text": "nebo 100 ml kefíru (+~50 kcal)"
+       }
       },
       {
        "typ": "orechy",
@@ -5574,16 +6078,16 @@
        "typ": "ubrat_k_obedu",
        "surovina": "bulgur",
        "g": -30,
-       "text": "k obědu o 30 g méně: Bulgur (suchý)"
+       "text": "k obědu o 30 g méně: Bulgur Golden Sun (suchý)"
       }
      ],
      "soucet_dne": {
-      "kcal": 3358,
-      "bilkoviny_g": 194.7,
-      "sacharidy_g": 413.9,
-      "tuky_g": 89.0,
-      "vlaknina_g": 61.3,
-      "nasycene_g": 22.4
+      "kcal": 3384,
+      "bilkoviny_g": 199.9,
+      "sacharidy_g": 409.0,
+      "tuky_g": 92.5,
+      "vlaknina_g": 57.6,
+      "nasycene_g": 23.0
      }
     },
     {
@@ -5603,7 +6107,13 @@
        "typ": "ferment",
        "surovina": "kysane_zeli",
        "g": 75,
-       "text": "kysané zelí 75 g k libovolnému jídlu"
+       "text": "kysané zelí 75 g k libovolnému jídlu",
+       "alternativa": {
+        "surovina": "kefir",
+        "g": 100,
+        "kcal_navic": 50,
+        "text": "nebo 100 ml kefíru (+~50 kcal)"
+       }
       },
       {
        "typ": "orechy",
@@ -5615,16 +6125,16 @@
        "typ": "ubrat_k_obedu",
        "surovina": "bulgur",
        "g": -30,
-       "text": "k obědu o 30 g méně: Bulgur (suchý)"
+       "text": "k obědu o 30 g méně: Bulgur Golden Sun (suchý)"
       }
      ],
      "soucet_dne": {
-      "kcal": 3399,
-      "bilkoviny_g": 198.0,
-      "sacharidy_g": 408.9,
-      "tuky_g": 93.8,
-      "vlaknina_g": 64.0,
-      "nasycene_g": 26.1
+      "kcal": 3417,
+      "bilkoviny_g": 206.8,
+      "sacharidy_g": 397.1,
+      "tuky_g": 98.0,
+      "vlaknina_g": 59.9,
+      "nasycene_g": 27.8
      }
     },
     {
@@ -5650,16 +6160,16 @@
        "typ": "ubrat_k_obedu",
        "surovina": "bulgur",
        "g": -30,
-       "text": "k obědu o 30 g méně: Bulgur (suchý)"
+       "text": "k obědu o 30 g méně: Bulgur Golden Sun (suchý)"
       }
      ],
      "soucet_dne": {
-      "kcal": 3433,
-      "bilkoviny_g": 201.6,
-      "sacharidy_g": 418.3,
-      "tuky_g": 93.9,
+      "kcal": 3518,
+      "bilkoviny_g": 204.7,
+      "sacharidy_g": 411.2,
+      "tuky_g": 105.2,
       "vlaknina_g": 53.8,
-      "nasycene_g": 31.1
+      "nasycene_g": 37.1
      }
     },
     {
@@ -5677,7 +6187,13 @@
        "typ": "ferment",
        "surovina": "kysane_zeli",
        "g": 75,
-       "text": "kysané zelí 75 g k libovolnému jídlu"
+       "text": "kysané zelí 75 g k libovolnému jídlu",
+       "alternativa": {
+        "surovina": "kefir",
+        "g": 100,
+        "kcal_navic": 50,
+        "text": "nebo 100 ml kefíru (+~50 kcal)"
+       }
       },
       {
        "typ": "orechy",
@@ -5693,12 +6209,12 @@
       }
      ],
      "soucet_dne": {
-      "kcal": 3443,
-      "bilkoviny_g": 199.2,
-      "sacharidy_g": 446.8,
-      "tuky_g": 83.7,
-      "vlaknina_g": 52.8,
-      "nasycene_g": 19.0
+      "kcal": 3419,
+      "bilkoviny_g": 197.0,
+      "sacharidy_g": 448.6,
+      "tuky_g": 81.6,
+      "vlaknina_g": 51.0,
+      "nasycene_g": 18.3
      }
     }
    ],
@@ -5734,9 +6250,9 @@
      },
      {
       "surovina": "tortilla_cz",
-      "nazev": "Celozrnná tortilla",
-      "mnozstvi": "124 g",
-      "g": 124,
+      "nazev": "Celozrnná tortilla Santa Maria",
+      "mnozstvi": "120 g",
+      "g": 120,
       "kategorie": "Lednice"
      },
      {
@@ -5769,9 +6285,9 @@
      },
      {
       "surovina": "cottage",
-      "nazev": "Cottage sýr (~4 % tuku)",
-      "mnozstvi": "150 g",
-      "g": 150,
+      "nazev": "Cottage sýr Pilos",
+      "mnozstvi": "200 g",
+      "g": 200,
       "kategorie": "Lednice"
      },
      {
@@ -5797,7 +6313,7 @@
      },
      {
       "surovina": "gnocchi",
-      "nazev": "Gnocchi bramborové (balené)",
+      "nazev": "Gnocchi Combino (Lidl)",
       "mnozstvi": "300 g",
       "g": 300,
       "kategorie": "Lednice",
@@ -5812,7 +6328,7 @@
      },
      {
       "surovina": "kefir",
-      "nazev": "Kefír 1,5 %",
+      "nazev": "Kefírové mléko Pilos 4 %",
       "mnozstvi": "300 g",
       "g": 300,
       "kategorie": "Lednice"
@@ -5883,8 +6399,8 @@
      {
       "surovina": "vlocky",
       "nazev": "Ovesné vločky",
-      "mnozstvi": "175 g",
-      "g": 175,
+      "mnozstvi": "165 g",
+      "g": 165,
       "kategorie": "Zásoba"
      },
      {
@@ -5988,8 +6504,8 @@
      {
       "surovina": "recky_jogurt_0",
       "nazev": "Řecký jogurt 0 % (Milko)",
-      "mnozstvi": "490 g",
-      "g": 490,
+      "mnozstvi": "500 g",
+      "g": 500,
       "kategorie": "Lednice"
      },
      {
@@ -6001,7 +6517,7 @@
      },
      {
       "surovina": "chleb_zitny",
-      "nazev": "Žitný kváskový chléb celozrnný",
+      "nazev": "Žitný kváskový chléb Breadway (Lidl)",
       "mnozstvi": "160 g",
       "g": 160,
       "kategorie": "Lednice"
@@ -6038,16 +6554,16 @@
      },
      {
       "surovina": "bulgur",
-      "nazev": "Bulgur (suchý)",
+      "nazev": "Bulgur Golden Sun (suchý)",
       "mnozstvi": "430 g",
       "g": 430,
       "kategorie": "Zásoba"
      },
      {
       "surovina": "tortilla_cz",
-      "nazev": "Celozrnná tortilla",
-      "mnozstvi": "124 g",
-      "g": 124,
+      "nazev": "Celozrnná tortilla Santa Maria",
+      "mnozstvi": "120 g",
+      "g": 120,
       "kategorie": "Lednice"
      },
      {
@@ -6066,9 +6582,9 @@
      },
      {
       "surovina": "cottage",
-      "nazev": "Cottage sýr (~4 % tuku)",
-      "mnozstvi": "160 g",
-      "g": 160,
+      "nazev": "Cottage sýr Pilos",
+      "mnozstvi": "200 g",
+      "g": 200,
       "kategorie": "Lednice"
      },
      {
@@ -6109,8 +6625,8 @@
      {
       "surovina": "feta",
       "nazev": "Feta (ovčí/kozí)",
-      "mnozstvi": "110 g",
-      "g": 110,
+      "mnozstvi": "130 g",
+      "g": 130,
       "kategorie": "Lednice"
      },
      {
@@ -6143,7 +6659,7 @@
      },
      {
       "surovina": "kefir",
-      "nazev": "Kefír 1,5 %",
+      "nazev": "Kefírové mléko Pilos 4 %",
       "mnozstvi": "400 g",
       "g": 400,
       "kategorie": "Lednice"
@@ -6353,9 +6869,9 @@
      },
      {
       "surovina": "tvaroh",
-      "nazev": "Tvaroh polotučný",
-      "mnozstvi": "100 g",
-      "g": 100,
+      "nazev": "Tvaroh polotučný Pilos",
+      "mnozstvi": "125 g",
+      "g": 125,
       "kategorie": "Lednice"
      },
      {
@@ -6417,8 +6933,8 @@
      {
       "surovina": "recky_jogurt_0",
       "nazev": "Řecký jogurt 0 % (Milko)",
-      "mnozstvi": "830 g",
-      "g": 830,
+      "mnozstvi": "840 g",
+      "g": 840,
       "kategorie": "Lednice"
      },
      {
@@ -6437,9 +6953,9 @@
      },
      {
       "surovina": "chleb_zitny",
-      "nazev": "Žitný kváskový chléb celozrnný",
-      "mnozstvi": "310 g",
-      "g": 310,
+      "nazev": "Žitný kváskový chléb Breadway (Lidl)",
+      "mnozstvi": "340 g",
+      "g": 340,
       "kategorie": "Lednice"
      }
     ]
@@ -6449,7 +6965,7 @@
  "zasoba_na_cyklus": [
   {
    "surovina": "bulgur",
-   "nazev": "Bulgur (suchý)",
+   "nazev": "Bulgur Golden Sun (suchý)",
    "spotreba_3_tydny_g": 430,
    "baleni": "500 g"
   },
@@ -6534,7 +7050,7 @@
   {
    "surovina": "vlocky",
    "nazev": "Ovesné vločky",
-   "spotreba_3_tydny_g": 1205,
+   "spotreba_3_tydny_g": 1175,
    "baleni": "500 g"
   },
   {
@@ -6740,151 +7256,151 @@
    {
     "krok": -4,
     "prumer_den": {
-     "kcal": 3007,
-     "bilkoviny_g": 184,
-     "sacharidy_g": 339,
-     "tuky_g": 90,
-     "vlaknina_g": 50
+     "kcal": 3033,
+     "bilkoviny_g": 186,
+     "sacharidy_g": 336,
+     "tuky_g": 94,
+     "vlaknina_g": 48
     }
    },
    {
     "krok": -3,
     "prumer_den": {
-     "kcal": 3105,
-     "bilkoviny_g": 187,
-     "sacharidy_g": 359,
-     "tuky_g": 91,
-     "vlaknina_g": 52
+     "kcal": 3132,
+     "bilkoviny_g": 189,
+     "sacharidy_g": 356,
+     "tuky_g": 95,
+     "vlaknina_g": 50
     }
    },
    {
     "krok": -2,
     "prumer_den": {
-     "kcal": 3200,
-     "bilkoviny_g": 190,
-     "sacharidy_g": 376,
-     "tuky_g": 92,
-     "vlaknina_g": 55
+     "kcal": 3230,
+     "bilkoviny_g": 192,
+     "sacharidy_g": 373,
+     "tuky_g": 96,
+     "vlaknina_g": 52
     }
    },
    {
     "krok": -1,
     "prumer_den": {
-     "kcal": 3305,
-     "bilkoviny_g": 192,
-     "sacharidy_g": 398,
-     "tuky_g": 92,
-     "vlaknina_g": 56
+     "kcal": 3334,
+     "bilkoviny_g": 194,
+     "sacharidy_g": 395,
+     "tuky_g": 97,
+     "vlaknina_g": 53
     }
    },
    {
     "krok": 0,
     "prumer_den": {
-     "kcal": 3411,
-     "bilkoviny_g": 195,
-     "sacharidy_g": 421,
-     "tuky_g": 93,
-     "vlaknina_g": 57
+     "kcal": 3439,
+     "bilkoviny_g": 197,
+     "sacharidy_g": 418,
+     "tuky_g": 97,
+     "vlaknina_g": 54
     }
    },
    {
     "krok": 1,
     "prumer_den": {
-     "kcal": 3515,
-     "bilkoviny_g": 198,
-     "sacharidy_g": 443,
-     "tuky_g": 93,
-     "vlaknina_g": 58
+     "kcal": 3543,
+     "bilkoviny_g": 200,
+     "sacharidy_g": 440,
+     "tuky_g": 97,
+     "vlaknina_g": 55
     }
    },
    {
     "krok": 2,
     "prumer_den": {
-     "kcal": 3620,
-     "bilkoviny_g": 201,
-     "sacharidy_g": 465,
-     "tuky_g": 93,
-     "vlaknina_g": 59
+     "kcal": 3649,
+     "bilkoviny_g": 203,
+     "sacharidy_g": 462,
+     "tuky_g": 97,
+     "vlaknina_g": 56
     }
    },
    {
     "krok": 3,
     "prumer_den": {
-     "kcal": 3724,
-     "bilkoviny_g": 203,
-     "sacharidy_g": 466,
-     "tuky_g": 103,
-     "vlaknina_g": 60
+     "kcal": 3752,
+     "bilkoviny_g": 205,
+     "sacharidy_g": 463,
+     "tuky_g": 107,
+     "vlaknina_g": 57
     }
    },
    {
     "krok": 4,
     "prumer_den": {
-     "kcal": 3822,
-     "bilkoviny_g": 205,
-     "sacharidy_g": 486,
-     "tuky_g": 104,
-     "vlaknina_g": 62
+     "kcal": 3851,
+     "bilkoviny_g": 208,
+     "sacharidy_g": 483,
+     "tuky_g": 108,
+     "vlaknina_g": 59
     }
    },
    {
     "krok": 5,
     "prumer_den": {
-     "kcal": 3926,
-     "bilkoviny_g": 208,
-     "sacharidy_g": 508,
-     "tuky_g": 104,
-     "vlaknina_g": 64
+     "kcal": 3955,
+     "bilkoviny_g": 210,
+     "sacharidy_g": 505,
+     "tuky_g": 108,
+     "vlaknina_g": 60
     }
    },
    {
     "krok": 6,
     "prumer_den": {
-     "kcal": 4025,
-     "bilkoviny_g": 208,
-     "sacharidy_g": 508,
-     "tuky_g": 115,
-     "vlaknina_g": 64
+     "kcal": 4054,
+     "bilkoviny_g": 210,
+     "sacharidy_g": 505,
+     "tuky_g": 119,
+     "vlaknina_g": 60
     }
    },
    {
     "krok": 7,
     "prumer_den": {
-     "kcal": 4120,
-     "bilkoviny_g": 211,
-     "sacharidy_g": 525,
-     "tuky_g": 116,
-     "vlaknina_g": 66
+     "kcal": 4152,
+     "bilkoviny_g": 213,
+     "sacharidy_g": 522,
+     "tuky_g": 121,
+     "vlaknina_g": 62
     }
    },
    {
     "krok": 8,
     "prumer_den": {
-     "kcal": 4219,
-     "bilkoviny_g": 211,
-     "sacharidy_g": 525,
-     "tuky_g": 127,
-     "vlaknina_g": 66
+     "kcal": 4251,
+     "bilkoviny_g": 213,
+     "sacharidy_g": 522,
+     "tuky_g": 132,
+     "vlaknina_g": 62
     }
    },
    {
     "krok": 9,
     "prumer_den": {
-     "kcal": 4325,
-     "bilkoviny_g": 214,
-     "sacharidy_g": 547,
-     "tuky_g": 127,
-     "vlaknina_g": 67
+     "kcal": 4356,
+     "bilkoviny_g": 216,
+     "sacharidy_g": 544,
+     "tuky_g": 132,
+     "vlaknina_g": 63
     }
    },
    {
     "krok": 10,
     "prumer_den": {
-     "kcal": 4423,
-     "bilkoviny_g": 216,
-     "sacharidy_g": 567,
-     "tuky_g": 128,
-     "vlaknina_g": 69
+     "kcal": 4455,
+     "bilkoviny_g": 219,
+     "sacharidy_g": 564,
+     "tuky_g": 133,
+     "vlaknina_g": 65
     }
    }
   ]
