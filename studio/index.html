@@ -1141,6 +1141,10 @@ function channelSheet(c) {
 function renderMore() {
   const size = new Blob([localStorage.getItem(KEY) || '']).size;
   $('#view').innerHTML = `
+    <h2>Kontext</h2>
+    <div class="set"><p>Tvůj brand a plán: témata, cíle, jak mluvíš, co kopírovat. Ať to máš na očích a Claude to ví.</p>
+      <textarea id="ctx" rows="6" placeholder="Např. Témata: gym, vaření, osobní rozvoj…&#10;Cíl: 7 shortů + 1 YouTube týdně&#10;Mluvit jako s kámošem">${esc(db.style)}</textarea>
+      <button class="btn sm" id="ctxcl" style="margin-top:8px">Zkopírovat pro Clauda</button></div>
     <h2>Rozvrh</h2>
     <div class="set"><p>Co a kolikrát týdně chceš pravidelně vydávat. Na stránce Dnes pak uvidíš, co ti tento týden ještě chybí.</p>
       ${db.schedule.map(s => `<div class="lrow" data-sch="${s.id}"><input value="${esc(s.series)}" list="serl" placeholder="Např. Vaření" data-sn><div class="stepper"><button data-sd="-1">−</button><b>${s.per}×</b><button data-sd="1">+</button></div><button class="ico" data-sx>${I.x}</button></div>`).join('')}
@@ -1154,6 +1158,9 @@ function renderMore() {
     <p class="muted" style="text-align:center">${db.ideas.length} nápadů · ${db.channels.length} kanálů · ${(size / 1024).toFixed(1)} kB</p>
     <div class="set" style="margin-top:20px"><button class="btn danger" id="wipe">Smazat všechna data</button></div>`;
   bindSyncBox();
+  growAll($('#view'));
+  $('#ctx').oninput = e => { db.style = e.target.value; db.setU = Date.now(); save(); };
+  $('#ctxcl').onclick = () => copy(claudePrompt(), 'Zkopírováno – vlož Claudovi a připiš téma');
   const touchS = s => { s.updated = Date.now(); save(); };
   $$('[data-sch]').forEach(row => {
     const s = db.schedule.find(x => x.id === row.dataset.sch);
@@ -1179,12 +1186,19 @@ function renderMore() {
       save(true); toast('Záloha nahrána'); render();
     } catch (err) { toast('Tohle není platná záloha'); }
   };
-  $('#expt').onclick = () => copy(db.ideas.map(ideaText).join('\n\n==========\n\n'));
+  $('#expt').onclick = () => copy((db.style.trim() ? '# Můj kontext\n' + db.style.trim() + '\n\n==========\n\n' : '') + db.ideas.map(ideaText).join('\n\n==========\n\n'));
   $('#wipe').onclick = () => {
     if (!(confirm('Smazat VŠECHNO? Nejde to vrátit.') && confirm('Fakt? Stáhl sis zálohu?'))) return;
     const del = { ...db.deleted }; [...db.ideas, ...db.tasks, ...db.channels, ...db.insp, ...db.reviews, ...db.schedule].forEach(x => del[x.id] = Date.now());
     db = blank(); db.deleted = del; db.setU = Date.now(); save(true); render();
   };
+}
+// text pro Clauda: kontext + rozvrh + formát, který umí „Vložit nápady“
+function claudePrompt() {
+  const sch = db.schedule.filter(s => s.series).map(s => `${s.per}× ${s.series}`).join(', ');
+  return [db.style.trim() ? '# Můj kontext\n' + db.style.trim() : '', sch ? '# Týdenní rozvrh\n' + sch : '',
+    `# Úkol\nVymysli mi nápady na krátká videa (téma připíšu níž). Odpověz řádkem ${IDEAS_MARK} a pod ním JSON pole objektů:\n[{"title":"…","desc":"…","series":"…","diff":1-5,"hook":"…","body":"odstavce oddělené prázdným řádkem","cta":"…"}]`,
+    '# Téma\n'].filter(Boolean).join('\n\n');
 }
 function ideaText(i) {
   const s = [`# ${i.title}`, [i.kind === 'long' ? 'Dlouhé video' : 'Short', ST[i.status], i.series, i.date ? 'vychází ' + fmtDate(i.date) : ''].filter(Boolean).join(' · ')];
