@@ -560,6 +560,8 @@ h2.sh::before{content:'';display:inline-block;width:8px;height:8px;border-radius
 
 .serdesc{white-space:pre-wrap;margin:8px 2px 14px;font-size:15px;color:var(--tx2);line-height:1.45}
 .dph .sp{flex:1}
+.zasoba{display:block;width:100%;text-align:left;margin-top:12px;border:1px solid #CFE9D8;background:#EEF8F1;color:#16794A;font:inherit;font-size:14.5px;padding:11px 14px;border-radius:var(--r);cursor:pointer}
+.zasoba b{font-size:17px}
 </style>
 </head>
 <body>
@@ -871,11 +873,12 @@ function renderHome() {
     <p class="hsub">${longDate(t)}</p>
     ${late.length || open.length ? `<div class="list today">${late.map(i => evRow({ i, k: 'pub' }, true)).join('')}${open.map(e => evRow(e)).join('')}</div>`
       : `<div class="focus"><span class="k">${doneEv.length ? 'Na dnešek máš hotovo' : 'Dnes nic naplánovaného'}</span>
-        <div class="ft2">${pool.length ? 'Vyber si něco ze zásobníku' : 'Zapiš si nápad'}</div>
+        <div class="ft2">${pool.length ? 'Vyber si nějaký nápad' : 'Zapiš si nápad'}</div>
         ${pool.length ? `<div class="list" style="margin-top:12px">${pool.map(i => irow(`<b>${esc(i.title)}</b>`, [i.series, i.diff ? DIFF[i.diff] : ''].filter(Boolean).join(' · ') || (i.desc ? esc(i.desc.slice(0, 60)) : ''), `<button class="btn xs pri" data-write="${i.id}">Psát</button>`, `data-open="${i.id}"`)).join('')}</div>
-          <button class="btn sm ghost" id="topool" style="margin-top:8px;padding-left:0">Celý zásobník →</button>`
+          <button class="btn sm ghost" id="topool" style="margin-top:8px;padding-left:0">Všechny nápady →</button>`
         : '<button class="btn sm pri" id="newidea" style="margin-top:12px">+ Nový nápad</button>'}</div>`}
     ${doneEv.length && (late.length || open.length) ? `<p class="muted" style="margin:8px 2px 0">Dnes už hotovo: ${doneEv.map(e => esc(e.i.title)).join(', ')}</p>` : ''}
+    ${(() => { const z = db.ideas.filter(i => i.status === 'ready' && !i.date).length; return z ? `<button class="zasoba" id="tozas"><b>${z}</b> ${plural(z, 'hotové video', 'hotová videa', 'hotových videí')} v zásobě – kdykoli vydáš</button>` : ''; })()}
     ${review ? `<div class="focus soft" style="margin-top:14px"><span class="k">Neděle</span><div class="ft2">Shrnutí týdne</div><p>Zapiš si čísla a co fungovalo. Zabere to dvě minuty.</p><button class="btn sm pri" id="doreview" style="margin-top:10px">Udělat shrnutí</button></div>` : ''}
     ${upcoming().length ? `<h2>Blíží se</h2><div class="list">${upcoming().slice(0, 3).map(({ e, d }) => { const n = evIdeas(e).length, k = daysTo(d);
       return `<div class="irow" data-evt="${e.id}"><div class="tx"><b>${esc(e.name)}</b><small>${k === 0 ? 'dnes' : k === 1 ? 'zítra' : 'za ' + k + ' dní'} · ${fmtDate(d)}</small></div><span class="wcnt ${n ? 'ok' : ''}">${n ? videos(n) : 'nic'}</span></div>`; }).join('')}</div>` : ''}
@@ -884,6 +887,7 @@ function renderHome() {
   bindEv(); bindTodo();
   $('#fab').onclick = () => newIdeaSheet();
   $$('[data-write]').forEach(b => b.onclick = e => { e.stopPropagation(); const i = byId(b.dataset.write); if (i.status === 'idea') setStatus(i, 'script'); openEditor(i.id); });
+  const tz = $('#tozas'); if (tz) tz.onclick = () => { ui.wmode = 'stav'; go('work'); };
   const tp = $('#topool'); if (tp) tp.onclick = () => { ui.wmode = 'stav'; go('work'); };
   const ni = $('#newidea'); if (ni) ni.onclick = () => newIdeaSheet();
   const dr = $('#doreview'); if (dr) dr.onclick = () => reviewSheet(ws);
@@ -899,7 +903,7 @@ function weekSeriesSheet(name) {
   const s = db.schedule.find(x => x.series === name);
   openModal(`<h3>${esc(name)}</h3><p class="muted" style="margin:-6px 0 12px">Tento týden ${week.length} z ${s ? s.per : '?'}</p>
     ${week.length ? `<div class="list">${week.map(i => irow(`<b>${esc(i.title)}</b>`, `${ST[i.status]} · vychází ${relDate(i.date)}`, '', `data-open="${i.id}"`)).join('')}</div>` : ''}
-    <label class="l" style="margin-top:14px">Ze zásobníku série</label>
+    <label class="l" style="margin-top:14px">Nenaplánované ze série</label>
     ${pool.length ? `<div class="list">${pool.map(i => irow(`<b>${esc(i.title)}</b>`, ST[i.status], `<button class="btn xs" data-plan="${i.id}">Na den</button>`, `data-open="${i.id}"`)).join('')}</div>` : '<p class="muted" style="margin:0 2px">V sérii nemáš nic volného.</p>'}
     <button class="btn full" id="wsnew" style="margin-top:12px">+ Nový nápad do série</button>`, m => {
     $$('[data-plan]', m).forEach(b => b.onclick = e => { e.stopPropagation(); pickDate(byId(b.dataset.plan), 'date', () => weekSeriesSheet(name)); });
@@ -923,7 +927,7 @@ function renderWork() {
   if (ui.wmode === 'stav') {
     const sh = db.ideas.filter(i => i.kind === 'short');
     const by = s => sh.filter(i => i.status === s).sort((a, b) => (b.fav - a.fav) || (b.updated - a.updated));
-    html = ['idea', 'script', 'film', 'edit', 'ready'].map(s => { const l = by(s); return l.length ? `<h2 class="sh sh-${s}">${ST[s]} <span class="cnt">${l.length}</span></h2><div class="list">${l.map(workRow).join('')}</div>` : ''; }).join('');
+    html = ['idea', 'script', 'film', 'edit', 'ready'].map(s => { const l = by(s); return l.length ? `<h2 class="sh sh-${s}">${s === 'ready' ? 'Hotovo – zásoba' : ST[s]} <span class="cnt">${l.length}</span></h2><div class="list">${l.map(workRow).join('')}</div>` : ''; }).join('');
     const pub = by('done').sort((a, b) => (b.date || '') < (a.date || '') ? -1 : 1);
     if (pub.length) html += `<h2>Vydáno <span class="cnt">${pub.length}</span><span class="sp"></span><button class="btn xs ghost" id="tpub">${ui.showPub ? 'Skrýt' : 'Zobrazit'}</button></h2>${ui.showPub ? `<div class="list">${pub.map(workRow).join('')}</div>` : ''}`;
     if (!sh.length) html = '<div class="empty"><b>Zatím tu nic není</b>Klepni na + a zapiš první nápad. Stačí název.</div>';
@@ -957,7 +961,7 @@ function seriesSheet(name) {
     ${exHTML ? '<label class="l">Příklady</label>' + exHTML : ''}
     <label class="l">Ještě udělat (${todo.length})</label>${todo.length ? `<div class="list">${todo.map(row).join('')}</div>` : '<p class="muted" style="margin:0 2px">Všechno hotové.</p>'}
     <label class="l" style="margin-top:14px">Udělané (${done.length})</label>${done.length ? `<div class="list">${done.map(row).join('')}</div>` : '<p class="muted" style="margin:0 2px">Zatím nic.</p>'}
-    <div class="dact" style="margin-top:12px"><button class="btn" id="smany">+ Víc videí</button><button class="btn" id="snew">+ Nápad</button></div>
+    <div class="dact" style="margin-top:12px"><button class="btn" id="smany">+ Víc videí</button><button class="btn pri" id="snew">+ Video do série</button></div>
     ${todo.filter(i => SI(i.status) < SI('edit')).length > 1 ? '<button class="btn pri full" id="sbatch" style="margin-top:10px">Natočit všechno najednou</button>' : ''}`, m => {
     $('#snew', m).onclick = () => newIdeaSheet({ series: name });
     $('#sedit', m).onclick = () => serEdit(so || { name });
@@ -1029,7 +1033,7 @@ function newIdeaSheet(pre = {}) {
       it.desc = $('#nd', m).value.trim(); it.link = $('#nl', m).value.trim(); it.series = pre.series || ''; it.event = pre.event || '';
       db.ideas.unshift(it); save(true); closeModal(); return it;
     };
-    $('#nsave', m).onclick = () => { const multi = $('#nmc', m).checked && $('#nm', m).value.trim(); if (create()) { if (!multi) toast('Uloženo do zásobníku'); render(); } };
+    $('#nsave', m).onclick = () => { const multi = $('#nmc', m).checked && $('#nm', m).value.trim(); if (create()) { if (!multi) toast('Uloženo do nápadů'); render(); } };
     $('#nscript', m).onclick = () => { const it = create(); if (it) { it.status = 'script'; save(true); render(); openEditor(it.id); } };
   });
 }
