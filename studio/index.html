@@ -551,6 +551,15 @@ h2.sh::before{content:'';display:inline-block;width:8px;height:8px;border-radius
 .rbrow{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--line);margin-top:8px;cursor:pointer}
 .rbrow .tx{flex:1;min-width:0;font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rbrow small{margin:0!important}
+
+.code.k-evt{background:#EFE9FB;color:#5B3BB0}
+.evtag{display:block;margin-top:8px;border:0;background:#EFE9FB;color:#5B3BB0;font:inherit;font-size:14px;font-weight:600;padding:7px 11px;border-radius:10px;cursor:pointer}
+.sibrow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:10px}
+.lrow input[type=date]{font-size:14px;padding:8px}
+.lrow .lchk{font-size:13px;white-space:nowrap}
+
+.serdesc{white-space:pre-wrap;margin:8px 2px 14px;font-size:15px;color:var(--tx2);line-height:1.45}
+.dph .sp{flex:1}
 </style>
 </head>
 <body>
@@ -641,13 +650,13 @@ const I = {
 };
 
 // ================= data =================
-function blank() { return { v: 4, ideas: [], tasks: [], channels: [], insp: [], reviews: [], schedule: [], hooks: [], style: '', setU: 0, deleted: {} }; }
+function blank() { return { v: 4, ideas: [], tasks: [], channels: [], insp: [], reviews: [], schedule: [], events: [], series: [], hooks: [], style: '', setU: 0, deleted: {} }; }
 const emptySc = () => ({ hook: { say: '', see: '', txt: '' }, body: [], end: { say: '', see: '' } });
 const emptyLong = () => ({ thumb: '', thumbWhy: '', thumbRef: '', music: '', videoRef: '', intro: '', body: '', end: '', cut: '', ideas: '' });
 function newIdea(title, kind = 'short') {
   const t = Date.now();
   return { id: uid(), kind, title, desc: '', link: '', status: 'idea', series: '', diff: 0, reuse: false, variants: [],
-    dScript: '', shoot: '', dEdit: '', date: '', sc: emptySc(), lg: emptyLong(), drive: '', note: '', fav: false, created: t, updated: t };
+    dScript: '', shoot: '', dEdit: '', date: '', event: '', sc: emptySc(), lg: emptyLong(), drive: '', note: '', fav: false, created: t, updated: t };
 }
 function norm(d) {
   const o = { ...blank(), ...d }, old = !d.v || d.v < 4;
@@ -680,7 +689,7 @@ function norm(d) {
     return n;
   });
   o.tasks = (o.tasks || []).map(x => ({ prio: 0, due: '', rep: '', ...x }));
-  ['channels', 'insp', 'reviews', 'schedule', 'hooks'].forEach(k => { if (!Array.isArray(o[k])) o[k] = []; });
+  ['channels', 'insp', 'reviews', 'schedule', 'events', 'series', 'hooks'].forEach(k => { if (!Array.isArray(o[k])) o[k] = []; });
   o.v = 4;
   return o;
 }
@@ -707,7 +716,7 @@ function scriptText(i, labels) {
   return [[L('Hook'), i.sc.hook.say], ...i.sc.body.map((p, n) => [L('Tělo ' + (n + 1)), p.say]), [L('Závěr'), i.sc.end.say]].filter(x => x[1].trim()).map(([l, t]) => [l, t.trim()]);
 }
 const words = i => scriptText(i).map(p => p[1]).join(' ').split(/\s+/).filter(Boolean).length;
-const seriesList = () => [...new Set([...db.schedule.map(s => s.series), ...db.ideas.map(i => i.series)].map(s => (s || '').trim()).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'cs'));
+const seriesList = () => [...new Set([...db.series.map(s => s.name), ...db.schedule.map(s => s.series), ...db.ideas.map(i => i.series)].map(s => (s || '').trim()).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'cs'));
 
 // ================= události v kalendáři a série =================
 function dayEvents(d) {
@@ -736,6 +745,40 @@ function streaks() {
   let w = weeks.has(monday(t)) ? monday(t) : addDays(monday(t), -7), wk = 0;
   while (weeks.has(w)) { wk++; w = addDays(w, -7); }
   return { total, days, weeks: wk, thisWeek: weeks.has(monday(t)) };
+}
+// akce a sezóny (Vánoce, léto…): každoroční nebo jednorázové
+const DEF_EVENTS = [['01-01', 'Nový rok – předsevzetí'], ['02-14', 'Valentýn'], ['06-01', 'Začátek léta'], ['07-01', 'Prázdniny'], ['09-01', 'Zpátky do rutiny'], ['10-31', 'Halloween'], ['12-05', 'Mikuláš'], ['12-24', 'Vánoce'], ['12-31', 'Silvestr']];
+const evNext = e => { if (!e.yearly) return e.date; const t = today(); let d = t.slice(0, 4) + e.date.slice(4); if (d < t) d = (+t.slice(0, 4) + 1) + e.date.slice(4); return d; };
+const evOn = d => db.events.filter(e => e.date && (e.yearly ? e.date.slice(5) === d.slice(5) : e.date === d));
+const daysTo = d => Math.round((new Date(d + 'T12:00') - new Date(today() + 'T12:00')) / 864e5);
+const evIdeas = e => db.ideas.filter(i => i.event === e.id);
+const upcoming = (n = 30) => db.events.filter(e => e.date).map(e => ({ e, d: evNext(e) })).filter(x => x.d >= today() && daysTo(x.d) <= n).sort((a, b) => a.d < b.d ? -1 : 1);
+function eventSheet(e) {
+  const d = evNext(e), l = evIdeas(e), n = daysTo(d);
+  openModal(`<h3>${esc(e.name)}</h3><p class="muted" style="margin:-6px 0 12px">${capFirst(relDate(d))}${n > 1 ? ` · za ${n} dní` : ''}</p>
+    ${n > 7 && !l.length ? '<p class="hint" style="margin:0 2px 10px">Tip: nápady připrav aspoň 2–3 týdny předem, ať máš čas natočit a sestříhat.</p>' : ''}
+    ${l.length ? `<div class="list">${l.map(i => irow(`<b>${esc(i.title)}</b>`, `${ST[i.status]}${i.date ? ' · vychází ' + relDate(i.date) : ''}`, '', `data-open="${i.id}"`)).join('')}</div>` : '<p class="muted" style="margin:0 2px">K téhle akci zatím nemáš žádné video.</p>'}
+    <div class="dact" style="margin-top:12px"><button class="btn" id="evmany">+ Víc videí</button><button class="btn pri" id="evnew">+ Nápad k akci</button></div>`, m => {
+    $('#evnew', m).onclick = () => newIdeaSheet({ event: e.id });
+    $('#evmany', m).onclick = () => manySheet({ event: e.id, series: '' }, e.name);
+  });
+}
+// víc videí z jednoho tématu najednou: každý řádek = jedno video
+function addMany(text, base) {
+  const l = String(text || '').split('\n').map(x => x.replace(/^\s*(?:[-•*–]|\d+[.)])\s*/, '').trim()).filter(Boolean);
+  const its = l.map(t => Object.assign(newIdea(t.slice(0, 140), base.kind || 'short'), { series: base.series || '', event: base.event || '', link: base.link || '', desc: base.desc || '' }));
+  db.ideas.unshift(...its); save(true); return its;
+}
+function manySheet(base, label) {
+  openModal(`<h3>Víc videí najednou</h3><p class="muted" style="margin:-6px 0 10px">${esc(label || base.series || '')} · každý řádek = jedno video</p>
+    <textarea id="mt" rows="6" placeholder="Protein palačinky&#10;Rychlá snídaně do 5 minut&#10;Jídlo na celý týden"></textarea>
+    <button class="btn pri full" id="madd" style="margin-top:10px">Přidat</button>`, m => {
+    setTimeout(() => { const el = $('#mt', m); el && el.focus(); }, 50);
+    $('#madd', m).onclick = () => {
+      const its = addMany($('#mt', m).value, base); if (!its.length) return toast('Napiš aspoň jedno video');
+      closeModal(); render(); if (cur) renderEditor(); toast(`Přidáno ${videos(its.length)}`);
+    };
+  });
 }
 function markPublished(i) { const t = today(); i.status = 'done'; if (!i.date || i.date > t) i.date = t; i.updated = Date.now(); save(true); toast('Vydáno'); }
 function setStatus(i, s) { i.status = s; i.updated = Date.now(); if (s === 'done' && (!i.date || i.date > today())) i.date = today(); save(true); }
@@ -834,6 +877,8 @@ function renderHome() {
         : '<button class="btn sm pri" id="newidea" style="margin-top:12px">+ Nový nápad</button>'}</div>`}
     ${doneEv.length && (late.length || open.length) ? `<p class="muted" style="margin:8px 2px 0">Dnes už hotovo: ${doneEv.map(e => esc(e.i.title)).join(', ')}</p>` : ''}
     ${review ? `<div class="focus soft" style="margin-top:14px"><span class="k">Neděle</span><div class="ft2">Shrnutí týdne</div><p>Zapiš si čísla a co fungovalo. Zabere to dvě minuty.</p><button class="btn sm pri" id="doreview" style="margin-top:10px">Udělat shrnutí</button></div>` : ''}
+    ${upcoming().length ? `<h2>Blíží se</h2><div class="list">${upcoming().slice(0, 3).map(({ e, d }) => { const n = evIdeas(e).length, k = daysTo(d);
+      return `<div class="irow" data-evt="${e.id}"><div class="tx"><b>${esc(e.name)}</b><small>${k === 0 ? 'dnes' : k === 1 ? 'zítra' : 'za ' + k + ' dní'} · ${fmtDate(d)}</small></div><span class="wcnt ${n ? 'ok' : ''}">${n ? videos(n) : 'nic'}</span></div>`; }).join('')}</div>` : ''}
     ${wk.length ? `<h2>Tento týden</h2><div class="list">${wk.map(({ s, n }) => `<div class="irow" data-wks="${esc(s.series)}"><div class="tx"><b>${esc(s.series)}</b><span class="wbar"><i style="width:${Math.min(100, n / s.per * 100)}%"></i></span></div><span class="wcnt ${n >= s.per ? 'ok' : ''}">${n}/${s.per}</span></div>`).join('')}</div>` : ''}
     ${todoHTML()}<button class="fab" id="fab" aria-label="Nový nápad">${I.plus}</button>`;
   bindEv(); bindTodo();
@@ -843,6 +888,7 @@ function renderHome() {
   const ni = $('#newidea'); if (ni) ni.onclick = () => newIdeaSheet();
   const dr = $('#doreview'); if (dr) dr.onclick = () => reviewSheet(ws);
   $$('[data-wks]').forEach(r => r.onclick = () => weekSeriesSheet(r.dataset.wks));
+  $$('[data-evt]').forEach(r => r.onclick = () => eventSheet(db.events.find(e => e.id === r.dataset.evt)));
 }
 // co je tento týden v sérii a co z ní můžu naplánovat
 function weekSeriesSheet(name) {
@@ -883,10 +929,10 @@ function renderWork() {
     if (!sh.length) html = '<div class="empty"><b>Zatím tu nic není</b>Klepni na + a zapiš první nápad. Stačí název.</div>';
   } else if (ui.wmode === 'serie') {
     const ss = seriesList();
-    html = ss.length ? `<div class="list" style="margin-top:6px">${ss.map(name => {
-      const l = db.ideas.filter(i => (i.series || '').trim() === name), d = l.filter(i => SI(i.status) >= SI('ready')).length;
-      return `<div class="irow" data-ser="${esc(name)}"><div class="tx"><b>${esc(name)}</b><span class="wbar"><i style="width:${l.length ? d / l.length * 100 : 0}%"></i></span></div><span class="wcnt">${d}/${l.length}</span></div>`;
-    }).join('')}</div>` : '<div class="empty"><b>Žádné série</b>Sérii dáš nápadu v jeho detailu, třeba „Vaření“ nebo „Cesta na stage“.</div>';
+    html = '<button class="btn full" id="seradd" style="margin-top:6px">+ Nová série</button>' + (ss.length ? `<div class="list" style="margin-top:12px">${ss.map(name => {
+      const l = db.ideas.filter(i => (i.series || '').trim() === name), d = l.filter(i => SI(i.status) >= SI('ready')).length, so = serObj(name);
+      return `<div class="irow" data-ser="${esc(name)}"><div class="tx"><b>${esc(name)}</b>${so && so.desc ? `<small>${esc(so.desc.split('\n')[0].slice(0, 70))}</small>` : ''}<span class="wbar"><i style="width:${l.length ? d / l.length * 100 : 0}%"></i></span></div><span class="wcnt">${d}/${l.length}</span></div>`;
+    }).join('')}</div>` : '<div class="empty"><b>Žádné série</b>Založ si sérii – třeba Tier listy nebo Head talk s green screenem. Popíšeš formát, přidáš příklady a pak do ní sypeš videa.</div>');
   } else {
     const lg = db.ideas.filter(i => i.kind === 'long').sort((a, b) => (SI(a.status) === 5) - (SI(b.status) === 5) || b.updated - a.updated);
     html = lg.length ? `<div class="list" style="margin-top:6px">${lg.map(i => `<div class="card ${i.status === 'ready' ? 'ready' : ''}" data-open="${i.id}"><div class="t">${esc(i.title || 'Bez názvu')}</div><div class="m"><span>${ST[i.status]}${i.date ? ' · ' + relDate(i.date) : ''}</span></div></div>`).join('')}</div>`
@@ -897,15 +943,63 @@ function renderWork() {
   $('#fabpaste').onclick = () => pasteIdeas();
   const tpb = $('#tpub'); if (tpb) tpb.onclick = () => { ui.showPub = !ui.showPub; render(); };
   $$('[data-ser]').forEach(r => r.onclick = () => seriesSheet(r.dataset.ser));
+  const sa = $('#seradd'); if (sa) sa.onclick = () => serEdit();
 }
 function seriesSheet(name) {
   const l = db.ideas.filter(i => (i.series || '').trim() === name);
   const done = l.filter(i => SI(i.status) >= SI('ready')), todo = l.filter(i => SI(i.status) < SI('ready'));
   const row = i => irow(`<b>${esc(i.title)}</b>`, `${ST[i.status]}${i.date ? ' · ' + relDate(i.date) : ''}${i.reuse ? ' · dá se vydat znovu' : ''}`, '', `data-open="${i.id}"`);
-  openModal(`<h3>${esc(name)}</h3>
+  const so = serObj(name);
+  const exHTML = so && so.examples.trim() ? `<div class="list" style="margin-bottom:12px">${so.examples.split('\n').map(x => x.trim()).filter(Boolean).map(x => { const u = (x.match(urlRe) || [])[0], t = u ? x.replace(u, '').trim() : x;
+    return irow(`<b>${esc(t || linkPlat(u))}</b>`, u ? linkPlat(u) : '', u ? `<a class="btn xs" href="${esc(u)}" target="_blank" rel="noopener">Otevřít ↗</a>` : ''); }).join('')}</div>` : '';
+  openModal(`<div class="dph"><h3 style="margin:0">${esc(name)}</h3><span class="sp"></span><button class="btn xs" id="sedit">Upravit</button></div>
+    ${so && so.desc.trim() ? `<p class="serdesc">${esc(so.desc.trim())}</p>` : '<p class="muted" style="margin:6px 2px 12px">Klepni na Upravit a popiš, jak série vypadá, a přidej příklady.</p>'}
+    ${exHTML ? '<label class="l">Příklady</label>' + exHTML : ''}
     <label class="l">Ještě udělat (${todo.length})</label>${todo.length ? `<div class="list">${todo.map(row).join('')}</div>` : '<p class="muted" style="margin:0 2px">Všechno hotové.</p>'}
     <label class="l" style="margin-top:14px">Udělané (${done.length})</label>${done.length ? `<div class="list">${done.map(row).join('')}</div>` : '<p class="muted" style="margin:0 2px">Zatím nic.</p>'}
-    <button class="btn full" id="snew" style="margin-top:12px">+ Nový nápad do série</button>`, m => { $('#snew', m).onclick = () => newIdeaSheet({ series: name }); });
+    <div class="dact" style="margin-top:12px"><button class="btn" id="smany">+ Víc videí</button><button class="btn" id="snew">+ Nápad</button></div>
+    ${todo.filter(i => SI(i.status) < SI('edit')).length > 1 ? '<button class="btn pri full" id="sbatch" style="margin-top:10px">Natočit všechno najednou</button>' : ''}`, m => {
+    $('#snew', m).onclick = () => newIdeaSheet({ series: name });
+    $('#sedit', m).onclick = () => serEdit(so || { name });
+    $('#smany', m).onclick = () => manySheet({ series: name });
+    const sb = $('#sbatch', m); if (sb) sb.onclick = () => {
+      const l2 = todo.filter(i => SI(i.status) < SI('edit')), tmp = { title: `${videos(l2.length)} ze série ${name}`, shoot: '' };
+      pickDate(tmp, 'shoot', () => { l2.forEach(i => { i.shoot = tmp.shoot; i.updated = Date.now(); }); save(true); seriesSheet(name); toast(`${videos(l2.length)} natočíš ${relDate(tmp.shoot)}`); });
+    };
+  });
+}
+// série jako vlastní záložka: název, jak vypadá, příklady
+const serObj = name => db.series.find(s => s.name.trim().toLowerCase() === String(name || '').trim().toLowerCase());
+function serEdit(s) {
+  const isNew = !s || !s.id, old = s ? s.name : '';
+  s = s && s.id ? s : { id: uid(), name: old, desc: '', examples: '' };
+  openModal(`<h3>${isNew && !old ? 'Nová série' : 'Série'}</h3>
+    <input id="sn" value="${esc(s.name)}" placeholder="Název – např. Tier listy" autocomplete="off">
+    <label class="l" style="margin-top:12px">Jak to vypadá</label>
+    <textarea id="sd" rows="3" placeholder="Formát, styl, jak se točí – např. green screen, mluvím do kamery, za mnou screenshot">${esc(s.desc)}</textarea>
+    <label class="l" style="margin-top:12px">Příklady</label>
+    <textarea id="se" rows="3" placeholder="Odkazy na videa nebo nápady – každý na řádek&#10;https://… tier list proteinů">${esc(s.examples)}</textarea>
+    <div class="dact" style="margin-top:16px">${s.id && !isNew ? '<button class="btn danger" id="sdel">Smazat</button>' : ''}<span class="grow"></span><button class="btn pri" id="ssave">Uložit</button></div>`, m => {
+    if (!s.name) setTimeout(() => { const el = $('#sn', m); el && el.focus(); }, 50);
+    growAll(m);
+    $('#ssave', m).onclick = () => {
+      const n = $('#sn', m).value.trim(); if (!n) return toast('Napiš název série');
+      const prev = s.name.trim();
+      if (prev && prev !== n) { // přejmenování: přenese se i na videa a rozvrh
+        db.ideas.forEach(i => { if ((i.series || '').trim() === prev) { i.series = n; i.updated = Date.now(); } });
+        db.schedule.forEach(x => { if (x.series === prev) { x.series = n; x.updated = Date.now(); } });
+      }
+      Object.assign(s, { name: n, desc: $('#sd', m).value.trim(), examples: $('#se', m).value.trim(), updated: Date.now() });
+      if (!db.series.includes(s)) db.series.push(s);
+      save(true); render(); seriesSheet(n);
+    };
+    const d = $('#sdel', m); if (d) d.onclick = () => {
+      if (!confirm('Smazat sérii „' + s.name + '“? Videa zůstanou, jen bez série.')) return;
+      gone(s.id); db.series = db.series.filter(x => x !== s);
+      db.ideas.forEach(i => { if ((i.series || '').trim() === s.name.trim()) { i.series = ''; i.updated = Date.now(); } });
+      save(true); closeModal(); render();
+    };
+  });
 }
 // nový nápad: název, popis, odkaz, krátký / dlouhý
 function newIdeaSheet(pre = {}) {
@@ -916,17 +1010,26 @@ function newIdeaSheet(pre = {}) {
     <input id="nl" inputmode="url" placeholder="Odkaz – nepovinné" autocomplete="off" style="margin-top:8px">
     <div class="seg cmode" id="nk" style="margin-top:12px"><button data-k="short" class="${kind === 'short' ? 'on' : ''}">Short</button><button data-k="long" class="${kind === 'long' ? 'on' : ''}">Dlouhé video</button></div>
     ${pre.series ? `<p class="muted" style="margin:8px 2px 0">Série: ${esc(pre.series)}</p>` : ''}
+    ${pre.event ? `<p class="muted" style="margin:8px 2px 0">Akce: ${esc((db.events.find(e => e.id === pre.event) || {}).name || '')}</p>` : ''}
+    <label class="rchk" style="margin-top:10px"><input type="checkbox" id="nmc"><span>Udělám z toho víc videí</span></label>
+    <div id="nmw" hidden><textarea id="nm" rows="4" placeholder="Každý řádek = jedno video&#10;Např. Protein palačinky&#10;Rychlá snídaně do 5 minut"></textarea>
+      <p class="hint">Název nahoře bude téma (série), videa se do ní přidají.</p></div>
     <div class="dact" style="margin-top:16px"><button class="btn" id="nsave">Uložit nápad</button><button class="btn pri" id="nscript">Psát scénář</button></div>`, m => {
     setTimeout(() => { const el = $('#nt', m); el && el.focus(); }, 50);
     $('#nt', m).onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); $('#nsave', m).click(); } };
     $$('#nk [data-k]', m).forEach(b => b.onclick = () => { kind = b.dataset.k; $$('#nk [data-k]', m).forEach(x => x.classList.toggle('on', x === b)); });
+    $('#nmc', m).onchange = e => { $('#nmw', m).hidden = !e.target.checked; if (e.target.checked) $('#nm', m).focus(); };
     const create = () => {
       const t = $('#nt', m).value.trim(); if (!t) { toast('Napiš název'); $('#nt', m).focus(); return null; }
+      if ($('#nmc', m).checked && $('#nm', m).value.trim()) {
+        const its = addMany($('#nm', m).value, { kind, series: pre.series || t, event: pre.event || '', link: $('#nl', m).value.trim(), desc: $('#nd', m).value.trim() });
+        closeModal(); toast(`Přidáno ${videos(its.length)} do „${pre.series || t}“`); return its[0];
+      }
       const it = newIdea(t.slice(0, 140), kind);
-      it.desc = $('#nd', m).value.trim(); it.link = $('#nl', m).value.trim(); it.series = pre.series || '';
+      it.desc = $('#nd', m).value.trim(); it.link = $('#nl', m).value.trim(); it.series = pre.series || ''; it.event = pre.event || '';
       db.ideas.unshift(it); save(true); closeModal(); return it;
     };
-    $('#nsave', m).onclick = () => { if (create()) { toast('Uloženo do zásobníku'); render(); } };
+    $('#nsave', m).onclick = () => { const multi = $('#nmc', m).checked && $('#nm', m).value.trim(); if (create()) { if (!multi) toast('Uloženo do zásobníku'); render(); } };
     $('#nscript', m).onclick = () => { const it = create(); if (it) { it.status = 'script'; save(true); render(); openEditor(it.id); } };
   });
 }
@@ -991,7 +1094,7 @@ function monthGridHTML(m, sel, attr, small) {
   for (let d = monday(m); d <= last; d = addDays(d, 1)) {
     const ev = small ? [] : dayEvents(d);
     h += `<button type="button" class="mc ${d < m || d >= next ? 'out' : ''} ${d === t ? 'today' : ''} ${d === sel ? 'sel' : ''} ${d < t ? 'past' : ''}" ${attr}="${d}">
-      <span class="dnum">${+d.slice(8)}</span>
+      <span class="dnum">${+d.slice(8)}</span>${small ? '' : evOn(d).map(e => `<span class="code k-evt">${esc(e.name)}</span>`).join('')}
       <span class="dots">${ev.slice(0, 3).map(e => `<span class="code k-${e.k} ${evDone(e) ? 'st-done' : ''}">${esc(e.i.title || '·')}</span>`).join('')}${ev.length > 3 ? `<span class="more">+${ev.length - 3}</span>` : ''}</span></button>`;
   }
   return h + '</div></div>';
@@ -1011,6 +1114,7 @@ function renderCal() {
     <p class="legend"><span class="code k-pub">Vydat</span><span class="code k-shoot">Natočit</span><span class="code k-script">Scénář / střih</span><span class="sp"></span><button class="btn xs ghost" id="reviews">Shrnutí týdnů</button></p>
     <div class="daypanel">
       <div class="dph"><b>${longDate(sel)}</b>${sel === t ? '<span class="today-tag">dnes</span>' : ''}</div>
+      ${evOn(sel).map(e => `<button class="evtag" data-evt="${e.id}">${esc(e.name)} · ${videos(evIdeas(e).length)} →</button>`).join('')}
       ${ev.length ? `<div class="list" style="margin-top:8px">${ev.map(e => evRow(e)).join('')}</div>` : '<p class="muted" style="margin:6px 2px 0">Na tenhle den nic není.</p>'}
       <button class="btn sm" id="planday" style="margin-top:10px">+ Naplánovat na tento den</button>
     </div>`;
@@ -1021,6 +1125,7 @@ function renderCal() {
   $('#flame').onclick = $('#pubtoday').onclick = () => publishedToday();
   $('#reviews').onclick = () => reviewsSheet();
   $('#planday').onclick = () => planDaySheet(sel);
+  $$('[data-evt]').forEach(b => b.onclick = () => eventSheet(db.events.find(e => e.id === b.dataset.evt)));
   // přejetí prstem po kalendáři = další / předchozí měsíc
   const g = $('.mgrid'); let sx = null, sy = 0;
   g.addEventListener('touchstart', e => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
@@ -1238,6 +1343,10 @@ function renderMore() {
       ${db.schedule.map(s => `<div class="lrow" data-sch="${s.id}"><input value="${esc(s.series)}" list="serl" placeholder="Např. Vaření" data-sn><div class="stepper"><button data-sd="-1">−</button><b>${s.per}×</b><button data-sd="1">+</button></div><button class="ico" data-sx>${I.x}</button></div>`).join('')}
       <datalist id="serl">${seriesList().map(s => `<option value="${esc(s)}">`).join('')}</datalist>
       <button class="btn sm" id="schadd" style="margin-top:8px">+ Přidat do rozvrhu</button></div>
+    <h2>Akce a sezóny</h2>
+    <div class="set"><p>Vánoce, léto, Valentýn… Uvidíš je v kalendáři a měsíc předem na stránce Dnes.</p>
+      ${[...db.events].sort((a, b) => evNext(a) < evNext(b) ? -1 : 1).map(e => `<div class="lrow" data-evr="${e.id}"><input value="${esc(e.name)}" placeholder="Název" data-en><input type="date" value="${e.date}" data-ed style="flex:none;width:150px"><label class="lchk" title="Každý rok"><input type="checkbox" data-ey ${e.yearly ? 'checked' : ''}> ročně</label><button class="ico" data-ex>${I.x}</button></div>`).join('')}
+      <div class="row" style="margin-top:8px"><button class="btn sm" id="evadd">+ Přidat akci</button>${DEF_EVENTS.some(([, n]) => !db.events.some(e => e.name === n)) ? '<button class="btn sm ghost" id="evdef">+ Běžné svátky</button>' : ''}</div></div>
     <h2>Synchronizace</h2>
     <div class="set" id="syncbox">${syncBoxHTML()}</div>
     <h2>Záloha</h2>
@@ -1256,6 +1365,19 @@ function renderMore() {
     $$('[data-sd]', row).forEach(b => b.onclick = () => { s.per = Math.max(1, Math.min(14, s.per + +b.dataset.sd)); touchS(s); $('b', row).textContent = s.per + '×'; });
     $('[data-sx]', row).onclick = () => { gone(s.id); db.schedule = db.schedule.filter(x => x !== s); save(true); render(); };
   });
+  $$('[data-evr]').forEach(row => {
+    const e = db.events.find(x => x.id === row.dataset.evr), tE = () => { e.updated = Date.now(); save(); };
+    $('[data-en]', row).oninput = ev => { e.name = ev.target.value.trim(); tE(); };
+    $('[data-ed]', row).onchange = ev => { e.date = ev.target.value; tE(); };
+    $('[data-ey]', row).onchange = ev => { e.yearly = ev.target.checked; tE(); };
+    $('[data-ex]', row).onclick = () => { gone(e.id); db.events = db.events.filter(x => x !== e); db.ideas.forEach(i => { if (i.event === e.id) { i.event = ''; i.updated = Date.now(); } }); save(true); render(); };
+  });
+  $('#evadd').onclick = () => { db.events.push({ id: uid(), name: '', date: today(), yearly: true, updated: Date.now() }); save(true); render(); const l = $$('[data-en]'); l[l.length - 1].focus(); };
+  const evd = $('#evdef'); if (evd) evd.onclick = () => {
+    const y = today().slice(0, 4);
+    DEF_EVENTS.filter(([, n]) => !db.events.some(e => e.name === n)).forEach(([md, n]) => db.events.push({ id: uid(), name: n, date: y + '-' + md, yearly: true, updated: Date.now() }));
+    save(true); render(); toast('Přidáno');
+  };
   $('#schadd').onclick = () => { db.schedule.push({ id: uid(), series: '', per: 1, updated: Date.now() }); save(true); render(); const all = $$('[data-sn]'); all[all.length - 1].focus(); };
   $('#exp').onclick = () => {
     const blob = new Blob([JSON.stringify({ app: 'studio', exported: new Date().toISOString(), ...db }, null, 1)], { type: 'application/json' });
@@ -1277,7 +1399,7 @@ function renderMore() {
   $('#expt').onclick = () => copy((db.style.trim() ? '# Můj kontext\n' + db.style.trim() + '\n\n==========\n\n' : '') + db.ideas.map(ideaText).join('\n\n==========\n\n'));
   $('#wipe').onclick = () => {
     if (!(confirm('Smazat VŠECHNO? Nejde to vrátit.') && confirm('Fakt? Stáhl sis zálohu?'))) return;
-    const del = { ...db.deleted }; [...db.ideas, ...db.tasks, ...db.channels, ...db.insp, ...db.reviews, ...db.schedule].forEach(x => del[x.id] = Date.now());
+    const del = { ...db.deleted }; [...db.ideas, ...db.tasks, ...db.channels, ...db.insp, ...db.reviews, ...db.schedule, ...db.events, ...db.series].forEach(x => del[x.id] = Date.now());
     db = blank(); db.deleted = del; db.setU = Date.now(); save(true); render();
   };
 }
@@ -1356,6 +1478,9 @@ function renderEditor() {
         <div><label class="l">Série</label><input data-f="series" list="serl2" placeholder="Např. Vaření" value="${esc(i.series)}"><datalist id="serl2">${seriesList().map(s => `<option value="${esc(s)}">`).join('')}</datalist></div>
         ${i.kind === 'short' ? `<div><label class="l">Náročnost <span>${i.diff ? '· ' + DIFF[i.diff] : ''}</span></label><div class="diff">${[1, 2, 3, 4, 5].map(n => `<button data-diff="${n}" class="${i.diff === n ? 'on' : ''}">${n}</button>`).join('')}</div></div>` : ''}
       </div>
+      ${(() => { const sib = i.series ? db.ideas.filter(x => x !== i && (x.series || '').trim() === i.series.trim()).length : 0;
+        return `<div class="sibrow">${sib ? `<button class="btn sm ghost" id="sibs">Téma „${esc(i.series)}“: ${videos(sib + 1)} →</button>` : ''}<button class="btn sm" id="moreone">+ Další video z tématu</button></div>`; })()}
+      ${db.events.length ? `<div class="fld"><label class="l">Akce / sezóna</label><select data-f="event"><option value="">Žádná</option>${db.events.map(e => `<option value="${e.id}" ${i.event === e.id ? 'selected' : ''}>${esc(e.name)} · ${fmtDate(evNext(e))}</option>`).join('')}</select></div>` : ''}
       ${!writing ? `<button class="btn pri full big" id="startwrite" style="margin-top:20px">Psát scénář</button>` : `
       <h2>Plán</h2>
       <div class="dgrid">${dateBtn(i, 'dScript', 'Napsat scénář')}${dateBtn(i, 'shoot', 'Natočit')}${dateBtn(i, 'dEdit', 'Sestříhat')}${dateBtn(i, 'date', 'Vydat')}</div>
@@ -1406,6 +1531,8 @@ function bindEditor() {
   $('#edel').onclick = () => { if (!confirm('Smazat „' + (i.title || 'Bez názvu') + '“?')) return; gone(i.id); db.ideas = db.ideas.filter(x => x !== i); closeEditor(); toast('Smazáno'); };
   $$('[data-st]', ed).forEach(b => b.onclick = () => { setStatus(i, b.dataset.st); renderEditor(); });
   const ns = $('#nextst'); if (ns) ns.onclick = () => { if (i.status === 'ready') markPublished(i); else setStatus(i, SK[SI(i.status) + 1]); renderEditor(); };
+  const sbb = $('#sibs', ed); if (sbb) sbb.onclick = () => seriesSheet(i.series.trim());
+  $('#moreone', ed).onclick = () => { if (!i.series.trim()) { i.series = i.title.trim() || 'Téma'; touch(); } manySheet({ series: i.series.trim(), kind: i.kind, event: i.event }); };
   const sw = $('#startwrite'); if (sw) sw.onclick = () => { setStatus(i, 'script'); renderEditor(); const h = $('[data-pk=hook] [data-pf=say]', ed); h && h.focus(); };
   $$('[data-f]', ed).forEach(el => el.addEventListener('input', () => {
     i[el.dataset.f] = el.value; touch();
@@ -1541,7 +1668,7 @@ function mergeDb(a, b) {
   const st = (b.setU || 0) > (a.setU || 0) ? b : a;
   return norm({ v: 4,
     ideas: mg(a.ideas, b.ideas).sort(byIdDesc), hooks: mg(a.hooks, b.hooks).sort(byIdDesc), insp: mg(a.insp, b.insp).sort(byIdDesc),
-    tasks: mg(a.tasks, b.tasks).sort(asc), channels: mg(a.channels, b.channels).sort(asc), reviews: mg(a.reviews, b.reviews).sort(asc), schedule: mg(a.schedule, b.schedule).sort(asc),
+    tasks: mg(a.tasks, b.tasks).sort(asc), channels: mg(a.channels, b.channels).sort(asc), reviews: mg(a.reviews, b.reviews).sort(asc), schedule: mg(a.schedule, b.schedule).sort(asc), events: mg(a.events, b.events).sort(asc), series: mg(a.series, b.series).sort(asc),
     style: st.style || '', setU: st.setU || 0, deleted: del });
 }
 const typing = () => { const el = document.activeElement; return el && /INPUT|TEXTAREA|SELECT/.test(el.tagName) && el.closest('#view, #modal'); };
