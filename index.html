@@ -1207,11 +1207,28 @@ svg.rchart .pt{fill:var(--rb);stroke:var(--ra);stroke-width:2}svg.rchart .pt.on{
 .rnote{display:block;width:100%;text-align:left;background:var(--rc);border-radius:12px;padding:8px 10px;margin-top:8px;color:var(--rf)}.rnote span{font-size:11px;color:var(--rm)}.rnote p{margin:2px 0 0;font-size:13.5px;line-height:1.4}.rnote i{color:var(--rm)}
 .rtags .chip.on{background:#1F3A2A;color:#3FCF7A}
 .rtg small{display:block}.rhk b{text-transform:none}.rrow{min-height:22px}.rhd b{font-size:21px}
+/* v2.24 motivace */
+.mvwhy{display:flex;flex-direction:column;gap:8px}.mvwhy button{display:flex;gap:12px;align-items:flex-start;text-align:left;background:var(--card);border-radius:16px;padding:12px 14px}
+.mvwhy span{font-family:var(--fd);font-style:italic;font-weight:800;font-size:24px;color:var(--hot);line-height:1;min-width:16px}.mvwhy p{margin:0;font-size:15px;line-height:1.4}
+.mvempty{display:block;width:100%;text-align:left;border:1px dashed var(--line);border-radius:16px;padding:14px;color:var(--mut);font-size:14px}
+.mvgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.mvph{position:relative;aspect-ratio:3/4;border-radius:16px;overflow:hidden;background:var(--card);padding:0}.mvph img{width:100%;height:100%;object-fit:cover;display:block}
+.mvph span{position:absolute;left:0;right:0;bottom:0;padding:22px 10px 8px;font-size:12.5px;font-weight:600;text-align:left;background:linear-gradient(transparent,rgba(0,0,0,.75));color:#fff}
+.mvph.miss::after{content:"není v tomto telefonu";position:absolute;inset:0;display:grid;place-items:center;font-size:12px;color:var(--mut)}
+.mvadd{aspect-ratio:3/4;border-radius:16px;border:1px dashed var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:var(--mut);font-size:13px;cursor:pointer}
+.mvadd svg{width:28px;height:28px}
+.mvfull img{width:100%;max-height:60vh;object-fit:contain;border-radius:14px;display:block;margin-top:6px}
+.mvhome{position:relative;display:block;width:100%;height:150px;margin-top:12px;border-radius:24px;overflow:hidden;background:var(--card);text-align:left;padding:0}
+.mvhome img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.mvhome .lbl,.mvhome b{position:relative;display:block;padding:0 16px}.mvhome .lbl{padding-top:92px;color:#fff;opacity:.8}.mvhome b{font-size:16px;color:#fff;line-height:1.3}
+.mvhome:not(.none)::before{content:"";position:absolute;inset:0;background:linear-gradient(transparent 35%,rgba(0,0,0,.72));z-index:0}.mvhome>*{z-index:1}
+.mvhome.none{height:auto;display:flex;flex-direction:column;padding:14px 44px 14px 0}.mvhome.none .lbl{padding-top:0;color:var(--mut)}.mvhome.none b{color:var(--fg);font-weight:600}.mvhome.none svg{position:absolute;right:14px;top:50%;transform:translateY(-50%);width:20px;height:20px;color:var(--mut)}
+.mvhome img{object-position:center 30%}
 </style>
 </head>
 <body>
 <div id="app"></div><div id="sheet" hidden></div><div id="toast" role="status" aria-live="polite"></div>
-<script>const APP_VERSION = "2.23.0";
+<script>const APP_VERSION = "2.24.0";
 const MARK = "<svg aria-hidden=\"true\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 994 296\"><path fill=\"currentColor\" d=\"M612 5L611 4L571 4L570 5L567 5L566 4L561 4L560 5L448 5L447 6L442 6L441 5L439 6L438 5L435 5L434 6L430 6L429 5L426 5L425 6L414 6L413 5L409 5L408 6L385 5L378 11L366 27L355 39L352 44L335 63L323 79L316 86L312 92L282 127L274 138L267 145L263 151L233 186L233 187L219 203L219 204L210 213L210 214L202 222L202 223L192 232L186 236L171 243L169 243L162 246L155 247L154 248L149 248L148 249L140 249L139 250L85 250L84 251L78 251L77 250L37 250L29 258L29 259L24 264L19 271L13 277L13 278L4 288L0 294L1 295L48 295L49 296L51 295L58 295L59 296L94 296L95 295L97 295L98 296L100 296L101 295L154 295L155 294L184 294L185 293L202 293L203 292L232 291L233 290L241 290L242 289L253 289L254 288L263 288L264 287L271 287L272 286L281 286L282 285L288 285L289 284L294 284L295 283L301 283L302 282L313 281L314 280L328 278L332 276L336 276L337 275L352 272L358 269L361 269L362 268L367 267L369 265L379 262L393 255L408 245L433 221L436 216L448 203L456 192L477 168L485 157L492 150L494 146L506 133L506 132L521 115L525 109L544 88L548 82L560 69L563 64L570 57L570 56L578 48L578 47L589 35L594 28L602 20L604 16L611 9ZM994 1L993 0L974 0L973 1L967 1L966 0L964 0L963 1L866 1L865 2L860 2L859 1L842 2L840 1L839 2L804 2L794 7L792 7L786 11L784 11L777 15L775 15L760 23L758 23L749 28L747 28L734 35L732 35L717 43L715 43L706 48L704 48L696 53L694 53L689 56L685 57L683 59L681 59L670 65L668 65L658 70L656 72L647 76L645 78L636 82L634 84L629 86L624 90L619 92L614 96L606 100L586 115L579 119L575 123L559 135L554 140L553 140L537 155L536 155L502 190L502 193L509 191L512 189L529 184L532 182L538 181L549 176L555 175L558 173L566 171L569 169L586 164L589 162L597 160L606 168L606 169L620 185L632 201L655 228L663 239L677 255L680 260L686 266L694 277L704 288L749 288L750 287L755 287L756 288L760 288L761 287L914 287L916 286L916 284L896 264L895 264L827 199L826 199L797 171L796 171L776 151L775 151L766 142L765 142L757 133L749 127L736 113L736 109L742 104L747 103L757 98L762 97L767 94L777 91L782 88L784 88L787 86L789 86L792 84L794 84L797 82L802 81L807 78L809 78L812 76L814 76L817 74L824 72L829 69L831 69L844 63L849 62L854 59L856 59L861 56L863 56L866 54L873 52L878 49L880 49L883 47L885 47L898 41L903 40L910 36L912 36L920 32L925 31L937 25L939 25L942 23L944 23L947 21L949 21L952 19L954 19L957 17L959 17L962 15L969 13L974 10L976 10L979 8L981 8L984 6L993 3Z\"/></svg>";
 // ===== Výchozí knihovna cviků (informace jsou skryté pod „Info o cviku“) =====
 const R = (min, max, fail = true) => ({ min, max, fail });
@@ -6239,6 +6256,63 @@ XV['f-vyvoj'] = function () { return _23vy().replace(/(<div class="two" style="m
 const _23mDen = mDen;
 mDen = function () { const h = _23mDen(); const k = view.d || today(); const t = dayTags(k);
   return h.replace(/(<button class="sw [^"]*" data-a="b-sick")/, `<div><div class="lbl ml">Co může ovlivnit dnešní váhu</div><div class="chips rtags">${RTAGS.filter(x => x !== 'nemoc').map(x => `<button class="chip ${t.includes(x) ? 'on' : ''}" data-a="rep-tag2" data-k="${k}" data-v="${x}">${x}</button>`).join('')}</div></div>$1`); };
+
+
+// ===================== v2.24: MOTIVACE – fotky inspirace (jen v telefonu) + proč to dělám =====================
+const MV = () => (S.motiv = S.motiv || { photos: [], why: [] });
+const MURL = new Map();
+async function mvUrl(id) { if (MURL.has(id)) return MURL.get(id); const f = await fGet(id).catch(() => null); if (!f) return null; const u = URL.createObjectURL(f.blob); MURL.set(id, u); return u; }
+function mvFill() { document.querySelectorAll('img[data-mid]:not([src])').forEach(async im => { const u = await mvUrl(im.dataset.mid); if (u) im.src = u; else im.closest('.mvph')?.classList.add('miss'); }); }
+// zmenšení fotky před uložením (šetří místo v telefonu)
+function shrink(file, max, q) { return new Promise((res, rej) => { const img = new Image(); const u = URL.createObjectURL(file);
+  img.onload = () => { const k = Math.min(1, max / Math.max(img.width, img.height)); const c = document.createElement('canvas'); c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+    c.getContext('2d').drawImage(img, 0, 0, c.width, c.height); URL.revokeObjectURL(u); c.toBlob(b => b ? res(b) : rej(new Error('blob')), 'image/jpeg', q); };
+  img.onerror = () => { URL.revokeObjectURL(u); rej(new Error('img')); }; img.src = u; }); }
+const todayPhoto = () => { const P = MV().photos; return P.length ? P[Math.floor(toU(today()) / DMS) % P.length] : null; };
+
+XV.motiv = function () {
+  const M = MV(); const P = M.photos;
+  return `<div class="wrap mv">${hdr(backBtn('home'), '<h1>Motivace</h1>', '<span></span>')}
+    <div class="sthd" style="margin-top:4px"><b>Proč to dělám</b><button class="lnk" data-a="mv-why" data-i="-1">+ Přidat</button></div>
+    ${M.why.length ? `<div class="mvwhy">${M.why.map((w, i) => `<button data-a="mv-why" data-i="${i}"><span>${i + 1}</span><p>${esc(w)}</p></button>`).join('')}</div>`
+      : '<button class="mvempty" data-a="mv-why" data-i="-1">Napiš si 2–3 důvody vlastními slovy. Ukážou se tu a občas na Domů.</button>'}
+    <div class="sthd" style="margin-top:22px"><b>Inspirace</b><small>${P.length ? P.length + ' ' + pl(P.length, 'fotka', 'fotky', 'fotek').split(' ')[1] : ''}</small></div>
+    <div class="mvgrid">${P.map((p, i) => `<button class="mvph" data-a="mv-open" data-i="${i}"><img data-mid="${p.id}" alt="${esc(p.cap || 'Inspirace')}">${p.cap ? `<span>${esc(p.cap)}</span>` : ''}</button>`).join('')}
+      <label class="mvadd">${ico('plus')}<span>Přidat fotky</span><input type="file" id="mv-file" accept="image/*" multiple hidden></label></div>
+    <p class="mut" style="font-size:12px;margin:14px 2px 0">Fotky zůstávají jen v tomto telefonu (zmenšené, ať nezabírají místo). Do zálohy se ukládají jen popisky a důvody.</p>
+  </div>${tabs()}`;
+};
+const _24render = render;
+render = function () { _24render(); if (document.querySelector('img[data-mid]:not([src])')) mvFill(); };
+document.addEventListener('change', async e => {
+  if (e.target.id !== 'mv-file') return; const files = [...e.target.files]; e.target.value = ''; if (!files.length) return; toast('Ukládám…');
+  try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist();
+    for (const f of files) { const b = await shrink(f, 1600, .85); const id = 'm' + uid(); await fPut(id, { name: f.name, type: 'image/jpeg', blob: b }); MV().photos.push({ id, cap: '', added: today() }); }
+    save(true); render(); toast(files.length > 1 ? `Přidáno ${files.length} fotek` : 'Fotka přidána');
+  } catch (err) { toast('Fotku se nepodařilo uložit'); }
+});
+A['mv-open'] = async b => { const i = +b.dataset.i; const p = MV().photos[i]; if (!p) return; const u = await mvUrl(p.id);
+  sheet(`<div class="mvfull">${u ? `<img src="${u}" alt="">` : '<p class="mut">Fotka v tomto telefonu není.</p>'}</div>
+    <div class="form"><label class="f">Popisek<input id="mv-cap" maxlength="80" value="${esc(p.cap || '')}" placeholder="např. takhle chci vypadat v létě"></label></div>
+    <div class="actions"><button class="btn danger" data-a="mv-del" data-i="${i}" aria-label="Smazat">${ico('trash')}</button><button class="btn" data-a="close">Zavřít</button><button class="btn white" data-a="mv-cap" data-i="${i}">Uložit</button></div>`); };
+A['mv-cap'] = b => { const p = MV().photos[+b.dataset.i]; if (!p) return; p.cap = $('#mv-cap').value.trim(); save(true); closeSheet(); render(); };
+A['mv-del'] = b => { const i = +b.dataset.i; const p = MV().photos[i]; if (!p) return; fDel(p.id).catch(() => { }); if (MURL.has(p.id)) { URL.revokeObjectURL(MURL.get(p.id)); MURL.delete(p.id); } MV().photos.splice(i, 1); save(true); closeSheet(); render(); toast('Smazáno'); };
+A['mv-why'] = b => { const i = +b.dataset.i; const w = i >= 0 ? MV().why[i] : '';
+  sheet(`<h2>${i >= 0 ? 'Upravit důvod' : 'Proč to dělám'}</h2><div class="form"><label class="f">Vlastními slovy<textarea id="mv-w" maxlength="200" rows="3" placeholder="např. chci mít sílu a energii na celý den">${esc(w)}</textarea></label></div>
+    <div class="actions">${i >= 0 ? `<button class="btn danger" data-a="mv-wdel" data-i="${i}" aria-label="Smazat">${ico('trash')}</button>` : ''}<button class="btn" data-a="close">Zrušit</button><button class="btn white" data-a="mv-wsave" data-i="${i}">Uložit</button></div>`); };
+A['mv-wsave'] = b => { const v = $('#mv-w').value.trim(); if (!v) return closeSheet(); const i = +b.dataset.i; if (i >= 0) MV().why[i] = v; else MV().why.push(v); save(true); closeSheet(); render(); };
+A['mv-wdel'] = b => { MV().why.splice(+b.dataset.i, 1); save(true); closeSheet(); render(); };
+// Domů: dnešní inspirace (každý den jiná fotka) nebo pozvánka k přidání
+const _24vHome = vHome;
+vHome = function () {
+  const h = _24vHome(); const M = MV(); const p = todayPhoto(); const why = M.why.length ? M.why[Math.floor(toU(today()) / DMS) % M.why.length] : '';
+  const card = p ? `<button class="mvhome" data-a="tab" data-v="motiv"><img data-mid="${p.id}" alt=""><span class="lbl">Inspirace</span><b>${esc(p.cap || why || 'Proč to dělám')}</b></button>`
+    : `<button class="mvhome none" data-a="tab" data-v="motiv"><span class="lbl">Motivace</span><b>${why ? esc(why) : 'Přidej fotky inspirace a proč to děláš'}</b>${ico('chev')}</button>`;
+  const T = document.createElement('template'); T.innerHTML = h; const last = [...T.content.querySelectorAll('.scard')].pop() || T.content.querySelector('.gcard');
+  if (last) { last.insertAdjacentHTML('afterend', card); return T.innerHTML; } return h.replace('<div class="hgrid">', card + '<div class="hgrid">');
+};
+const _24tabs = tabs;
+tabs = () => view.n === 'motiv' ? _24tabs().replace('data-v="home" class="', 'data-v="home" class="on ') : _24tabs();
 
 render();
 </script>
