@@ -537,6 +537,20 @@ h2.sh::before{content:'';display:inline-block;width:8px;height:8px;border-radius
 .tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
 .tags span{font-size:12px;font-weight:600;padding:3px 8px;border-radius:99px;background:#FFF1E8;color:#B4410E}
 .ghostbtn{background:none;border-color:transparent;color:var(--tx2)}
+
+.hook3 .hl{display:block;font-size:11.5px;font-weight:700;letter-spacing:.02em;text-transform:uppercase;color:var(--tx3);margin-top:8px}
+.hook3 textarea{font-size:16px;padding:3px 0}
+.h3c{display:flex;gap:4px}
+.h3c span{font-size:11px;font-weight:600;padding:2px 7px;border-radius:99px;background:#F1F2F4;color:var(--tx3)}
+.h3c span.ok{background:#E6F5EC;color:#16794A}
+.ratio{display:inline-block;min-width:44px;text-align:center;font-size:12.5px;font-weight:700;padding:3px 7px;border-radius:8px;background:#F1F2F4;color:var(--tx2)}
+.ratio.ok{background:#E6F5EC;color:#16794A}
+.rbn{font-size:12.5px;font-weight:700;padding:3px 9px;border-radius:99px;background:#FFF1E8;color:#B4410E}
+.rbn.ok{background:#E6F5EC;color:#16794A}
+.rbcard{cursor:default}
+.rbrow{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--line);margin-top:8px;cursor:pointer}
+.rbrow .tx{flex:1;min-width:0;font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rbrow small{margin:0!important}
 </style>
 </head>
 <body>
@@ -628,7 +642,7 @@ const I = {
 
 // ================= data =================
 function blank() { return { v: 4, ideas: [], tasks: [], channels: [], insp: [], reviews: [], schedule: [], hooks: [], style: '', setU: 0, deleted: {} }; }
-const emptySc = () => ({ hook: { say: '', see: '' }, body: [], end: { say: '', see: '' } });
+const emptySc = () => ({ hook: { say: '', see: '', txt: '' }, body: [], end: { say: '', see: '' } });
 const emptyLong = () => ({ thumb: '', thumbWhy: '', thumbRef: '', music: '', videoRef: '', intro: '', body: '', end: '', cut: '', ideas: '' });
 function newIdea(title, kind = 'short') {
   const t = Date.now();
@@ -686,7 +700,7 @@ document.addEventListener('visibilitychange', () => { if (document.visibilitySta
 try { navigator.storage && navigator.storage.persist && navigator.storage.persist(); } catch (e) {}
 
 const parts = i => [i.sc.hook, ...i.sc.body, i.sc.end];
-const hasScript = i => i.kind === 'long' ? !!(i.lg.intro + i.lg.body + i.lg.end).trim() : parts(i).some(p => (p.say + p.see).trim());
+const hasScript = i => i.kind === 'long' ? !!(i.lg.intro + i.lg.body + i.lg.end).trim() : parts(i).some(p => (p.say + p.see + (p.txt || '')).trim());
 function scriptText(i, labels) {
   const L = l => labels ? l : '';
   if (i.kind === 'long') return [['Úvod', i.lg.intro], ['Tělo', i.lg.body], ['Závěr', i.lg.end]].filter(x => x[1].trim()).map(([l, t]) => [L(l), t.trim()]);
@@ -944,7 +958,7 @@ function addPastedIdeas(text) {
   const list = (parseIdeasPaste(text) || []).filter(o => o && typeof o === 'object' && str(o.title)).map(o => {
     const it = newIdea(str(o.title).slice(0, 140), o.kind === 'long' ? 'long' : 'short');
     it.desc = str(o.desc) || str(o.description); it.note = str(o.note); it.series = str(o.series); it.link = str(o.link);
-    it.sc.hook.say = str(o.hook); it.sc.end.say = str(o.cta);
+    it.sc.hook.say = str(o.hook); it.sc.hook.see = str(o.hookVisual); it.sc.hook.txt = str(o.hookText); it.sc.end.say = str(o.cta);
     it.sc.body = str(o.body).split(/\n\s*\n/).map(x => x.trim()).filter(Boolean).map(say => ({ id: uid(), say, see: '' }));
     const d = parseInt(o.diff || o.difficulty, 10); if (d >= 1 && d <= 5) it.diff = d;
     return it;
@@ -1087,7 +1101,7 @@ function reviewSheet(ws) {
 
 // ================= INSPIRACE =================
 function renderInsp() {
-  $('#topx').innerHTML = `<div class="seg">${[['ch', 'Kanály'], ['vid', 'Videa']].map(([k, v]) => `<button data-im="${k}" class="${ui.imode === k ? 'on' : ''}">${v}</button>`).join('')}</div>`;
+  $('#topx').innerHTML = `<div class="seg">${[['ch', 'Kanály'], ['rb', 'Rozbory'], ['vid', 'Videa']].map(([k, v]) => `<button data-im="${k}" class="${ui.imode === k ? 'on' : ''}">${v}</button>`).join('')}</div>`;
   $$('[data-im]').forEach(b => b.onclick = () => { ui.imode = b.dataset.im; keepUi(); render(); });
   if (ui.imode === 'ch') {
     const list = [...db.channels].sort((a, b) => a.name.localeCompare(b.name, 'cs'));
@@ -1101,18 +1115,92 @@ function renderInsp() {
       : '<div class="empty"><b>Kanály, které sleduješ</b>Přidej tvůrce, od kterých se učíš – třeba kvůli vizuálu, střihu nebo tématu. Pak se jimi jen proklikáš.</div>'}`;
     $('#chadd').onclick = () => channelSheet();
     $$('[data-ch]').forEach(c => c.onclick = e => { if (e.target.closest('a')) return; channelSheet(db.channels.find(x => x.id === c.dataset.ch)); });
+  } else if (ui.imode === 'rb') {
+    renderRb();
   } else {
     $('#view').innerHTML = `
       <form class="panel" id="inf"><input id="iu" inputmode="url" placeholder="Odkaz na video" autocomplete="off">
         <textarea id="in" rows="1" placeholder="Co se ti na tom líbí?" style="margin-top:8px"></textarea>
         <div style="display:flex;justify-content:flex-end;margin-top:10px"><button class="btn pri sm">Uložit</button></div></form>
-      ${db.insp.length ? `<div class="list" style="margin-top:14px">${db.insp.map(x => `<div class="irow"><div class="tx"><b>${esc(x.note || linkPlat(x.url))}</b><small>${esc(linkPlat(x.url))} · ${fmtDate(ds(new Date(x.created)))}</small></div><a class="btn xs" href="${esc(x.url)}" target="_blank" rel="noopener">Otevřít</a><button class="ico" data-ix="${x.id}" style="width:32px;height:32px">${I.x}</button></div>`).join('')}</div>` : '<div class="empty"><b>Uložená videa</b>Video, které tě chytne, sem ulož odkazem.</div>'}`;
+      ${vids().length ? `<div class="list" style="margin-top:14px">${vids().map(x => `<div class="irow"><div class="tx"><b>${esc(x.note || linkPlat(x.url))}</b><small>${esc(linkPlat(x.url))} · ${fmtDate(ds(new Date(x.created)))}</small></div><a class="btn xs" href="${esc(x.url)}" target="_blank" rel="noopener">Otevřít</a><button class="ico" data-ix="${x.id}" style="width:32px;height:32px">${I.x}</button></div>`).join('')}</div>` : '<div class="empty"><b>Uložená videa</b>Video, které tě chytne, sem ulož odkazem.</div>'}`;
     $('#inf').onsubmit = e => {
       e.preventDefault(); const u = ($('#iu').value.match(urlRe) || [])[0]; if (!u) return toast('Tohle nevypadá jako odkaz');
       db.insp.unshift({ id: uid(), url: u, note: $('#in').value.trim(), created: Date.now(), updated: Date.now() }); save(true); render();
     };
     $$('[data-ix]').forEach(b => b.onclick = () => { gone(b.dataset.ix); db.insp = db.insp.filter(x => x.id !== b.dataset.ix); save(true); render(); });
   }
+}
+// rozbory: u autora najdu 3 videa, která mají 3× víc zhlédnutí než on sledujících
+const vids = () => db.insp.filter(x => x.kind !== 'rb');
+const rbs = () => db.insp.filter(x => x.kind === 'rb');
+function parseNum(s) {
+  const m = String(s || '').replace(/\s/g, '').replace(',', '.').match(/^([\d.]+)(k|tis\.?|m|mil\.?)?$/i); if (!m) return 0;
+  const u = (m[2] || '').toLowerCase(); return Math.round(parseFloat(m[1]) * (u.startsWith('k') || u.startsWith('t') ? 1e3 : u.startsWith('m') ? 1e6 : 1)) || 0;
+}
+const fmtN = n => !n ? '' : n >= 1e6 ? +(n / 1e6).toFixed(1) + ' mil.' : n >= 1e3 ? +(n / 1e3).toFixed(1) + ' tis.' : String(n);
+const ratio = r => r.subs && r.views ? r.views / r.subs : 0;
+const ratioHTML = r => { const x = ratio(r); return x ? `<span class="ratio ${x >= 3 ? 'ok' : ''}">${String(+x.toFixed(1)).replace('.', ',')}×</span>` : '<span class="ratio">?</span>'; };
+const authorSubs = a => { const r = rbs().find(x => x.author.toLowerCase() === a.toLowerCase() && x.subs); return r ? r.subs : 0; };
+function renderRb() {
+  const groups = {};
+  rbs().forEach(r => { const k = r.author.trim().toLowerCase() || '?'; (groups[k] = groups[k] || []).push(r); });
+  const list = Object.values(groups).sort((a, b) => Math.max(...b.map(x => x.created)) - Math.max(...a.map(x => x.created)));
+  $('#view').innerHTML = `
+    <div class="set"><p><b>Pravidlo 3×:</b> najdi autora a 3 jeho videa, která mají aspoň 3× víc zhlédnutí, než má sledujících. U každého si rozepiš, proč fungovalo – hlavně hook. Pak zkopíruj formát + hook.</p></div>
+    <button class="btn full" id="rbadd" style="margin-top:12px">+ Nový rozbor</button>
+    ${list.length ? `<div class="chlist">${list.map(g => {
+      const a = g[0].author || 'Bez autora', ok = g.filter(r => ratio(r) >= 3).length, subs = authorSubs(a);
+      return `<div class="chcard rbcard"><div class="chh"><b>${esc(a)}</b><span class="rbn ${ok >= 3 ? 'ok' : ''}">${Math.min(ok, 3)}/3</span></div>
+        ${subs ? `<small style="margin-top:2px">${fmtN(subs)} sledujících</small>` : ''}
+        ${g.sort((x, y) => x.created - y.created).map(r => `<div class="rbrow" data-rb="${r.id}">${ratioHTML(r)}<span class="tx">${esc(r.why.split('\n')[0] || r.hook.say || r.hook.txt || linkPlat(r.url) || 'Video')}</span><small>${fmtN(r.views)}</small></div>`).join('')}
+        ${g.length < 3 ? `<button class="btn sm ghostbtn" style="margin-top:6px" data-rbmore="${esc(a)}">+ další video</button>` : ''}</div>`;
+    }).join('')}</div>`
+    : '<div class="empty"><b>Rozbory videí</b>Najdi autora, jeho video s 3× víc zhlédnutími, než má sledujících, a rozepiš si, proč fungovalo.</div>'}`;
+  $('#rbadd').onclick = () => rbSheet();
+  $$('[data-rb]').forEach(el => el.onclick = () => rbSheet(db.insp.find(x => x.id === el.dataset.rb)));
+  $$('[data-rbmore]').forEach(b => b.onclick = () => rbSheet(null, b.dataset.rbmore));
+}
+function rbSheet(r, author) {
+  const isNew = !r;
+  r = r || { id: uid(), kind: 'rb', author: author || '', subs: author ? authorSubs(author) : 0, url: '', views: 0, hook: { say: '', see: '', txt: '' }, why: '', take: '', created: Date.now() };
+  const names = [...new Set([...db.channels.map(c => c.name), ...rbs().map(x => x.author)].filter(Boolean))];
+  openModal(`<h3>${isNew ? 'Nový rozbor' : 'Rozbor videa'}</h3>
+    <input id="ra" value="${esc(r.author)}" list="ral" placeholder="Autor">
+    <datalist id="ral">${names.map(n => `<option value="${esc(n)}">`).join('')}</datalist>
+    <input id="ru" value="${esc(r.url)}" inputmode="url" placeholder="Odkaz na video" style="margin-top:8px">
+    <div class="rgrid2" style="margin-top:8px"><input id="rs" value="${r.subs || ''}" inputmode="decimal" placeholder="Sledujících (např. 12k)"><input id="rv" value="${r.views || ''}" inputmode="decimal" placeholder="Zhlédnutí (např. 80k)"></div>
+    <p class="hint" id="rr"></p>
+    <label class="l" style="margin-top:10px">Hook</label>
+    <div class="part hook3" style="margin-top:0">${HOOK3.map(([k, l, ph]) => `<label class="hl">${l}</label><textarea data-rh="${k}" rows="1" placeholder="${ph}">${esc(r.hook[k] || '')}</textarea>`).join('')}</div>
+    <label class="l" style="margin-top:12px">Proč to fungovalo</label>
+    <textarea id="rw" rows="3" placeholder="Téma, emoce, tempo, střih, audio, B-roll, rozhovor…">${esc(r.why)}</textarea>
+    <label class="l" style="margin-top:12px">Co si vezmu</label>
+    <textarea id="rt" rows="2" placeholder="Formát, styl střihu, zvuk…">${esc(r.take)}</textarea>
+    <button class="btn full" id="ridea" style="margin-top:14px">Udělat z toho nápad</button>
+    <div class="dact" style="margin-top:12px">${isNew ? '' : '<button class="btn danger" id="rdel">Smazat</button>'}<span class="grow"></span><button class="btn pri" id="rsave">Uložit</button></div>`, m => {
+    const read = () => {
+      r.author = $('#ra', m).value.trim(); r.url = $('#ru', m).value.trim(); r.subs = parseNum($('#rs', m).value); r.views = parseNum($('#rv', m).value);
+      $$('[data-rh]', m).forEach(el => r.hook[el.dataset.rh] = el.value.trim()); r.why = $('#rw', m).value.trim(); r.take = $('#rt', m).value.trim();
+    };
+    const upd = () => {
+      read(); const x = ratio(r);
+      $('#rr', m).innerHTML = !x ? 'Vyplň sledující a zhlédnutí – spočítám poměr.' : x >= 3 ? `<b style="color:var(--ok,#16794A)">${String(+x.toFixed(1)).replace('.', ',')}× víc zhlédnutí než sledujících – splňuje pravidlo ✓</b>` : `<b style="color:var(--bad)">Jen ${String(+x.toFixed(1)).replace('.', ',')}× – pod 3×, hledej jiné video.</b>`;
+    };
+    $('#ra', m).onchange = () => { if (!$('#rs', m).value) { const s = authorSubs($('#ra', m).value.trim()); if (s) $('#rs', m).value = s; } upd(); };
+    ['#rs', '#rv'].forEach(s => $(s, m).oninput = upd); upd(); growAll(m);
+    const store = () => {
+      read(); if (!r.author && !r.url) { toast('Vyplň autora nebo odkaz'); return false; }
+      r.updated = Date.now(); if (isNew && !db.insp.includes(r)) db.insp.unshift(r); save(true); return true;
+    };
+    $('#rsave', m).onclick = () => { if (store()) { closeModal(); render(); } };
+    $('#ridea', m).onclick = () => {
+      if (!store()) return;
+      const it = newIdea('Podle ' + (r.author || 'videa'), 'short');
+      it.link = r.url; it.desc = [r.take, r.why].filter(Boolean).join('\n\n'); it.sc.hook = { ...r.hook };
+      db.ideas.unshift(it); save(true); closeModal(); openEditor(it.id); toast('Nápad vytvořen – přepiš hook na sebe');
+    };
+    const d = $('#rdel', m); if (d) d.onclick = () => { if (!confirm('Smazat rozbor?')) return; gone(r.id); db.insp = db.insp.filter(x => x !== r); save(true); closeModal(); render(); };
+  });
 }
 function channelSheet(c) {
   const isNew = !c; c = c || { id: uid(), name: '', url: '', why: '', tags: [] };
@@ -1197,7 +1285,7 @@ function renderMore() {
 function claudePrompt() {
   const sch = db.schedule.filter(s => s.series).map(s => `${s.per}× ${s.series}`).join(', ');
   return [db.style.trim() ? '# Můj kontext\n' + db.style.trim() : '', sch ? '# Týdenní rozvrh\n' + sch : '',
-    `# Úkol\nVymysli mi nápady na krátká videa (téma připíšu níž). Odpověz řádkem ${IDEAS_MARK} a pod ním JSON pole objektů:\n[{"title":"…","desc":"…","series":"…","diff":1-5,"hook":"…","body":"odstavce oddělené prázdným řádkem","cta":"…"}]`,
+    `# Úkol\nVymysli mi nápady na krátká videa (téma připíšu níž). Odpověz řádkem ${IDEAS_MARK} a pod ním JSON pole objektů:\n[{"title":"…","desc":"…","series":"…","diff":1-5,"hook":"co říkám","hookVisual":"co je vidět","hookText":"text na obrazovce","body":"odstavce oddělené prázdným řádkem","cta":"…"}]`,
     '# Téma\n'].filter(Boolean).join('\n\n');
 }
 function ideaText(i) {
@@ -1209,7 +1297,7 @@ function ideaText(i) {
       .filter(x => x[1].trim()).forEach(([l, t]) => s.push('', '## ' + l, t.trim()));
   } else {
     const p = (l, x) => { if ((x.say + x.see).trim()) s.push('', `[${l}]`, x.say.trim(), x.see.trim() ? '(obraz: ' + x.see.trim() + ')' : ''); };
-    p('Hook', i.sc.hook); i.sc.body.forEach((x, n) => p('Tělo ' + (n + 1), x)); p('Závěr', i.sc.end);
+    p('Hook', i.sc.hook); if ((i.sc.hook.txt || '').trim()) s.push('(text: ' + i.sc.hook.txt.trim() + ')'); i.sc.body.forEach((x, n) => p('Tělo ' + (n + 1), x)); p('Závěr', i.sc.end);
   }
   if (i.note.trim()) s.push('', i.note.trim());
   return s.filter(x => x !== '').join('\n');
@@ -1241,6 +1329,11 @@ addEventListener('popstate', () => {
 function flashSaved() { const s = $('#saved'); if (s) { s.textContent = 'Uloženo'; clearTimeout(s._t); s._t = setTimeout(() => s.textContent = '', 1400); } }
 const touch = () => { cur.updated = Date.now(); save(); };
 const dateBtn = (i, k, label) => `<button class="dbtn ${i[k] ? 'set' : ''}" data-dk="${k}"><span>${label}</span><b>${i[k] ? relDate(i[k]) : '—'}</b></button>`;
+// hook musí fungovat na zvuk, obraz i jako psaný text
+const HOOK3 = [['say', 'Zvukový', 'Co říkám / co je slyšet'], ['see', 'Vizuální', 'Co je vidět – první záběr'], ['txt', 'Psaný', 'Text na obrazovce']];
+const hookChecks = h => `<div class="h3c">${HOOK3.map(([k, l]) => `<span class="${(h[k] || '').trim() ? 'ok' : ''}">${l}</span>`).join('')}</div>`;
+const hookHTML = h => `<div class="part hook3" data-pk="hook"><div class="ph"><span>Hook – první vteřiny</span><span class="sp"></span>${hookChecks(h)}</div>
+  ${HOOK3.map(([k, l, ph]) => `<label class="hl">${l}</label><textarea data-pf="${k}" rows="1" placeholder="${ph}">${esc(h[k] || '')}</textarea>`).join('')}</div>`;
 const partHTML = (p, key, label, rm) => `<div class="part" data-pk="${key}"><div class="ph"><span>${label}</span>${rm ? `<span class="sp"></span><button class="ico" data-prm>${I.x}</button>` : ''}</div>
   <textarea data-pf="say" rows="2" placeholder="Co říkám">${esc(p.say)}</textarea>
   <textarea data-pf="see" rows="1" class="see" placeholder="Co je vidět – záběr, text na obrazovce">${esc(p.see)}</textarea></div>`;
@@ -1267,7 +1360,7 @@ function renderEditor() {
       <h2>Plán</h2>
       <div class="dgrid">${dateBtn(i, 'dScript', 'Napsat scénář')}${dateBtn(i, 'shoot', 'Natočit')}${dateBtn(i, 'dEdit', 'Sestříhat')}${dateBtn(i, 'date', 'Vydat')}</div>
       ${i.kind === 'short' ? `
-        <h2>Hook</h2>${partHTML(i.sc.hook, 'hook', 'Hook – první vteřiny')}
+        <h2>Hook</h2>${hookHTML(i.sc.hook)}
         <h2>Tělo</h2>${i.sc.body.map((p, n) => partHTML(p, 'b' + n, 'Část ' + (n + 1), true)).join('')}
         <button class="btn sm" id="addpart" style="margin-top:8px">+ Přidat část</button>
         <h2>Závěr</h2>${partHTML(i.sc.end, 'end', 'Závěr / výzva')}` : `
@@ -1322,7 +1415,7 @@ function bindEditor() {
   $$('[data-dk]', ed).forEach(b => b.onclick = () => pickDate(i, b.dataset.dk, renderEditor));
   $$('[data-pk]', ed).forEach(box => {
     const k = box.dataset.pk, p = k === 'hook' ? i.sc.hook : k === 'end' ? i.sc.end : i.sc.body[+k.slice(1)];
-    $$('[data-pf]', box).forEach(el => el.oninput = () => { p[el.dataset.pf] = el.value; touch(); updStats(); });
+    $$('[data-pf]', box).forEach(el => el.oninput = () => { p[el.dataset.pf] = el.value; touch(); updStats(); if (k === 'hook') $('.h3c', box).outerHTML = hookChecks(p); });
     const rm = $('[data-prm]', box); if (rm) rm.onclick = () => { if ((p.say + p.see).trim() && !confirm('Smazat tuhle část?')) return; i.sc.body.splice(+k.slice(1), 1); touch(); renderEditor(); };
   });
   const ap = $('#addpart'); if (ap) ap.onclick = () => { i.sc.body.push({ id: uid(), say: '', see: '' }); touch(); renderEditor(); const l = $$('[data-pk^=b] [data-pf=say]', ed); l[l.length - 1].focus(); };
