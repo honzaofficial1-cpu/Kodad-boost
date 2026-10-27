@@ -1146,16 +1146,16 @@ function renderRb() {
   rbs().forEach(r => { const k = r.author.trim().toLowerCase() || '?'; (groups[k] = groups[k] || []).push(r); });
   const list = Object.values(groups).sort((a, b) => Math.max(...b.map(x => x.created)) - Math.max(...a.map(x => x.created)));
   $('#view').innerHTML = `
-    <div class="set"><p><b>Pravidlo 3×:</b> najdi autora a 3 jeho videa, která mají aspoň 3× víc zhlédnutí, než má sledujících. U každého si rozepiš, proč fungovalo – hlavně hook. Pak zkopíruj formát + hook.</p></div>
+    <div class="set"><p><b>Pravidlo 3×:</b> u autora hledej videa, která mají aspoň 3× víc zhlédnutí, než má sledujících – klidně všechna. U každého si rozepiš, proč fungovalo – hlavně hook. Pak zkopíruj formát + hook.</p></div>
     <button class="btn full" id="rbadd" style="margin-top:12px">+ Nový rozbor</button>
     ${list.length ? `<div class="chlist">${list.map(g => {
       const a = g[0].author || 'Bez autora', ok = g.filter(r => ratio(r) >= 3).length, subs = authorSubs(a);
-      return `<div class="chcard rbcard"><div class="chh"><b>${esc(a)}</b><span class="rbn ${ok >= 3 ? 'ok' : ''}">${Math.min(ok, 3)}/3</span></div>
+      return `<div class="chcard rbcard"><div class="chh"><b>${esc(a)}</b><span class="rbn ${ok ? 'ok' : ''}">${ok} ${plural(ok, 'splňuje', 'splňují', 'splňuje')} 3×</span></div>
         ${subs ? `<small style="margin-top:2px">${fmtN(subs)} sledujících</small>` : ''}
         ${g.sort((x, y) => x.created - y.created).map(r => `<div class="rbrow" data-rb="${r.id}">${ratioHTML(r)}<span class="tx">${esc(r.why.split('\n')[0] || r.hook.say || r.hook.txt || linkPlat(r.url) || 'Video')}</span><small>${fmtN(r.views)}</small></div>`).join('')}
-        ${g.length < 3 ? `<button class="btn sm ghostbtn" style="margin-top:6px" data-rbmore="${esc(a)}">+ další video</button>` : ''}</div>`;
+        <button class="btn sm ghostbtn" style="margin-top:6px" data-rbmore="${esc(a)}">+ další video</button></div>`;
     }).join('')}</div>`
-    : '<div class="empty"><b>Rozbory videí</b>Najdi autora, jeho video s 3× víc zhlédnutími, než má sledujících, a rozepiš si, proč fungovalo.</div>'}`;
+    : '<div class="empty"><b>Rozbory videí</b>Najdi autora, jeho videa s 3× víc zhlédnutími, než má sledujících, a rozepiš si, proč fungovalo.</div>'}`;
   $('#rbadd').onclick = () => rbSheet();
   $$('[data-rb]').forEach(el => el.onclick = () => rbSheet(db.insp.find(x => x.id === el.dataset.rb)));
   $$('[data-rbmore]').forEach(b => b.onclick = () => rbSheet(null, b.dataset.rbmore));
