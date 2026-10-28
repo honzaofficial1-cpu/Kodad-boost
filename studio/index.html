@@ -592,6 +592,35 @@ h2.sh::before{content:'';display:inline-block;width:8px;height:8px;border-radius
 .nextwk{display:block;width:100%;text-align:left;font:inherit;cursor:pointer;margin-bottom:12px}
 .undo{display:flex;align-items:center;gap:8px;background:var(--ink);color:#fff;border-radius:12px;padding:9px 14px;margin-bottom:10px;font-size:14px}
 .undo button{margin-left:auto;background:none;border:0;color:#FFB27A;font:inherit;font-weight:700;cursor:pointer}
+/* napsat týden najednou */
+.wbtns{display:flex;gap:8px;margin-top:12px}
+.wbtns .btn{flex:1}
+#modal .box.wwbox{max-width:620px;max-height:92dvh}
+.ww-day{border-top:1px solid var(--line);padding:12px 0 4px}
+.ww-day:first-of-type{border-top:0;padding-top:4px}
+.ww-dh{display:flex;align-items:baseline;gap:8px;margin:0 2px 8px}
+.ww-dh b{font-size:17px;letter-spacing:-.01em}
+.ww-dh span{font-size:13px;color:var(--tx3)}
+.ww-dh .ww-ev{font-size:12px;font-weight:600;padding:2px 8px;border-radius:99px;background:#EFE9FB;color:#5B3BB0}
+.ww-day.tod .ww-dh b{color:var(--brand)}
+.ww-f{display:grid;grid-template-columns:62px 1fr;gap:8px;align-items:start;margin-bottom:8px}
+.ww-f>span{font-size:12.5px;font-weight:700;padding-top:12px;text-transform:uppercase;letter-spacing:.03em}
+.ww-f.sh>span{color:#9A5B12}
+.ww-f.pub>span{color:var(--link)}
+.ww-f textarea{min-height:44px}
+.ww-sum{position:sticky;bottom:calc(-16px - var(--safe-b));background:var(--bg);border-top:1px solid var(--line);margin:8px -4px 0;padding:10px 4px calc(12px + var(--safe-b))}
+.ww-sum p{margin:0 2px 8px;font-size:13.5px;color:var(--tx2)}
+.ww-sum p b{color:var(--ink)}
+.ww-sum p.new b{color:var(--link)}
+.ww-pool{margin:6px 0 10px}
+.ww-pool .chips{flex-wrap:wrap;overflow:visible;max-height:132px;overflow-y:auto}
+.ww-pool .chip{cursor:pointer;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* náhled importu */
+.imp-sec{margin:12px 0 0}
+.imp-sec h4{margin:0 2px 6px;font-size:13px;color:var(--tx3);font-weight:700}
+.imp-sec ul{margin:0;padding:0 2px 0 18px;font-size:14.5px}
+.imp-sec li{margin:2px 0}
+.imp-sec li small{color:var(--tx3)}
 .stack{display:grid;gap:8px}
 .serchips{display:flex;gap:6px;overflow-x:auto;padding:2px 16px 12px;margin:0 -16px;scrollbar-width:none}
 .serchips::-webkit-scrollbar{display:none}
@@ -1001,7 +1030,8 @@ function renderHome() {
     ${ws === c0 && wdOf(t) >= 5 ? '<button class="focus soft nextwk" id="nextwk"><span class="k">Víkend</span><div class="ft2">Naplánuj příští týden →</div></button>' : ''}
     ${ui.undo ? '<div class="undo">Naplánováno<button id="undo">Vrátit</button></div>' : ''}
     <div class="week">${[...Array(7)].map((_, n) => weekDayHTML(addDays(ws, n))).join('')}</div>
-    ${ws >= c0 && free.length && wp.length < tg ? '<button class="btn pri full" id="auto" style="margin-top:12px">Naplánuj za mě</button>' : ''}
+    <div class="wbtns"><button class="btn pri" id="wwrite">Napsat týden</button><button class="btn" id="wpaste">Vložit od Clauda</button></div>
+    ${ws >= c0 && free.length && wp.length < tg ? '<button class="btn full" id="auto" style="margin-top:8px">Naplánuj za mě</button>' : ''}
     ${sug.length ? `<h2>Návrhy</h2><div class="list">${sug.map(x => x.i
       ? irow(`<b>${esc(x.i.title)}</b>`, esc(x.why), `<button class="btn xs" data-sadd="${x.i.id}">→ ${DSHORT[wdOf(free[0])]}</button>`, `data-open="${x.i.id}"`)
       : irow(`<b>${esc(x.miss)}</b>`, x.why, `<button class="btn xs" data-snew="${esc(x.miss)}">+ Nápad</button>`)).join('')}</div>` : ''}
@@ -1015,6 +1045,8 @@ function renderHome() {
   const wn = $('#wnow'); if (wn) wn.onclick = () => { ui.wk = c0; render(); };
   const nw = $('#nextwk'); if (nw) nw.onclick = () => mv(1);
   const au = $('#auto'); if (au) au.onclick = () => autoPlan(ws);
+  $('#wwrite').onclick = () => writeWeekSheet(ws);
+  $('#wpaste').onclick = () => pasteIdeas();
   const un = $('#undo'); if (un) un.onclick = () => { ui.undo.forEach(s => { const i = byId(s.id); if (i) { i.date = s.date; i.shoot = s.shoot; i.updated = Date.now(); } }); ui.undo = null; save(true); render(); toast('Vráceno'); };
   $('#fab').onclick = () => newIdeaSheet();
   $$('[data-wd]').forEach(r => r.onclick = e => { if (e.target.closest('button')) return; if (r.dataset.wd >= t) planDaySheet(r.dataset.wd); });
@@ -1055,6 +1087,81 @@ function shootSheet(d) {
     <button class="btn full" id="shmv" style="margin-top:12px">Přesunout natáčení</button>`, m => {
     bindEv(m);
     $('#shmv', m).onclick = () => { const tmp = { title: videos(l.length), shoot: d }; pickDate(tmp, 'shoot', () => { l.forEach(i => { i.shoot = tmp.shoot; i.updated = Date.now(); }); save(true); render(); }); };
+  });
+}
+
+// ================= NAPSAT TÝDEN NAJEDNOU =================
+// klíč pro porovnání názvů: bez diakritiky, malá písmena, bez interpunkce
+const tkey = s => String(s || '').normalize('NFD').replace(/\p{M}/gu, '').toLowerCase().replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
+// najde existující video podle názvu – přednost má nevydané a naposledy upravené
+function findByTitle(title) {
+  const k = tkey(title); if (!k) return null;
+  const l = db.ideas.filter(i => tkey(i.title) === k);
+  return l.sort((a, b) => (a.status === 'done') - (b.status === 'done') || b.updated - a.updated)[0] || null;
+}
+// řádek „Název #série“ → { title, series }
+function parseLine(line) {
+  let t = line.replace(/^\s*(?:[-•*–]|\[[ x]\])\s+/i, '').replace(/^✓\s*/, '').trim(), series = '';
+  const m = /\s#([^#]+)$/.exec(t);
+  if (m) {
+    const want = tkey(m[1]);
+    const hit = seriesList().find(s => tkey(s.replace(/[^\p{L}\p{N} ]/gu, '')).startsWith(want));
+    if (hit) { series = hit; t = t.slice(0, m.index).trim(); }
+  }
+  return { title: t.slice(0, 140), series };
+}
+const wwLines = v => String(v || '').split('\n').map(parseLine).filter(x => x.title);
+function writeWeekSheet(ws) {
+  const days = [...Array(7)].map((_, n) => addDays(ws, n)), t = today(), we = days[6];
+  const inWk = (i, k) => i[k] >= ws && i[k] <= we;
+  const val = (d, k) => db.ideas.filter(i => i[k] === d).sort((a, b) => a.created - b.created).map(i => i.title).join('\n');
+  const pool = () => db.ideas.filter(i => i.status !== 'done' && !i.date && i.title.trim()).sort((a, b) => SI(b.status) - SI(a.status) || b.updated - a.updated);
+  const wkLabel = `${fmtDate(ws)} – ${fmtDate(we)}`;
+  openModal(`<h3>Napsat týden <span class="muted" style="font-weight:500;font-size:15px">${wkLabel}</span></h3>
+    <p class="muted" style="margin:-6px 2px 10px;font-size:14px">Každý řádek = jedno video. Napiš název, který už máš, a Studio ho najde. Nový název založí nové video.</p>
+    ${pool().length ? `<div class="ww-pool"><label class="l">Nápady bez data – klepni a vloží se do posledního pole</label><div class="chips">${pool().map(i => `<button type="button" class="chip" data-wp="${i.id}">${esc(i.title)}</button>`).join('')}</div></div>` : ''}
+    ${days.map(d => `<div class="ww-day ${d === t ? 'tod' : ''}" data-wwd="${d}">
+      <div class="ww-dh"><b>${DAYN[wdOf(d)]}</b><span>${fmtDate(d)}</span>${evOn(d).map(e => `<span class="ww-ev">${esc(e.name)}</span>`).join('')}</div>
+      <label class="ww-f sh"><span>Natočit</span><textarea rows="1" data-ww="shoot" placeholder="${shootWd().includes(wdOf(d)) ? 'Natáčecí den' : ''}">${esc(val(d, 'shoot'))}</textarea></label>
+      <label class="ww-f pub"><span>Vydat</span><textarea rows="1" data-ww="date">${esc(val(d, 'date'))}</textarea></label>
+    </div>`).join('')}
+    <div class="ww-sum"><p id="wwinfo"></p><button class="btn pri full" id="wwsave">Uložit týden</button></div>`, m => {
+    m.querySelector('.box').classList.add('wwbox');
+    let last = null;
+    const fields = () => $$('[data-ww]', m);
+    const read = () => fields().map(el => ({ d: el.closest('[data-wwd]').dataset.wwd, k: el.dataset.ww, lines: wwLines(el.value) }));
+    const info = () => {
+      const all = read().flatMap(f => f.lines), keys = new Set(), fresh = [];
+      all.forEach(x => { const k = tkey(x.title); if (keys.has(k)) return; keys.add(k); if (!findByTitle(x.title)) fresh.push(x.title); });
+      $('#wwinfo', m).innerHTML = !keys.size ? 'Zatím nic.' : `<b>${videos(keys.size)}</b> v týdnu` + (fresh.length ? `<br><span class="new">Nová: <b>${fresh.map(esc).join(', ')}</b></span><br><small>Je to nové video? Pokud ne, oprav název podle toho, co už máš.</small>` : ' · všechna už máš v nápadech');
+    };
+    fields().forEach(el => { el.addEventListener('focus', () => last = el); el.addEventListener('input', info); });
+    $$('[data-wp]', m).forEach(b => b.onclick = e => {
+      e.preventDefault();
+      const el = last || $('[data-ww="date"]', m), i = byId(b.dataset.wp); if (!i) return;
+      el.value = (el.value.trim() ? el.value.replace(/\s+$/, '') + '\n' : '') + i.title; grow(el); el.focus(); info();
+    });
+    info();
+    $('#wwsave', m).onclick = () => {
+      const made = {}, got = { shoot: new Set(), date: new Set() };
+      let nNew = 0;
+      const pick = x => {
+        const k = tkey(x.title);
+        let i = made[k] || findByTitle(x.title);
+        if (!i) { i = newIdea(x.title); db.ideas.unshift(i); made[k] = i; nNew++; }
+        else made[k] = i;
+        if (x.series && !i.series) i.series = x.series;
+        return i;
+      };
+      read().forEach(f => f.lines.forEach(x => { const i = pick(x); i[f.k] = f.d; i.updated = Date.now(); got[f.k].add(i.id); }));
+      // co z týdne zmizelo, ztratí datum (vydaná videa zůstanou)
+      db.ideas.forEach(i => ['shoot', 'date'].forEach(k => {
+        if (inWk(i, k) && !got[k].has(i.id) && !(k === 'date' && i.status === 'done')) { i[k] = ''; i.updated = Date.now(); }
+      }));
+      save(true); closeModal(); render();
+      const n = got.shoot.size + got.date.size;
+      toast(n ? `Týden uložen${nNew ? ` · ${nNew} ${plural(nNew, 'nové video', 'nová videa', 'nových videí')}` : ''}` : 'Týden je prázdný');
+    };
   });
 }
 
@@ -1189,39 +1296,104 @@ function pickDate(i, field, after, month) {
   });
 }
 
-// vložení nápadů ze Clauda: řádek STUDIO-NAPADY a za ním JSON pole
+// vložení od Clauda: řádek STUDIO-NAPADY a za ním JSON
+//  – pole videí: [{ … }]
+//  – nebo objekt: { "videa": [ … ], "ukoly": [ … ], "smazat": ["id", …] }
+// video s "id" (nebo se stejným názvem) se upraví, jinak se založí nové
 const IDEAS_MARK = 'STUDIO-NAPADY';
 function parseIdeasPaste(text) {
-  const k = String(text || '').indexOf(IDEAS_MARK); if (k < 0) return null;
-  const rest = text.slice(k + IDEAS_MARK.length), a = rest.indexOf('['), b = rest.lastIndexOf(']');
-  if (a < 0 || b < a) return null;
-  try { const arr = JSON.parse(rest.slice(a, b + 1)); return Array.isArray(arr) ? arr : null; } catch (e) { return null; }
+  text = String(text || '');
+  const k = text.indexOf(IDEAS_MARK); if (k < 0) return null;
+  const rest = text.slice(k + IDEAS_MARK.length).replace(/```(json)?/g, '');
+  const a = rest.search(/[\[{]/); if (a < 0) return null;
+  const close = rest[a] === '[' ? ']' : '}', b = rest.lastIndexOf(close); if (b < a) return null;
+  try {
+    const o = JSON.parse(rest.slice(a, b + 1));
+    if (Array.isArray(o)) return { videa: o, ukoly: [], smazat: [] };
+    if (o && typeof o === 'object') return { videa: Array.isArray(o.videa || o.ideas) ? (o.videa || o.ideas) : [], ukoly: Array.isArray(o.ukoly || o.tasks) ? (o.ukoly || o.tasks) : [], smazat: Array.isArray(o.smazat) ? o.smazat : [] };
+  } catch (e) {}
+  return null;
 }
-function addPastedIdeas(text) {
+const isDay = v => /^\d{4}-\d{2}-\d{2}$/.test(v);
+// připraví změny, ale ještě nic nezapíše (kvůli náhledu)
+function planPaste(p) {
   const str = v => typeof v === 'string' ? v.trim() : '';
-  const list = (parseIdeasPaste(text) || []).filter(o => o && typeof o === 'object' && str(o.title)).map(o => {
-    const it = newIdea(str(o.title).slice(0, 140), o.kind === 'long' ? 'long' : 'short');
-    it.desc = str(o.desc) || str(o.description); it.note = str(o.note); it.series = str(o.series); it.link = str(o.link);
-    it.sc.hook.say = str(o.hook); it.sc.hook.see = str(o.hookVisual); it.sc.hook.txt = str(o.hookText); it.sc.end.say = str(o.cta);
-    it.sc.body = str(o.body).split(/\n\s*\n/).map(x => x.trim()).filter(Boolean).map(say => ({ id: uid(), say, see: '' }));
-    const d = parseInt(o.diff || o.difficulty, 10); if (d >= 1 && d <= 5) it.diff = d;
-    return it;
+  const ops = [], seen = new Set();
+  p.videa.filter(o => o && typeof o === 'object').forEach(o => {
+    const i = (o.id && byId(String(o.id))) || (str(o.title) && findByTitle(o.title));
+    if (i) { if (!seen.has(i.id)) { seen.add(i.id); ops.push({ i, o }); } }
+    else if (str(o.title)) ops.push({ o });
   });
-  if (!list.length) { toast('Tohle nejsou nápady ze Clauda'); return false; }
-  db.ideas.unshift(...list); save(true); render();
-  toast(`Přidáno ${list.length} ${plural(list.length, 'nápad', 'nápady', 'nápadů')}`);
+  const del = p.smazat.map(id => byId(String(id))).filter(i => i && !seen.has(i.id));
+  const tasks = p.ukoly.map(x => typeof x === 'string' ? { text: x } : x).filter(x => x && str(x.text));
+  return { ops, del, tasks };
+}
+function applyIdea(i, o) {
+  const str = v => typeof v === 'string' ? v.trim() : '', has = k => Object.prototype.hasOwnProperty.call(o, k);
+  if (has('title') && str(o.title)) i.title = str(o.title).slice(0, 140);
+  ['desc', 'series', 'link', 'note'].forEach(k => { if (has(k)) i[k] = str(o[k]); });
+  if (has('description')) i.desc = str(o.description);
+  ['shoot', 'date', 'dScript', 'dEdit'].forEach(k => { if (has(k) && (o[k] === '' || isDay(o[k]))) i[k] = o[k]; });
+  if (has('status') && ST[o.status]) i.status = o.status;
+  const d = parseInt(o.diff, 10); if (d >= 1 && d <= 5) i.diff = d;
+  if (has('hook')) i.sc.hook.say = str(o.hook);
+  if (has('hookVisual')) i.sc.hook.see = str(o.hookVisual);
+  if (has('hookText')) i.sc.hook.txt = str(o.hookText);
+  if (has('body')) {
+    const b = Array.isArray(o.body) ? o.body : str(o.body).split(/\n\s*\n/);
+    i.sc.body = b.map(x => typeof x === 'string' ? { say: x.trim(), see: '' } : { say: str(x && x.say), see: str(x && x.see) }).filter(x => x.say || x.see).map(x => ({ id: uid(), ...x }));
+  }
+  if (has('cta')) i.sc.end.say = str(o.cta);
+  if (has('ctaVisual')) i.sc.end.see = str(o.ctaVisual);
+  // scénář dopsaný u nápadu posune stav na „Píšu scénář“
+  if (!has('status') && i.status === 'idea' && (has('hook') || has('body'))) i.status = 'script';
+  i.updated = Date.now();
+}
+function applyPaste(pl) {
+  let nNew = 0, nUpd = 0;
+  pl.ops.forEach(({ i, o }) => {
+    if (i) { applyIdea(i, o); nUpd++; }
+    else { const it = newIdea('', o.kind === 'long' ? 'long' : 'short'); applyIdea(it, o); db.ideas.unshift(it); nNew++; }
+  });
+  if (pl.del.length) { const ids = new Set(pl.del.map(i => i.id)); db.ideas = db.ideas.filter(i => !ids.has(i.id)); gone(...ids); }
+  pl.tasks.forEach(x => {
+    const ex = db.tasks.find(t => tkey(t.text) === tkey(x.text));
+    if (ex) { if (typeof x.done === 'boolean') ex.done = x.done; if (isDay(x.due)) ex.due = x.due; ex.updated = Date.now(); }
+    else if (x.done !== true) db.tasks.push({ id: uid(), text: String(x.text).trim(), done: false, prio: [0, 1, 2, 3].includes(x.prio) ? x.prio : 0, due: isDay(x.due) ? x.due : '', rep: '', updated: Date.now() });
+  });
+  save(true); render(); if (cur) renderEditor();
+  toast([nUpd && `Upraveno ${videos(nUpd)}`, nNew && `přidáno ${videos(nNew)}`, pl.del.length && `smazáno ${pl.del.length}`].filter(Boolean).join(' · ') || 'Hotovo');
+}
+// náhled: co se změní, a teprve pak „Použít“
+function previewPaste(text) {
+  const p = parseIdeasPaste(text);
+  if (!p) { toast('Tohle není text od Clauda pro Studio'); return false; }
+  const pl = planPaste(p);
+  if (!pl.ops.length && !pl.del.length && !pl.tasks.length) { toast('Není co vložit'); return false; }
+  const when = o => [isDay(o.shoot) && 'natočit ' + fmtDate(o.shoot), isDay(o.date) && 'vydat ' + fmtDate(o.date)].filter(Boolean).join(' · ');
+  const what = o => [('hook' in o || 'body' in o) && 'scénář', when(o)].filter(Boolean).join(' · ');
+  const upd = pl.ops.filter(x => x.i), add = pl.ops.filter(x => !x.i);
+  const li = (t, s) => `<li>${esc(t)}${s ? ` <small>${esc(s)}</small>` : ''}</li>`;
+  openModal(`<h3>Vložit od Clauda</h3>
+    ${upd.length ? `<div class="imp-sec"><h4>Upraví ${videos(upd.length)}</h4><ul>${upd.map(x => li(x.o.title || x.i.title, what(x.o))).join('')}</ul></div>` : ''}
+    ${add.length ? `<div class="imp-sec"><h4>Přidá ${videos(add.length)}</h4><ul>${add.map(x => li(x.o.title, what(x.o))).join('')}</ul></div>` : ''}
+    ${pl.del.length ? `<div class="imp-sec"><h4>Smaže (duplikáty)</h4><ul>${pl.del.map(i => li(i.title || 'Bez názvu')).join('')}</ul></div>` : ''}
+    ${pl.tasks.length ? `<div class="imp-sec"><h4>Úkoly</h4><ul>${pl.tasks.map(x => li(x.text, x.done === true ? 'odškrtne' : '')).join('')}</ul></div>` : ''}
+    <button class="btn pri full" id="impok" style="margin-top:16px">Použít</button>`, m => {
+    $('#impok', m).onclick = () => { closeModal(); applyPaste(pl); };
+  });
   return true;
 }
 async function pasteIdeas() {
   let text = '';
   try { text = await navigator.clipboard.readText(); } catch (e) { text = ''; }
-  if (text && text.trim()) { addPastedIdeas(text); return; }
+  if (text && text.includes(IDEAS_MARK)) { previewPaste(text); return; }
   // schránku nejde přečíst – text se vloží ručně
-  openModal(`<h3>Vložit nápady</h3><p class="muted" style="margin:-6px 0 10px">Vlož sem text od Clauda (začíná řádkem ${IDEAS_MARK}).</p>
-    <textarea id="pastet" rows="8" placeholder="${IDEAS_MARK}&#10;[{&quot;title&quot;: …}]"></textarea>
-    <button class="btn pri full" id="pasteadd" style="margin-top:10px">Přidat</button>`, m => {
+  openModal(`<h3>Vložit od Clauda</h3><p class="muted" style="margin:-6px 0 10px">Vlož sem text od Clauda (začíná řádkem ${IDEAS_MARK}).</p>
+    <textarea id="pastet" rows="8" placeholder="${IDEAS_MARK}&#10;{ &quot;videa&quot;: […] }"></textarea>
+    <button class="btn pri full" id="pasteadd" style="margin-top:10px">Pokračovat</button>`, m => {
     setTimeout(() => { const el = $('#pastet', m); el && el.focus(); }, 50);
-    $('#pasteadd', m).onclick = () => { if (addPastedIdeas($('#pastet', m).value)) closeModal(); };
+    $('#pasteadd', m).onclick = () => previewPaste($('#pastet', m).value);
   });
 }
 
@@ -1532,7 +1704,7 @@ function renderMore() {
     <h2>Synchronizace</h2>
     <div class="set" id="syncbox">${syncBoxHTML()}</div>
     <h2>Záloha</h2>
-    <div class="set"><div class="row"><button class="btn" id="exp">Stáhnout zálohu</button><button class="btn" id="imp">Nahrát zálohu</button><button class="btn" id="pasteideas">Vložit nápady</button><input type="file" id="impf" accept=".json,application/json" hidden></div></div>
+    <div class="set"><div class="row"><button class="btn" id="exp">Stáhnout zálohu</button><button class="btn" id="imp">Nahrát zálohu</button><button class="btn" id="pasteideas">Vložit od Clauda</button><input type="file" id="impf" accept=".json,application/json" hidden></div></div>
     <div class="set"><p>Všechno jako text – do Poznámek nebo pro Clauda.</p><button class="btn" id="expt">Kopírovat vše jako text</button></div>
     <p class="muted" style="text-align:center">${db.ideas.length} nápadů · ${db.channels.length} kanálů · ${(size / 1024).toFixed(1)} kB</p>
     <div class="set" style="margin-top:20px"><button class="btn danger" id="wipe">Smazat všechna data</button></div>`;
@@ -1597,11 +1769,11 @@ function renderMore() {
     db = blank(); db.deleted = del; db.setU = Date.now(); save(true); render();
   };
 }
-// text pro Clauda: kontext + rozvrh + formát, který umí „Vložit nápady“
+// text pro Clauda: kontext + rozvrh + formát, který umí „Vložit od Clauda“
 function claudePrompt() {
   const sch = db.schedule.filter(s => s.series).map(s => `${s.per}× ${s.series}`).join(', ');
   return [db.style.trim() ? '# Můj kontext\n' + db.style.trim() : '', sch ? '# Týdenní rozvrh\n' + sch : '',
-    `# Úkol\nVymysli mi nápady na krátká videa (téma připíšu níž). Odpověz řádkem ${IDEAS_MARK} a pod ním JSON pole objektů:\n[{"title":"…","desc":"…","series":"…","diff":1-5,"hook":"co říkám","hookVisual":"co je vidět","hookText":"text na obrazovce","body":"odstavce oddělené prázdným řádkem","cta":"…"}]`,
+    `# Úkol\nVymysli mi nápady na krátká videa (téma připíšu níž). Odpověz řádkem ${IDEAS_MARK} a pod ním JSON:\n{"videa":[{"title":"…","desc":"…","series":"…","diff":1-5,"hook":"co říkám","hookVisual":"co je vidět","hookText":"text na obrazovce","body":"odstavce oddělené prázdným řádkem","cta":"…","shoot":"RRRR-MM-DD (natočit, nepovinné)","date":"RRRR-MM-DD (vydat, nepovinné)"}]}`,
     '# Téma\n'].filter(Boolean).join('\n\n');
 }
 function ideaText(i) {
