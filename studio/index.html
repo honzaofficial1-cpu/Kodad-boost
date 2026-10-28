@@ -1516,6 +1516,8 @@ function renderMore() {
     <div class="set"><p>Tvůj brand a plán: témata, cíle, jak mluvíš, co kopírovat. Ať to máš na očích a Claude to ví.</p>
       <textarea id="ctx" rows="6" placeholder="Např. Témata: gym, vaření, osobní rozvoj…&#10;Cíl: 7 shortů + 1 YouTube týdně&#10;Mluvit jako s kámošem">${esc(db.style)}</textarea>
       <button class="btn sm" id="ctxcl" style="margin-top:8px">Zkopírovat pro Clauda</button></div>
+    <h2>Plán</h2>
+    <div class="set"><p>Vyhodí z kalendáře všechno naplánované a vrátí to do nápadů. Scénáře i odkazy zůstanou, vydaná videa taky.</p><button class="btn" id="clrplan">Vyčistit kalendář</button></div>
     <h2>Natáčecí den</h2>
     <div class="set"><p>Kdy točíš najednou. „Naplánuj za mě“ sem dá natáčení.</p><div class="chips wrapc">${DSHORT.map((d, n) => `<button class="chip ${shootWd().includes(n) ? 'on' : ''}" data-swd="${n}">${d}</button>`).join('')}</div></div>
     <h2>Rozvrh</h2>
@@ -1539,6 +1541,17 @@ function renderMore() {
   $('#ctx').oninput = e => { db.style = e.target.value; db.setU = Date.now(); save(); };
   $('#ctxcl').onclick = () => copy(claudePrompt(), 'Zkopírováno – vlož Claudovi a připiš téma');
   $$('[data-swd]').forEach(b => b.onclick = () => { const n = +b.dataset.swd, s = new Set(shootWd()); s.has(n) ? s.delete(n) : s.add(n); if (!s.size) return toast('Nech aspoň jeden den'); db.shootWd = [...s].sort(); db.setU = Date.now(); save(true); render(); });
+  $('#clrplan').onclick = () => {
+    const l = db.ideas.filter(i => i.status !== 'done' || i.variants.some(v => !v.done && v.date));
+    if (!l.length) return toast('Kalendář je prázdný');
+    if (!confirm(`Vrátit ${videos(l.length)} do nápadů a smazat jejich data v kalendáři?`)) return;
+    l.forEach(i => {
+      if (i.status !== 'done') { i.date = i.shoot = i.dScript = i.dEdit = ''; i.status = 'idea'; }
+      i.variants.forEach(v => { if (!v.done) v.date = ''; });
+      i.updated = Date.now();
+    });
+    save(true); toast(`Hotovo – ${videos(l.length)} v nápadech`); render();
+  };
   const touchS = s => { s.updated = Date.now(); save(); };
   $$('[data-sch]').forEach(row => {
     const s = db.schedule.find(x => x.id === row.dataset.sch);
