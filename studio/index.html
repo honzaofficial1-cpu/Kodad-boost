@@ -566,6 +566,17 @@ body.wide main.wrap,body.wide .top .wrap{max-width:1100px}
 .schr select{width:76px;flex:none;padding:9px 8px}
 .pr.empty{min-height:36px}
 .pr.empty .pw.add{height:30px;font-size:13px;padding:0 10px}
+
+/* co se stalo? */
+.row.ci{align-items:flex-start}
+.row.ci .lbl{color:var(--bad)}
+.row.ci .lbl.s{color:var(--bad)}
+.cib{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.row.k-lateShoot .lbl{color:var(--bad)}
+/* větší dotyková plocha malých tlačítek (vzhled beze změny) */
+.tick,.vchip>button,.ico.sm{position:relative}
+.tick::after,.vchip>button::after{content:'';position:absolute;inset:-9px}
+.ico.sm::after{content:'';position:absolute;inset:-6px}
 </style>
 </head>
 <body>
@@ -928,7 +939,8 @@ function todayItems() {
   db.ideas.forEach(i => {
     if (i.status !== 'done' && i.date && i.date < t) out.push({ k: 'late', i });
     else if (i.status !== 'done' && i.date === t) out.push({ k: 'pub', i });
-    if (SI(i.status) < SI('shot') && i.shoot && i.shoot <= t) out.push({ k: 'shoot', i });
+    if (SI(i.status) < SI('shot') && i.shoot && i.shoot < t) out.push({ k: 'lateShoot', i });
+    else if (SI(i.status) < SI('shot') && i.shoot === t) out.push({ k: 'shoot', i });
     const soon = (i.shoot && i.shoot <= addDays(t, 2)) || (i.date && i.date <= addDays(t, 3));
     if (i.status === 'idea' && soon && !(i.shoot && i.shoot <= t)) out.push({ k: 'write', i });
     if (i.status === 'done' && i.date) {
@@ -937,10 +949,10 @@ function todayItems() {
     }
   });
   [t, addDays(t, 1)].forEach(d => slotsOn(d).forEach(s => { if (!slotVids(d, s.part).length) out.push({ k: 'slot', s, d }); }));
-  const ord = { late: 0, slot: 1, shoot: 2, write: 3, pub: 4, n48: 5, n7: 6 };
+  const ord = { late: 0, lateShoot: 0, slot: 1, shoot: 2, write: 3, pub: 4, n48: 5, n7: 6 };
   return out.sort((a, b) => ord[a.k] - ord[b.k]);
 }
-const LBL = { late: 'Mělo vyjít', pub: 'Vydat', shoot: 'Natočit', write: 'Dopsat scénář', n48: 'Čísla po 48 h', n7: 'Čísla po 7 dnech' };
+const LBL = { late: 'Mělo vyjít', lateShoot: 'Mělo se natočit', pub: 'Vydat', shoot: 'Natočit', write: 'Dopsat scénář', n48: 'Čísla po 48 h', n7: 'Čísla po 7 dnech' };
 function itemRow(x) {
   if (x.k === 'slot') { const c = catById(slotCat(x.s));
     return `<div class="row act k-slot"><div class="rt"><span class="lbl" style="color:${c ? c.color : 'var(--bad)'}">Chybí video · ${relDate(x.d)} ${PARTS[x.s.part].s}</span><b>${c ? ab(c) + ' ' : ''}${esc(slotLabel(x.s))}</b></div><div class="btns"><button class="btn sm pri" data-fill="${x.d}|${x.s.part}">Vybrat</button></div></div>`; }
@@ -949,11 +961,12 @@ function itemRow(x) {
     late: `<button class="btn sm" data-mv="${i.id}">Přesunout</button><button class="btn sm pri" data-pub="${i.id}">Vydat</button>`,
     pub: `<button class="btn sm pri" data-pub="${i.id}">Vydat</button>`,
     shoot: `<button class="btn sm pri" data-act="shot" data-id="${i.id}">Natočeno</button>`,
+    lateShoot: `<button class="btn sm" data-mvs="${i.id}">Přesunout</button><button class="btn sm pri" data-act="shot" data-id="${i.id}">Natočeno</button>`,
     write: `<button class="btn sm" data-open="${i.id}">Psát</button>`,
     n48: `<button class="btn sm" data-num="${i.id}">Zapsat čísla</button>`,
     n7: `<button class="btn sm" data-num="${i.id}">Zapsat čísla</button>`
   }[x.k];
-  const sub = x.k === 'late' ? 'mělo vyjít ' + relDate(i.date) : x.k === 'write' ? (i.shoot ? 'natáčíš ' + relDate(i.shoot) : 'vychází ' + relDate(i.date)) : x.k.startsWith('n') ? 'vyšlo ' + relDate(i.date) : i.fmt;
+  const sub = x.k === 'late' ? 'mělo vyjít ' + relDate(i.date) : x.k === 'lateShoot' ? 'mělo se natočit ' + relDate(i.shoot) : x.k === 'write' ? (i.shoot ? 'natáčíš ' + relDate(i.shoot) : 'vychází ' + relDate(i.date)) : x.k.startsWith('n') ? 'vyšlo ' + relDate(i.date) : i.fmt;
   return `<div class="row act k-${x.k}" data-open="${i.id}"><div class="rt"><span class="lbl">${LBL[x.k]}${(x.k === 'pub' || x.k === 'late') && i.part ? ' ' + PARTS[i.part].s : ''}${catOf(i) ? ' · ' + ab(catOf(i)) : ''}</span><b>${esc(i.title)}</b>${sub ? `<small>${esc(sub)}</small>` : ''}</div><div class="btns">${btn}</div></div>`;
 }
 function bindActs(root = document) {
@@ -963,6 +976,7 @@ function bindActs(root = document) {
     if (!$('#modal').hidden && $('#modal')._refresh) $('#modal')._refresh();
   });
   $$('[data-mv]', root).forEach(b => b.onclick = e => { e.stopPropagation(); pickDate(byId(b.dataset.mv), 'date', render); });
+  $$('[data-mvs]', root).forEach(b => b.onclick = e => { e.stopPropagation(); pickDate(byId(b.dataset.mvs), 'shoot', render); });
   $$('[data-num]', root).forEach(b => b.onclick = e => { e.stopPropagation(); numsSheet(byId(b.dataset.num)); });
   $$('[data-fill]', root).forEach(b => b.onclick = e => { e.stopPropagation(); const [d, p] = b.dataset.fill.split('|'); pickVideoSheet(d, p); });
   $$('[data-pub]', root).forEach(b => b.onclick = e => { e.stopPropagation(); pubSheet(byId(b.dataset.pub)); });
@@ -1241,6 +1255,36 @@ function pubSheet(i) {
     $('#pcopy', m).onclick = () => copy(i.cap || '', i.cap ? 'Popisek zkopírován' : 'Popisek je prázdný');
     bindChk(m, i);
     $('#pdone', m).onclick = () => { setStatus(i, 'done'); closeModal(); toast('Vydáno'); };
+  }, () => render());
+}
+
+// ================= CO SE STALO? (zpožděné termíny) =================
+// když něco mělo vyjít nebo se natočit a není to odškrtnuté, appka se jednou denně zeptá
+const overdue = () => { const t = today(), l = [];
+  db.ideas.forEach(i => {
+    if (i.status !== 'done' && i.date && i.date < t) l.push({ i, k: 'date' });
+    if (SI(i.status) < SI('shot') && i.shoot && i.shoot < t) l.push({ i, k: 'shoot' });
+  });
+  return l.sort((a, b) => a.i[a.k] < b.i[b.k] ? -1 : 1);
+};
+function checkIn(force) {
+  if (!force) {
+    let last = ''; try { last = localStorage.getItem('studio.checkin') || ''; } catch (e) {}
+    if (last === today() || cur || !$('#modal').hidden || !$('#prompter').hidden) return;
+  }
+  const l = overdue();
+  if (!l.length) { if (force) { closeModal(); render(); toast('Vše vyřešeno'); } return; }
+  try { localStorage.setItem('studio.checkin', today()); } catch (e) {}
+  openModal(`<h3>Co se stalo?</h3><p class="muted">${l.length === 1 ? 'Tohle mělo být hotové' : `Tyhle věci (${l.length}) měly být hotové`} a není to odškrtnuté.</p>
+    <div class="list">${l.map((x, n) => `<div class="row ci" data-ci="${n}"><div class="rt">
+      <span class="lbl ${x.k === 'shoot' ? 's' : ''}">${x.k === 'date' ? 'Mělo vyjít' : 'Mělo se natočit'} ${relDate(x.i[x.k])}${x.k === 'date' && x.i.part ? ' ' + PARTS[x.i.part].s : ''}</span>
+      <b>${catOf(x.i) ? ab(catOf(x.i)) + ' ' : ''}${esc(x.i.title)}</b>
+      <div class="cib"><button class="btn sm pri" data-cy>${x.k === 'date' ? 'Vydal jsem' : 'Natočil jsem'}</button><button class="btn sm" data-cm>Přesunout</button><button class="btn sm quiet" data-cx>Zrušit termín</button></div></div></div>`).join('')}</div>`, m => {
+    $$('[data-ci]', m).forEach(r => { const x = l[+r.dataset.ci];
+      $('[data-cy]', r).onclick = () => { setStatus(x.i, x.k === 'date' ? 'done' : 'shot'); toast(x.k === 'date' ? 'Vydáno' : 'Natočeno'); checkIn(true); };
+      $('[data-cm]', r).onclick = () => pickDate(x.i, x.k, () => checkIn(true));
+      $('[data-cx]', r).onclick = () => { x.i[x.k] = ''; if (x.k === 'date') x.i.part = ''; touchV(x.i); save(true); toast('Termín zrušen – video zůstalo ve Videích'); checkIn(true); };
+    });
   }, () => render());
 }
 
@@ -2299,10 +2343,11 @@ document.addEventListener('keydown', e => {
   if ((t.match(urlRe) || []).length) { quickAdd(t); history.replaceState(null, '', location.pathname); toast('Odkaz uložen jako video'); }
   try { const raw = JSON.parse(localStorage.getItem(KEY)); if (raw && raw.v !== 5) save(true); } catch (e) {}
   go('today');
+  setTimeout(() => checkIn(), 500);
 })();
 syncNow();
 setInterval(() => { if (document.visibilityState === 'visible') syncNow(); }, 90000);
-document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') syncNow(); });
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') { syncNow(); setTimeout(() => checkIn(), 400); } });
 if ('serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).catch(() => {}));
 </script>
 </body>
