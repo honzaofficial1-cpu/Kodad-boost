@@ -483,6 +483,61 @@ body.wide main.wrap,body.wide .top .wrap{max-width:1100px}
 .row.pkd.sel{background:var(--brand-soft)}
 .row.pkd.hint2 .dl b{color:var(--ty-shoot)}
 .row.vid .rt small .cn{display:inline}
+
+/* zkratky kategorií */
+.ab{display:inline-block;font:800 11px/1 var(--fb);letter-spacing:.03em;padding:3px 6px;border-radius:5px;background:var(--cc);color:#fff;vertical-align:1px}
+.ab0{font-weight:800;font-size:.8em;letter-spacing:.03em;margin-right:5px;opacity:.85}
+.vchip.k-date.s-done .ab0{opacity:1}
+.c b{font-weight:800;font-size:.9em}
+.catrow .cn .ab{margin-right:2px}
+.abin{width:64px!important;flex:none!important;text-transform:uppercase;text-align:center;padding:11px 6px}
+/* sloty */
+.sgrid{background:var(--surf);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.sgh,.sgr{display:grid;grid-template-columns:44px repeat(3,1fr);gap:6px;align-items:stretch;padding:6px 8px}
+.sgh{padding-top:9px;padding-bottom:2px}
+.sgh span{font-size:12px;font-weight:600;color:var(--tx3);text-align:center}
+.sgr{border-top:1px solid var(--line)}
+.sgh+.sgr{border-top:0}
+.sgr.tod{background:#FFFAF6}
+.sgr.past{opacity:.55}
+.sgr .sd{display:flex;flex-direction:column;justify-content:center}
+.sgr .sd b{font:700 15px/1.1 var(--fd)}
+.sgr .sd small{font-size:12px;color:var(--tx3)}
+.sgr.tod .sd b{color:var(--brand)}
+.sc{min-height:52px;border-radius:10px;border:1.5px dashed var(--line2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:4px;overflow:hidden;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.sc i{font-style:normal;font-size:12.5px;color:var(--tx3)}
+.sc.on{border:0;background:color-mix(in srgb,var(--cc) 16%,#fff)}
+.sc.on b{font:800 15px/1 var(--fd);color:color-mix(in srgb,var(--cc) 80%,#000);letter-spacing:.02em}
+.sc small{font-size:11px;line-height:1.2;color:var(--tx2);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sc small.miss{color:var(--bad)}
+.sgrid.one .sgr{grid-template-columns:repeat(3,1fr);border:0;padding:8px}
+.slot.ps .sl{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding-top:5px}
+.slot.ps .sl small{font-size:11.5px;color:var(--tx3)}
+.vchip.k-slot,.c.k-slot{background:none!important;box-shadow:inset 0 0 0 1.5px var(--cc);color:color-mix(in srgb,var(--cc) 75%,#000);border-style:dashed}
+.c.k-slot{box-shadow:none;border:1.5px dashed var(--cc);opacity:.9}
+.vchip.k-slot.fit{background:color-mix(in srgb,var(--cc) 14%,#fff)!important;font-weight:700}
+.row.pkd.fit .dl b{color:var(--brand)}
+.catpick{display:grid;gap:8px}
+.catpick button{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:var(--r);background:var(--surf);border:1.5px solid color-mix(in srgb,var(--cc,#999) 40%,#fff);text-align:left}
+.catpick button b{font:800 15px var(--fd);min-width:46px;text-align:center;padding:6px 0;border-radius:8px;background:var(--cc,#999);color:#fff}
+.catpick button span{font-size:16px;font-weight:600}
+.catpick button.on{background:color-mix(in srgb,var(--cc) 14%,#fff)}
+.catpick button.none{--cc:#9B9BA2}
+#cfmt.need button{animation:shake .35s}
+@keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.seg.parts{margin:8px 0 0}
+/* kalendář: přepínače a 2 týdny */
+.calbar{display:flex;gap:8px;margin-bottom:10px}
+.calbar .seg{flex:1;margin:0}
+.seg.sm button{height:32px;font-size:13.5px}
+.mgrid.tall .mc{min-height:150px}
+.mgrid.tall .c{-webkit-line-clamp:3}
+@media (min-width:700px){.mgrid.tall .mc{min-height:190px}}
+.row .rt b.ab,.row .lbl b.ab{display:inline-block;width:auto}
+.row .rt .vchip b,.row .rt .c b{display:inline}
+.vchip.k-slot{box-shadow:none;border:1.5px dashed var(--cc)}
+.row .rt b.ab,.row .lbl b.ab{font:800 11px/1 var(--fb);padding:3px 6px;vertical-align:1px}
+.row .rt .vchip b,.row .rt .c b{font-size:.8em;font-weight:800}
 </style>
 </head>
 <body>
@@ -584,6 +639,9 @@ const I = {
 // kategorie (co to je – podle nich barvy a rozvrh) a typy dnů
 const CAT_COLORS = ['#F26A1B', '#2F6FDB', '#1F9D57', '#8B5CF6', '#D9467A', '#C59A06', '#0E9AA7', '#6B7280'];
 const DEF_CATS = [['c-ez', 'Ez', 3, '#F26A1B'], ['c-osobni', 'Recept / osobní', 2, '#1F9D57'], ['c-odborne', 'Odborné', 2, '#2F6FDB']];
+// části dne pro vydání (sloty)
+const PARTS = { am: { n: 'Ráno', s: 'ráno' }, pm: { n: 'Odpoledne', s: 'odpo' }, ev: { n: 'Večer', s: 'večer' } };
+const PK = Object.keys(PARTS);
 const DTYPES = { shoot: { n: 'Natáčení', a: 'nat' }, edit: { n: 'Střih', a: 'stř' }, write: { n: 'Scénáře', a: 'scé' }, plan: { n: 'Plánování', a: 'plán' }, off: { n: 'Volno', a: 'vol' } };
 
 // ================= data =================
@@ -593,10 +651,10 @@ const emptyRes = () => ({ v: '', f: '' });
 function newVideo(title, fmt = '') {
   const t = Date.now();
   return { id: uid(), kind: 'short', title, fmt, link: '', status: 'idea', sc: emptySc(), cta: '', shoot: '', date: '',
-    cat: '', r48: emptyRes(), r7: emptyRes(), chapters: [], thumb: '', thumbRef: '', cap: '', drive: '', chk: {}, note: '', created: t, updated: t };
+    cat: '', part: '', r48: emptyRes(), r7: emptyRes(), chapters: [], thumb: '', thumbRef: '', cap: '', drive: '', chk: {}, note: '', created: t, updated: t };
 }
 function blank() {
-  return { v: 5, ideas: [], tasks: [], terms: [], channels: [], insp: [], pillars: [], schedule: [], cats: [], days: [], weekPlan: null, shootWd: [2], myF: 0, lists: null, fmtHidden: [], style: '', setU: 0, deleted: {},
+  return { v: 5, ideas: [], tasks: [], terms: [], channels: [], insp: [], pillars: [], schedule: [], cats: [], days: [], slots: [], weekPlan: null, shootWd: [2], myF: 0, lists: null, fmtHidden: [], style: '', setU: 0, deleted: {},
     reviews: [], events: [], series: [], hooks: [] };
 }
 const DEF_EVENTS = ['Nový rok – předsevzetí', 'Valentýn', 'Začátek léta', 'Prázdniny', 'Zpátky do rutiny', 'Halloween', 'Mikuláš', 'Vánoce', 'Silvestr'];
@@ -627,7 +685,7 @@ function norm(d, seed) {
   const o = { ...blank(), ...d };
   const raw = o.ideas || [];
   o.ideas = raw.map(normVideo);
-  ['tasks', 'terms', 'channels', 'insp', 'pillars', 'schedule', 'cats', 'days', 'reviews', 'events', 'series', 'hooks'].forEach(k => { if (!Array.isArray(o[k])) o[k] = []; });
+  ['tasks', 'terms', 'channels', 'insp', 'pillars', 'schedule', 'cats', 'days', 'slots', 'reviews', 'events', 'series', 'hooks'].forEach(k => { if (!Array.isArray(o[k])) o[k] = []; });
   o.tasks = o.tasks.map(x => ({ text: '', due: '', done: false, ...x }));
   o.schedule = o.schedule.map(s => ({ ...s, format: s.format || s.series || '' }));
   if (!Array.isArray(o.shootWd)) o.shootWd = [2];
@@ -642,7 +700,8 @@ function norm(d, seed) {
     o.cats = src.filter(([id]) => !o.deleted[id]).map(([id, name, per, color]) => ({ id, name, per, color, updated: 1 }));
     o.ideas.forEach((i, n) => { if (raw[n].cat === undefined) { const c = o.cats.find(c => lc(c.name) === lc(i.fmt)); if (c) i.cat = c.id; } });
   }
-  o.cats = o.cats.map(c => ({ name: '', per: 0, color: CAT_COLORS[0], ...c }));
+  o.cats = o.cats.map(c => ({ name: '', per: 0, color: CAT_COLORS[0], abbr: '', ...c }));
+  o.ideas.forEach(i => { if (!PARTS[i.part]) i.part = ''; });
   if (!Array.isArray(o.fmtHidden)) o.fmtHidden = [];
   o.myF = parseNum(o.myF);
   o.deleted = o.deleted || {};
@@ -705,7 +764,7 @@ const nextTerm = (days = 45) => db.terms.filter(t => t.date >= today() && daysTo
 const chkOf = (i, k) => { const l = lists(k), on = (i.chk && i.chk[k]) || []; return { l, on, n: l.filter(x => on.includes(x)).length }; };
 function weekStat(ws) {
   const we = addDays(ws, 6), inW = db.ideas.filter(i => i.date >= ws && i.date <= we);
-  const tg = db.cats.reduce((a, c) => a + (c.per || 0), 0);
+  const tg = weekTarget(ws);
   const miss = catStat(ws).filter(x => x.toPlan > 0).map(x => ({ f: x.c.name, n: x.toPlan }));
   return { done: inW.filter(i => i.status === 'done').length, planned: inW.filter(i => i.status !== 'done').length, all: inW.length, tg, miss };
 }
@@ -724,14 +783,29 @@ function setDayType(d, type) {
   save(true);
 }
 // stav týdne po kategoriích: kolik vyšlo, natočeno, v plánu a kolik ještě natočit
+const weekSlots = ws => db.slots.filter(s => s.cat && s.date >= ws && s.date <= addDays(ws, 6));
+const perOf = (c, ws) => { const sl = weekSlots(ws); return sl.length ? sl.filter(s => s.cat === c.id).length : (c.per || 0); };
+const weekTarget = ws => { const sl = weekSlots(ws); return sl.length ? sl.length : db.cats.reduce((a, c) => a + (c.per || 0), 0); };
 function catStat(ws) {
   const we = addDays(ws, 6);
-  return db.cats.filter(c => c.per > 0).map(c => {
+  return db.cats.map(c => ({ c, per: perOf(c, ws) })).filter(x => x.per > 0).map(({ c, per }) => {
     const l = db.ideas.filter(i => i.cat === c.id), inW = l.filter(i => i.date >= ws && i.date <= we);
     const done = inW.filter(i => i.status === 'done').length, ready = inW.filter(i => i.status === 'shot').length;
     const zas = l.filter(i => i.status === 'shot' && !i.date).length, planned = inW.filter(i => SI(i.status) < SI('shot')).length;
-    return { c, done, ready, zas, planned, toShoot: Math.max(0, c.per - done - ready - zas), toPlan: Math.max(0, c.per - inW.length) };
+    return { c, per, done, ready, zas, planned, toShoot: Math.max(0, per - done - ready - zas), toPlan: Math.max(0, per - inW.length) };
   });
+}
+// zkratka kategorie (EZ, REC…) a sloty
+const abbrOf = n => (String(n || '').normalize('NFD').replace(/\p{M}/gu, '').trim().split(/[\s\/,]+/)[0] || '').slice(0, 3).toUpperCase();
+const catAbbr = c => c ? (c.abbr || abbrOf(c.name)) : '';
+const catById = id => db.cats.find(c => c.id === id);
+const slotsOn = d => db.slots.filter(s => s.date === d && s.cat && catById(s.cat)).sort((a, b) => PK.indexOf(a.part) - PK.indexOf(b.part));
+const slotVids = (d, p) => db.ideas.filter(i => i.date === d && i.part === p);
+function setSlot(d, part, cat) {
+  const id = 's' + d + part, ex = db.slots.find(x => x.id === id);
+  if (!cat) { if (ex) { gone(id); db.slots = db.slots.filter(x => x !== ex); } }
+  else if (ex) { ex.cat = cat; ex.updated = Date.now(); }
+  else db.slots.push({ id, date: d, part, cat, updated: Date.now() });
 }
 
 // ================= drobnosti UI =================
@@ -760,8 +834,8 @@ const row = (main, sub, right = '', attrs = '') => `<div class="row" ${attrs}><d
 // ================= navigace =================
 let view = 'today', prevView = 'today';
 const ui = { wmode: 'write', vfmt: '', pil: '', wk: '', sel: '', month: '', showDone: false };
-try { const s = JSON.parse(localStorage.getItem('studio.ui5')) || {}; ['wmode', 'vfmt', 'pil'].forEach(k => { if (s[k] !== undefined) ui[k] = s[k]; }); } catch (e) {}
-const keepUi = () => { try { localStorage.setItem('studio.ui5', JSON.stringify({ wmode: ui.wmode, vfmt: ui.vfmt, pil: ui.pil })); } catch (e) {} };
+try { const s = JSON.parse(localStorage.getItem('studio.ui5')) || {}; ['wmode', 'vfmt', 'pil', 'calr', 'calf'].forEach(k => { if (s[k] !== undefined) ui[k] = s[k]; }); } catch (e) {}
+const keepUi = () => { try { localStorage.setItem('studio.ui5', JSON.stringify({ wmode: ui.wmode, vfmt: ui.vfmt, pil: ui.pil, calr: ui.calr, calf: ui.calf })); } catch (e) {} };
 const TITLES = { today: 'Dnes', week: 'Týden', cal: 'Kalendář', vids: 'Videa', insp: 'Inspirace', set: 'Nastavení' };
 $$('.tabs button').forEach(b => b.onclick = () => go(b.dataset.v));
 function go(v) {
@@ -798,11 +872,14 @@ function todayItems() {
       else if (i.date <= addDays(t, -7) && i.date >= addDays(t, -30) && !parseNum(i.r7.v)) out.push({ k: 'n7', i });
     }
   });
-  const ord = { late: 0, shoot: 1, write: 2, pub: 3, n48: 4, n7: 5 };
+  [t, addDays(t, 1)].forEach(d => slotsOn(d).forEach(s => { if (!slotVids(d, s.part).length) out.push({ k: 'slot', s, d }); }));
+  const ord = { late: 0, slot: 1, shoot: 2, write: 3, pub: 4, n48: 5, n7: 6 };
   return out.sort((a, b) => ord[a.k] - ord[b.k]);
 }
 const LBL = { late: 'Mělo vyjít', pub: 'Vydat', shoot: 'Natočit', write: 'Dopsat scénář', n48: 'Čísla po 48 h', n7: 'Čísla po 7 dnech' };
 function itemRow(x) {
+  if (x.k === 'slot') { const c = catById(x.s.cat);
+    return `<div class="row act k-slot"><div class="rt"><span class="lbl" style="color:${c.color}">Chybí video · ${relDate(x.d)} ${PARTS[x.s.part].s}</span><b>${ab(c)} ${esc(c.name)}</b></div><div class="btns"><button class="btn sm pri" data-fill="${x.d}|${x.s.part}|${c.id}">Vybrat</button></div></div>`; }
   const i = x.i;
   const btn = {
     late: `<button class="btn sm" data-mv="${i.id}">Přesunout</button><button class="btn sm pri" data-pub="${i.id}">Vydat</button>`,
@@ -813,7 +890,7 @@ function itemRow(x) {
     n7: `<button class="btn sm" data-num="${i.id}">Zapsat čísla</button>`
   }[x.k];
   const sub = x.k === 'late' ? 'mělo vyjít ' + relDate(i.date) : x.k === 'write' ? (i.shoot ? 'natáčíš ' + relDate(i.shoot) : 'vychází ' + relDate(i.date)) : x.k.startsWith('n') ? 'vyšlo ' + relDate(i.date) : i.fmt;
-  return `<div class="row act k-${x.k}" data-open="${i.id}"><div class="rt"><span class="lbl">${LBL[x.k]}</span><b>${esc(i.title)}</b>${sub ? `<small>${esc(sub)}</small>` : ''}</div><div class="btns">${btn}</div></div>`;
+  return `<div class="row act k-${x.k}" data-open="${i.id}"><div class="rt"><span class="lbl">${LBL[x.k]}${(x.k === 'pub' || x.k === 'late') && i.part ? ' ' + PARTS[i.part].s : ''}${catOf(i) ? ' · ' + ab(catOf(i)) : ''}</span><b>${esc(i.title)}</b>${sub ? `<small>${esc(sub)}</small>` : ''}</div><div class="btns">${btn}</div></div>`;
 }
 function bindActs(root = document) {
   $$('[data-act]', root).forEach(b => b.onclick = e => {
@@ -823,6 +900,7 @@ function bindActs(root = document) {
   });
   $$('[data-mv]', root).forEach(b => b.onclick = e => { e.stopPropagation(); pickDate(byId(b.dataset.mv), 'date', render); });
   $$('[data-num]', root).forEach(b => b.onclick = e => { e.stopPropagation(); numsSheet(byId(b.dataset.num)); });
+  $$('[data-fill]', root).forEach(b => b.onclick = e => { e.stopPropagation(); const [d, p, c] = b.dataset.fill.split('|'); assignSheet(d, 'date', { p, c }); });
   $$('[data-pub]', root).forEach(b => b.onclick = e => { e.stopPropagation(); pubSheet(byId(b.dataset.pub)); });
 }
 // co dnes dělat podle typu dne
@@ -929,6 +1007,7 @@ function catSheet(c, after, onNew) {
   const isNew = !c; let col = c ? c.color : CAT_COLORS[db.cats.length % CAT_COLORS.length];
   openModal(`<h3>${isNew ? 'Nová kategorie' : esc(c.name)}</h3>
     <input id="ctn" value="${esc(c ? c.name : '')}" placeholder="Např. Ez, Odborné, Recept / osobní" autocomplete="off">
+    <label class="l">Zkratka</label><input id="cta" value="${esc(c ? c.abbr || '' : '')}" placeholder="${esc(abbrOf(c ? c.name : '') || 'EZ')}" maxlength="4" autocomplete="off" style="width:110px;text-transform:uppercase">
     <label class="l">Barva</label><div class="swatches">${CAT_COLORS.map(x => `<button data-sw="${x}" class="${x === col ? 'on' : ''}" style="background:${x}"></button>`).join('')}</div>
     <label class="l">Kolikrát týdně</label><div class="stepper" style="width:max-content"><button data-sd="-1">−</button><b id="ctp">${c ? c.per : 1}×</b><button data-sd="1">+</button></div>
     <div class="btnrow end">${isNew ? '' : '<button class="btn danger" id="ctdel">Smazat</button>'}<span class="sp"></span><button class="btn pri" id="ctok">Uložit</button></div>`, m => {
@@ -938,11 +1017,19 @@ function catSheet(c, after, onNew) {
     $$('[data-sd]', m).forEach(b => b.onclick = () => { per = Math.max(0, Math.min(14, per + +b.dataset.sd)); $('#ctp', m).textContent = per + '×'; });
     $('#ctok', m).onclick = () => {
       const n = $('#ctn', m).value.trim(); if (!n) return toast('Napiš název');
-      const x = c || { id: uid() }; Object.assign(x, { name: n, color: col, per, updated: Date.now() });
+      const x = c || { id: uid() }; Object.assign(x, { name: n, abbr: $('#cta', m).value.trim().toUpperCase(), color: col, per, updated: Date.now() });
       if (isNew) { db.cats.push(x); onNew && onNew(x); }
       save(true); closeModal(); (after || render)();
     };
     const d = $('#ctdel', m); if (d) d.onclick = () => delCat(c, after);
+  });
+}
+// nové video: jaký je to typ (kategorie)
+function askCat(it, after) {
+  if (!it || it.cat || !db.cats.length) return;
+  openModal(`<h3>Jaký typ videa?</h3><p class="muted">${esc(it.title)}</p>
+    <div class="catpick">${db.cats.map(c => `<button data-pc="${c.id}" style="--cc:${c.color}"><b>${esc(catAbbr(c))}</b><span>${esc(c.name)}</span></button>`).join('')}</div>`, m => {
+    $$('[data-pc]', m).forEach(b => b.onclick = () => { it.cat = b.dataset.pc; touchV(it); save(true); closeModal(); (after || render)(); });
   });
 }
 // ================= RYCHLE ZAPSAT (+) =================
@@ -979,6 +1066,7 @@ function captureSheet(pre = {}) {
         const u = (v.match(urlRe) || [])[0]; if (!u) return toast('Vlož odkaz na video');
         saveLink(u, [v.replace(urlRe, '').replace(/\s+/g, ' ').trim(), note].filter(Boolean).join(' – '));
       } else {
+        if (!fmt && db.cats.length) { toast('Vyber typ videa'); const cf = $('#cfmt', m); cf.classList.add('need'); setTimeout(() => cf.classList.remove('need'), 900); return; }
         const it = quickAdd(v); if (fmt) it.cat = fmt; if (note) it.note = note; if (fmt || note) { touchV(it); save(true); }
         if (write) { closeModal(); openEditor(it.id); setTimeout(() => { const h = $('#editor [data-pk=hook] [data-pf=say]'); h && h.focus(); }, 80); return; }
       }
@@ -1077,49 +1165,84 @@ const sameFmt = (a, b) => (a || '').trim().toLowerCase() === (b || '').trim().to
 const onDay = (d, k) => db.ideas.filter(i => i[k] === d);
 const termsOn = d => db.terms.filter(t => t.date === d);
 let lastSlot = null;
+const ab = c => c ? `<b class="ab" style="--cc:${c.color}">${esc(catAbbr(c))}</b>` : '';
 // pruh na kategorii: plné = vyšlo, střední = natočeno, obrys = v plánu, prázdné = chybí
 function catBars(ws) {
   const st = catStat(ws);
-  if (!st.length) return '<p class="muted">Kategorie a kolik videí týdně nastavíš v ozubeném kole.</p>';
+  if (!st.length) return '<p class="muted">Kategorie a kolik videí týdně nastavíš v ozubeném kole – nebo si v Týdnu naplánuj sloty.</p>';
   return `<div class="cats">${st.map(s => { const a = s.done, b = a + s.ready + s.zas, c = b + s.planned;
-    return `<div class="catrow" style="--cc:${s.c.color}"><span class="cn">${esc(s.c.name)}</span><span class="bars">${[...Array(s.c.per)].map((_, k) => `<i class="${k < a ? 'd' : k < b ? 'r' : k < c ? 'p' : ''}"></i>`).join('')}</span><span class="cx ${s.toShoot ? '' : 'ok'}">${s.toShoot ? `natočit <b>${s.toShoot}</b>` : 'natočeno ✓'}</span></div>`; }).join('')}</div>`;
+    return `<div class="catrow" style="--cc:${s.c.color}"><span class="cn">${ab(s.c)} ${esc(s.c.name)}</span><span class="bars">${[...Array(s.per)].map((_, k) => `<i class="${k < a ? 'd' : k < b ? 'r' : k < c ? 'p' : ''}"></i>`).join('')}</span><span class="cx ${s.toShoot ? '' : 'ok'}">${s.toShoot ? `natočit <b>${s.toShoot}</b>` : 'natočeno ✓'}</span></div>`; }).join('')}</div>`;
 }
 function weekCounter(ws) {
-  const we = addDays(ws, 6), pubs = db.ideas.filter(i => i.date >= ws && i.date <= we), tg = db.cats.reduce((a, c) => a + (c.per || 0), 0);
-  return `<div class="counter"><div class="big"><b>${pubs.length}${tg ? `<small>/${tg}</small>` : ''}</b><span>${plural(pubs.length, 'video', 'videa', 'videí')} k vydání</span></div>${catBars(ws)}</div>`;
+  const we = addDays(ws, 6), pubs = db.ideas.filter(i => i.date >= ws && i.date <= we), tg = weekTarget(ws);
+  return `<div class="counter"><div class="big"><b>${pubs.length}${tg ? `<small>/${tg}</small>` : ''}</b><span>${plural(pubs.length, 'video', 'videa', 'videí')} k vydání${weekSlots(ws).length ? ' · podle slotů' : ''}</span></div>${catBars(ws)}</div>`;
 }
-const pubChip = (i, extra = '') => `<span class="vchip k-date s-${i.status}" style="--cc:${catColor(i)}" data-open="${i.id}">${i.status === 'done' ? '✓ ' : ''}${esc(i.title)}${extra}</span>`;
+const pubChip = (i, extra = '') => `<span class="vchip k-date s-${i.status}" style="--cc:${catColor(i)}" data-open="${i.id}">${catOf(i) ? `<b class="ab0">${esc(catAbbr(catOf(i)))}</b>` : ''}${i.status === 'done' ? '✓ ' : ''}${esc(i.title)}${extra}</span>`;
 const typeTag = d => { const ty = dayType(d); return ty ? `<em class="ty ty-${ty}">${DTYPES[ty].n}</em>` : ''; };
+// vydání, která nepatří do žádného slotu toho dne
+const freePubs = d => { const sp = slotsOn(d).map(s => s.part); return onDay(d, 'date').filter(i => !i.part || !sp.includes(i.part)); };
+// buňka slotu: ťuknutí přepne kategorii (— → EZ → REC → … → —)
+function slotCell(d, p) {
+  const s = db.slots.find(x => x.date === d && x.part === p && x.cat), c = s && catById(s.cat), v = slotVids(d, p)[0];
+  return `<button class="sc ${c ? 'on' : ''}" data-sl="${d}|${p}" ${c ? `style="--cc:${c.color}"` : ''}>${c ? `<b>${esc(catAbbr(c))}</b>${v ? `<small>${v.status === 'done' ? '✓ ' : ''}${esc(v.title)}</small>` : '<small class="miss">chybí video</small>'}` : `<i>${PARTS[p].s}</i>`}</button>`;
+}
+function bindSlotCells(root = document) {
+  $$('[data-sl]', root).forEach(b => {
+    const [d, p] = b.dataset.sl.split('|');
+    b.onclick = () => {
+      const s = db.slots.find(x => x.date === d && x.part === p && x.cat), ids = ['', ...db.cats.map(c => c.id)];
+      setSlot(d, p, ids[(ids.indexOf(s ? s.cat : '') + 1) % ids.length]); save(true); render();
+    };
+    longPress(b, () => slotSheet(d, p));
+  });
+}
+function slotSheet(d, p) {
+  const s = db.slots.find(x => x.date === d && x.part === p && x.cat);
+  openModal(`<h3>${capFirst(relDate(d))} · ${PARTS[p].n}</h3><p class="muted">Co v tuhle dobu vyjde?</p>
+    <div class="catpick">${db.cats.map(c => `<button data-pc="${c.id}" class="${s && s.cat === c.id ? 'on' : ''}" style="--cc:${c.color}"><b>${esc(catAbbr(c))}</b><span>${esc(c.name)}</span></button>`).join('')}<button data-pc="" class="none"><b>—</b><span>Nic</span></button></div>`, m => {
+    $$('[data-pc]', m).forEach(b => b.onclick = () => { setSlot(d, p, b.dataset.pc); save(true); closeModal(); render(); });
+  });
+}
 function renderWeek() {
   const t = today(), c0 = monday(t);
   if (!ui.wk) ui.wk = c0;
+  if (!['slots', 'write', 'view'].includes(ui.wmode)) ui.wmode = 'write';
   const ws = ui.wk;
   const label = ws === c0 ? 'Tento týden' : ws === addDays(c0, 7) ? 'Příští týden' : ws === addDays(c0, -7) ? 'Minulý týden' : `${fmtDate(ws)} – ${fmtDate(addDays(ws, 6))}`;
   const days = [...Array(7)].map((_, n) => addDays(ws, n));
+  const un = (i, k) => `<button data-un="${i.id}" data-k="${k}" aria-label="Odebrat">${I.x}</button>`;
   let body;
-  if (ui.wmode === 'write') {
+  if (ui.wmode === 'slots') {
+    body = `<p class="muted" style="margin-top:0">Naplánuj si, co kdy vyjde. Ťukni do políčka – každé další ťuknutí přepne kategorii. Podržením vybereš ze seznamu.</p>
+      <div class="sgrid"><div class="sgh"><span></span>${PK.map(p => `<span>${PARTS[p].n}</span>`).join('')}</div>
+      ${days.map((d, n) => `<div class="sgr ${d === t ? 'tod' : ''} ${d < t ? 'past' : ''}"><span class="sd"><b>${DSHORT[n]}</b><small>${+d.slice(8)}.</small></span>${PK.map(p => slotCell(d, p)).join('')}</div>`).join('')}</div>
+      <div class="btnrow"><button class="btn" id="slcopy">Zkopírovat minulý týden</button><button class="btn quiet" id="slclear">Vymazat týden</button></div>`;
+  } else if (ui.wmode === 'write') {
     const pool = db.ideas.filter(i => i.status !== 'done' && !i.date && !i.shoot).slice(0, 40);
-    const un = (i, k) => `<button data-un="${i.id}" data-k="${k}" aria-label="Odebrat">${I.x}</button>`;
-    const slot = (d, k) => `<div class="slot"><span class="sl">${k === 'shoot' ? 'Natočit' : 'Vydat'}</span><div class="sv">${onDay(d, k).map(i => k === 'date' ? pubChip(i, un(i, k)) : `<span class="vchip k-shoot s-${i.status}" data-open="${i.id}">${esc(i.title)}${un(i, k)}</span>`).join('')}<input class="slin" data-d="${d}" data-k="${k}" list="alltt" placeholder="+ video" autocomplete="off" enterkeyhint="done"></div></div>`;
+    const inp = (d, k, p, c, ph) => `<input class="slin" data-d="${d}" data-k="${k}" ${p ? `data-p="${p}" data-c="${c}"` : ''} list="alltt" placeholder="${ph}" autocomplete="off" enterkeyhint="done">`;
+    const shootRow = d => `<div class="slot"><span class="sl">Natočit</span><div class="sv">${onDay(d, 'shoot').map(i => `<span class="vchip k-shoot s-${i.status}" data-open="${i.id}">${catOf(i) ? `<b class="ab0">${esc(catAbbr(catOf(i)))}</b>` : ''}${esc(i.title)}${un(i, 'shoot')}</span>`).join('')}${inp(d, 'shoot', '', '', '+ video')}</div></div>`;
+    const slotRow = (d, s) => { const c = catById(s.cat), l = slotVids(d, s.part);
+      return `<div class="slot ps"><span class="sl">${ab(c)}<small>${PARTS[s.part].s}</small></span><div class="sv">${l.map(i => pubChip(i, un(i, 'date'))).join('')}${l.length ? '' : inp(d, 'date', s.part, c.id, '+ ' + esc(c.name))}</div></div>`; };
+    const freeRow = d => `<div class="slot"><span class="sl">${slotsOn(d).length ? 'Další' : 'Vydat'}</span><div class="sv">${freePubs(d).map(i => pubChip(i, un(i, 'date'))).join('')}${inp(d, 'date', '', '', '+ video')}</div></div>`;
     body = `${pool.length ? `<div class="pool"><small>Nápady bez data – ťukni do řádku dne a pak sem</small><div>${pool.map(i => `<button class="pchip" data-pool="${i.id}">${catOf(i) ? `<i style="background:${catColor(i)}"></i>` : ''}${esc(i.title)}</button>`).join('')}</div></div>` : ''}
       <datalist id="alltt">${db.ideas.filter(i => i.status !== 'done').map(i => `<option value="${esc(i.title)}">`).join('')}</datalist>
       <div class="wlist">${days.map((d, n) => `<div class="wd ${d === t ? 'tod' : ''} ${d < t ? 'past' : ''}">
         <div class="wdh"><b>${DAYN[n]}</b><span>${fmtDate(d)}</span>${typeTag(d)}${termsOn(d).map(x => `<i>${esc(x.title)}</i>`).join('')}</div>
-        ${slot(d, 'shoot')}${slot(d, 'date')}</div>`).join('')}</div>`;
+        ${shootRow(d)}${slotsOn(d).map(s => slotRow(d, s)).join('')}${freeRow(d)}</div>`).join('')}</div>`;
   } else {
     body = `<div class="list">${days.map((d, n) => {
-      const sh = onDay(d, 'shoot'), pb = onDay(d, 'date');
+      const sh = onDay(d, 'shoot'), pb = onDay(d, 'date'), miss = slotsOn(d).filter(s => !slotVids(d, s.part).length);
       return `<div class="row day ${d === t ? 'tod' : ''}"><div class="dl"><b>${DSHORT[n]}</b><small>${+d.slice(8)}.</small></div><div class="rt">
         ${typeTag(d)}${termsOn(d).map(x => `<span class="tchip">${esc(x.title)}</span>`).join('')}
-        ${pb.map(i => pubChip(i)).join('')}
+        ${pb.map(i => pubChip(i)).join('')}${miss.map(s => `<span class="vchip k-slot" style="--cc:${catById(s.cat).color}">${PARTS[s.part].s} ${esc(catAbbr(catById(s.cat)))}</span>`).join('')}
         ${sh.length ? `<button class="shline" data-sd="${d}">Natočit: ${sh.map(i => esc(i.title)).join(', ')}</button>` : ''}
-        ${!pb.length && !sh.length ? '<small>—</small>' : ''}</div></div>`;
+        ${!pb.length && !sh.length && !miss.length ? '<small>—</small>' : ''}</div></div>`;
     }).join('')}</div>`;
   }
   $('#view').innerHTML = `
     <div class="wknav"><button class="ico" id="wprev">${I.l}</button><b>${label}</b>${ws !== c0 ? '<button class="btn sm" id="wnow">Teď</button>' : ''}<button class="ico" id="wnext">${I.r}</button></div>
     ${weekCounter(ws)}
-    <div class="seg"><button data-wm="write" class="${ui.wmode === 'write' ? 'on' : ''}">Napsat týden</button><button data-wm="view" class="${ui.wmode === 'view' ? 'on' : ''}">Přehled</button></div>
+    <div class="seg"><button data-wm="slots" class="${ui.wmode === 'slots' ? 'on' : ''}">Sloty</button><button data-wm="write" class="${ui.wmode === 'write' ? 'on' : ''}">Napsat týden</button><button data-wm="view" class="${ui.wmode === 'view' ? 'on' : ''}">Přehled</button></div>
     ${body}
     <div class="claude"><button class="btn" id="tocl">Poslat Claudovi</button><button class="btn" id="fromcl">Vložit od Clauda</button></div>`;
   const mv = n => { ui.wk = addDays(ui.wk, 7 * n); render(); };
@@ -1128,77 +1251,120 @@ function renderWeek() {
   $$('[data-wm]').forEach(b => b.onclick = () => { ui.wmode = b.dataset.wm; keepUi(); render(); });
   $('#tocl').onclick = () => copy(claudeSummary(), 'Zkopírováno – vlož to Claudovi');
   $('#fromcl').onclick = () => pasteSheet();
+  bindSlotCells();
+  const sc = $('#slcopy'); if (sc) sc.onclick = () => {
+    const prev = db.slots.filter(s => s.cat && s.date >= addDays(ws, -7) && s.date < ws);
+    if (!prev.length) return toast('Minulý týden nemá sloty');
+    prev.forEach(s => setSlot(addDays(s.date, 7), s.part, s.cat)); save(true); render(); toast('Zkopírováno');
+  };
+  const sx = $('#slclear'); if (sx) sx.onclick = () => { if (!confirm('Vymazat sloty tohoto týdne? Videa zůstanou.')) return; weekSlots(ws).forEach(s => setSlot(s.date, s.part, '')); save(true); render(); };
   $$('[data-sd]').forEach(b => b.onclick = () => shootMode(b.dataset.sd));
-  $$('[data-un]').forEach(b => b.onclick = e => { e.stopPropagation(); const i = byId(b.dataset.un); i[b.dataset.k] = ''; touchV(i); save(true); render(); });
+  $$('[data-un]').forEach(b => b.onclick = e => { e.stopPropagation(); const i = byId(b.dataset.un); i[b.dataset.k] = ''; if (b.dataset.k === 'date') i.part = ''; touchV(i); save(true); render(); });
   $$('.slin').forEach(inp => {
-    inp.onfocus = () => { lastSlot = { d: inp.dataset.d, k: inp.dataset.k }; $$('.slin').forEach(x => x.classList.toggle('act', x === inp)); };
-    const commit = () => { const v = inp.value.trim(); if (!v) return; inp.value = ''; assign(findByTitle(v) || quickAdd(v), inp.dataset.d, inp.dataset.k, true); };
+    const slot = () => ({ d: inp.dataset.d, k: inp.dataset.k, p: inp.dataset.p || '', c: inp.dataset.c || '' });
+    inp.onfocus = () => { lastSlot = slot(); $$('.slin').forEach(x => x.classList.toggle('act', x === inp)); };
+    const commit = () => { const v = inp.value.trim(); if (!v) return; inp.value = ''; const ex = findByTitle(v); assign(ex || quickAdd(v), slot(), !ex); };
     inp.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); commit(); } };
     inp.onchange = commit;
   });
   $$('[data-pool]').forEach(b => {
     b.onmousedown = e => e.preventDefault(); // ať input neztratí fokus
-    b.onclick = () => { if (!lastSlot) return toast('Nejdřív ťukni do řádku dne'); assign(byId(b.dataset.pool), lastSlot.d, lastSlot.k, true); };
+    b.onclick = () => { if (!lastSlot) return toast('Nejdřív ťukni do řádku dne'); assign(byId(b.dataset.pool), lastSlot); };
   });
 }
-function assign(i, d, k, refocus) {
+// dá video na den (natočit / vydat); u slotu i část dne a kategorii
+function assign(i, sl, isNew) {
   if (!i) return;
-  i[k] = d; touchV(i); save(true); render();
-  if (refocus) setTimeout(() => { const el = $(`.slin[data-d="${d}"][data-k="${k}"]`); if (el) el.focus(); }, 30);
+  i[sl.k] = sl.d;
+  if (sl.k === 'date') { i.part = sl.p || ''; if (sl.c && !i.cat) i.cat = sl.c; }
+  touchV(i); save(true); render();
+  if (isNew && !i.cat) return askCat(i);
+  setTimeout(() => { const el = $(`.slin[data-d="${sl.d}"][data-k="${sl.k}"]${sl.p ? `[data-p="${sl.p}"]` : ':not([data-p])'}`) || $(`.slin[data-d="${sl.d}"][data-k="${sl.k}"]:not([data-p])`); if (el) el.focus(); }, 30);
 }
 
 // ================= KALENDÁŘ =================
 const monthStart = d => d.slice(0, 8) + '01';
 const addMonths = (m, n) => { const d = new Date(m + 'T12:00'); d.setDate(1); d.setMonth(d.getMonth() + n); return ds(d); };
 const monthLabel = m => MONTHS[+m.slice(5, 7) - 1] + ' ' + m.slice(0, 4);
-// pick = výběr data: místo názvů barevné tečky, ať je vidět, co už na dni je
-function monthGridHTML(m, sel, attr, pick) {
-  const t = today(), next = addMonths(m, 1), last = addDays(monday(addDays(next, -1)), 6);
-  let h = `<div class="mgrid ${pick ? 'pick' : 'big'}"><div class="mhead">${['Po', 'Út', 'St', 'Čt', 'Pá', 'So', 'Ne'].map(x => `<span>${x}</span>`).join('')}</div><div class="mcells">`;
-  for (let d = monday(m); d <= last; d = addDays(d, 1)) {
-    const ty = dayType(d), pb = onDay(d, 'date'), sh = onDay(d, 'shoot'), tm = termsOn(d);
-    let inner;
-    if (pick) inner = `<span class="dots">${tm.map(() => '<i class="tm"></i>').join('')}${pb.map(i => `<i style="background:${catColor(i)}"></i>`).join('')}${sh.map(() => '<i class="sh"></i>').join('')}</span>`;
-    else { const ch = [...tm.map(x => `<span class="c k-term">${esc(x.title)}</span>`), ...pb.map(i => `<span class="c k-pub ${i.status === 'done' ? 'dn' : ''}" style="--cc:${catColor(i)}">${i.status === 'done' ? '✓ ' : ''}${esc(i.title)}</span>`), ...sh.map(i => `<span class="c k-shoot ${SI(i.status) >= SI('shot') ? 'dn' : ''}">${esc(i.title)}</span>`)];
-      inner = ch.slice(0, 4).join('') + (ch.length > 4 ? `<span class="more">+${ch.length - 4}</span>` : ''); }
-    h += `<button type="button" class="mc ${ty ? 'ty-' + ty : ''} ${d < m || d >= next ? 'out' : ''} ${d === t ? 'today' : ''} ${d === sel ? 'sel' : ''}" ${attr}="${d}"><span class="dh"><span class="dn_">${+d.slice(8)}</span>${ty ? `<em>${DTYPES[ty].a}</em>` : ''}</span>${inner}</button>`;
+// co se v kalendáři ukáže na dni (filtr: vše / jen vydání / jen natáčení)
+function calChips(d, f = 'all') {
+  const out = termsOn(d).map(x => `<span class="c k-term">${esc(x.title)}</span>`);
+  const pubC = i => `<span class="c k-pub ${i.status === 'done' ? 'dn' : ''}" style="--cc:${catColor(i)}">${catOf(i) ? `<b>${esc(catAbbr(catOf(i)))}</b> ` : ''}${i.status === 'done' ? '✓ ' : ''}${esc(i.title)}</span>`;
+  if (f !== 'shoot') {
+    slotsOn(d).forEach(s => { const l = slotVids(d, s.part), c = catById(s.cat); if (l.length) l.forEach(i => out.push(pubC(i))); else out.push(`<span class="c k-slot" style="--cc:${c.color}"><b>${esc(catAbbr(c))}</b> ${PARTS[s.part].s}</span>`); });
+    freePubs(d).forEach(i => out.push(pubC(i)));
   }
+  if (f !== 'pub') onDay(d, 'shoot').forEach(i => out.push(`<span class="c k-shoot ${SI(i.status) >= SI('shot') ? 'dn' : ''}">${catOf(i) ? `<b>${esc(catAbbr(catOf(i)))}</b> ` : ''}${esc(i.title)}</span>`));
+  return out;
+}
+function gridHTML(days, o) {
+  const t = today(), max = o.max || 4;
+  let h = `<div class="mgrid ${o.cls}"><div class="mhead">${['Po', 'Út', 'St', 'Čt', 'Pá', 'So', 'Ne'].map(x => `<span>${x}</span>`).join('')}</div><div class="mcells">`;
+  days.forEach(d => {
+    const ty = dayType(d);
+    let inner;
+    if (o.pick) inner = `<span class="dots">${termsOn(d).map(() => '<i class="tm"></i>').join('')}${onDay(d, 'date').map(i => `<i style="background:${catColor(i)}"></i>`).join('')}${onDay(d, 'shoot').map(() => '<i class="sh"></i>').join('')}</span>`;
+    else { const ch = calChips(d, o.f); inner = ch.slice(0, max).join('') + (ch.length > max ? `<span class="more">+${ch.length - max}</span>` : ''); }
+    h += `<button type="button" class="mc ${ty ? 'ty-' + ty : ''} ${o.out && o.out(d) ? 'out' : ''} ${d === t ? 'today' : ''} ${d === o.sel ? 'sel' : ''}" ${o.attr}="${d}"><span class="dh"><span class="dn_">${+d.slice(8)}${o.showMonth && d.slice(8) === '01' ? '. ' + (+d.slice(5, 7)) + '.' : ''}</span>${ty ? `<em>${DTYPES[ty].a}</em>` : ''}</span>${inner}</button>`;
+  });
   return h + '</div></div>';
 }
-const legendHTML = () => `<p class="legend">${db.cats.map(c => `<span class="lg"><i style="background:${c.color}"></i>${esc(c.name)}</span>`).join('')}<span class="lg"><i class="sh"></i>Natočit</span><span class="lg"><i class="tm"></i>Termín</span></p>`;
+function monthGridHTML(m, sel, attr, pick, f) {
+  const next = addMonths(m, 1), last = addDays(monday(addDays(next, -1)), 6), days = [];
+  for (let d = monday(m); d <= last; d = addDays(d, 1)) days.push(d);
+  return gridHTML(days, { sel, attr, pick, f, cls: pick ? 'pick' : 'big', out: d => d < m || d >= next });
+}
+const legendHTML = () => `<p class="legend">${db.cats.map(c => `<span class="lg"><i style="background:${c.color}"></i><b>${esc(catAbbr(c))}</b> ${esc(c.name)}</span>`).join('')}<span class="lg"><i class="sh"></i>Natočit</span><span class="lg"><i class="tm"></i>Termín</span></p>`;
 function renderCal() {
   const t = today();
   if (!ui.sel) ui.sel = t;
   if (!ui.month) ui.month = monthStart(ui.sel);
-  const m = ui.month, sel = ui.sel, sh = onDay(sel, 'shoot'), pb = onDay(sel, 'date'), tm = termsOn(sel);
+  const calr = ui.calr || 'm', f = ui.calf || 'all';
+  if (calr === '2w' && !ui.c2) ui.c2 = monday(ui.sel);
+  const m = ui.month, sel = ui.sel, sh = onDay(sel, 'shoot'), tm = termsOn(sel);
   const x = (attr, id) => `<button class="ico sm" ${attr}="${id}" aria-label="Odebrat">${I.x}</button>`;
+  const grid = calr === '2w' ? gridHTML([...Array(14)].map((_, n) => addDays(ui.c2, n)), { sel, attr: 'data-cd', f, cls: 'big tall', max: 6, showMonth: true })
+    : monthGridHTML(m, sel, 'data-cd', false, f);
+  const label = calr === '2w' ? `${fmtDate(ui.c2)} – ${fmtDate(addDays(ui.c2, 13))}` : monthLabel(m);
+  const isNow = calr === '2w' ? ui.c2 === monday(t) : m === monthStart(t);
   $('#view').innerHTML = `
-    <div class="wknav"><button class="ico" id="mprev">${I.l}</button><b>${monthLabel(m)}</b>${m !== monthStart(t) ? '<button class="btn sm" id="mnow">Dnes</button>' : ''}<button class="ico" id="mnext">${I.r}</button></div>
-    ${monthGridHTML(m, sel, 'data-cd')}
+    <div class="calbar"><div class="seg sm"><button data-cr="m" class="${calr === 'm' ? 'on' : ''}">Měsíc</button><button data-cr="2w" class="${calr === '2w' ? 'on' : ''}">2 týdny</button></div>
+      <div class="seg sm"><button data-cf2="all" class="${f === 'all' ? 'on' : ''}">Vše</button><button data-cf2="pub" class="${f === 'pub' ? 'on' : ''}">Vydat</button><button data-cf2="shoot" class="${f === 'shoot' ? 'on' : ''}">Točit</button></div></div>
+    <div class="wknav"><button class="ico" id="mprev">${I.l}</button><b>${label}</b>${isNow ? '' : '<button class="btn sm" id="mnow">Dnes</button>'}<button class="ico" id="mnext">${I.r}</button></div>
+    ${grid}
     ${legendHTML()}
     <div class="daypanel">
       <h2 style="margin-top:4px">${longDate(sel)}</h2>
       <div class="fchips wrapc dtypes">${Object.entries(DTYPES).map(([k, v]) => `<button data-dt="${k}" class="ty-${k} ${dayType(sel) === k ? 'on' : ''}">${v.n}</button>`).join('')}</div>
       ${(db.weekPlan || {})[wdOf(sel)] ? `<p class="hint" style="margin:-2px 2px 10px">${DTYPES[db.weekPlan[wdOf(sel)]].n} je tu každý týden (Nastavení → Pravidelný týden).</p>` : ''}
-      ${tm.length + pb.length + sh.length ? `<div class="list">
+      <label class="l">Sloty – co kdy vyjde</label>
+      <div class="sgrid one"><div class="sgr">${PK.map(p => slotCell(sel, p)).join('')}</div></div>
+      ${tm.length + onDay(sel, 'date').length + sh.length ? `<div class="list" style="margin-top:12px">
         ${tm.map(z => row(`<span class="lbl t">Termín</span><b>${esc(z.title)}</b>`, '', x('data-rt', z.id))).join('')}
-        ${pb.map(i => row(`<span class="lbl p" style="color:${catColor(i)}">Vydat${catOf(i) ? ' · ' + esc(catOf(i).name) : ''}</span><b>${esc(i.title)}</b>`, ST[i.status], x('data-rp', i.id), `data-open="${i.id}"`)).join('')}
-        ${sh.map(i => row(`<span class="lbl s">Natočit</span><b>${esc(i.title)}</b>`, ST[i.status], x('data-rs', i.id), `data-open="${i.id}"`)).join('')}</div>` : '<p class="muted">Nic naplánovaného.</p>'}
+        ${onDay(sel, 'date').sort((a, b) => PK.indexOf(a.part) - PK.indexOf(b.part)).map(i => row(`<span class="lbl p" style="color:${catColor(i)}">Vydat${i.part ? ' ' + PARTS[i.part].s : ''}${catOf(i) ? ' · ' + esc(catOf(i).name) : ''}</span><b>${esc(i.title)}</b>`, ST[i.status], x('data-rp', i.id), `data-open="${i.id}"`)).join('')}
+        ${sh.map(i => row(`<span class="lbl s">Natočit</span><b>${esc(i.title)}</b>`, ST[i.status], x('data-rs', i.id), `data-open="${i.id}"`)).join('')}</div>` : ''}
       <div class="btnrow"><button class="btn" data-add="shoot">+ Natočit</button><button class="btn" data-add="date">+ Vydat</button><button class="btn" data-add="term">+ Termín</button></div>
       ${sh.length ? '<button class="btn full" id="calshoot" style="margin-top:8px">Otevřít natáčecí den</button>' : ''}
     </div>`;
-  const goMonth = n => { ui.month = addMonths(ui.month, n); ui.sel = monthStart(t) === ui.month ? t : ui.month; render(); };
-  $('#mprev').onclick = () => goMonth(-1); $('#mnext').onclick = () => goMonth(1);
-  const mn = $('#mnow'); if (mn) mn.onclick = () => { ui.sel = t; ui.month = monthStart(t); render(); };
+  const go_ = n => {
+    if (calr === '2w') { ui.c2 = addDays(ui.c2, 14 * n); ui.sel = ui.c2 <= t && t <= addDays(ui.c2, 13) ? t : ui.c2; }
+    else { ui.month = addMonths(ui.month, n); ui.sel = monthStart(t) === ui.month ? t : ui.month; }
+    render();
+  };
+  $('#mprev').onclick = () => go_(-1); $('#mnext').onclick = () => go_(1);
+  const mn = $('#mnow'); if (mn) mn.onclick = () => { ui.sel = t; ui.month = monthStart(t); ui.c2 = monday(t); render(); };
+  $$('[data-cr]').forEach(b => b.onclick = () => { ui.calr = b.dataset.cr; ui.c2 = monday(ui.sel); ui.month = monthStart(ui.sel); keepUi(); render(); });
+  $$('[data-cf2]').forEach(b => b.onclick = () => { ui.calf = b.dataset.cf2; keepUi(); render(); });
   const g = $('.mgrid'); let sx = null, sy = 0;
   g.addEventListener('touchstart', e => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
-  g.addEventListener('touchend', e => { if (sx === null) return; const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy; sx = null; if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) goMonth(dx < 0 ? 1 : -1); });
+  g.addEventListener('touchend', e => { if (sx === null) return; const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy; sx = null; if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) go_(dx < 0 ? 1 : -1); });
   $$('[data-cd]').forEach(b => b.onclick = () => {
-    const d = b.dataset.cd; ui.sel = d; if (monthStart(d) !== ui.month) ui.month = monthStart(d); render();
+    const d = b.dataset.cd; ui.sel = d; if (calr === 'm' && monthStart(d) !== ui.month) ui.month = monthStart(d); render();
     const r = $('.daypanel').getBoundingClientRect(); if (r.top > innerHeight - 200) scrollTo({ top: scrollY + r.top - 70, behavior: 'smooth' });
   });
+  bindSlotCells($('.daypanel'));
   $$('[data-rt]').forEach(b => b.onclick = () => { gone(b.dataset.rt); db.terms = db.terms.filter(z => z.id !== b.dataset.rt); save(true); render(); });
-  $$('[data-rp],[data-rs]').forEach(b => b.onclick = e => { e.stopPropagation(); const i = byId(b.dataset.rp || b.dataset.rs); i[b.dataset.rp ? 'date' : 'shoot'] = ''; touchV(i); save(true); render(); });
+  $$('[data-rp],[data-rs]').forEach(b => b.onclick = e => { e.stopPropagation(); const i = byId(b.dataset.rp || b.dataset.rs); if (b.dataset.rp) { i.date = ''; i.part = ''; } else i.shoot = ''; touchV(i); save(true); render(); });
   $$('[data-add]').forEach(b => b.onclick = () => b.dataset.add === 'term' ? termSheet(sel) : assignSheet(sel, b.dataset.add));
   const cs = $('#calshoot'); if (cs) cs.onclick = () => shootMode(sel);
   $$('[data-dt]').forEach(b => b.onclick = () => { setDayType(sel, dayType(sel) === b.dataset.dt ? '' : b.dataset.dt); render(); });
@@ -1210,31 +1376,44 @@ function termSheet(d) {
     $('#tt', m).onkeydown = e => { if (e.key === 'Enter') ok(); }; $('#tok', m).onclick = ok;
   });
 }
-// vybrat video na den (nebo napsat nové)
-function assignSheet(d, k) {
-  const opts = db.ideas.filter(i => i.status !== 'done' && i[k] !== d).sort((a, b) => (!!a[k] - !!b[k]) || SI(b.status) - SI(a.status) || b.updated - a.updated);
-  openModal(`<h3>${k === 'shoot' ? 'Natočit' : 'Vydat'} · ${relDate(d)}</h3>
+// vybrat video na den (nebo napsat nové); u slotu se doplní část dne a kategorie
+function assignSheet(d, k, sl = {}) {
+  const c = sl.c && catById(sl.c);
+  const opts = db.ideas.filter(i => i.status !== 'done' && !(i[k] === d && (!sl.p || i.part === sl.p)))
+    .sort((a, b) => (c ? (b.cat === c.id) - (a.cat === c.id) : 0) || (!!a[k] - !!b[k]) || SI(b.status) - SI(a.status) || b.updated - a.updated);
+  openModal(`<h3>${k === 'shoot' ? 'Natočit' : 'Vydat'} · ${relDate(d)}${sl.p ? ' · ' + PARTS[sl.p].s : ''}</h3>${c ? `<p class="muted">${esc(c.name)}</p>` : ''}
     <input id="asn" placeholder="Nové video – název nebo odkaz (Enter)" autocomplete="off" enterkeyhint="done">
-    <div class="list" style="margin-top:10px">${opts.map(i => row(`<b>${esc(i.title)}</b>`, [ST[i.status], i.fmt, i[k] ? 'teď ' + relDate(i[k]) : ''].filter(Boolean).join(' · '), '', `data-pick="${i.id}"`)).join('') || '<p class="muted" style="padding:12px">Žádná rozpracovaná videa.</p>'}</div>`, m => {
-    $('#asn', m).onkeydown = e => { if (e.key === 'Enter') { const it = quickAdd(e.target.value); if (it) { it[k] = d; touchV(it); save(true); closeModal(); render(); } } };
-    $$('[data-pick]', m).forEach(r => r.onclick = () => { const i = byId(r.dataset.pick); i[k] = d; touchV(i); save(true); closeModal(); render(); toast('Naplánováno'); });
+    <div class="list" style="margin-top:10px">${opts.map(i => row(`<b>${catOf(i) ? ab(catOf(i)) + ' ' : ''}${esc(i.title)}</b>`, [ST[i.status], i.fmt, i[k] ? 'teď ' + relDate(i[k]) : ''].filter(Boolean).join(' · '), '', `data-pick="${i.id}"`)).join('') || '<p class="muted" style="padding:12px">Žádná rozpracovaná videa.</p>'}</div>`, m => {
+    const put = (i, isNew) => { closeModal(); assign(i, { d, k, p: sl.p || '', c: sl.c || '' }, isNew); toast('Naplánováno'); };
+    $('#asn', m).onkeydown = e => { if (e.key === 'Enter') { const it = quickAdd(e.target.value); if (it) put(it, true); } };
+    $$('[data-pick]', m).forEach(r => r.onclick = () => put(byId(r.dataset.pick)));
   });
 }
-// výběr dne: seznam dní s tím, co na nich už je (nebo celý měsíc)
+// výběr dne: seznam dní s tím, co na nich už je, i s volnými sloty (nebo celý měsíc)
 function pickDate(i, field, after, month, count = 21) {
   const t = today(), title = field === 'shoot' ? 'Kdy natočíš?' : 'Kdy vydáš?';
-  const done = () => { touchV(i); save(true); closeModal(); (after || render)(); };
+  const choose = d => {
+    i[field] = d;
+    if (field === 'date') { // volný slot stejné kategorie → doplní se část dne
+      const s = slotsOn(d).find(s => s.cat === i.cat && !slotVids(d, s.part).some(x => x !== i));
+      i.part = s ? s.part : (slotsOn(d).some(s => s.part === i.part) ? '' : i.part);
+    }
+    touchV(i); save(true); closeModal(); (after || render)(); toast(capFirst(relDate(d)) + (field === 'date' && i.part ? ' ' + PARTS[i.part].s : ''));
+  };
   const bindPick = box => {
-    $$('[data-aday]', box).forEach(b => b.onclick = () => { i[field] = b.dataset.aday; done(); toast(capFirst(relDate(i[field]))); });
-    const c = $('[data-aclear]', box); if (c) c.onclick = () => { i[field] = ''; done(); };
+    $$('[data-aday]', box).forEach(b => b.onclick = () => choose(b.dataset.aday));
+    const c = $('[data-aclear]', box); if (c) c.onclick = () => { i[field] = ''; if (field === 'date') i.part = ''; touchV(i); save(true); closeModal(); (after || render)(); };
   };
   if (!month) {
     const days = [...Array(count)].map((_, n) => addDays(t, n));
-    openModal(`<h3>${title}</h3><p class="muted">${esc(i.title)}</p>
+    openModal(`<h3>${title}</h3><p class="muted">${catOf(i) ? ab(catOf(i)) + ' ' : ''}${esc(i.title)}</p>
       <div class="list pk">${days.map(d => {
-        const ty = dayType(d), pb = onDay(d, 'date').filter(x => x !== i || field !== 'date'), sh = onDay(d, 'shoot').filter(x => x !== i || field !== 'shoot'), tm = termsOn(d);
-        const what = [...tm.map(x => `<span class="tchip">${esc(x.title)}</span>`), ...pb.map(x => `<span class="vchip k-date s-${x.status}" style="--cc:${catColor(x)}">${esc(x.title)}</span>`), ...sh.map(x => `<span class="vchip k-shoot">${esc(x.title)}</span>`)];
-        return `<button class="row pkd ${d === i[field] ? 'sel' : ''} ${field === 'shoot' && ty === 'shoot' ? 'hint2' : ''}" data-aday="${d}"><div class="dl"><b>${DSHORT[wdOf(d)]}</b><small>${fmtDate(d)}</small></div><div class="rt">${ty ? `<em class="ty ty-${ty}">${DTYPES[ty].n}</em>` : ''}${what.join('') || (ty ? '' : '<small>nic</small>')}</div></button>`;
+        const ty = dayType(d), tm = termsOn(d);
+        const pb = onDay(d, 'date').filter(x => x !== i || field !== 'date'), sh = onDay(d, 'shoot').filter(x => x !== i || field !== 'shoot');
+        const free = field === 'date' ? slotsOn(d).filter(s => !slotVids(d, s.part).some(x => x !== i)) : [];
+        const fit = free.some(s => s.cat === i.cat);
+        const what = [...tm.map(x => `<span class="tchip">${esc(x.title)}</span>`), ...pb.map(x => pubChip(x)), ...free.map(s => `<span class="vchip k-slot ${s.cat === i.cat ? 'fit' : ''}" style="--cc:${catById(s.cat).color}">${PARTS[s.part].s} ${esc(catAbbr(catById(s.cat)))} volné</span>`), ...sh.map(x => `<span class="vchip k-shoot">${esc(x.title)}</span>`)];
+        return `<button class="row pkd ${d === i[field] ? 'sel' : ''} ${fit ? 'fit' : ''} ${field === 'shoot' && ty === 'shoot' ? 'hint2' : ''}" data-aday="${d}"><div class="dl"><b>${DSHORT[wdOf(d)]}</b><small>${fmtDate(d)}</small></div><div class="rt">${ty ? `<em class="ty ty-${ty}">${DTYPES[ty].n}</em>` : ''}${what.join('') || (ty ? '' : '<small>nic</small>')}</div></button>`;
       }).join('')}</div>
       <div class="btnrow"><button class="btn" id="pkmore">Další dny</button><button class="btn" id="pkcal">Vybrat v kalendáři</button></div>
       ${i[field] ? '<button class="btn full quiet" data-aclear style="margin-top:6px">Zrušit datum</button>' : ''}`, box => {
@@ -1257,7 +1436,7 @@ function pickDate(i, field, after, month, count = 21) {
 // ================= VIDEA =================
 function vidRow(i) {
   const r = resOf(i), x = myRatio(i);
-  const when = i.status === 'done' ? (i.date ? 'vyšlo ' + relDate(i.date) : '') : [i.shoot && SI(i.status) < SI('shot') ? 'natočit ' + relDate(i.shoot) : '', i.date ? 'vydat ' + relDate(i.date) : ''].filter(Boolean).join(' · ');
+  const when = i.status === 'done' ? (i.date ? 'vyšlo ' + relDate(i.date) : '') : [i.shoot && SI(i.status) < SI('shot') ? 'natočit ' + relDate(i.shoot) : '', i.date ? 'vydat ' + relDate(i.date) + (i.part ? ' ' + PARTS[i.part].s : '') : ''].filter(Boolean).join(' · ');
   const right = i.status === 'done' && r.v ? `<div class="num"><b class="${x >= 3 ? 'hit' : ''}">${x ? fmtX(x) : fmtN(r.v)}</b><small>${x ? fmtN(r.v) : 'zhlédnutí'}</small></div>` : '';
   const c = catOf(i);
   return `<div class="row vid" data-open="${i.id}"><span class="cbar" style="--cc:${c ? c.color : 'transparent'}"></span><div class="rt"><b>${esc(i.title || 'Bez názvu')}</b><small>${c ? `<span class="cn" style="color:${c.color}">${esc(c.name)}</span>${i.fmt || when ? ' · ' : ''}` : ''}${esc([i.fmt, i.kind === 'long' ? 'Dlouhé' : '', when].filter(Boolean).join(' · ')) || (c ? '' : '&nbsp;')}</small></div>${right}</div>`;
@@ -1275,7 +1454,7 @@ function renderVids() {
     <form class="quick top" id="vq"><input id="vqi" placeholder="Nové video – název nebo odkaz (Enter)" autocomplete="off" enterkeyhint="done"></form>
     ${fl.length + cl.length ? `<div class="fchips nosel catchips"><button data-vf="" class="${!sel ? 'on' : ''}">Vše</button>${cl.map(c => `<button data-vf="cat:${c.id}" data-vc="${c.id}" class="${sel === 'cat:' + c.id ? 'on' : ''}" style="--cc:${c.color}"><i></i>${esc(c.name)}</button>`).join('')}${fl.map(f => `<button data-vf="${esc(f)}" class="${sel === f ? 'on' : ''}">${esc(f)}</button>`).join('')}</div>` : ''}
     ${all.length ? ['shot', 'script', 'idea', 'done'].map(sec).join('') : '<div class="calm"><b>Zatím žádná videa.</b><span>Napiš nahoru název a dej Enter.</span></div>'}`;
-  $('#vq').onsubmit = e => { e.preventDefault(); const it = quickAdd($('#vqi').value, sel); if (it) { render(); toast('Přidáno'); setTimeout(() => { const el = $('#vqi'); el && el.focus(); }, 30); } };
+  $('#vq').onsubmit = e => { e.preventDefault(); const it = quickAdd($('#vqi').value, selCat ? '' : sel); if (!it) return; if (selCat) { it.cat = selCat.id; touchV(it); save(true); } render(); if (!it.cat && db.cats.length) return askCat(it); toast('Přidáno'); setTimeout(() => { const el = $('#vqi'); el && el.focus(); }, 30); };
   $$('[data-vf]').forEach(b => { b.onclick = () => { ui.vfmt = b.dataset.vf; keepUi(); render(); }; if (b.dataset.vc) longPress(b, () => catSheet(db.cats.find(c => c.id === b.dataset.vc))); else if (b.dataset.vf) longPress(b, () => fmtSheet(b.dataset.vf)); });
   if (fl.length && !localStorage.getItem('studio.tipfmt')) { try { localStorage.setItem('studio.tipfmt', '1'); } catch (e) {} setTimeout(() => toast('Tip: podrž formát a můžeš ho upravit nebo smazat'), 400); }
   const md = $('#moredone'); if (md) md.onclick = () => { ui.showDone = true; render(); };
@@ -1330,6 +1509,7 @@ function renderEditor() {
       <div class="fchips wrapc nosel">${fl.map(f => `<button data-fm="${esc(f)}" class="${sameFmt(f, i.fmt) ? 'on' : ''}">${esc(f)}</button>`).join('')}<button data-fm="+" class="add">+ Vlastní</button></div>
       <div class="fld"><input data-f="link" inputmode="url" autocomplete="off" placeholder="Odkaz na inspiraci" value="${esc(i.link)}">${isUrl(i.link) ? `<a class="hint" href="${esc(i.link)}" target="_blank" rel="noopener">Otevřít ${esc(linkPlat(i.link))} ↗</a>` : ''}</div>
       <div class="g2" style="margin-top:14px">${dateBtn(i, 'shoot', 'Natočit')}${dateBtn(i, 'date', 'Vydat')}</div>
+      ${i.date ? `<div class="seg sm parts">${PK.map(p => `<button data-pt="${p}" class="${i.part === p ? 'on' : ''}">${PARTS[p].n}</button>`).join('')}</div>` : ''}
       ${si >= SI('shot') ? `<div class="fld"><input data-f="drive" inputmode="url" autocomplete="off" placeholder="Odkaz na sestříhané video (Disk…)" value="${esc(i.drive)}">${isUrl(i.drive) ? `<a class="hint" href="${esc(i.drive)}" target="_blank" rel="noopener">Otevřít video ↗</a>` : ''}</div>` : ''}
       ${si < SI('done') ? chkBlock(i, si >= SI('shot') ? 'pub' : 'script') : ''}
       <h2>Hook ${hookChecks(i.sc.hook)}</h2>
@@ -1387,6 +1567,7 @@ function bindEditor() {
     if (f === '+') { f = (prompt('Nový formát') || '').trim(); if (!f) return; }
     i.fmt = sameFmt(i.fmt, f) ? '' : f; touch(); renderEditor();
   });
+  $$('[data-pt]', ed).forEach(b => b.onclick = () => { i.part = i.part === b.dataset.pt ? '' : b.dataset.pt; touch(); renderEditor(); });
   $$('[data-dk]', ed).forEach(b => b.onclick = () => pickDate(i, b.dataset.dk, renderEditor));
   $$('[data-pk]', ed).forEach(box => {
     const k = box.dataset.pk, p = k === 'hook' ? i.sc.hook : k === 'end' ? i.sc.end : i.sc.body[+k.slice(1)];
@@ -1637,7 +1818,7 @@ function renderSet() {
   $('#view').innerHTML = `
     <h2 style="margin-top:4px">Kategorie a rozvrh</h2>
     <div class="panel"><p>Co to je za video a kolik jich chceš týdně. Barva se ukáže v kalendáři. Ťukni na barvu pro změnu.</p>
-      ${db.cats.map(c => `<div class="schr" data-cat="${c.id}"><button class="sw" data-cc style="background:${c.color}" aria-label="Barva"></button><input value="${esc(c.name)}" placeholder="Název" data-cn><div class="stepper"><button data-sd="-1">−</button><b>${c.per}×</b><button data-sd="1">+</button></div><button class="ico sm" data-cx>${I.x}</button></div>`).join('')}
+      ${db.cats.map(c => `<div class="schr" data-cat="${c.id}"><button class="sw" data-cc style="background:${c.color}" aria-label="Barva"></button><input value="${esc(c.name)}" placeholder="Název" data-cn><input value="${esc(c.abbr || '')}" placeholder="${esc(abbrOf(c.name))}" data-ca maxlength="4" class="abin" aria-label="Zkratka"><div class="stepper"><button data-sd="-1">−</button><b>${c.per}×</b><button data-sd="1">+</button></div><button class="ico sm" data-cx>${I.x}</button></div>`).join('')}
       <button class="btn sm" id="catadd">+ Kategorie</button></div>
     <h2>Pravidelný týden</h2>
     <div class="panel"><p>Co který den děláš. Jednotlivé dny změníš v kalendáři.</p>
@@ -1662,7 +1843,8 @@ function renderSet() {
   const setU = () => { db.setU = Date.now(); save(); };
   $$('[data-cat]').forEach(r => {
     const c = db.cats.find(x => x.id === r.dataset.cat), t = () => { c.updated = Date.now(); save(); };
-    $('[data-cn]', r).oninput = e => { c.name = e.target.value.trim(); t(); };
+    $('[data-cn]', r).oninput = e => { c.name = e.target.value.trim(); t(); $('[data-ca]', r).placeholder = abbrOf(c.name); };
+    $('[data-ca]', r).oninput = e => { c.abbr = e.target.value.trim().toUpperCase(); t(); };
     $('[data-cc]', r).onclick = e => { c.color = CAT_COLORS[(CAT_COLORS.indexOf(c.color) + 1) % CAT_COLORS.length]; e.currentTarget.style.background = c.color; t(); };
     $$('[data-sd]', r).forEach(b => b.onclick = () => { c.per = Math.max(0, Math.min(14, c.per + +b.dataset.sd)); t(); $('b', r).textContent = c.per + '×'; });
     $('[data-cx]', r).onclick = () => delCat(c);
@@ -1704,15 +1886,16 @@ function claudeSummary() {
   const t = today(), ws = monday(t), we = addDays(ws, 13), L = [];
   L.push(`# Studio – přehled (${longDate(t)})`);
   if (db.style.trim()) L.push('', '## O mně', db.style.trim());
-  const sch = db.cats.filter(c => c.name && c.per).map(c => `${c.per}× ${c.name}`);
+  const sch = db.cats.filter(c => c.name && c.per).map(c => `${c.per}× ${c.name} (${catAbbr(c)})`);
   if (sch.length) L.push('', '## Kategorie a rozvrh na týden', sch.join(', '));
   const wp = Object.entries(db.weekPlan || {}).map(([n, v]) => `${DSHORT[n]} ${DTYPES[v] ? DTYPES[v].n.toLowerCase() : v}`);
   L.push('', `Pravidelný týden: ${wp.join(', ') || '—'}${db.myF ? ` · moji sledující: ${fmtN(db.myF)}` : ''}`);
   const st = catStat(ws); if (st.length) L.push('', '## Tento týden ještě natočit', st.map(s => `${s.c.name}: ${s.toShoot}`).join(', '));
   L.push('', '## Plán (tento a příští týden)');
   for (let d = ws; d <= we; d = addDays(d, 1)) {
-    const sh = onDay(d, 'shoot').map(i => i.title), pb = onDay(d, 'date').map(i => i.title + (catOf(i) ? ' [' + catOf(i).name + ']' : '') + (i.status === 'done' ? ' ✓' : '')), tm = termsOn(d).map(x => x.title), ty = dayType(d);
-    if (sh.length || pb.length || tm.length || ty) L.push(`- ${DSHORT[wdOf(d)]} ${d}${ty ? ' (' + DTYPES[ty].n.toLowerCase() + ')' : ''}: ${[tm.length && 'termín: ' + tm.join(', '), sh.length && 'natočit: ' + sh.join(', '), pb.length && 'vydat: ' + pb.join(', ')].filter(Boolean).join(' | ') || '—'}`);
+    const sh = onDay(d, 'shoot').map(i => i.title), pb = onDay(d, 'date').map(i => (i.part ? PARTS[i.part].s + ' ' : '') + i.title + (catOf(i) ? ' [' + catAbbr(catOf(i)) + ']' : '') + (i.status === 'done' ? ' ✓' : '')), tm = termsOn(d).map(x => x.title), ty = dayType(d);
+    const free = slotsOn(d).filter(s => !slotVids(d, s.part).length).map(s => `${PARTS[s.part].s} ${catAbbr(catById(s.cat))}`);
+    if (sh.length || pb.length || tm.length || ty || free.length) L.push(`- ${DSHORT[wdOf(d)]} ${d}${ty ? ' (' + DTYPES[ty].n.toLowerCase() + ')' : ''}: ${[tm.length && 'termín: ' + tm.join(', '), sh.length && 'natočit: ' + sh.join(', '), pb.length && 'vydat: ' + pb.join(', '), free.length && 'volné sloty: ' + free.join(', ')].filter(Boolean).join(' | ') || '—'}`);
   }
   const wip = db.ideas.filter(i => i.status === 'script' || i.status === 'shot');
   if (wip.length) L.push('', '## Rozpracovaná videa', ...wip.map(i => `- ${i.title} (${ST[i.status]}${i.fmt ? ', ' + i.fmt : ''}${i.shoot ? ', natočit ' + i.shoot : ''}${i.date ? ', vydat ' + i.date : ''})`));
@@ -1725,7 +1908,7 @@ function claudeSummary() {
   L.push('', '## Jak mi odpovědět',
     `Když mám něco vložit do appky, napiš na konec blok začínající řádkem ${DATA_MARK} a pod ním JSON:`,
     DATA_MARK,
-    JSON.stringify({ videos: [{ title: 'Název', category: db.cats[0] ? db.cats[0].name : 'Ez', format: 'Recept', hook: { say: 'co říkám', see: 'co je vidět', txt: 'text na obrazovce' }, body: [{ say: '…', see: '…' }], end: '…', cta: '…', caption: 'popisek + hashtagy', shoot: 'RRRR-MM-DD', publish: 'RRRR-MM-DD', link: '' }], tasks: [{ text: '…', date: 'RRRR-MM-DD' }], terms: [{ title: '…', date: 'RRRR-MM-DD' }] }),
+    JSON.stringify({ videos: [{ title: 'Název', category: db.cats[0] ? db.cats[0].name : 'Ez', format: 'Recept', hook: { say: 'co říkám', see: 'co je vidět', txt: 'text na obrazovce' }, body: [{ say: '…', see: '…' }], end: '…', cta: '…', caption: 'popisek + hashtagy', shoot: 'RRRR-MM-DD', publish: 'RRRR-MM-DD', part: 'ráno | odpo | večer', link: '' }], tasks: [{ text: '…', date: 'RRRR-MM-DD' }], terms: [{ title: '…', date: 'RRRR-MM-DD' }] }),
     'Existující video poznám podle názvu – vyplněná pole se přepíšou, prázdná zůstanou. Pole, která neměníš, vynech.');
   return L.join('\n');
 }
@@ -1753,19 +1936,20 @@ function claudeChanges(d) {
     if (ex && str(v.title) && tkey(v.title) !== tkey(ex.title)) p.title = str(v.title);
     if (STMAP[v.status]) p.status = STMAP[v.status];
     const fmt = str(v.format || v.fmt || v.series); if (fmt) p.fmt = fmt;
-    const cn = str(v.category || v.kategorie); const cat = cn && db.cats.find(c => tkey(c.name) === tkey(cn)); if (cat) p.cat = cat;
+    const cn = str(v.category || v.kategorie); const cat = cn && db.cats.find(c => tkey(c.name) === tkey(cn) || tkey(catAbbr(c)) === tkey(cn)); if (cat) p.cat = cat;
     const h = v.hook; if (typeof h === 'string' && h.trim()) p.hook = { say: h.trim() }; else if (h && typeof h === 'object') p.hook = { say: str(h.say), see: str(h.see || h.visual), txt: str(h.txt || h.text) };
     if (str(v.hookVisual)) p.hook = { ...(p.hook || {}), see: str(v.hookVisual) };
     if (str(v.hookText)) p.hook = { ...(p.hook || {}), txt: str(v.hookText) };
     let body = v.body; if (typeof body === 'string') body = body.split(/\n\s*\n/).map(x => ({ say: x })); if (Array.isArray(body)) { body = body.map(x => typeof x === 'string' ? { say: x } : { say: str(x.say), see: str(x.see) }).filter(x => x.say || x.see); if (body.length) p.body = body; }
     if (str(v.end)) p.end = str(v.end); if (str(v.cta)) p.cta = str(v.cta); if (str(v.ctaVisual)) p.endSee = str(v.ctaVisual);
+    const pt = tkey(v.part || v.cas || v.time); const pk = PK.find(k => k === pt || tkey(PARTS[k].s) === pt || tkey(PARTS[k].n) === pt); if (pk) p.part = pk;
     if (okDate(v.shoot)) p.shoot = v.shoot; if (okDate(v.publish || v.date)) p.date = okDate(v.publish || v.date);
     if (str(v.description)) v.note = v.note || v.description;
     if (str(v.link)) p.link = str(v.link); if (str(v.note || v.desc)) p.note = str(v.note || v.desc); if (str(v.caption || v.cap)) p.cap = str(v.caption || v.cap);
     const what = [p.status && ST[p.status], p.cat && p.cat.name, p.fmt, p.hook && 'hook', p.body && `tělo (${p.body.length})`, (p.end || p.cta) && 'konec', p.cap && 'popisek', p.shoot && 'natočit ' + fmtDate(p.shoot), p.date && 'vydat ' + fmtDate(p.date)].filter(Boolean).join(', ');
     ch.push({ label: (ex ? 'Upravit' : 'Nové video') + ` „${title}“`, sub: what, apply: () => {
       const i = ex || (() => { const n = newVideo(title.slice(0, 140)); db.ideas.unshift(n); return n; })();
-      if (p.fmt) i.fmt = p.fmt; if (p.cat) i.cat = p.cat.id; if (p.link) i.link = p.link; if (p.shoot) i.shoot = p.shoot; if (p.date) i.date = p.date; if (p.cta) i.cta = p.cta;
+      if (p.fmt) i.fmt = p.fmt; if (p.cat) i.cat = p.cat.id; if (p.part) i.part = p.part; if (p.link) i.link = p.link; if (p.shoot) i.shoot = p.shoot; if (p.date) i.date = p.date; if (p.cta) i.cta = p.cta;
       if (p.hook) Object.entries(p.hook).forEach(([k, val]) => { if (val) i.sc.hook[k] = val; });
       if (p.body) i.sc.body = p.body.map(x => ({ id: uid(), say: x.say || '', see: x.see || '' }));
       if (p.end) i.sc.end.say = p.end; if (p.endSee) i.sc.end.see = p.endSee; if (p.cap) i.cap = p.cap; if (p.title) i.title = p.title.slice(0, 140);
@@ -1845,7 +2029,7 @@ function mergeDb(a, b) {
   const st = (b.setU || 0) > (a.setU || 0) ? b : a;
   return norm({ v: 5,
     ideas: mg(a.ideas, b.ideas).sort(byIdDesc), insp: mg(a.insp, b.insp).sort(byIdDesc),
-    tasks: mg(a.tasks, b.tasks).sort(asc), terms: mg(a.terms, b.terms).sort(asc), channels: mg(a.channels, b.channels).sort(asc), pillars: mg(a.pillars, b.pillars).sort(asc), cats: mg(a.cats, b.cats).sort(asc), days: mg(a.days, b.days).sort(asc), schedule: mg(a.schedule, b.schedule).sort(asc),
+    tasks: mg(a.tasks, b.tasks).sort(asc), terms: mg(a.terms, b.terms).sort(asc), channels: mg(a.channels, b.channels).sort(asc), pillars: mg(a.pillars, b.pillars).sort(asc), cats: mg(a.cats, b.cats).sort(asc), days: mg(a.days, b.days).sort(asc), slots: mg(a.slots, b.slots).sort(asc), schedule: mg(a.schedule, b.schedule).sort(asc),
     reviews: mg(a.reviews, b.reviews).sort(asc), events: mg(a.events, b.events).sort(asc), series: mg(a.series, b.series).sort(asc), hooks: mg(a.hooks, b.hooks).sort(byIdDesc),
     style: st.style || '', shootWd: st.shootWd, weekPlan: st.weekPlan || null, myF: st.myF || 0, lists: st.lists || null, fmtHidden: st.fmtHidden || [], setU: st.setU || 0, deleted: del });
 }
