@@ -637,6 +637,7 @@ const I = {
 };
 
 // kategorie (co to je – podle nich barvy a rozvrh) a typy dnů
+const MAX_CATS = 3; // jen tři typy videí
 const CAT_COLORS = ['#F26A1B', '#2F6FDB', '#1F9D57', '#8B5CF6', '#D9467A', '#C59A06', '#0E9AA7', '#6B7280'];
 const DEF_CATS = [['c-ez', 'Ez', 3, '#F26A1B'], ['c-osobni', 'Recept / osobní', 2, '#1F9D57'], ['c-odborne', 'Odborné', 2, '#2F6FDB']];
 // části dne pro vydání (sloty)
@@ -1504,7 +1505,7 @@ function renderEditor() {
       <div class="steps">${SK.map((s, n) => `<button data-st="${s}" class="${n <= si ? 'on' : ''} ${n === si ? 'cur' : ''}"><span>${n < si || (n === si && n > 0) ? I.check : n + 1}</span>${ST[s]}</button>`).join('')}</div>
       ${NEXT[i.status] ? `<button class="btn pri full big" id="nextst">${NEXT[i.status]} ${I.check}</button>` : ''}
       <label class="l">Kategorie</label>
-      <div class="fchips wrapc nosel catchips">${db.cats.map(c => `<button data-ct="${c.id}" class="${i.cat === c.id ? 'on' : ''}" style="--cc:${c.color}"><i></i>${esc(c.name)}</button>`).join('')}<button data-ct="+" class="add">+ Kategorie</button></div>
+      <div class="fchips wrapc nosel catchips">${db.cats.map(c => `<button data-ct="${c.id}" class="${i.cat === c.id ? 'on' : ''}" style="--cc:${c.color}"><i></i>${esc(c.name)}</button>`).join('')}${db.cats.length < MAX_CATS ? '<button data-ct="+" class="add">+ Kategorie</button>' : ''}</div>
       <label class="l">Formát</label>
       <div class="fchips wrapc nosel">${fl.map(f => `<button data-fm="${esc(f)}" class="${sameFmt(f, i.fmt) ? 'on' : ''}">${esc(f)}</button>`).join('')}<button data-fm="+" class="add">+ Vlastní</button></div>
       <div class="fld"><input data-f="link" inputmode="url" autocomplete="off" placeholder="Odkaz na inspiraci" value="${esc(i.link)}">${isUrl(i.link) ? `<a class="hint" href="${esc(i.link)}" target="_blank" rel="noopener">Otevřít ${esc(linkPlat(i.link))} ↗</a>` : ''}</div>
@@ -1817,9 +1818,10 @@ function renderSet() {
   const size = new Blob([localStorage.getItem(KEY) || '']).size;
   $('#view').innerHTML = `
     <h2 style="margin-top:4px">Kategorie a rozvrh</h2>
-    <div class="panel"><p>Co to je za video a kolik jich chceš týdně. Barva se ukáže v kalendáři. Ťukni na barvu pro změnu.</p>
+    <div class="panel"><p>Tři typy videí, jejich zkratka a kolik jich chceš týdně. Barva se ukáže v kalendáři – ťukni na ni pro změnu.</p>
       ${db.cats.map(c => `<div class="schr" data-cat="${c.id}"><button class="sw" data-cc style="background:${c.color}" aria-label="Barva"></button><input value="${esc(c.name)}" placeholder="Název" data-cn><input value="${esc(c.abbr || '')}" placeholder="${esc(abbrOf(c.name))}" data-ca maxlength="4" class="abin" aria-label="Zkratka"><div class="stepper"><button data-sd="-1">−</button><b>${c.per}×</b><button data-sd="1">+</button></div><button class="ico sm" data-cx>${I.x}</button></div>`).join('')}
-      <button class="btn sm" id="catadd">+ Kategorie</button></div>
+      ${db.cats.length > MAX_CATS ? `<p class="late" style="margin:8px 2px 0">Máš ${db.cats.length} kategorie – nech si jen ${MAX_CATS} (smaž křížkem ty navíc, videa zůstanou bez typu).</p>` : ''}
+      ${db.cats.length < MAX_CATS ? '<button class="btn sm" id="catadd">+ Kategorie</button>' : ''}</div>
     <h2>Pravidelný týden</h2>
     <div class="panel"><p>Co který den děláš. Jednotlivé dny změníš v kalendáři.</p>
       ${DSHORT.map((d, n) => `<div class="wpl"><b>${DAYN[n]}</b><select data-wpl="${n}"><option value="">—</option>${Object.entries(DTYPES).map(([k, v]) => `<option value="${k}" ${(db.weekPlan || {})[n] === k ? 'selected' : ''}>${v.n}</option>`).join('')}</select></div>`).join('')}</div>
@@ -1849,7 +1851,7 @@ function renderSet() {
     $$('[data-sd]', r).forEach(b => b.onclick = () => { c.per = Math.max(0, Math.min(14, c.per + +b.dataset.sd)); t(); $('b', r).textContent = c.per + '×'; });
     $('[data-cx]', r).onclick = () => delCat(c);
   });
-  $('#catadd').onclick = () => { db.cats.push({ id: uid(), name: '', per: 1, color: CAT_COLORS[db.cats.length % CAT_COLORS.length], updated: Date.now() }); save(true); render(); const l = $$('[data-cn]'); l[l.length - 1].focus(); };
+  const cadd = $('#catadd'); if (cadd) cadd.onclick = () => { db.cats.push({ id: uid(), name: '', per: 1, color: CAT_COLORS[db.cats.length % CAT_COLORS.length], updated: Date.now() }); save(true); render(); const l = $$('[data-cn]'); l[l.length - 1].focus(); };
   $$('[data-wpl]').forEach(s => s.onchange = () => { const wp = { ...(db.weekPlan || {}) }; if (s.value) wp[s.dataset.wpl] = s.value; else delete wp[s.dataset.wpl]; db.weekPlan = wp; db.shootWd = shootWd(); setU(); });
   $$('[data-lst]').forEach(el => el.oninput = () => { db.lists = { ...(db.lists || {}), [el.dataset.lst]: el.value.split('\n').map(x => x.trim()).filter(Boolean) }; setU(); });
   $('#lstdef').onclick = () => { if (!confirm('Vrátit výchozí checklisty?')) return; db.lists = null; setU(); render(); };
