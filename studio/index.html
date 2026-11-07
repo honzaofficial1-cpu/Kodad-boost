@@ -577,6 +577,16 @@ body.wide main.wrap,body.wide .top .wrap{max-width:1100px}
 .tick,.vchip>button,.ico.sm{position:relative}
 .tick::after,.vchip>button::after{content:'';position:absolute;inset:-9px}
 .ico.sm::after{content:'';position:absolute;inset:-6px}
+
+.recbar{display:flex;align-items:center;gap:10px;margin:10px 0 0;padding:10px 12px;border-radius:12px;background:var(--sunk);color:var(--tx2);font-size:14px;font-weight:600}
+.recbar .btn{margin-left:auto}
+.fromlink{display:block;margin-top:8px;font-size:13.5px;color:var(--brand-ink);text-align:left}
+.wpl2{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin:2px 0 4px}
+.wpl2 small{font-size:12px;color:var(--tx3);margin-right:2px}
+.wpl2 span{font-size:12px;padding:2px 8px;border-radius:99px;background:var(--sunk);color:var(--tx2)}
+.wpl2 span b{color:color-mix(in srgb,var(--cc) 75%,#000);font-weight:800}
+.wpl2 span.full{background:color-mix(in srgb,var(--cc) 14%,#fff)}
+#modal .wpl2{margin:0 0 10px}
 </style>
 </head>
 <body>
@@ -611,7 +621,7 @@ const SK = Object.keys(ST);
 const SI = s => SK.indexOf(s);
 const NEXT = { idea: 'Scénář hotový', script: 'Natočeno', shot: 'Vydáno' };
 // výchozí formáty a jejich výchozí kategorie (ez / rec / odb)
-const DEF_FMTS = [['EZ s textem', 'ez'], ['Head talk', 'odb'], ['Mluvení u tabule', 'odb'], ['Recept', 'rec'], ['Recept edit', 'rec'], ['Vaření', 'rec'], ['Recenze', '']];
+const DEF_FMTS = [['EZ s textem', 'ez'], ['Head talk', 'odb'], ['Mluvení u tabule', 'odb'], ['Recept', 'rec'], ['Recept edit', 'ez'], ['Vaření', 'rec'], ['Recenze', 'odb']];
 const WPS = 2.3; // slov za sekundu při mluvení
 const DAYN = ['Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek', 'Sobota', 'Neděle'];
 const DSHORT = ['po', 'út', 'st', 'čt', 'pá', 'so', 'ne'];
@@ -679,7 +689,9 @@ const I = {
 // kategorie (co to je – podle nich barvy a rozvrh) a typy dnů
 const MAX_CATS = 3; // jen tři typy videí
 const CAT_COLORS = ['#F26A1B', '#2F6FDB', '#1F9D57', '#8B5CF6', '#D9467A', '#C59A06', '#0E9AA7', '#6B7280'];
-const DEF_CATS = [['c-ez', 'Ez', 3, '#F26A1B'], ['c-osobni', 'Recept / osobní', 2, '#1F9D57'], ['c-odborne', 'Odborné', 2, '#2F6FDB']];
+// 3 kategorie podle toho, jak video vzniká: bez mluvení (edit s hudbou, text) · dabing · mluvím do kamery
+const CAT3 = [['Bez mluvení', 'EZ'], ['Dabing', 'DAB'], ['Do kamery', 'KAM']];
+const DEF_CATS = [['c-ez', CAT3[0][0], 3, '#F26A1B', CAT3[0][1]], ['c-osobni', CAT3[1][0], 2, '#1F9D57', CAT3[1][1]], ['c-odborne', CAT3[2][0], 2, '#2F6FDB', CAT3[2][1]]];
 // části dne pro vydání (sloty)
 const PARTS = { am: { n: 'Ráno', s: 'ráno' }, pm: { n: 'Odpoledne', s: 'odpo' }, ev: { n: 'Večer', s: 'večer' } };
 const PK = Object.keys(PARTS);
@@ -738,7 +750,7 @@ function norm(d, seed) {
     const src = o.schedule.filter(s => (s.format || '').trim()).length
       ? o.schedule.filter(s => (s.format || '').trim()).map((s, n) => ['c-' + lc(s.format).replace(/[^a-z0-9]+/g, '-'), s.format.trim(), s.per || 1, CAT_COLORS[n % CAT_COLORS.length]])
       : DEF_CATS;
-    o.cats = src.filter(([id]) => !o.deleted[id]).map(([id, name, per, color]) => ({ id, name, per, color, updated: 1 }));
+    o.cats = src.filter(([id]) => !o.deleted[id]).map(([id, name, per, color, abbr]) => ({ id, name, per, color, abbr: abbr || '', k3: !!abbr, updated: 1 }));
     o.ideas.forEach((i, n) => { if (raw[n].cat === undefined) { const c = o.cats.find(c => lc(c.name) === lc(i.fmt)); if (c) i.cat = c.id; } });
   }
   o.cats = o.cats.map(c => ({ name: '', per: 0, color: CAT_COLORS[0], abbr: '', ...c }));
@@ -852,14 +864,15 @@ function setDayType(d, type) {
 const slotOk = s => !!(s.fmt || (s.cat && db.cats.some(c => c.id === s.cat)));
 const slotCat = s => (s.fmt && fmtCat(s.fmt)) || (s.cat && db.cats.some(c => c.id === s.cat) ? s.cat : '');
 const weekSlots = ws => db.slots.filter(s => slotOk(s) && s.date >= ws && s.date <= addDays(ws, 6));
-const perOf = (c, ws) => { const sl = weekSlots(ws); return sl.length ? sl.filter(s => slotCat(s) === c.id).length : (c.per || 0); };
-const weekTarget = ws => { const sl = weekSlots(ws); return sl.length ? sl.length : db.cats.reduce((a, c) => a + (c.per || 0), 0); };
+// cíl týdne: kolik videí z kategorie má vyjít (víc naplánovaných míst cíl zvýší)
+const perOf = (c, ws) => Math.max(c.per || 0, weekSlots(ws).filter(s => slotCat(s) === c.id).length);
+const weekTarget = ws => db.cats.reduce((a, c) => a + perOf(c, ws), 0) + weekSlots(ws).filter(s => !slotCat(s)).length;
 function catStat(ws) {
   const we = addDays(ws, 6);
   return db.cats.map(c => ({ c, per: perOf(c, ws) })).filter(x => x.per > 0).map(({ c, per }) => {
     const l = db.ideas.filter(i => i.cat === c.id), inW = l.filter(i => i.date >= ws && i.date <= we);
     const done = inW.filter(i => i.status === 'done').length, ready = inW.filter(i => i.status === 'shot').length;
-    const zas = l.filter(i => i.status === 'shot' && !i.date).length, planned = inW.filter(i => SI(i.status) < SI('shot')).length;
+    const zas = l.filter(i => i.status === 'shot' && !i.date && !i.recycle).length, planned = inW.filter(i => SI(i.status) < SI('shot')).length;
     return { c, per, done, ready, zas, planned, toShoot: Math.max(0, per - done - ready - zas), toPlan: Math.max(0, per - inW.length) };
   });
 }
@@ -882,6 +895,21 @@ function setSlot(d, part, val) {
   if (ex) Object.assign(ex, o, { updated: Date.now() });
   else db.slots.push({ id, date: d, part, ...o, updated: Date.now() });
 }
+
+// jednorázově přejmenuje dosavadní tři kategorie (barvy a počty zůstanou); značka k3 je u každé kategorie, ať se to nedělá znovu
+function migrateCats3() {
+  const ids = ['c-ez', 'c-osobni', 'c-odborne'].map(id => db.cats.find(c => c.id === id));
+  const order = ids.every(Boolean) ? ids : db.cats.slice(0, 3);
+  if (!order.length || order.every(c => c.k3)) return;
+  const was = order.map(c => c.k3);
+  order.forEach((c, n) => { if (!c.k3) { c.name = CAT3[n][0]; c.abbr = CAT3[n][1]; c.k3 = true; c.updated = Date.now(); } });
+  // Recept edit = edit s hudbou → bez mluvení (jen když měl dosud výchozí kategorii)
+  const re = fmtDef('Recept edit');
+  if (re && order[0] && order[1] && !was[0] && re.cat === order[1].id) { re.cat = order[0].id; re.updated = Date.now(); }
+  save(true);
+}
+// tichá kategorie (bez mluvení) – ráno se nabízí jen ta
+const quietCat = () => { const c = db.cats.find(c => c.id === 'c-ez') || db.cats.find(c => (c.abbr || '').toUpperCase() === 'EZ') || db.cats[0]; return c ? c.id : ''; };
 
 // ================= drobnosti UI =================
 let toastT;
@@ -1007,7 +1035,7 @@ function dayBanner(t, shootN, weekend, nx) {
 function renderToday() {
   const t = today(), items = todayItems(), term = nextTerm(), shootN = db.ideas.filter(i => i.shoot === t).length;
   const tasks = db.tasks.filter(x => !x.done && (!x.due || x.due <= t)).sort((a, b) => (a.due || '9') < (b.due || '9') ? -1 : 1);
-  const ws = monday(t), w = weekStat(ws), zas = db.ideas.filter(i => i.status === 'shot' && !i.date).length;
+  const ws = monday(t), w = weekStat(ws), zas = db.ideas.filter(i => i.status === 'shot' && !i.date && !i.recycle).length;
   const nx = weekStat(addDays(ws, 7)), weekend = wdOf(t) >= 5 && (nx.tg ? nx.all < nx.tg : !nx.all);
   const strip = [...Array(7)].map((_, n) => { const d = addDays(ws, n), pb = onDay(d, 'date'), sh = onDay(d, 'shoot'), ty = dayType(d);
     return `<button class="wsd_ ${d === t ? 'tod' : ''} ${d < t ? 'past' : ''}" data-gow><small>${DSHORT[n]}</small><b>${+d.slice(8)}</b><span>${pb.map(i => `<i class="p ${i.status === 'done' ? 'ok' : ''}" style="--cc:${catColor(i)}"></i>`).join('')}${sh.length ? '<i class="s"></i>' : ''}</span><u class="${ty ? 'ty-' + ty : ''}">${ty ? DTYPES[ty].a : ''}</u></button>`; }).join('');
@@ -1304,7 +1332,7 @@ function catBars(ws) {
 }
 function weekCounter(ws) {
   const we = addDays(ws, 6), pubs = db.ideas.filter(i => i.date >= ws && i.date <= we), tg = weekTarget(ws);
-  return `<div class="counter"><div class="big"><b>${pubs.length}${tg ? `<small>/${tg}</small>` : ''}</b><span>${plural(pubs.length, 'video', 'videa', 'videí')} k vydání${weekSlots(ws).length ? ' · podle plánu' : ''}</span></div>${catBars(ws)}</div>`;
+  return `<div class="counter"><div class="big"><b>${pubs.length}${tg ? `<small>/${tg}</small>` : ''}</b><span>${plural(pubs.length, 'video', 'videa', 'videí')} k vydání</span></div>${catBars(ws)}</div>`;
 }
 const pubChip = (i, extra = '') => `<span class="vchip k-date s-${i.status}" style="--cc:${catColor(i)}" data-open="${i.id}">${catOf(i) ? `<b class="ab0">${esc(catAbbr(catOf(i)))}</b>` : ''}${i.status === 'done' ? '✓ ' : ''}${esc(i.title)}${extra}</span>`;
 const typeTag = d => { const ty = dayType(d); return ty ? `<em class="ty ty-${ty}">${DTYPES[ty].n}</em>` : ''; };
@@ -1316,23 +1344,37 @@ const slotColor = s => { const c = catById(slotCat(s)); return c ? c.color : '#9
 function planRow(d, p) {
   const s = slotAt(d, p), l = slotVids(d, p);
   const what = s ? `<button class="pw" data-pf="${d}|${p}" style="--cc:${slotColor(s)}"><i></i>${esc(slotLabel(s))}</button>`
-    : `<button class="pw add" data-pf="${d}|${p}">${l.length ? '+ formát' : '+ Naplánovat formát'}</button>`;
+    : `<button class="pw add" data-pf="${d}|${p}">${l.length ? '+ formát' : p === 'am' && catById(quietCat()) ? '+ ' + esc(catAbbr(catById(quietCat()))) + ' bez mluvení' : '+ Naplánovat formát'}</button>`;
   const vid = l.map(i => `<button class="pv s-${i.status}" data-open="${i.id}" style="--cc:${catColor(i)}">${i.status === 'done' ? '✓ ' : i.status === 'shot' ? '● ' : ''}${esc(i.title)}</button>`).join('')
     || (s ? `<button class="pv add" data-pvk="${d}|${p}">+ Vybrat video</button>` : '');
   return `<div class="pr ${s || l.length ? '' : 'empty'}"><span class="pk">${PARTS[p].n}</span><div class="pc">${what}${vid}</div>${s || l.length ? `<button class="pm" data-pm="${d}|${p}" aria-label="Možnosti">⋯</button>` : ''}</div>`;
 }
 const planHTML = d => `<div class="plan">${PK.map(p => planRow(d, p)).join('')}</div>`;
+// stav plánu týdne: kolik z každé kategorie je naplánováno (místo nebo video) a kolik má týdně vyjít
+function weekPlanLine(ws) {
+  const we = addDays(ws, 6), has = c => {
+    const sl = db.slots.filter(s => slotOk(s) && s.date >= ws && s.date <= we && slotCat(s) === c.id);
+    const extra = db.ideas.filter(i => i.cat === c.id && i.date >= ws && i.date <= we && !(i.part && slotAt(i.date, i.part)));
+    return sl.length + extra.length;
+  };
+  const l = db.cats.filter(c => c.per > 0).map(c => { const n = has(c); return `<span class="${n >= c.per ? 'full' : ''}" style="--cc:${c.color}"><b>${esc(catAbbr(c))}</b> ${n}/${c.per}</span>`; });
+  return l.length ? `<div class="wpl2"><small>Týden:</small>${l.join('')}</div>` : '';
+}
 function bindPlan(root = document) {
   $$('[data-pf]', root).forEach(b => { const [d, p] = b.dataset.pf.split('|'); b.onclick = e => { e.stopPropagation(); fmtPickSheet(d, p); }; });
   $$('[data-pvk]', root).forEach(b => { const [d, p] = b.dataset.pvk.split('|'); b.onclick = e => { e.stopPropagation(); pickVideoSheet(d, p); }; });
   $$('[data-pm]', root).forEach(b => { const [d, p] = b.dataset.pm.split('|'); b.onclick = e => { e.stopPropagation(); slotMenu(d, p); }; });
 }
 // vybrat formát pro místo – tím se jen naplánuje vydání, video nevzniká
-function fmtPickSheet(d, p) {
-  const s = slotAt(d, p);
-  openModal(`<h3>${capFirst(relDate(d))} · ${PARTS[p].n}</h3><p class="muted">Co v tuhle dobu vyjde?</p>
-    <div class="fpick">${fmtList().map(f => { const c = catById(fmtCat(f)); return `<button data-fp="${esc(f)}" class="${s && sameFmt(s.fmt, f) ? 'on' : ''}" style="--cc:${c ? c.color : '#9B9BA2'}"><i></i><span>${esc(f)}</span>${c ? `<small>${esc(catAbbr(c))}</small>` : ''}</button>`; }).join('')}</div>
-    <div class="btnrow">${s ? '<button class="btn quiet danger" id="fpdel">Zrušit místo</button>' : ''}<button class="btn quiet" id="fpedit">Upravit formáty</button></div>`, m => {
+// ráno jen formáty bez mluvení, odpoledne a večer zbytek
+const fmtsFor = p => { const q = quietCat(), all = fmtList(); if (!q) return all; const l = all.filter(f => p === 'am' ? fmtCat(f) === q : fmtCat(f) !== q); return l.length ? l : all; };
+function fmtPickSheet(d, p, all) {
+  const s = slotAt(d, p), list = all ? fmtList() : fmtsFor(p), hidden = fmtList().length - list.length;
+  openModal(`<h3>${capFirst(relDate(d))} · ${PARTS[p].n}</h3><p class="muted">${p === 'am' && !all ? 'Ráno jen bez mluvení – edit s hudbou, text.' : 'Co v tuhle dobu vyjde?'}</p>
+    ${weekPlanLine(monday(d))}
+    <div class="fpick">${list.map(f => { const c = catById(fmtCat(f)); return `<button data-fp="${esc(f)}" class="${s && sameFmt(s.fmt, f) ? 'on' : ''}" style="--cc:${c ? c.color : '#9B9BA2'}"><i></i><span>${esc(f)}</span>${c ? `<small>${esc(catAbbr(c))}</small>` : ''}</button>`; }).join('')}</div>
+    <div class="btnrow">${hidden > 0 ? `<button class="btn quiet" id="fpall">Ukázat všechny (${hidden})</button>` : ''}${s ? '<button class="btn quiet danger" id="fpdel">Zrušit místo</button>' : ''}<button class="btn quiet" id="fpedit">Upravit formáty</button></div>`, m => {
+    const fa = $('#fpall', m); if (fa) fa.onclick = () => fmtPickSheet(d, p, true);
     $$('[data-fp]', m).forEach(b => b.onclick = () => { setSlot(d, p, { fmt: b.dataset.fp }); save(true); closeModal(); render(); });
     const x = $('#fpdel', m); if (x) x.onclick = () => { setSlot(d, p, ''); save(true); closeModal(); render(); };
     $('#fpedit', m).onclick = () => { closeModal(); go('set'); setTimeout(() => { const h = $('#fmtsec'); h && h.scrollIntoView({ block: 'start' }); }, 50); };
@@ -1359,15 +1401,17 @@ function slotMenu(d, p) {
 function pickVideoSheet(d, p) {
   const s = slotAt(d, p), cur_ = slotVids(d, p);
   const rank = i => SI(i.status) === SI('shot') ? 0 : SI(i.status) === SI('script') ? 1 : 2;
-  const pool = db.ideas.filter(i => i.status !== 'done' && !cur_.includes(i));
+  const pool = db.ideas.filter(i => (i.status !== 'done' || i.recycle) && !cur_.includes(i));
   const top = s ? pool.filter(i => !i.date && slotFits(s, i)).sort((a, b) => rank(a) - rank(b) || b.updated - a.updated) : [];
   const rest = pool.filter(i => !top.includes(i)).sort((a, b) => (!!a.date - !!b.date) || rank(a) - rank(b) || b.updated - a.updated);
-  const rowV = i => row(`<b>${catOf(i) ? ab(catOf(i)) + ' ' : ''}${esc(i.title)}</b>`, [ST[i.status], i.fmt, i.date ? 'teď ' + relDate(i.date) + (i.part ? ' ' + PARTS[i.part].s : '') : 'bez termínu'].filter(Boolean).join(' · '), '', `data-pv="${i.id}"`);
+  const rowV = i => row(`<b>${catOf(i) ? ab(catOf(i)) + ' ' : ''}${esc(i.title)}</b>`, [i.recycle ? 'k recyklaci' : '', ST[i.status], i.fmt, i.date ? 'teď ' + relDate(i.date) + (i.part ? ' ' + PARTS[i.part].s : '') : 'bez termínu'].filter(Boolean).join(' · '), '', `data-pv="${i.id}"`);
   openModal(`<h3>${capFirst(relDate(d))} · ${PARTS[p].n}${s ? ' · ' + esc(slotLabel(s)) : ''}</h3>
     <input id="pvn" placeholder="Nové video – název nebo odkaz (Enter)" autocomplete="off" enterkeyhint="done">
     ${top.length ? `<label class="l">${esc(s.fmt || slotLabel(s))} · bez termínu</label><div class="list">${top.map(rowV).join('')}</div>` : s ? `<p class="muted" style="margin-top:12px">Žádné nevydané video formátu ${esc(slotLabel(s))} bez termínu – napiš nový název nahoře.</p>` : ''}
     ${rest.length ? `<label class="l">Jiná videa</label><div class="list">${rest.map(rowV).join('')}</div>` : ''}`, m => {
     const put = i => {
+      if (i.status === 'done') i = repost(i); // vydané video k recyklaci → nové vydání
+      i.recycle = false;
       const moved = i.date && (i.date !== d || i.part !== p) ? relDate(i.date) : '';
       cur_.forEach(x => { if (x !== i) { x.date = ''; x.part = ''; touchV(x); } });
       i.date = d; i.part = p;
@@ -1391,7 +1435,7 @@ function renderWeek() {
   let body;
   if (ui.wmode === 'slots') {
     body = `<p class="muted" style="margin-top:0">Naplánuj, co kdy vyjde. Formát stačí – konkrétní video vybereš později.</p>
-      <div class="wlist">${days.map((d, n) => `<div class="wd ${d === t ? 'tod' : ''} ${d < t ? 'past' : ''}">${dayHead(d, n)}${planHTML(d)}</div>`).join('')}</div>
+      <div class="wlist">${days.map((d, n) => `<div class="wd ${d === t ? 'tod' : ''} ${d < t ? 'past' : ''}">${dayHead(d, n)}${weekPlanLine(ws)}${planHTML(d)}</div>`).join('')}</div>
       <div class="btnrow"><button class="btn" id="slcopy">Zkopírovat minulý týden</button><button class="btn quiet" id="slclear">Vymazat plán týdne</button></div>`;
   } else if (ui.wmode === 'write') {
     const pool = db.ideas.filter(i => i.status !== 'done' && !i.date && !i.shoot).slice(0, 40);
@@ -1449,7 +1493,7 @@ function renderWeek() {
 // dá video na den (natočit / vydat bez části dne)
 function assign(i, sl, isNew) {
   if (!i) return;
-  i[sl.k] = sl.d;
+  i[sl.k] = sl.d; i.recycle = false;
   if (sl.k === 'date') i.part = '';
   touchV(i); save(true); render();
   if (isNew && !i.cat) return askCat(i);
@@ -1605,6 +1649,14 @@ function pickDate(i, field, after, month, count = 21) {
   });
 }
 
+// nové vydání už vydaného videa (recyklace): kopie se stavem Natočeno, odkazem na původní a stejným scénářem
+function repost(i) {
+  const n = newVideo(i.title + ' (znovu)', i.fmt);
+  Object.assign(n, { cat: i.cat, kind: i.kind, link: i.link, drive: i.drive, sc: JSON.parse(JSON.stringify(i.sc)), cta: i.cta, cap: i.cap, status: 'shot', from: i.id, note: i.note });
+  i.recycle = false; touchV(i);
+  db.ideas.unshift(n); return n;
+}
+
 // ================= VIDEA =================
 function vidRow(i) {
   const r = resOf(i), x = myRatio(i);
@@ -1613,19 +1665,21 @@ function vidRow(i) {
   const c = catOf(i);
   return `<div class="row vid" data-open="${i.id}"><span class="cbar" style="--cc:${c ? c.color : 'transparent'}"></span><div class="rt"><b>${esc(i.title || 'Bez názvu')}</b><small>${c ? `<span class="cn" style="color:${c.color}">${esc(c.name)}</span>${i.fmt || when ? ' · ' : ''}` : ''}${esc([i.fmt, i.kind === 'long' ? 'Dlouhé' : '', when].filter(Boolean).join(' · ')) || (c ? '' : '&nbsp;')}</small></div>${right}</div>`;
 }
+const recSec = all => { const l = all.filter(i => i.recycle).sort((a, b) => b.updated - a.updated);
+  return l.length ? `<h2>Recyklovat později <span class="cnt">${l.length}</span></h2><div class="list">${l.map(vidRow).join('')}</div>` : ''; };
 function renderVids() {
   const fl = fmtList().filter(f => db.ideas.some(i => sameFmt(i.fmt, f))), cl = db.cats.filter(c => db.ideas.some(i => i.cat === c.id));
   const selCat = cl.find(c => ui.vfmt === 'cat:' + c.id);
   const sel = selCat ? ui.vfmt : fl.find(f => sameFmt(f, ui.vfmt)) || '';
   const all = db.ideas.filter(i => !sel || (selCat ? i.cat === selCat.id : sameFmt(i.fmt, sel)));
   // rozpracované nahoře (nejblíž vydání první), v každém stavu naposledy upravené navrchu
-  const by = s => all.filter(i => i.status === s).sort((a, b) => s === 'done' ? ((b.date || '') < (a.date || '') ? -1 : 1) : b.updated - a.updated);
+  const by = s => all.filter(i => i.status === s && !i.recycle).sort((a, b) => s === 'done' ? ((b.date || '') < (a.date || '') ? -1 : 1) : b.updated - a.updated);
   const sec = s => { const l = by(s); if (!l.length) return ''; const show = s === 'done' && !ui.showDone ? l.slice(0, 5) : l;
     return `<h2><span class="dot s-${s}"></span>${ST[s]} <span class="cnt">${l.length}</span></h2><div class="list">${show.map(vidRow).join('')}</div>${show.length < l.length ? `<button class="btn quiet full" id="moredone">Zobrazit všech ${l.length}</button>` : ''}`; };
   $('#view').innerHTML = `
     <form class="quick top" id="vq"><input id="vqi" placeholder="Nové video – název nebo odkaz (Enter)" autocomplete="off" enterkeyhint="done"></form>
     ${fl.length + cl.length ? `<div class="fchips nosel catchips"><button data-vf="" class="${!sel ? 'on' : ''}">Vše</button>${cl.map(c => `<button data-vf="cat:${c.id}" data-vc="${c.id}" class="${sel === 'cat:' + c.id ? 'on' : ''}" style="--cc:${c.color}"><i></i>${esc(c.name)}</button>`).join('')}${fl.map(f => `<button data-vf="${esc(f)}" class="${sel === f ? 'on' : ''}">${esc(f)}</button>`).join('')}</div>` : ''}
-    ${all.length ? ['shot', 'script', 'idea', 'done'].map(sec).join('') : '<div class="calm"><b>Zatím žádná videa.</b><span>Napiš nahoru název a dej Enter.</span></div>'}`;
+    ${all.length ? ['shot', 'script', 'idea'].map(sec).join('') + recSec(all) + sec('done') : '<div class="calm"><b>Zatím žádná videa.</b><span>Napiš nahoru název a dej Enter.</span></div>'}`;
   $('#vq').onsubmit = e => { e.preventDefault(); const it = quickAdd($('#vqi').value, selCat ? '' : sel); if (!it) return; if (selCat) { it.cat = selCat.id; touchV(it); save(true); } render(); if (!it.cat && db.cats.length) return askCat(it); toast('Přidáno'); setTimeout(() => { const el = $('#vqi'); el && el.focus(); }, 30); };
   $$('[data-vf]').forEach(b => { b.onclick = () => { ui.vfmt = b.dataset.vf; keepUi(); render(); }; if (b.dataset.vc) longPress(b, () => catSheet(db.cats.find(c => c.id === b.dataset.vc))); else if (b.dataset.vf) longPress(b, () => fmtSheet(b.dataset.vf)); });
   if (fl.length && !localStorage.getItem('studio.tipfmt')) { try { localStorage.setItem('studio.tipfmt', '1'); } catch (e) {} setTimeout(() => toast('Tip: podrž formát a můžeš ho upravit nebo smazat'), 400); }
@@ -1673,6 +1727,8 @@ function renderEditor() {
     </div></div>
     <div class="wrap ed">
       <textarea class="ttl" data-f="title" rows="1" placeholder="Název">${esc(i.title)}</textarea>
+      ${i.recycle ? `<div class="recbar">Odloženo k recyklaci<button class="btn sm" id="unrec">Vrátit</button></div>` : ''}
+      ${i.from && byId(i.from) ? `<button class="fromlink" data-open="${i.from}">Vychází z: ${esc(byId(i.from).title)} →</button>` : ''}
       <div class="steps">${SK.map((s, n) => `<button data-st="${s}" class="${n <= si ? 'on' : ''} ${n === si ? 'cur' : ''}"><span>${n < si || (n === si && n > 0) ? I.check : n + 1}</span>${ST[s]}</button>`).join('')}</div>
       ${NEXT[i.status] ? `<button class="btn pri full big" id="nextst">${NEXT[i.status]} ${I.check}</button>` : ''}
       <label class="l">Kategorie</label>
@@ -1695,6 +1751,7 @@ function renderEditor() {
       <h2>Konec</h2>
       <div class="part" data-pk="end"><textarea data-pf="say" rows="1" placeholder="Jak to uzavřu">${esc(i.sc.end.say)}</textarea><textarea data-pf="see" rows="1" class="see" placeholder="Co je vidět">${esc(i.sc.end.see)}</textarea>
         <label class="hl">CTA</label><textarea data-f="cta" rows="1" placeholder="Např. Ulož si to na později">${esc(i.cta)}</textarea></div>
+      <button class="btn full" id="variant" style="margin-top:14px">+ Udělat z toho další video (jinak pojaté)</button>
       <h2>Popisek <button class="btn sm quiet" id="capcopy" style="margin-left:auto">${I.copy} Kopírovat</button></h2>
       <textarea class="notes" data-f="cap" rows="2" placeholder="Text k příspěvku + hashtagy">${esc(i.cap)}</textarea>
       <label class="chk"><input type="checkbox" id="islong" ${i.kind === 'long' ? 'checked' : ''}><span>Dlouhé video (YouTube) – kapitoly a miniatura</span></label>
@@ -1721,7 +1778,9 @@ function bindEditor() {
   const ed = $('#editor'), i = cur;
   $('#eback').onclick = () => closeEditor();
   $('#esave').onclick = () => { closeEditor(); toast('Uloženo'); };
-  $('#edel').onclick = () => { if (!confirm('Smazat „' + (i.title || 'Bez názvu') + '“?')) return; gone(i.id); db.ideas = db.ideas.filter(x => x !== i); closeEditor(); toast('Smazáno'); };
+  $('#edel').onclick = () => delSheet(i);
+  $('#variant').onclick = () => variantSheet(i);
+  const ur = $('#unrec', ed); if (ur) ur.onclick = () => { i.recycle = false; touch(); renderEditor(); toast('Vráceno mezi videa'); };
   $$('[data-st]', ed).forEach(b => b.onclick = () => {
     const s = b.dataset.st, n = SI(s);
     const target = n === SI(i.status) && n > 0 ? SK[n - 1] : s; // ťuknutím na aktuální krok ho odškrtneš
@@ -1794,6 +1853,49 @@ function videoText(i) {
   if (i.cap.trim()) s.push('', '[Popisek]', i.cap.trim());
   if (i.note.trim()) s.push('', i.note.trim());
   return s.filter(x => typeof x === 'string').join('\n').replace(/\n{3,}/g, '\n\n').trim();
+}
+
+// další video ze stejného námětu, jen jinak pojaté
+function variantSheet(i) {
+  let fmt = i.fmt || '';
+  openModal(`<h3>Další video z tohohle</h3><p class="muted">Stejný námět, jiný úhel. Původní video zůstane.</p>
+    <input id="vtn" value="${esc(i.title)} – jinak" placeholder="Název" autocomplete="off">
+    <label class="l">Jak to pojmeš jinak?</label>
+    <textarea id="vta" rows="2" placeholder="Např. místo receptu mýty o jídle, jiný hook, z pohledu diváka…"></textarea>
+    <label class="l">Formát</label>
+    <div class="fchips wrapc catchips nosel" id="vtf">${fmtList().map(f => { const c = catById(fmtCat(f)); return `<button data-vf2="${esc(f)}" class="${sameFmt(f, fmt) ? 'on' : ''}" ${c ? `style="--cc:${c.color}"` : ''}>${c ? '<i></i>' : ''}${esc(f)}</button>`; }).join('')}</div>
+    <label class="chk" style="margin-top:12px"><input type="checkbox" id="vtc" ${hasScript(i) ? 'checked' : ''}><span>Zkopírovat scénář jako základ</span></label>
+    <button class="btn pri full big" id="vtok" style="margin-top:14px">Vytvořit a psát</button>`, m => {
+    $$('[data-vf2]', m).forEach(b => b.onclick = () => { fmt = sameFmt(fmt, b.dataset.vf2) ? '' : b.dataset.vf2; $$('[data-vf2]', m).forEach(x => x.classList.toggle('on', sameFmt(x.dataset.vf2, fmt))); });
+    let done = false;
+    $('#vtok', m).onclick = () => {
+      if (done) return; done = true;
+      const n = newVideo(($('#vtn', m).value.trim() || i.title + ' – jinak').slice(0, 140), fmt);
+      n.cat = (fmt && fmtCat(fmt)) || i.cat; n.link = i.link; n.from = i.id;
+      n.note = [$('#vta', m).value.trim(), i.note].filter(Boolean).join('\n\n');
+      if ($('#vtc', m).checked) { n.sc = JSON.parse(JSON.stringify(i.sc)); n.sc.body.forEach(b => b.id = uid()); n.cta = i.cta; }
+      db.ideas.unshift(n); save(true); closeModal(); closeEditor(true); openEditor(n.id);
+      setTimeout(() => { const h = $('#editor [data-pk=hook] [data-pf=say]'); h && h.focus(); }, 80); toast('Nové video – původní zůstalo');
+    };
+  });
+}
+// místo rovnou smazat: přesunout, recyklovat, odložit, předělat
+function delSheet(i) {
+  const has = i.date || i.shoot;
+  openModal(`<h3>Co s tímhle videem?</h3><p class="muted">${esc(i.title)} · ${ST[i.status]}${i.date ? ' · vydat ' + relDate(i.date) : ''}${i.shoot && SI(i.status) < SI('shot') ? ' · natočit ' + relDate(i.shoot) : ''}</p>
+    <div class="stack">
+      ${has ? '<button class="btn full" id="dmove">Nestihl jsem – přesunout</button>' : ''}
+      <button class="btn full" id="drec">Recyklovat někdy později</button>
+      ${has ? '<button class="btn full" id="dpark">Odložit mezi nápady (bez termínu)</button>' : ''}
+      <button class="btn full" id="dvar">Předělat jinak (nové video z tohohle)</button>
+      <button class="btn danger full" id="ddel">Smazat natrvalo</button></div>`, m => {
+    const clear = () => { i.date = ''; i.part = ''; if (SI(i.status) < SI('shot')) i.shoot = ''; };
+    const mv = $('#dmove', m); if (mv) mv.onclick = () => pickDate(i, i.date && i.status !== 'done' ? 'date' : 'shoot', () => { if (cur) renderEditor(); render(); });
+    $('#drec', m).onclick = () => { clear(); i.recycle = true; touchV(i); save(true); closeModal(); closeEditor(); toast('Odloženo k recyklaci – najdeš ve Videích'); };
+    const pk = $('#dpark', m); if (pk) pk.onclick = () => { clear(); touchV(i); save(true); closeModal(); if (cur) renderEditor(); toast('Termín zrušen – video zůstalo mezi nápady'); };
+    $('#dvar', m).onclick = () => variantSheet(i);
+    $('#ddel', m).onclick = () => { gone(i.id); db.ideas = db.ideas.filter(x => x !== i); closeModal(); closeEditor(); toast('Smazáno'); };
+  });
 }
 
 // ================= INSPIRACE =================
@@ -2342,6 +2444,7 @@ document.addEventListener('keydown', e => {
   const t = [sp.get('url'), sp.get('text'), sp.get('title')].filter(Boolean).join(' ');
   if ((t.match(urlRe) || []).length) { quickAdd(t); history.replaceState(null, '', location.pathname); toast('Odkaz uložen jako video'); }
   try { const raw = JSON.parse(localStorage.getItem(KEY)); if (raw && raw.v !== 5) save(true); } catch (e) {}
+  migrateCats3();
   go('today');
   setTimeout(() => checkIn(), 500);
 })();
