@@ -587,6 +587,17 @@ body.wide main.wrap,body.wide .top .wrap{max-width:1100px}
 .wpl2 span b{color:color-mix(in srgb,var(--cc) 75%,#000);font-weight:800}
 .wpl2 span.full{background:color-mix(in srgb,var(--cc) 14%,#fff)}
 #modal .wpl2{margin:0 0 10px}
+
+/* 5 kroků a dodabovat */
+.steps.s5 button{font-size:11.5px}
+.steps.s5 button span{width:28px;height:28px}
+.dubchk{margin:10px 2px 0}
+.dubchk.on span{color:#B4410E;font-weight:600}
+.dubtag{display:inline-block;font:700 11px/1 var(--fb);padding:3px 7px;border-radius:99px;background:#FDECEC;color:var(--bad);vertical-align:2px;margin-left:4px}
+.btn.dubon{border-color:var(--bad);color:var(--bad)}
+.row.k-dub .lbl{color:var(--bad)}
+.row.k-cut .lbl{color:var(--ty-edit)}
+.row .rt .dubtag{display:inline-block;width:auto}
 </style>
 </head>
 <body>
@@ -838,6 +849,18 @@ function setStatus(i, s) {
   if (s === 'shot' && i.shoot && i.shoot > today()) i.shoot = today();
   save(true);
 }
+// kroky práce: Nápad → Scénář → Natočeno → Střih → Vydáno
+// (střih = natočené video se značkou „sestříháno“; „dodabovat“ = ještě nahrát dabing)
+const STAGES = ['Nápad', 'Scénář', 'Natočeno', 'Střih', 'Vydáno'];
+const stageOf = i => i.status === 'done' ? 4 : i.status === 'shot' ? (i.cut ? 3 : 2) : SI(i.status);
+const stName = i => i.status === 'shot' ? (i.cut ? 'Sestříháno' : 'Natočeno') + (i.dub ? ' · dodabovat' : '') : ST[i.status];
+function setStage(i, n) { i.cut = n >= 3; if (n < 2) i.dub = false; setStatus(i, ['idea', 'script', 'shot', 'shot', 'done'][n]); }
+// hlavní tlačítko „co dál“ v detailu videa
+function nextStep(i) {
+  const n = stageOf(i);
+  if (n === 2 && i.dub) return { t: 'Nadabováno', f: () => { i.dub = false; touchV(i); save(true); } };
+  return n < 4 ? { t: ['Scénář hotový', 'Natočeno', 'Sestříháno', 'Vydáno'][n], f: () => setStage(i, n + 1) } : null;
+}
 const nextTerm = (days = 45) => db.terms.filter(t => t.date >= today() && daysTo(t.date) <= days).sort((a, b) => a.date < b.date ? -1 : 1)[0];
 const chkOf = (i, k) => { const l = lists(k), on = (i.chk && i.chk[k]) || []; return { l, on, n: l.filter(x => on.includes(x)).length }; };
 function weekStat(ws) {
@@ -969,6 +992,8 @@ function todayItems() {
     else if (i.status !== 'done' && i.date === t) out.push({ k: 'pub', i });
     if (SI(i.status) < SI('shot') && i.shoot && i.shoot < t) out.push({ k: 'lateShoot', i });
     else if (SI(i.status) < SI('shot') && i.shoot === t) out.push({ k: 'shoot', i });
+    if (i.status === 'shot' && i.dub && (!i.date || i.date <= addDays(t, 3))) out.push({ k: 'dub', i });
+    else if (i.status === 'shot' && !i.cut && i.date && i.date <= addDays(t, 2)) out.push({ k: 'cut', i });
     const soon = (i.shoot && i.shoot <= addDays(t, 2)) || (i.date && i.date <= addDays(t, 3));
     if (i.status === 'idea' && soon && !(i.shoot && i.shoot <= t)) out.push({ k: 'write', i });
     if (i.status === 'done' && i.date) {
@@ -977,10 +1002,10 @@ function todayItems() {
     }
   });
   [t, addDays(t, 1)].forEach(d => slotsOn(d).forEach(s => { if (!slotVids(d, s.part).length) out.push({ k: 'slot', s, d }); }));
-  const ord = { late: 0, lateShoot: 0, slot: 1, shoot: 2, write: 3, pub: 4, n48: 5, n7: 6 };
+  const ord = { late: 0, lateShoot: 0, slot: 1, shoot: 2, dub: 3, cut: 3, write: 4, pub: 5, n48: 6, n7: 7 };
   return out.sort((a, b) => ord[a.k] - ord[b.k]);
 }
-const LBL = { late: 'Mělo vyjít', lateShoot: 'Mělo se natočit', pub: 'Vydat', shoot: 'Natočit', write: 'Dopsat scénář', n48: 'Čísla po 48 h', n7: 'Čísla po 7 dnech' };
+const LBL = { dub: 'Dodabovat', cut: 'Sestříhat', late: 'Mělo vyjít', lateShoot: 'Mělo se natočit', pub: 'Vydat', shoot: 'Natočit', write: 'Dopsat scénář', n48: 'Čísla po 48 h', n7: 'Čísla po 7 dnech' };
 function itemRow(x) {
   if (x.k === 'slot') { const c = catById(slotCat(x.s));
     return `<div class="row act k-slot"><div class="rt"><span class="lbl" style="color:${c ? c.color : 'var(--bad)'}">Chybí video · ${relDate(x.d)} ${PARTS[x.s.part].s}</span><b>${c ? ab(c) + ' ' : ''}${esc(slotLabel(x.s))}</b></div><div class="btns"><button class="btn sm pri" data-fill="${x.d}|${x.s.part}">Vybrat</button></div></div>`; }
@@ -989,12 +1014,14 @@ function itemRow(x) {
     late: `<button class="btn sm" data-mv="${i.id}">Přesunout</button><button class="btn sm pri" data-pub="${i.id}">Vydat</button>`,
     pub: `<button class="btn sm pri" data-pub="${i.id}">Vydat</button>`,
     shoot: `<button class="btn sm pri" data-act="shot" data-id="${i.id}">Natočeno</button>`,
+    dub: `<button class="btn sm pri" data-dubd="${i.id}">Nadabováno</button>`,
+    cut: `<button class="btn sm pri" data-cutd="${i.id}">Sestříháno</button>`,
     lateShoot: `<button class="btn sm" data-mvs="${i.id}">Přesunout</button><button class="btn sm pri" data-act="shot" data-id="${i.id}">Natočeno</button>`,
     write: `<button class="btn sm" data-open="${i.id}">Psát</button>`,
     n48: `<button class="btn sm" data-num="${i.id}">Zapsat čísla</button>`,
     n7: `<button class="btn sm" data-num="${i.id}">Zapsat čísla</button>`
   }[x.k];
-  const sub = x.k === 'late' ? 'mělo vyjít ' + relDate(i.date) : x.k === 'lateShoot' ? 'mělo se natočit ' + relDate(i.shoot) : x.k === 'write' ? (i.shoot ? 'natáčíš ' + relDate(i.shoot) : 'vychází ' + relDate(i.date)) : x.k.startsWith('n') ? 'vyšlo ' + relDate(i.date) : i.fmt;
+  const sub = (x.k === 'dub' || x.k === 'cut') ? (i.date ? 'vychází ' + relDate(i.date) : 'bez termínu') : x.k === 'late' ? 'mělo vyjít ' + relDate(i.date) : x.k === 'lateShoot' ? 'mělo se natočit ' + relDate(i.shoot) : x.k === 'write' ? (i.shoot ? 'natáčíš ' + relDate(i.shoot) : 'vychází ' + relDate(i.date)) : x.k.startsWith('n') ? 'vyšlo ' + relDate(i.date) : i.fmt;
   return `<div class="row act k-${x.k}" data-open="${i.id}"><div class="rt"><span class="lbl">${LBL[x.k]}${(x.k === 'pub' || x.k === 'late') && i.part ? ' ' + PARTS[i.part].s : ''}${catOf(i) ? ' · ' + ab(catOf(i)) : ''}</span><b>${esc(i.title)}</b>${sub ? `<small>${esc(sub)}</small>` : ''}</div><div class="btns">${btn}</div></div>`;
 }
 function bindActs(root = document) {
@@ -1007,33 +1034,40 @@ function bindActs(root = document) {
   $$('[data-mvs]', root).forEach(b => b.onclick = e => { e.stopPropagation(); pickDate(byId(b.dataset.mvs), 'shoot', render); });
   $$('[data-num]', root).forEach(b => b.onclick = e => { e.stopPropagation(); numsSheet(byId(b.dataset.num)); });
   $$('[data-fill]', root).forEach(b => b.onclick = e => { e.stopPropagation(); const [d, p] = b.dataset.fill.split('|'); pickVideoSheet(d, p); });
+  $$('[data-dubd]', root).forEach(b => b.onclick = e => { e.stopPropagation(); const i = byId(b.dataset.dubd); i.dub = false; touchV(i); save(true); toast('Nadabováno ✓'); render(); if ($('#modal')._refresh) $('#modal')._refresh(); });
+  $$('[data-cutd]', root).forEach(b => b.onclick = e => { e.stopPropagation(); const i = byId(b.dataset.cutd); setStage(i, 3); toast('Sestříháno ✓'); render(); if ($('#modal')._refresh) $('#modal')._refresh(); });
+  $$('[data-dubt]', root).forEach(b => b.onclick = e => { e.stopPropagation(); const i = byId(b.dataset.dubt); i.dub = !i.dub; touchV(i); save(true); toast(i.dub ? 'Označeno: dodabovat' : 'Dabing hotový'); render(); if ($('#modal')._refresh) $('#modal')._refresh(); });
   $$('[data-pub]', root).forEach(b => b.onclick = e => { e.stopPropagation(); pubSheet(byId(b.dataset.pub)); });
 }
 // co dnes dělat podle typu dne
 function dayBanner(t, shootN, weekend, nx) {
   const ty = dayType(t);
   const nextWk = `<button class="shootday plan" id="plannext"><span><b>Naplánuj příští týden</b><small>${nx.all}${nx.tg ? '/' + nx.tg : ''} videí naplánováno${nx.miss.length ? ' · chybí ' + nx.miss.map(x => `${esc(x.f)} ${x.n}×`).join(', ') : ''}</small></span>${I.r}</button>`;
-  if (ty === 'shoot' || shootN) return `<button class="shootday" id="shootday"><span><b>Natáčecí den</b><small>${shootN ? videos(shootN) + ' · checklist a čtečka' : 'Zatím nic na natočení – vyber videa'}</small></span>${I.r}</button>${weekend && ty !== 'plan' ? nextWk : ''}`;
+  // natáčení se ukáže vždy, když je co točit; ve střihový / scénářový / plánovací den k tomu i jeho karta
+  const other = ['edit', 'write', 'plan', 'off'].includes(ty);
+  const sb = (ty === 'shoot' || shootN) ? (other ? `<button class="shootday" id="shootday"><span><b>Natáčecí den</b><small>${shootN ? videos(shootN) + ' · checklist a čtečka' : 'Zatím nic na natočení – vyber videa'}</small></span>${I.r}</button>` : `<button class="shootday" id="shootday"><span><b>Natáčecí den</b><small>${shootN ? videos(shootN) + ' · checklist a čtečka' : 'Zatím nic na natočení – vyber videa'}</small></span>${I.r}</button>${weekend && ty !== 'plan' ? nextWk : ''}`) : '';
+  if (sb && !other) return sb;
   if (ty === 'edit') {
-    const l = db.ideas.filter(i => i.status === 'shot').sort((a, b) => (a.date || '9') < (b.date || '9') ? -1 : 1);
-    return `<div class="daybox ty-edit"><b>Střihový den</b><small>${l.length ? 'Natočeno a čeká na střih – dej odkaz na hotové video' : 'Nic natočeného na střih.'}</small>
-      ${l.length ? `<div class="list">${l.map(i => row(`<b>${esc(i.title)}</b>`, [catOf(i) && catOf(i).name, i.date ? 'vydat ' + relDate(i.date) : 'bez data', isUrl(i.drive) ? 'sestříháno ✓' : ''].filter(Boolean).join(' · '), `<button class="btn sm" data-bopen="${i.id}">Otevřít</button>`)).join('')}</div>` : ''}</div>${weekend ? nextWk : ''}`;
+    const l = db.ideas.filter(i => i.status === 'shot' && !i.cut && !i.recycle).sort((a, b) => (a.date || '9') < (b.date || '9') ? -1 : 1);
+    return sb + `<div class="daybox ty-edit"><b>Střihový den</b><small>${l.length ? 'Natočené a čeká na střih' : 'Nic natočeného na střih.'}</small>
+      ${l.length ? `<div class="list">${l.map(i => row(`<b>${esc(i.title)}${i.dub ? ' <span class="dubtag">dodabovat</span>' : ''}</b>`, [catOf(i) && catOf(i).name, i.date ? 'vydat ' + relDate(i.date) : 'bez data'].filter(Boolean).join(' · '), i.dub ? `<button class="btn sm pri" data-dubd="${i.id}">Nadabováno</button>` : `<button class="btn sm pri" data-cutd="${i.id}">Sestříháno</button>`, `data-open="${i.id}"`)).join('')}</div>` : ''}</div>${weekend ? nextWk : ''}`;
   }
   if (ty === 'write') {
     const l = db.ideas.filter(i => i.status === 'idea').sort((a, b) => (a.shoot || a.date || '9') < (b.shoot || b.date || '9') ? -1 : 1).slice(0, 6);
-    return `<div class="daybox ty-write"><b>Den na scénáře</b><small>${l.length ? 'Nejdřív ty, co se natáčí nejdřív' : 'Žádné nápady bez scénáře.'}</small>
+    return sb + `<div class="daybox ty-write"><b>Den na scénáře</b><small>${l.length ? 'Nejdřív ty, co se natáčí nejdřív' : 'Žádné nápady bez scénáře.'}</small>
       ${l.length ? `<div class="list">${l.map(i => row(`<b>${esc(i.title)}</b>`, [catOf(i) && catOf(i).name, i.shoot ? 'natočit ' + relDate(i.shoot) : i.date ? 'vydat ' + relDate(i.date) : ''].filter(Boolean).join(' · '), `<button class="btn sm" data-bopen="${i.id}">Psát</button>`)).join('')}</div>` : ''}</div>${weekend ? nextWk : ''}`;
   }
   if (ty === 'plan') {
     const nn = todayItems().filter(x => x.k === 'n48' || x.k === 'n7').length;
-    return `<div class="daybox ty-plan"><b>Plánovací den</b><small>Naplánuj příští týden, zapiš čísla a projdi inspiraci.</small></div>${nextWk}
+    return sb + `<div class="daybox ty-plan"><b>Plánovací den</b><small>Naplánuj příští týden, zapiš čísla a projdi inspiraci.</small></div>${nextWk}
       ${nn ? `<button class="shootday plan" id="dnums"><span><b>Zapsat čísla</b><small>${videos(nn)} čeká na výsledky</small></span>${I.r}</button>` : ''}`;
   }
-  if (ty === 'off') return `<div class="daybox ty-off"><b>Volno</b><small>Dnes nic netočíš ani nestříháš. Odpočiň si.</small></div>`;
+  if (ty === 'off') return sb + `<div class="daybox ty-off"><b>Volno</b><small>Dnes nic netočíš ani nestříháš. Odpočiň si.</small></div>`;
   return weekend ? nextWk : '';
 }
 function renderToday() {
-  const t = today(), items = todayItems(), term = nextTerm(), shootN = db.ideas.filter(i => i.shoot === t).length;
+  const t = today(), items = todayItems().filter(x => !(dayType(t) === 'edit' && (x.k === 'cut' || x.k === 'dub'))), // ve střihový den jsou v kartě Střihový den
+    term = nextTerm(), shootN = db.ideas.filter(i => i.shoot === t).length;
   const tasks = db.tasks.filter(x => !x.done && (!x.due || x.due <= t)).sort((a, b) => (a.due || '9') < (b.due || '9') ? -1 : 1);
   const ws = monday(t), w = weekStat(ws), zas = db.ideas.filter(i => i.status === 'shot' && !i.date && !i.recycle).length;
   const nx = weekStat(addDays(ws, 7)), weekend = wdOf(t) >= 5 && (nx.tg ? nx.all < nx.tg : !nx.all);
@@ -1252,7 +1286,7 @@ function shootMode(d) {
       <div class="list">${lists('shoot').map((c, n) => `<div class="row task ${done.includes(c) ? 'done' : ''}" data-ck="${n}"><button class="tick">${I.check}</button><div class="rt"><span>${esc(c)}</span></div></div>`).join('')}</div>
       <label class="l">Videa (${l.filter(i => SI(i.status) >= SI('shot')).length}/${l.length})</label>
       <div class="list">${l.map(i => `<div class="row ${SI(i.status) >= SI('shot') ? 'isdone' : ''}"><div class="rt"><b>${esc(i.title)}</b><small>${esc([i.fmt, i.sc.hook.say && '„' + i.sc.hook.say.slice(0, 60) + '“'].filter(Boolean).join(' · ') || (hasScript(i) ? '' : 'Bez scénáře'))}</small></div>
-        <div class="btns"><button class="btn sm" data-pr="${i.id}">Čtečka</button>${SI(i.status) < SI('shot') ? `<button class="btn sm pri" data-act="shot" data-id="${i.id}">Natočeno</button>` : `<span class="okm">${I.check}</span>`}</div></div>`).join('')}</div>`;
+        <div class="btns"><button class="btn sm" data-pr="${i.id}">Čtečka</button>${SI(i.status) < SI('shot') ? `<button class="btn sm pri" data-act="shot" data-id="${i.id}">Natočeno</button>` : (i.status === 'shot' ? `<button class="btn sm ${i.dub ? 'dubon' : ''}" data-dubt="${i.id}">${i.dub ? 'Dodabovat ✓' : 'Dodabovat?'}</button>` : '') + `<span class="okm">${I.check}</span>`}</div></div>`).join('')}</div>`;
     $$('[data-ck]', m).forEach(r => r.onclick = () => { const n = lists('shoot')[+r.dataset.ck]; done = done.includes(n) ? done.filter(x => x !== n) : [...done, n]; try { localStorage.setItem(key, JSON.stringify(done)); } catch (e) {} draw(m); });
     $$('[data-pr]', m).forEach(b => b.onclick = () => openPrompter(byId(b.dataset.pr)));
     bindActs(m);
@@ -1383,7 +1417,7 @@ function fmtPickSheet(d, p, all) {
 // ⋯ u místa: změnit formát, vyměnit / vybrat video, odebrat video z termínu, zrušit místo
 function slotMenu(d, p) {
   const s = slotAt(d, p), l = slotVids(d, p), i = l[0];
-  openModal(`<h3>${capFirst(relDate(d))} · ${PARTS[p].n}${s ? ' · ' + esc(slotLabel(s)) : ''}</h3>${i ? `<p class="muted">${esc(i.title)} · ${ST[i.status]}</p>` : ''}
+  openModal(`<h3>${capFirst(relDate(d))} · ${PARTS[p].n}${s ? ' · ' + esc(slotLabel(s)) : ''}</h3>${i ? `<p class="muted">${esc(i.title)} · ${stName(i)}</p>` : ''}
     <div class="stack">
       ${i ? '<button class="btn full" id="smopen">Otevřít video</button>' : ''}
       <button class="btn full" id="smfmt">${s ? 'Změnit formát' : 'Naplánovat formát'}</button>
@@ -1393,7 +1427,7 @@ function slotMenu(d, p) {
     const o = $('#smopen', m); if (o) o.onclick = () => { closeModal(); openEditor(i.id); };
     $('#smfmt', m).onclick = () => fmtPickSheet(d, p);
     $('#smpick', m).onclick = () => pickVideoSheet(d, p);
-    const u = $('#smun', m); if (u) u.onclick = () => { l.forEach(x => { x.date = ''; x.part = ''; touchV(x); }); save(true); closeModal(); render(); toast(`Video zůstalo ve Videích (${ST[i.status].toLowerCase()})`); };
+    const u = $('#smun', m); if (u) u.onclick = () => { l.forEach(x => { x.date = ''; x.part = ''; touchV(x); }); save(true); closeModal(); render(); toast(`Video zůstalo ve Videích (${stName(i).toLowerCase()})`); };
     const x = $('#smdel', m); if (x) x.onclick = () => { setSlot(d, p, ''); save(true); closeModal(); render(); };
   });
 }
@@ -1404,7 +1438,7 @@ function pickVideoSheet(d, p) {
   const pool = db.ideas.filter(i => (i.status !== 'done' || i.recycle) && !cur_.includes(i));
   const top = s ? pool.filter(i => !i.date && slotFits(s, i)).sort((a, b) => rank(a) - rank(b) || b.updated - a.updated) : [];
   const rest = pool.filter(i => !top.includes(i)).sort((a, b) => (!!a.date - !!b.date) || rank(a) - rank(b) || b.updated - a.updated);
-  const rowV = i => row(`<b>${catOf(i) ? ab(catOf(i)) + ' ' : ''}${esc(i.title)}</b>`, [i.recycle ? 'k recyklaci' : '', ST[i.status], i.fmt, i.date ? 'teď ' + relDate(i.date) + (i.part ? ' ' + PARTS[i.part].s : '') : 'bez termínu'].filter(Boolean).join(' · '), '', `data-pv="${i.id}"`);
+  const rowV = i => row(`<b>${catOf(i) ? ab(catOf(i)) + ' ' : ''}${esc(i.title)}</b>`, [i.recycle ? 'k recyklaci' : '', stName(i), i.fmt, i.date ? 'teď ' + relDate(i.date) + (i.part ? ' ' + PARTS[i.part].s : '') : 'bez termínu'].filter(Boolean).join(' · '), '', `data-pv="${i.id}"`);
   openModal(`<h3>${capFirst(relDate(d))} · ${PARTS[p].n}${s ? ' · ' + esc(slotLabel(s)) : ''}</h3>
     <input id="pvn" placeholder="Nové video – název nebo odkaz (Enter)" autocomplete="off" enterkeyhint="done">
     ${top.length ? `<label class="l">${esc(s.fmt || slotLabel(s))} · bez termínu</label><div class="list">${top.map(rowV).join('')}</div>` : s ? `<p class="muted" style="margin-top:12px">Žádné nevydané video formátu ${esc(slotLabel(s))} bez termínu – napiš nový název nahoře.</p>` : ''}
@@ -1559,8 +1593,8 @@ function renderCal() {
       ${planHTML(sel)}
       ${tm.length + fp.length + sh.length ? `<div class="list" style="margin-top:12px">
         ${tm.map(z => row(`<span class="lbl t">Termín</span><b>${esc(z.title)}</b>`, '', x('data-rt', z.id))).join('')}
-        ${fp.map(i => row(`<span class="lbl p" style="color:${catColor(i)}">Vydat${catOf(i) ? ' · ' + esc(catOf(i).name) : ''}</span><b>${esc(i.title)}</b>`, ST[i.status], x('data-rp', i.id), `data-open="${i.id}"`)).join('')}
-        ${sh.map(i => row(`<span class="lbl s">Natočit</span><b>${esc(i.title)}</b>`, ST[i.status], x('data-rs', i.id), `data-open="${i.id}"`)).join('')}</div>` : ''}
+        ${fp.map(i => row(`<span class="lbl p" style="color:${catColor(i)}">Vydat${catOf(i) ? ' · ' + esc(catOf(i).name) : ''}</span><b>${esc(i.title)}</b>`, stName(i), x('data-rp', i.id), `data-open="${i.id}"`)).join('')}
+        ${sh.map(i => row(`<span class="lbl s">Natočit</span><b>${esc(i.title)}</b>`, stName(i), x('data-rs', i.id), `data-open="${i.id}"`)).join('')}</div>` : ''}
       <div class="btnrow"><button class="btn" data-add="shoot">+ Natočit</button><button class="btn" data-add="date">+ Vydat</button><button class="btn" data-add="term">+ Termín</button></div>
       ${sh.length ? '<button class="btn full" id="calshoot" style="margin-top:8px">Otevřít natáčecí den</button>' : ''}
     </div>`;
@@ -1599,7 +1633,7 @@ function assignSheet(d, k) {
   const opts = db.ideas.filter(i => i.status !== 'done' && i[k] !== d).sort((a, b) => (!!a[k] - !!b[k]) || SI(b.status) - SI(a.status) || b.updated - a.updated);
   openModal(`<h3>${k === 'shoot' ? 'Natočit' : 'Vydat'} · ${relDate(d)}</h3>
     <input id="asn" placeholder="Nové video – název nebo odkaz (Enter)" autocomplete="off" enterkeyhint="done">
-    <div class="list" style="margin-top:10px">${opts.map(i => row(`<b>${catOf(i) ? ab(catOf(i)) + ' ' : ''}${esc(i.title)}</b>`, [ST[i.status], i.fmt, i[k] ? 'teď ' + relDate(i[k]) : ''].filter(Boolean).join(' · '), '', `data-pick="${i.id}"`)).join('') || '<p class="muted" style="padding:12px">Žádná rozpracovaná videa.</p>'}</div>`, m => {
+    <div class="list" style="margin-top:10px">${opts.map(i => row(`<b>${catOf(i) ? ab(catOf(i)) + ' ' : ''}${esc(i.title)}</b>`, [stName(i), i.fmt, i[k] ? 'teď ' + relDate(i[k]) : ''].filter(Boolean).join(' · '), '', `data-pick="${i.id}"`)).join('') || '<p class="muted" style="padding:12px">Žádná rozpracovaná videa.</p>'}</div>`, m => {
     const put = (i, isNew) => { closeModal(); assign(i, { d, k }, isNew); toast('Naplánováno'); };
     $('#asn', m).onkeydown = e => { if (e.key === 'Enter') { const it = quickAdd(e.target.value); if (it) put(it, true); } };
     $$('[data-pick]', m).forEach(r => r.onclick = () => put(byId(r.dataset.pick)));
@@ -1663,7 +1697,7 @@ function vidRow(i) {
   const when = i.status === 'done' ? (i.date ? 'vyšlo ' + relDate(i.date) : '') : [i.shoot && SI(i.status) < SI('shot') ? 'natočit ' + relDate(i.shoot) : '', i.date ? 'vydat ' + relDate(i.date) + (i.part ? ' ' + PARTS[i.part].s : '') : ''].filter(Boolean).join(' · ');
   const right = i.status === 'done' && r.v ? `<div class="num"><b class="${x >= 3 ? 'hit' : ''}">${x ? fmtX(x) : fmtN(r.v)}</b><small>${x ? fmtN(r.v) : 'zhlédnutí'}</small></div>` : '';
   const c = catOf(i);
-  return `<div class="row vid" data-open="${i.id}"><span class="cbar" style="--cc:${c ? c.color : 'transparent'}"></span><div class="rt"><b>${esc(i.title || 'Bez názvu')}</b><small>${c ? `<span class="cn" style="color:${c.color}">${esc(c.name)}</span>${i.fmt || when ? ' · ' : ''}` : ''}${esc([i.fmt, i.kind === 'long' ? 'Dlouhé' : '', when].filter(Boolean).join(' · ')) || (c ? '' : '&nbsp;')}</small></div>${right}</div>`;
+  return `<div class="row vid" data-open="${i.id}"><span class="cbar" style="--cc:${c ? c.color : 'transparent'}"></span><div class="rt"><b>${esc(i.title || 'Bez názvu')}${i.dub ? ' <span class="dubtag">dodabovat</span>' : ''}</b><small>${c ? `<span class="cn" style="color:${c.color}">${esc(c.name)}</span>${i.fmt || when ? ' · ' : ''}` : ''}${esc([i.fmt, i.kind === 'long' ? 'Dlouhé' : '', when].filter(Boolean).join(' · ')) || (c ? '' : '&nbsp;')}</small></div>${right}</div>`;
 }
 const recSec = all => { const l = all.filter(i => i.recycle).sort((a, b) => b.updated - a.updated);
   return l.length ? `<h2>Recyklovat později <span class="cnt">${l.length}</span></h2><div class="list">${l.map(vidRow).join('')}</div>` : ''; };
@@ -1673,13 +1707,13 @@ function renderVids() {
   const sel = selCat ? ui.vfmt : fl.find(f => sameFmt(f, ui.vfmt)) || '';
   const all = db.ideas.filter(i => !sel || (selCat ? i.cat === selCat.id : sameFmt(i.fmt, sel)));
   // rozpracované nahoře (nejblíž vydání první), v každém stavu naposledy upravené navrchu
-  const by = s => all.filter(i => i.status === s && !i.recycle).sort((a, b) => s === 'done' ? ((b.date || '') < (a.date || '') ? -1 : 1) : b.updated - a.updated);
+  const by = s => all.filter(i => !i.recycle && (s === 'cut' ? i.status === 'shot' && i.cut : s === 'shot' ? i.status === 'shot' && !i.cut : i.status === s)).sort((a, b) => s === 'done' ? ((b.date || '') < (a.date || '') ? -1 : 1) : b.updated - a.updated);
   const sec = s => { const l = by(s); if (!l.length) return ''; const show = s === 'done' && !ui.showDone ? l.slice(0, 5) : l;
-    return `<h2><span class="dot s-${s}"></span>${ST[s]} <span class="cnt">${l.length}</span></h2><div class="list">${show.map(vidRow).join('')}</div>${show.length < l.length ? `<button class="btn quiet full" id="moredone">Zobrazit všech ${l.length}</button>` : ''}`; };
+    return `<h2><span class="dot s-${s === 'cut' ? 'done' : s}"></span>${s === 'cut' ? 'Sestříháno – připraveno' : s === 'shot' ? 'Natočeno – stříhat' : ST[s]} <span class="cnt">${l.length}</span></h2><div class="list">${show.map(vidRow).join('')}</div>${show.length < l.length ? `<button class="btn quiet full" id="moredone">Zobrazit všech ${l.length}</button>` : ''}`; };
   $('#view').innerHTML = `
     <form class="quick top" id="vq"><input id="vqi" placeholder="Nové video – název nebo odkaz (Enter)" autocomplete="off" enterkeyhint="done"></form>
     ${fl.length + cl.length ? `<div class="fchips nosel catchips"><button data-vf="" class="${!sel ? 'on' : ''}">Vše</button>${cl.map(c => `<button data-vf="cat:${c.id}" data-vc="${c.id}" class="${sel === 'cat:' + c.id ? 'on' : ''}" style="--cc:${c.color}"><i></i>${esc(c.name)}</button>`).join('')}${fl.map(f => `<button data-vf="${esc(f)}" class="${sel === f ? 'on' : ''}">${esc(f)}</button>`).join('')}</div>` : ''}
-    ${all.length ? ['shot', 'script', 'idea'].map(sec).join('') + recSec(all) + sec('done') : '<div class="calm"><b>Zatím žádná videa.</b><span>Napiš nahoru název a dej Enter.</span></div>'}`;
+    ${all.length ? ['cut', 'shot', 'script', 'idea'].map(sec).join('') + recSec(all) + sec('done') : '<div class="calm"><b>Zatím žádná videa.</b><span>Napiš nahoru název a dej Enter.</span></div>'}`;
   $('#vq').onsubmit = e => { e.preventDefault(); const it = quickAdd($('#vqi').value, selCat ? '' : sel); if (!it) return; if (selCat) { it.cat = selCat.id; touchV(it); save(true); } render(); if (!it.cat && db.cats.length) return askCat(it); toast('Přidáno'); setTimeout(() => { const el = $('#vqi'); el && el.focus(); }, 30); };
   $$('[data-vf]').forEach(b => { b.onclick = () => { ui.vfmt = b.dataset.vf; keepUi(); render(); }; if (b.dataset.vc) longPress(b, () => catSheet(db.cats.find(c => c.id === b.dataset.vc))); else if (b.dataset.vf) longPress(b, () => fmtSheet(b.dataset.vf)); });
   if (fl.length && !localStorage.getItem('studio.tipfmt')) { try { localStorage.setItem('studio.tipfmt', '1'); } catch (e) {} setTimeout(() => toast('Tip: podrž formát a můžeš ho upravit nebo smazat'), 400); }
@@ -1729,8 +1763,9 @@ function renderEditor() {
       <textarea class="ttl" data-f="title" rows="1" placeholder="Název">${esc(i.title)}</textarea>
       ${i.recycle ? `<div class="recbar">Odloženo k recyklaci<button class="btn sm" id="unrec">Vrátit</button></div>` : ''}
       ${i.from && byId(i.from) ? `<button class="fromlink" data-open="${i.from}">Vychází z: ${esc(byId(i.from).title)} →</button>` : ''}
-      <div class="steps">${SK.map((s, n) => `<button data-st="${s}" class="${n <= si ? 'on' : ''} ${n === si ? 'cur' : ''}"><span>${n < si || (n === si && n > 0) ? I.check : n + 1}</span>${ST[s]}</button>`).join('')}</div>
-      ${NEXT[i.status] ? `<button class="btn pri full big" id="nextst">${NEXT[i.status]} ${I.check}</button>` : ''}
+      ${(() => { const sg = stageOf(i), nx = nextStep(i); return `<div class="steps s5">${STAGES.map((s, n) => `<button data-sg="${n}" class="${n <= sg ? 'on' : ''} ${n === sg ? 'cur' : ''}"><span>${n < sg || (n === sg && n > 0) ? I.check : n + 1}</span>${s}</button>`).join('')}</div>
+      ${nx ? `<button class="btn pri full big" id="nextst">${nx.t} ${I.check}</button>` : ''}
+      ${sg === 2 || sg === 3 ? `<label class="chk dubchk ${i.dub ? 'on' : ''}"><input type="checkbox" id="dub" ${i.dub ? 'checked' : ''}><span>Potřebuju dodabovat</span></label>` : ''}`; })()}
       <label class="l">Kategorie</label>
       <div class="fchips wrapc nosel catchips">${db.cats.map(c => `<button data-ct="${c.id}" class="${i.cat === c.id ? 'on' : ''}" style="--cc:${c.color}"><i></i>${esc(c.name)}</button>`).join('')}${db.cats.length < MAX_CATS ? '<button data-ct="+" class="add">+ Kategorie</button>' : ''}</div>
       <label class="l">Formát</label>
@@ -1781,13 +1816,14 @@ function bindEditor() {
   $('#edel').onclick = () => delSheet(i);
   $('#variant').onclick = () => variantSheet(i);
   const ur = $('#unrec', ed); if (ur) ur.onclick = () => { i.recycle = false; touch(); renderEditor(); toast('Vráceno mezi videa'); };
-  $$('[data-st]', ed).forEach(b => b.onclick = () => {
-    const s = b.dataset.st, n = SI(s);
-    const target = n === SI(i.status) && n > 0 ? SK[n - 1] : s; // ťuknutím na aktuální krok ho odškrtneš
-    if (SI(target) < SI(i.status) && !confirm(`Vrátit na „${ST[target]}“?`)) return;
-    setStatus(i, target); renderEditor();
+  $$('[data-sg]', ed).forEach(b => b.onclick = () => {
+    const n = +b.dataset.sg, sg = stageOf(i);
+    const target = n === sg && n > 0 ? n - 1 : n; // ťuknutím na aktuální krok ho odškrtneš
+    if (target < sg && !confirm(`Vrátit na „${STAGES[target]}“?`)) return;
+    setStage(i, target); renderEditor();
   });
-  const ns = $('#nextst'); if (ns) ns.onclick = () => { const s = SK[SI(i.status) + 1]; setStatus(i, s); toast(ST[s]); renderEditor(); };
+  const ns = $('#nextst'); if (ns) ns.onclick = () => { const x = nextStep(i); x.f(); toast(x.t + ' ✓'); renderEditor(); };
+  const db_ = $('#dub', ed); if (db_) db_.onchange = () => { i.dub = db_.checked; touch(); renderEditor(); toast(i.dub ? 'Označeno: dodabovat' : 'Dabing hotový'); };
   const lk = $('[data-rr]', ed); if (lk) lk.addEventListener('change', () => { const had = !!lk.dataset.had; if (had !== !!i.link) renderEditor(); });
   if (lk) lk.dataset.had = i.link ? '1' : '';
   $$('[data-f]', ed).forEach(el => el.addEventListener('input', () => { i[el.dataset.f] = el.value; touch(); if (el.dataset.f === 'cta') updStats(); }));
@@ -1844,7 +1880,7 @@ function hookSheet(i) {
   });
 }
 function videoText(i) {
-  const s = [`# ${i.title}`, [i.fmt, ST[i.status], i.shoot ? 'natočit ' + fmtDate(i.shoot) : '', i.date ? 'vydat ' + fmtDate(i.date) : ''].filter(Boolean).join(' · ')];
+  const s = [`# ${i.title}`, [i.fmt, stName(i), i.shoot ? 'natočit ' + fmtDate(i.shoot) : '', i.date ? 'vydat ' + fmtDate(i.date) : ''].filter(Boolean).join(' · ')];
   if (i.link) s.push('Inspirace: ' + i.link);
   const h = i.sc.hook; if ((h.say + h.see + h.txt).trim()) s.push('', '[Hook]', h.say && 'Říkám: ' + h.say, h.see && 'Vidět: ' + h.see, h.txt && 'Text: ' + h.txt);
   i.sc.body.forEach((p, n) => { if ((p.say + p.see).trim()) s.push('', `[Bod ${n + 1}]`, p.say, p.see && '(vidět: ' + p.see + ')'); });
@@ -1882,7 +1918,7 @@ function variantSheet(i) {
 // místo rovnou smazat: přesunout, recyklovat, odložit, předělat
 function delSheet(i) {
   const has = i.date || i.shoot;
-  openModal(`<h3>Co s tímhle videem?</h3><p class="muted">${esc(i.title)} · ${ST[i.status]}${i.date ? ' · vydat ' + relDate(i.date) : ''}${i.shoot && SI(i.status) < SI('shot') ? ' · natočit ' + relDate(i.shoot) : ''}</p>
+  openModal(`<h3>Co s tímhle videem?</h3><p class="muted">${esc(i.title)} · ${stName(i)}${i.date ? ' · vydat ' + relDate(i.date) : ''}${i.shoot && SI(i.status) < SI('shot') ? ' · natočit ' + relDate(i.shoot) : ''}</p>
     <div class="stack">
       ${has ? '<button class="btn full" id="dmove">Nestihl jsem – přesunout</button>' : ''}
       <button class="btn full" id="drec">Recyklovat někdy později</button>
@@ -2193,7 +2229,7 @@ function claudeSummary() {
     if (sh.length || pb.length || tm.length || ty || free.length) L.push(`- ${DSHORT[wdOf(d)]} ${d}${ty ? ' (' + DTYPES[ty].n.toLowerCase() + ')' : ''}: ${[tm.length && 'termín: ' + tm.join(', '), sh.length && 'natočit: ' + sh.join(', '), pb.length && 'vydat: ' + pb.join(', '), free.length && 'volné sloty: ' + free.join(', ')].filter(Boolean).join(' | ') || '—'}`);
   }
   const wip = db.ideas.filter(i => i.status === 'script' || i.status === 'shot');
-  if (wip.length) L.push('', '## Rozpracovaná videa', ...wip.map(i => `- ${i.title} (${ST[i.status]}${i.fmt ? ', ' + i.fmt : ''}${i.shoot ? ', natočit ' + i.shoot : ''}${i.date ? ', vydat ' + i.date : ''})`));
+  if (wip.length) L.push('', '## Rozpracovaná videa', ...wip.map(i => `- ${i.title} (${stName(i)}${i.fmt ? ', ' + i.fmt : ''}${i.shoot ? ', natočit ' + i.shoot : ''}${i.date ? ', vydat ' + i.date : ''})`));
   const ideas = db.ideas.filter(i => i.status === 'idea' && !i.date).slice(0, 25);
   if (ideas.length) L.push('', '## Nápady bez data', ...ideas.map(i => `- ${i.title}${i.fmt ? ' (' + i.fmt + ')' : ''}`));
   const res = db.ideas.filter(i => i.status === 'done' && resOf(i).v).sort((a, b) => (b.date || '') < (a.date || '') ? -1 : 1).slice(0, 12);
@@ -2259,7 +2295,7 @@ function claudeChanges(d) {
     if (x.done === true) return;
     ch.push({ label: `Úkol „${t}“`, sub: due ? relDate(due) : '', apply: () => db.tasks.push({ id: uid(), text: t, due, done: false, updated: Date.now() }) }); });
   (Array.isArray(d.del) ? d.del : []).map(id => byId(String(id))).filter(Boolean).forEach(i =>
-    ch.push({ label: `Smazat „${i.title}“`, sub: ST[i.status], apply: () => { gone(i.id); db.ideas = db.ideas.filter(x => x !== i); } }));
+    ch.push({ label: `Smazat „${i.title}“`, sub: stName(i), apply: () => { gone(i.id); db.ideas = db.ideas.filter(x => x !== i); } }));
   (Array.isArray(d.terms) ? d.terms : []).forEach(x => { const t = str(x.title || x.text), dd = okDate(x.date); if (!t || !dd) return;
     ch.push({ label: `Termín „${t}“`, sub: relDate(dd), apply: () => db.terms.push({ id: uid(), title: t, date: dd, updated: Date.now() }) }); });
   return ch;
