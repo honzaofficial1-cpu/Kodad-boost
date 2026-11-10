@@ -73,8 +73,8 @@ Když máš k dispozici jeho scénáře (viz níže), napodob jeho slovník, dé
 Jinak: krátce, česky, hovorově, s konkrétními čísly, žádné „v dnešním videu si ukážeme“.
 
 Jeho scénáře a rozhodnutí z minulých týdnů jsou v soukromém gistu. Když je v zadání ID gistu, načti
-`curl -sL https://gist.github.com/<ID>/raw/studio-data.json` (API `api.github.com/gists` je v cloudové
-session blokované; když odkaz vrátí 404, otevři `https://gist.github.com/<ID>`, ten přesměruje na adresu
-s uživatelským jménem, a k ní přidej `/raw/studio-data.json`) → pole `ideas` (videa se scénáři v `sc`)
+`curl -sL https://gist.githubusercontent.com/honzaofficial1-cpu/<ID>/raw/studio-data.json` (API
+`api.github.com/gists` je v cloudové session blokované a adresa bez uživatelského jména vrací 404)
+→ pole `ideas` (videa se scénáři v `sc`)
 a `aiDec` (co u minulých návrhů řekl: `yes` / `no` / `redo` + poznámka). Ber si z toho styl a poučení.
 Když gist načíst nejde, pokračuj bez něj.
