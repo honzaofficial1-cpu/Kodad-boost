@@ -621,6 +621,8 @@ h3.natt{color:var(--nat)}
 .aisc{margin-top:10px;font-size:15px;line-height:1.45}
 .aihint{display:flex;align-items:center;gap:10px;background:var(--sunk);color:var(--tx2);border-radius:12px;padding:8px 8px 8px 12px;font-size:13.5px;line-height:1.35;margin:4px 0 10px}
 .aihint span{flex:1}.aihint .btn{flex:none}
+.dubtag.rw{background:#FFF1E6;color:#C2410C}
+.aifor{margin:8px 0 0;font-size:13.5px;color:var(--tx2)}
 .aisc p{margin:0 0 6px}
 .aisc em{font-style:normal;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--tx3);margin-right:6px}
 .aisc span{color:var(--tx3);margin-left:4px}
@@ -1697,7 +1699,7 @@ function vidRow(i) {
   const when = i.status === 'done' ? (i.date ? 'vyšlo ' + relDate(i.date) : '') : [i.shoot && SI(i.status) < SI('shot') ? 'natočit ' + relDate(i.shoot) : '', i.date ? 'vydat ' + relDate(i.date) + (i.part ? ' ' + PARTS[i.part].s : '') : ''].filter(Boolean).join(' · ');
   const right = i.status === 'done' && r.v ? `<div class="num"><b class="${x >= 3 ? 'hit' : ''}">${x ? fmtX(x) : fmtN(r.v)}</b><small>${x ? fmtN(r.v) : 'zhlédnutí'}</small></div>` : '';
   const c = catOf(i);
-  return `<div class="row vid" data-open="${i.id}"><span class="cbar" style="--cc:${c ? c.color : 'transparent'}"></span><div class="rt"><b>${esc(i.title || 'Bez názvu')}${i.dub ? ' <span class="dubtag">dodabovat</span>' : ''}</b><small>${c ? `<span class="cn" style="color:${c.color}">${esc(c.name)}</span>${i.fmt || when ? ' · ' : ''}` : ''}${esc([i.fmt, i.kind === 'long' ? 'Dlouhé' : '', when].filter(Boolean).join(' · ')) || (c ? '' : '&nbsp;')}</small></div>${right}</div>`;
+  return `<div class="row vid" data-open="${i.id}"><span class="cbar" style="--cc:${c ? c.color : 'transparent'}"></span><div class="rt"><b>${esc(i.title || 'Bez názvu')}${i.dub ? ' <span class="dubtag">dodabovat</span>' : ''}${i.rework && i.status === 'idea' ? ' <span class="dubtag rw">dopracovat</span>' : ''}</b><small>${c ? `<span class="cn" style="color:${c.color}">${esc(c.name)}</span>${i.fmt || when ? ' · ' : ''}` : ''}${esc([i.fmt, i.kind === 'long' ? 'Dlouhé' : '', when].filter(Boolean).join(' · ')) || (c ? '' : '&nbsp;')}</small></div>${right}</div>`;
 }
 const recSec = all => { const l = all.filter(i => i.recycle).sort((a, b) => b.updated - a.updated);
   return l.length ? `<h2>Recyklovat později <span class="cnt">${l.length}</span></h2><div class="list">${l.map(vidRow).join('')}</div>` : ''; };
@@ -2521,32 +2523,42 @@ function aiBackfill() { // videa vzatá dřív, než appka původní verzi uklá
 function aiHintHTML(i) {
   if (!i.aiOrig) return '';
   const fin = i.status === 'shot' || i.status === 'done';
-  return `<div class="aihint"><span>${fin ? '✓ Natočeno – Claude se příště učí z tvojí verze.' : '✨ Od AI – přepiš si to po svém. Až dáš <b>Natočeno</b>, Claude se naučí z tvojí verze.'}</span><button class="btn quiet sm" id="aiorig">Původní verze</button></div>`;
+  const t = fin ? '✓ Natočeno – Claude se příště učí z tvojí verze.' : i.rework && i.status === 'idea' ? '✏️ K dopracování – přepiš si to po svém a pak dej <b>Scénář hotový</b>.' : '✨ Od AI – přepiš si to po svém. Až dáš <b>Natočeno</b>, Claude se naučí z tvojí verze.';
+  return `<div class="aihint"><span>${t}</span><button class="btn quiet sm" id="aiorig">Původní verze</button></div>`;
 }
 function aiOrigSheet(i) {
   const o = i.aiOrig || {}, h = o.hook || {}, p = (k, v) => v ? `<p><em>${k}</em>${esc(v)}</p>` : '';
   openModal(`<h3>Původní verze od AI</h3><p class="muted">Jen pro porovnání – tvoje úpravy zůstávají.</p>
     <div class="aisc">${p('Název', o.title)}${p('Hook', h.say)}${p('Vidět', h.see)}${p('Text', h.txt)}${(o.body || []).map((b, n) => `<p><em>${n + 1}.</em>${esc(b.say || '')}${b.see ? `<span>(${esc(b.see)})</span>` : ''}</p>`).join('')}${p('Konec', o.end)}${p('CTA', o.cta)}${p('Popisek', o.cap)}</div>`);
 }
+const scEmpty = i => !(i.sc.hook.say || i.sc.hook.txt || i.sc.body.some(b => b.say) || i.sc.end.say);
+// návrh na téma, které už máš jako nápad bez scénáře → doplní se do něj, nevznikne druhé video
+const aiTarget = x => x.for ? db.ideas.find(i => i.id === x.for && !i.deleted && (i.status === 'idea' || i.status === 'script') && scEmpty(i)) : null;
 function aiToVideo(x, redo) {
   const fmt = x.format ? ((fmtDef(x.format) || addFmt(x.format, aiCatId(x.category))).name) : '';
-  const it = newVideo(String(x.title || 'Návrh od AI').slice(0, 140), fmt);
-  it.cat = aiCatId(x.category) || (fmt && fmtCat(fmt)) || ''; it.link = isUrl(x.link) ? x.link : '';
+  const tg = aiTarget(x), it = tg || newVideo(String(x.title || 'Návrh od AI').slice(0, 140), fmt);
+  if (!it.fmt) it.fmt = fmt;
+  it.cat = it.cat || aiCatId(x.category) || (it.fmt && fmtCat(it.fmt)) || '';
+  if (!it.link && isUrl(x.link)) it.link = x.link;
   const h = x.hook || {}; it.sc.hook = { say: h.say || '', see: h.see || '', txt: h.txt || '' };
   it.sc.body = (Array.isArray(x.body) ? x.body : []).map(b => typeof b === 'string' ? { say: b } : b).map(b => ({ id: uid(), say: b.say || '', see: b.see || '' }));
   it.sc.end = { say: (x.end && x.end.say !== undefined ? x.end.say : x.end) || '', see: (x.end && x.end.see) || '' };
-  it.cta = x.cta || ''; it.cap = x.caption || '';
-  it.shots = (Array.isArray(x.shots) ? x.shots : []).map(s => ({ id: uid(), text: s.text || String(s), type: s.type === 'me' ? 'me' : 'broll', place: s.place || '', done: false }));
-  it.note = [redo ? 'Předělat: ' + redo : '', x.why ? 'Proč: ' + x.why : ''].filter(Boolean).join('\n\n');
-  it.status = redo ? 'idea' : 'script'; it.ai = x.id; it.aiOrig = aiSnap(x);
-  db.ideas.unshift(it); return it;
+  it.cta = x.cta || it.cta || ''; it.cap = x.caption || it.cap || '';
+  it.shots = [...(it.shots || []), ...(Array.isArray(x.shots) ? x.shots : []).map(s => ({ id: uid(), text: s.text || String(s), type: s.type === 'me' ? 'me' : 'broll', place: s.place || '', done: false }))];
+  const add = [redo ? 'Předělat: ' + redo : '', x.how ? 'Jak natočit: ' + x.how : '', x.why ? 'Proč: ' + x.why : '', x.src ? 'Zdroje (ověř si): ' + x.src : ''].filter(Boolean).join('\n\n');
+  it.note = [add, it.note].filter(Boolean).join('\n\n');
+  it.status = redo || x.rework ? 'idea' : 'script'; if (x.rework) it.rework = true;
+  it.ai = x.id; it.aiOrig = aiSnap(x);
+  if (tg) touchV(tg); else db.ideas.unshift(it);
+  return it;
 }
 function aiCardHTML(x, open) {
   const c = catById(aiCatId(x.category)), h = x.hook || {};
   return `<div class="aicard" data-ai="${esc(x.id)}">
-    <div class="aih"><b>${esc(x.title)}</b><small>${c ? ab(c) + ' ' : ''}${esc(x.format || '')}${x.why ? ' · ' + esc(x.why) : ''}</small></div>
+    <div class="aih"><b>${esc(x.title)}</b><small>${x.rework ? '<span class="dubtag rw">k dopracování</span> ' : ''}${c ? ab(c) + ' ' : ''}${esc(x.format || '')}${x.why ? ' · ' + esc(x.why) : ''}</small></div>
+    ${aiTarget(x) ? `<p class="aifor">Doplní se do tvého nápadu „${esc(aiTarget(x).title)}“</p>` : ''}
     <div class="aisc"><p><em>Hook</em>${esc(h.say || '')}</p>${h.see ? `<p><em>Vidět</em>${esc(h.see)}</p>` : ''}${h.txt ? `<p><em>Text</em>${esc(h.txt)}</p>` : ''}
-      ${open ? `${(x.body || []).map((b, n) => `<p><em>${n + 1}.</em>${esc(typeof b === 'string' ? b : b.say)}${b.see ? `<span>(${esc(b.see)})</span>` : ''}</p>`).join('')}
+      ${open ? `${x.how ? `<p><em>Jak</em>${esc(x.how)}</p>` : ''}${(x.body || []).map((b, n) => `<p><em>${n + 1}.</em>${esc(typeof b === 'string' ? b : b.say)}${b.see ? `<span>(${esc(b.see)})</span>` : ''}</p>`).join('')}
         ${x.end ? `<p><em>Konec</em>${esc(x.end.say !== undefined ? x.end.say : x.end)}</p>` : ''}${x.cta ? `<p><em>CTA</em>${esc(x.cta)}</p>` : ''}
         ${(x.shots || []).length ? `<p><em>Natočit</em>${x.shots.map(s => esc((s.text || s) + (s.place ? ' (' + s.place + ')' : ''))).join(' · ')}</p>` : ''}` : `<button class="btn quiet sm" data-aiopen>Celý scénář ▾</button>`}</div>
     <div class="btnrow"><button class="btn pri" data-aiy>Beru</button><button class="btn" data-air>Předělat</button><button class="btn quiet" data-ain>Ne</button></div></div>`;
@@ -2555,7 +2567,10 @@ function aiHTML() {
   if (!aiData) return '<div class="calm"><b>Návrhy přijdou v neděli.</b><span>Každou neděli ráno tu budou celá videa se scénářem a denní EZ nápady.</span></div>';
   const open = aiOpen(), done = aiData.ideas.filter(x => aiDec(x.id));
   return `<p class="muted" style="margin-top:0">Týden od ${fmtDate(aiData.week)} · Beru = video se scénářem do Videí a hned ho naplánuješ.</p>
-    ${open.length ? open.map(x => aiCardHTML(x, ui.aiOpen === x.id)).join('') : '<div class="calm"><b>Všechno projité ✓</b><span>Další návrhy přijdou v neděli.</span></div>'}
+    ${(() => { const card = x => aiCardHTML(x, ui.aiOpen === x.id), rw = open.filter(x => x.rework), wk = open.filter(x => !x.rework);
+      if (!open.length) return '<div class="calm"><b>Všechno projité ✓</b><span>Další návrhy přijdou v neděli.</span></div>';
+      return (rw.length ? `<h2>Na objednávku · k dopracování <span class="cnt">${rw.length}</span></h2>${rw.map(card).join('')}` : '')
+        + (wk.length ? `${rw.length ? `<h2>Tento týden <span class="cnt">${wk.length}</span></h2>` : ''}${wk.map(card).join('')}` : ''); })()}
     ${done.length ? `<h2>Rozhodnuto <span class="cnt">${done.length}</span></h2><div class="list">${done.map(x => { const d = aiDec(x.id); return row(`<b>${esc(x.title)}</b>`, { yes: 'Beru', no: 'Ne', redo: 'Předělat' }[d.dec] + (d.note ? ' · ' + esc(d.note) : ''), `<button class="btn sm quiet" data-aiu="${esc(x.id)}">Vrátit</button>`); }).join('')}</div>` : ''}`;
 }
 function bindAI(root = document) {

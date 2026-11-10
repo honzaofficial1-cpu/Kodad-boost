@@ -4,6 +4,555 @@
  "by": "Claude",
  "ideas": [
   {
+   "id": "2026-11-10-t1",
+   "rework": true,
+   "title": "Tier list: suplementy",
+   "category": "KAM",
+   "format": "TIER LIST 📊",
+   "why": "Máš to v nápadech a suplementy jsou věčné téma v komentářích. Tier list = lidi se hádají a komentujou.",
+   "how": "Stoupni si před tabuli S / A / B / C / D (vytiskni, nakresli na tabuli, nebo green screen a tabulku dej v CapCutu). Hlas: nahraj si názvy sám, nebo převod textu na řeč v CapCutu. U každé položky: hlas řekne název → ty řekneš tier a jednu větu proč → obrázek položky vyjede do řádku (v CapCutu klíčové snímky). 6–8 položek, 30–45 s. Všech 6 tier listů natoč najednou, mezi videi jen převlékni triko.",
+   "hook": {
+    "say": "BCAA? D tier. A za polovinu dalších suplementů taky vyhazuješ prachy.",
+    "see": "Já před tabulí, BCAA rovnou spadne do D",
+    "txt": "TIER LIST: SUPLEMENTY"
+   },
+   "body": [
+    {
+     "say": "Hlas: Kreatin. → S tier. Nejprozkoumanější suplement vůbec. 3 až 5 gramů denně a máš víc síly i svalů.",
+     "see": "Kreatin vyletí do S"
+    },
+    {
+     "say": "Hlas: Protein. → A tier. Je super, ale nenahradí kvalitní stravu. Je to jen jídlo v prášku.",
+     "see": "Protein do A"
+    },
+    {
+     "say": "Hlas: Kofein. → A tier. Prokazatelně zvedne výkon. Jen ne pozdě odpoledne, zabije ti spánek.",
+     "see": "Předtréninkovka do A"
+    },
+    {
+     "say": "Hlas: Vitamín D. → B tier, v zimě A. Většina z nás ho teď má málo – nech si ho změřit.",
+     "see": "Vitamín D do B"
+    },
+    {
+     "say": "Hlas: Multivitamín. → C tier. Když jíš normálně, moc ti nedá.",
+     "see": "Multivitamín do C"
+    },
+    {
+     "say": "Hlas: Spalovače tuků. → D tier. Většinou drahý kafe s hezkou etiketou.",
+     "see": "Spalovač do D"
+    },
+    {
+     "say": "Hlas: Testo boostery. → D tier. Na testosteron nefungujou. Spánek a jídlo jo.",
+     "see": "Testo booster do D, já kroutím hlavou"
+    }
+   ],
+   "end": "S tier je jen jeden. Zbytek je bonus, ne základ.",
+   "cta": "Napiš, co bys dal jinam 👇",
+   "caption": "Suplementy, co fakt dávají smysl – a ty, co jsou vyhozený prachy 💸 Souhlasíš? #tierlist #suplementy #kreatin #fitness",
+   "shots": [
+    {
+     "text": "Já před tier tabulí – všechny odpovědi v jednom záběru",
+     "type": "me",
+     "place": "Doma"
+    },
+    {
+     "text": "Suplementy na stole – nafoť je na animaci",
+     "type": "broll",
+     "place": "Kuchyň"
+    },
+    {
+     "text": "Detail: sypání kreatinu do vody",
+     "type": "broll",
+     "place": "Kuchyň"
+    }
+   ],
+   "src": "Kreider a kol. 2017, JISSN – stanovisko ISSN ke kreatinu; Guest a kol. 2021, JISSN – kofein a výkon (3–6 mg/kg); Morton a kol. 2018, BJSM – přínos proteinu do cca 1,6 g/kg/den; Wolfe 2017, JISSN – BCAA samotné nestačí; Cashman a kol. 2016, AJCN – nedostatek vitamínu D v Evropě; Qureshi a kol. 2014, J Diet Suppl – Tribulus bez vlivu na testosteron",
+   "for": "mvv758ck46eav"
+  },
+  {
+   "id": "2026-11-10-t2",
+   "rework": true,
+   "title": "Tier list: sladký na dietě",
+   "category": "KAM",
+   "format": "TIER LIST 📊",
+   "why": "Na dietě to řeší každý a gumoví medvídci rozjedou komentáře. Navazuje na tvůj tier list Jídlo do diety.",
+   "how": "Stoupni si před tabuli S / A / B / C / D (vytiskni, nakresli na tabuli, nebo green screen a tabulku dej v CapCutu). Hlas: nahraj si názvy sám, nebo převod textu na řeč v CapCutu. U každé položky: hlas řekne název → ty řekneš tier a jednu větu proč → obrázek položky vyjede do řádku (v CapCutu klíčové snímky). 6–8 položek, 30–45 s. Všech 6 tier listů natoč najednou, mezi videi jen převlékni triko.",
+   "hook": {
+    "say": "Chuť na sladký na dietě? Tohle ti pomůže… a tohle tě potopí.",
+    "see": "Já před tabulí, v ruce pytlík gumových medvídků",
+    "txt": "TIER LIST: SLADKÝ NA DIETĚ"
+   },
+   "body": [
+    {
+     "say": "Hlas: Řecký jogurt s ovocem. → S tier. Chutná jak dezert, má bílkoviny a zasytí.",
+     "see": "Jogurt do S"
+    },
+    {
+     "say": "Hlas: Ovoce. → A tier. Hodně jídla, málo kalorií. Mražený maliny jsou cheat code.",
+     "see": "Ovoce do A"
+    },
+    {
+     "say": "Hlas: Proteinová tyčinka. → B tier. Lepší než čokoládová, ale pořád kolem 200 kalorií. Není to jídlo zadarmo.",
+     "see": "Tyčinka do B"
+    },
+    {
+     "say": "Hlas: Hořká čokoláda. → B tier. Dva čtverečky v pohodě. Celá tabulka je jak oběd.",
+     "see": "Čokoláda do B"
+    },
+    {
+     "say": "Hlas: Rýžový chlebíčky s čokoládou. → C tier. Jeden má pár kalorií, jenže sníš celej balík a hlad máš dál.",
+     "see": "Chlebíčky do C"
+    },
+    {
+     "say": "Hlas: Gumoví medvídci. → Hrst po tréninku C, celej pytlík D. Rychlej cukr, nula bílkovin.",
+     "see": "Medvídci nejdřív do C, pak spadnou do D"
+    },
+    {
+     "say": "Hlas: Croissant. → D tier. Ve studii zasytil nejmíň ze všech jídel.",
+     "see": "Croissant do D"
+    }
+   ],
+   "end": "Sladký nemusíš úplně zakázat. Jen si vyber chytře.",
+   "cta": "Napiš svoje sladký na dietě 👇",
+   "caption": "Na dietě nemusíš brečet nad sladkým 🍫 Co máš ty? #tierlist #dieta #hubnuti #fitness",
+   "shots": [
+    {
+     "text": "Já před tier tabulí – všechny odpovědi v jednom záběru",
+     "type": "me",
+     "place": "Doma"
+    },
+    {
+     "text": "Já s pytlíkem medvídků – na začátek",
+     "type": "me",
+     "place": "Doma"
+    },
+    {
+     "text": "Sladkosti vyskládané na lince – nafoť na animaci",
+     "type": "broll",
+     "place": "Kuchyň"
+    }
+   ],
+   "src": "Holt a kol. 1995, Eur J Clin Nutr – index sytosti (croissant nejméně sytý, 47 %); kalorie z etiket: hořká čokoláda 85 % cca 600 kcal/100 g, rýžový chlebíček cca 30 kcal/ks, gumoví medvídci cca 340 kcal/100 g"
+  },
+  {
+   "id": "2026-11-10-t3",
+   "rework": true,
+   "title": "Tier list: kardio na hubnutí",
+   "category": "KAM",
+   "format": "TIER LIST 📊",
+   "why": "Máš to v nápadech, v zimě lidi řeší hubnutí a můžeš tam zmínit Hyrox.",
+   "how": "Stoupni si před tabuli S / A / B / C / D (vytiskni, nakresli na tabuli, nebo green screen a tabulku dej v CapCutu). Hlas: nahraj si názvy sám, nebo převod textu na řeč v CapCutu. U každé položky: hlas řekne název → ty řekneš tier a jednu větu proč → obrázek položky vyjede do řádku (v CapCutu klíčové snímky). 6–8 položek, 30–45 s. Všech 6 tier listů natoč najednou, mezi videi jen převlékni triko.",
+   "hook": {
+    "say": "Nejlepší kardio na hubnutí není běh.",
+    "see": "Já před tabulí, běh letí do A",
+    "txt": "TIER LIST: KARDIO NA HUBNUTÍ"
+   },
+   "body": [
+    {
+     "say": "Hlas: Chůze do kopce na pásu. → S tier. Dáš ji klidně každý den, neunaví tě na trénink a kalorie se sčítají.",
+     "see": "Pás v náklonu do S"
+    },
+    {
+     "say": "Hlas: Běh. → A tier. Spálí hodně za krátkou dobu, ale pro začátečníka je dost tvrdej na klouby.",
+     "see": "Běh do A"
+    },
+    {
+     "say": "Hlas: Veslo. → A tier. Celý tělo najednou. A na Hyrox ho stejně potřebuješ.",
+     "see": "Veslo do A"
+    },
+    {
+     "say": "Hlas: Kolo. → A tier. Šetrný na kolena a dáš na něm klidně hodinu.",
+     "see": "Kolo do A"
+    },
+    {
+     "say": "Hlas: HIIT. → B tier. Krátký a účinný, jenže víc než dvakrát třikrát týdně to nedáš.",
+     "see": "HIIT do B"
+    },
+    {
+     "say": "Hlas: Eliptical. → C tier. Pohodlný… až moc. Většina lidí na něm jen scrolluje.",
+     "see": "Eliptical do C"
+    },
+    {
+     "say": "Hlas: Potit se v sauna pásu. → D tier. Ztratíš vodu, ne tuk. Napiješ se a je to zpátky.",
+     "see": "Sauna pás do D"
+    }
+   ],
+   "end": "Nejlepší kardio je to, který budeš dělat pravidelně. A hubneš stejně hlavně v kuchyni.",
+   "cta": "Jaký kardio děláš ty? 👇",
+   "caption": "Nejlepší kardio na hubnutí? Není to běh 🏃‍♂️ #tierlist #kardio #hubnuti #hyrox",
+   "shots": [
+    {
+     "text": "Já před tier tabulí – všechny odpovědi v jednom záběru",
+     "type": "me",
+     "place": "Doma"
+    },
+    {
+     "text": "Krátké záběry: pás v náklonu, veslo, kolo, švihadlo",
+     "type": "broll",
+     "place": "Gym"
+    }
+   ],
+   "src": "Ainsworth a kol. 2011, Med Sci Sports Exerc – Compendium of Physical Activities (energetická náročnost aktivit); úbytek váhy pocením je voda",
+   "for": "mvv6x7u5hfb5a"
+  },
+  {
+   "id": "2026-11-10-t4",
+   "rework": true,
+   "title": "Tier list: co nesmí chybět v gym tašce",
+   "category": "KAM",
+   "format": "TIER LIST 📊",
+   "why": "Máš to v nápadech. Lehký a vtipný – lidi rádi porovnávají, co nosí. Natočíš to snadno.",
+   "how": "Stoupni si před tabuli S / A / B / C / D (vytiskni, nakresli na tabuli, nebo green screen a tabulku dej v CapCutu). Hlas: nahraj si názvy sám, nebo převod textu na řeč v CapCutu. U každé položky: hlas řekne název → ty řekneš tier a jednu větu proč → obrázek položky vyjede do řádku (v CapCutu klíčové snímky). 6–8 položek, 30–45 s. Všech 6 tier listů natoč najednou, mezi videi jen převlékni triko.",
+   "hook": {
+    "say": "Tohle mám v tašce do gymu. A jedna věc z toho je úplně zbytečná.",
+    "see": "Vysypu tašku na zem",
+    "txt": "CO MÁM V GYM TAŠCE"
+   },
+   "body": [
+    {
+     "say": "Hlas: Láhev s vodou. → S tier. Bez debaty.",
+     "see": "Láhev do S"
+    },
+    {
+     "say": "Hlas: Sluchátka. → S tier. Bez nich se netrénuje. Promiň.",
+     "see": "Sluchátka do S"
+    },
+    {
+     "say": "Hlas: Zápisník nebo appka na trénink. → S tier. Bez zapisování nevíš, jestli se zlepšuješ.",
+     "see": "Zápisník do S"
+    },
+    {
+     "say": "Hlas: Trhačky. → A tier. Když ti na tazích dojde úchop dřív než záda.",
+     "see": "Trhačky do A"
+    },
+    {
+     "say": "Hlas: Deodorant. → A tier. Ne pro tebe. Pro ostatní.",
+     "see": "Deodorant do A"
+    },
+    {
+     "say": "Hlas: Opasek. → B tier. Na těžký dřepy a mrtvý tahy. Ne na bicepsový zdvih.",
+     "see": "Opasek do B"
+    },
+    {
+     "say": "Hlas: Rukavice. → D tier. Mozoly jsou zadarmo.",
+     "see": "Rukavice do D"
+    }
+   ],
+   "end": "Co v tašce nosíš ty a já to tam nemám?",
+   "cta": "Napiš, co ti tam chybí 👇",
+   "caption": "Co nesmí chybět v gym tašce 🎒 A rukavice? D tier, sorry. #tierlist #gym #gymtaska #fitness",
+   "shots": [
+    {
+     "text": "Já před tier tabulí – všechny odpovědi v jednom záběru",
+     "type": "me",
+     "place": "Doma"
+    },
+    {
+     "text": "Vysypání tašky na zem – shora",
+     "type": "broll",
+     "place": "Gym"
+    },
+    {
+     "text": "Věci z tašky jednotlivě – na animaci",
+     "type": "broll",
+     "place": "Gym"
+    }
+   ],
+   "for": "mvwlpq17j8x7z"
+  },
+  {
+   "id": "2026-11-10-t5",
+   "rework": true,
+   "title": "Tier list: ranní návyky",
+   "category": "KAM",
+   "format": "TIER LIST 📊",
+   "why": "Máš to v nápadech i s inspirací. Sedí na tvoje „o 1 % lepší každý den“.",
+   "how": "Stoupni si před tabuli S / A / B / C / D (vytiskni, nakresli na tabuli, nebo green screen a tabulku dej v CapCutu). Hlas: nahraj si názvy sám, nebo převod textu na řeč v CapCutu. U každé položky: hlas řekne název → ty řekneš tier a jednu větu proč → obrázek položky vyjede do řádku (v CapCutu klíčové snímky). 6–8 položek, 30–45 s. Všech 6 tier listů natoč najednou, mezi videi jen převlékni triko.",
+   "hook": {
+    "say": "Studená sprcha ráno? Jen B tier. Tohle je S.",
+    "see": "Já před tabulí, studená sprcha spadne do B",
+    "txt": "TIER LIST: RANNÍ NÁVYKY"
+   },
+   "body": [
+    {
+     "say": "Hlas: Světlo ven hned ráno. → S tier. Deset minut venku a večer líp usneš.",
+     "see": "Slunce do S"
+    },
+    {
+     "say": "Hlas: Snídaně s bílkovinami. → A tier. Vydržíš do oběda a nevyjíš lednici.",
+     "see": "Snídaně do A"
+    },
+    {
+     "say": "Hlas: Trénink ráno. → A tier. Když ho dáš ráno, už ti ho nic nezruší.",
+     "see": "Trénink do A"
+    },
+    {
+     "say": "Hlas: Kafe hned po probuzení. → B tier. Klidně si ho dej. To čekání 90 minut nemá pořádný důkaz.",
+     "see": "Kafe do B"
+    },
+    {
+     "say": "Hlas: Studená sprcha. → B tier. Probere tě, ale zázraky nečekej.",
+     "see": "Sprcha do B"
+    },
+    {
+     "say": "Hlas: Ustlat postel. → C tier. Fajn malá výhra, ale život ti nezmění.",
+     "see": "Postel do C"
+    },
+    {
+     "say": "Hlas: Telefon v posteli. → D tier. Půl hodiny scrollování a jsi pozadu dřív, než vstaneš.",
+     "see": "Telefon do D"
+    }
+   ],
+   "end": "Nemusíš dělat všechno. Vyber si jednu věc a dělej ji každej den. O 1 % lepší.",
+   "cta": "Co děláš ráno ty? 👇",
+   "caption": "Ranní návyky od S po D ☀️ Kolik jich děláš? #tierlist #rannirutina #disciplina #motivace",
+   "shots": [
+    {
+     "text": "Já před tier tabulí – všechny odpovědi v jednom záběru",
+     "type": "me",
+     "place": "Doma"
+    },
+    {
+     "text": "Ranní záběry: světlo za oknem, kafe, sprcha",
+     "type": "broll",
+     "place": "Doma"
+    }
+   ],
+   "src": "Wright a kol. 2013, Current Biology – přirozené světlo posune vnitřní hodiny dřív; Buijze a kol. 2016, PLoS One – studená sprcha: o 29 % méně absence v práci, počet dní nemoci stejný; pro odklad kafe o 90 minut chybí kvalitní studie",
+   "for": "mvxp17sizfa8t"
+  },
+  {
+   "id": "2026-11-10-t6",
+   "rework": true,
+   "title": "Tier list: cviky na břicho",
+   "category": "KAM",
+   "format": "TIER LIST 📊",
+   "why": "Máš to v nápadech a „jak na břicho“ lidi hledají pořád. Konec s mýtem o pálení tuku je silnej.",
+   "how": "Stoupni si před tabuli S / A / B / C / D (vytiskni, nakresli na tabuli, nebo green screen a tabulku dej v CapCutu). Hlas: nahraj si názvy sám, nebo převod textu na řeč v CapCutu. U každé položky: hlas řekne název → ty řekneš tier a jednu větu proč → obrázek položky vyjede do řádku (v CapCutu klíčové snímky). 6–8 položek, 30–45 s. Všech 6 tier listů natoč najednou, mezi videi jen převlékni triko.",
+   "hook": {
+    "say": "Sklapovačky ti břicho nevyrýsujou. Tyhle cviky jo.",
+    "see": "Já před tabulí, sklapovačky letí do B",
+    "txt": "TIER LIST: CVIKY NA BŘICHO"
+   },
+   "body": [
+    {
+     "say": "Hlas: Zdvihy nohou ve visu. → S tier. Břicho dostane fakt zabrat a k tomu posiluješ úchop.",
+     "see": "Zdvihy do S"
+    },
+    {
+     "say": "Hlas: Kolečko. → S tier. Vypadá nevinně, druhej den nemůžeš kýchnout.",
+     "see": "Kolečko do S"
+    },
+    {
+     "say": "Hlas: Zkracovačky na kladce. → A tier. Můžeš přidávat váhu jako u každýho jinýho svalu.",
+     "see": "Kladka do A"
+    },
+    {
+     "say": "Hlas: Plank. → B tier. Dobrej začátek, ale po minutě už jen čekáš.",
+     "see": "Plank do B"
+    },
+    {
+     "say": "Hlas: Sklapovačky. → B tier. Nejsou špatný, jen nejsou zázrak.",
+     "see": "Sklapovačky do B"
+    },
+    {
+     "say": "Hlas: Ruský twisty. → C tier. Hodně točení, málo práce.",
+     "see": "Twisty do C"
+    }
+   ],
+   "end": "A pamatuj: břišáky ti tuk na břiše nespálí. To dělá kuchyň.",
+   "cta": "Ulož si to na trénink břicha",
+   "caption": "Cviky na břicho od S po D 🔥 Tuk ti stejně spálí kuchyň. #tierlist #bricho #sixpack #gym",
+   "shots": [
+    {
+     "text": "Já před tier tabulí – všechny odpovědi v jednom záběru",
+     "type": "me",
+     "place": "Doma"
+    },
+    {
+     "text": "Ukázky cviků – 2 s každý",
+     "type": "broll",
+     "place": "Gym"
+    }
+   ],
+   "src": "Escamilla a kol. 2006, JOSPT – EMG: kolečko a zdvihy ve visu nejvíc aktivují břišní svaly; Vispute a kol. 2011, J Strength Cond Res – 6 týdnů cviků na břicho nesnížilo tuk na břiše",
+   "for": "mvv6zc5w7wndp"
+  },
+  {
+   "id": "2026-11-10-r1",
+   "rework": true,
+   "title": "Před, nebo po tréninku?",
+   "category": "KAM",
+   "format": "RYCHLOVKY ⚡",
+   "why": "Tvůj nápad. Rychlý, jasný a lidi si to ukládají.",
+   "how": "Stůj do kamery. Hlas (převod textu na řeč v CapCutu) řekne položku → ty odpovíš jedním slovem a jednou větou proč. Odpověď velkým textem na obrazovku, rychlé střihy, 25–35 s.",
+   "hook": {
+    "say": "Před tréninkem, nebo po? Rychlovka.",
+    "see": "Já do kamery, nad hlavou text PŘED / PO",
+    "txt": "PŘED, NEBO PO TRÉNINKU?"
+   },
+   "body": [
+    {
+     "say": "Hlas: Rýžový chlebíčky s marmeládou. → PŘED. Rychlý sacharidy a nezatíží žaludek.",
+     "see": "Text PŘED"
+    },
+    {
+     "say": "Hlas: Banán. → PŘED. Energie na trénink za pár minut.",
+     "see": "Text PŘED"
+    },
+    {
+     "say": "Hlas: Kafe. → PŘED. Půl hodiny až hodinu před. Jen ne večer.",
+     "see": "Text PŘED"
+    },
+    {
+     "say": "Hlas: Burger. → PO. A ne každej den 😄 Tuk se tráví pomalu, před tréninkem by tě tížil.",
+     "see": "Text PO"
+    },
+    {
+     "say": "Hlas: Tvaroh. → PO. Nebo před spaním, bílkoviny na celou noc.",
+     "see": "Text PO"
+    },
+    {
+     "say": "Hlas: Čokoládový mlíko. → PO. Sacharidy i bílkoviny v jednom. Podceňovaný.",
+     "see": "Text PO"
+    },
+    {
+     "say": "Hlas: Ořechy. → Ani jedno. Je to svačina, ne jídlo k tréninku.",
+     "see": "Text ANI JEDNO"
+    }
+   ],
+   "end": "A upřímně? Víc než načasování řeší, kolik toho sníš za celej den.",
+   "cta": "Co jíš ty před tréninkem? 👇",
+   "caption": "Před, nebo po tréninku? ⚡ Burger po, ale ne každej den 😄 #fitness #jidlo #trenink #gym",
+   "shots": [
+    {
+     "text": "Já do kamery – všechny odpovědi",
+     "type": "me",
+     "place": "Doma"
+    },
+    {
+     "text": "Jídla položená na lince – na animaci",
+     "type": "broll",
+     "place": "Kuchyň"
+    }
+   ],
+   "src": "Schoenfeld, Aragon, Krieger 2013, JISSN – načasování bílkovin nehraje roli, když sedí celkový příjem; Henselmans a kol. 2022, Nutrients – sacharidy před tréninkem pomůžou hlavně při tréninku nalačno nebo hodně dlouhém"
+  },
+  {
+   "id": "2026-11-10-r2",
+   "rework": true,
+   "title": "Mýtus, nebo pravda? Gym edice",
+   "category": "KAM",
+   "format": "RYCHLOVKY ⚡",
+   "why": "Navazuje na tvoje videa se studiemi. Šest věcí, co lidi pořád věří, vyvrátíš za 30 vteřin.",
+   "how": "Stůj do kamery. Hlas (převod textu na řeč v CapCutu) řekne položku → ty odpovíš jedním slovem a jednou větou proč. Odpověď velkým textem na obrazovku, rychlé střihy, 25–35 s.",
+   "hook": {
+    "say": "Polovina rad z gymu je blbost. Jdeme na to.",
+    "see": "Já do kamery, text MÝTUS / PRAVDA",
+    "txt": "MÝTUS, NEBO PRAVDA?"
+   },
+   "body": [
+    {
+     "say": "Hlas: Po šestý večer nejez. → MÝTUS. Rozhoduje, kolik sníš za celej den, ne v kolik.",
+     "see": "Text MÝTUS"
+    },
+    {
+     "say": "Hlas: Bez svalovice to nefunguje. → MÝTUS. Svalovice neukazuje, jestli rosteš.",
+     "see": "Text MÝTUS"
+    },
+    {
+     "say": "Hlas: Svaly rostou, když spíš. → PRAVDA. Jedna noc bez spánku a stavba svalů padne skoro o pětinu.",
+     "see": "Text PRAVDA"
+    },
+    {
+     "say": "Hlas: Kreatin tě nafoukne. → NAPŮL. Nabereš kilo, dvě vody, ale do svalů, ne pod kůži.",
+     "see": "Text NAPŮL"
+    },
+    {
+     "say": "Hlas: Protein ničí ledviny. → MÝTUS. U zdravých lidí to studie neukázaly.",
+     "see": "Text MÝTUS"
+    },
+    {
+     "say": "Hlas: Musíš jet každou sérii do selhání. → MÝTUS. Stačí skončit jedno, dvě opakování před.",
+     "see": "Text MÝTUS"
+    },
+    {
+     "say": "Hlas: Čím víc se potíš, tím víc pálíš. → MÝTUS. Pot je voda, ne tuk.",
+     "see": "Text MÝTUS"
+    }
+   ],
+   "end": "Kterej mýtus jsi věřil ty?",
+   "cta": "Napiš další mýtus a rozeberu ho 👇",
+   "caption": "Mýtus, nebo pravda? Věci z gymu, co lidi pořád věří 🤯 #fitness #mytus #gym #trenink",
+   "shots": [
+    {
+     "text": "Já do kamery – všechny odpovědi",
+     "type": "me",
+     "place": "Gym"
+    }
+   ],
+   "src": "Lamon a kol. 2021, Physiological Reports – noc bez spánku −18 % syntézy svalových bílkovin; Schoenfeld & Contreras 2013, Strength Cond J – svalovice není ukazatel růstu; Devries a kol. 2018, J Nutr – vyšší příjem bílkovin a ledviny u zdravých; Refalo a kol. 2023, Sports Med – blízko selhání stačí; Kreider a kol. 2017, JISSN – kreatin a voda ve svalech"
+  },
+  {
+   "id": "2026-11-10-r3",
+   "rework": true,
+   "title": "Red flag, nebo green flag v gymu",
+   "category": "KAM",
+   "format": "RYCHLOVKY ⚡",
+   "why": "Vtipný, každej v gymu to zná a lidi označujou kámoše. Natočíš za 10 minut.",
+   "how": "Stůj do kamery. Hlas (převod textu na řeč v CapCutu) řekne položku → ty odpovíš jedním slovem a jednou větou proč. Odpověď velkým textem na obrazovku, rychlé střihy, 25–35 s.",
+   "hook": {
+    "say": "Red flag, nebo green flag v gymu? Rychle.",
+    "see": "Já do kamery v gymu",
+    "txt": "RED FLAG 🚩 NEBO GREEN FLAG 💚"
+   },
+   "body": [
+    {
+     "say": "Hlas: Vrací činky na místo. → GREEN. Respekt.",
+     "see": "Text GREEN 💚"
+    },
+    {
+     "say": "Hlas: Zabere stroj a deset minut scrolluje. → RED. Brácho.",
+     "see": "Text RED 🚩"
+    },
+    {
+     "say": "Hlas: Má zápisník s tréninkem. → GREEN. Ten ví, co dělá.",
+     "see": "Text GREEN 💚"
+    },
+    {
+     "say": "Hlas: Dává rady, i když se nikdo neptal. → RED.",
+     "see": "Text RED 🚩"
+    },
+    {
+     "say": "Hlas: Zeptá se, jestli se můžete prostřídat. → GREEN.",
+     "see": "Text GREEN 💚"
+    },
+    {
+     "say": "Hlas: Řve u každý série. → U poslední OK. U rozcvičky RED.",
+     "see": "Text RED 🚩"
+    },
+    {
+     "say": "Hlas: Natáčí se v gymu. → (jen mlčky koukáš do kamery) … další.",
+     "see": "Ticho, pak střih"
+    }
+   ],
+   "end": "Kterej z nich jsi ty?",
+   "cta": "Označ kámoše, co je red flag 🚩",
+   "caption": "Red flag, nebo green flag v gymu? 🚩💚 Označ kámoše. #gym #redflag #fitness #gymhumor",
+   "shots": [
+    {
+     "text": "Já do kamery v gymu – všechny odpovědi",
+     "type": "me",
+     "place": "Gym"
+    },
+    {
+     "text": "Krátké scénky: vracení činek, scrollování na stroji",
+     "type": "broll",
+     "place": "Gym"
+    }
+   ]
+  },
+  {
    "id": "2026-11-09-1",
    "title": "Proč v listopadu všichni přestanou cvičit",
    "category": "KAM",

@@ -25,8 +25,9 @@ U `EZ` a `DAB` jsou všechny záběry B-roll (`"type": "broll"`). Jen u `KAM` m�
 
 ## Formáty (pole `format`)
 
-EZ s textem (EZ) · Head talk (KAM) · Mluvení u tabule (KAM) · Recept (DAB) · Recept edit (EZ) · Vaření (DAB) · Recenze (KAM).
-Jiný formát použij jen výjimečně.
+Používej **přesně jeho názvy formátů** z gistu (pole `fmts` a `fmt` u videí) – třeba „TIER LIST 📊“, včetně emoji.
+Video pak spadne do jeho složky. Bez gistu: EZ s textem (EZ) · Head talk (KAM) · Mluvení u tabule (KAM) · Recept (DAB) ·
+Recept edit (EZ) · Vaření (DAB) · Recenze (KAM). Nový formát jen výjimečně.
 
 ## Místa natáčení (pole `place` u záběrů)
 
@@ -66,6 +67,20 @@ Neopakuj témata z `studio/ai/historie.txt` z posledních 8 týdnů.
 ```
 
 `id` musí být každý týden nové (začíná datem pondělí). Appka podle něj pozná, co už bylo rozhodnuté.
+
+Nepovinná pole u videa (appka je umí):
+- `how` – jak to natočit, prakticky (setup, kolik vteřin, co do CapCutu). Uloží se do poznámky.
+- `src` – zdroje k faktům (autor, rok, časopis – co zjistili). On si zdroje dává do poznámek, fakta podkládej studiemi.
+- `for` – id jeho existujícího nápadu bez scénáře na stejné téma (z gistu). „Beru“ pak scénář doplní do něj
+  a nevznikne druhé video. Jeho nápadů bez scénáře je hodně – klidně z nich vybírej.
+- `rework: true` – „k dopracování“: video se uloží jako Nápad se štítkem „dopracovat“ a on ho přepíše.
+
+## Na objednávku (když si Honza řekne v chatu, třeba „udělej mi 10 videí na téma X“)
+
+- Nové návrhy **přidej na začátek** `ideas` k těm stávajícím, nic nemaž. Id: `<dnešní datum>-<písmeno><číslo>`.
+- Vždycky `rework: true` (sám si je přepíše) a ke každému `how`. Kde to jde, `for` na jeho existující nápad.
+- Názvy přidej do `historie.txt`.
+- V neděli pak návrhy s `rework: true`, o kterých ještě nerozhodl (jejich id není v `aiDec`), v souboru nech.
 
 ## Jak psát jako on
 
