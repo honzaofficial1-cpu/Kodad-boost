@@ -2140,8 +2140,8 @@ function renderSet() {
       <textarea id="sabout" rows="3" placeholder="Témata: gym, vaření… Cíl: 7 videí týdně. Mluvím jako s kámošem.">${esc(db.style)}</textarea>
       <div class="btnrow"><button class="btn" id="stocl">Poslat Claudovi</button><button class="btn" id="sfromcl">Vložit od Clauda</button></div></div>
     <h2>Návrhy od AI</h2>
-    <div class="panel"><p>Každou neděli ráno ti Claude připraví celá videa se scénářem (Inspirace → Návrhy AI) a na každý den jeden krátký EZ nápad. Aby psal jako ty, potřebuje vidět tvoje scénáře – pošli mu jednou tenhle klíč.</p>
-      ${sc.gist ? `<div class="capin"><input readonly value="${esc(sc.gist)}"><button class="btn" id="aikey">Kopírovat</button></div>` : '<p class="muted" style="margin:0">Klíč se ukáže, až propojíš synchronizaci (níž).</p>'}</div>
+    <div class="panel"><p>Každou neděli ráno ti Claude připraví celá videa se scénářem (Inspirace → Návrhy AI) a na každý den jeden krátký EZ nápad. Aby psal jako ty, potřebuje vidět tvoje scénáře – pošli mu jednou tenhle <b>kód tvých dat</b>. Token ze Synchronizace nikomu neposílej, to je heslo.</p>
+      ${sc.gist ? `<div class="capin"><input readonly value="${esc(sc.gist)}"><button class="btn" id="aikey">Kopírovat</button></div>` : '<p class="muted" style="margin:0">Kód se ukáže, až propojíš synchronizaci (níž).</p>'}</div>
     <h2>Synchronizace</h2>
     <div class="panel" id="syncbox">${syncBoxHTML()}</div>
     <h2>Záloha</h2>
@@ -2168,7 +2168,7 @@ function renderSet() {
   $('#fadd').onclick = fadd; $('#fnew').onkeydown = e => { if (e.key === 'Enter') fadd(); };
   $$('[data-plx]').forEach(b => b.onclick = () => { if (!confirm(`Odebrat místo „${b.dataset.plx}“? Záběry zůstanou.`)) return; db.places = places().filter(p => p !== b.dataset.plx); db.setU = Date.now(); save(true); render(); });
   $('#pladd').onclick = () => addPlace();
-  const ak = $('#aikey'); if (ak) ak.onclick = () => copy(sc.gist, 'Klíč zkopírován – pošli ho Claudovi');
+  const ak = $('#aikey'); if (ak) ak.onclick = () => copy(sc.gist, 'Kód zkopírován – pošli ho Claudovi');
   const cadd = $('#catadd'); if (cadd) cadd.onclick = () => { db.cats.push({ id: uid(), name: '', per: 1, color: CAT_COLORS[db.cats.length % CAT_COLORS.length], updated: Date.now() }); save(true); render(); const l = $$('[data-cn]'); l[l.length - 1].focus(); };
   $$('[data-wpl]').forEach(s => s.onchange = () => { const wp = { ...(db.weekPlan || {}) }; if (s.value) wp[s.dataset.wpl] = s.value; else delete wp[s.dataset.wpl]; db.weekPlan = wp; db.shootWd = shootWd(); setU(); });
   $$('[data-lst]').forEach(el => el.oninput = () => { db.lists = { ...(db.lists || {}), [el.dataset.lst]: el.value.split('\n').map(x => x.trim()).filter(Boolean) }; setU(); });
