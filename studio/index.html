@@ -619,6 +619,8 @@ h3.natt{color:var(--nat)}
 .aih>b{display:block;font:700 18px/1.25 var(--fd)}
 .aih small{display:block;color:var(--tx3);font-size:13px;margin-top:3px}
 .aisc{margin-top:10px;font-size:15px;line-height:1.45}
+.aihint{display:flex;align-items:center;gap:10px;background:var(--sunk);color:var(--tx2);border-radius:12px;padding:8px 8px 8px 12px;font-size:13.5px;line-height:1.35;margin:4px 0 10px}
+.aihint span{flex:1}.aihint .btn{flex:none}
 .aisc p{margin:0 0 6px}
 .aisc em{font-style:normal;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--tx3);margin-right:6px}
 .aisc span{color:var(--tx3);margin-left:4px}
@@ -1742,6 +1744,7 @@ function renderEditor() {
       <textarea class="ttl" data-f="title" rows="1" placeholder="Název">${esc(i.title)}</textarea>
       ${i.recycle ? `<div class="recbar">Odloženo k recyklaci<button class="btn sm" id="unrec">Vrátit</button></div>` : ''}
       ${i.from && byId(i.from) ? `<button class="fromlink" data-open="${i.from}">Vychází z: ${esc(byId(i.from).title)} →</button>` : ''}
+      ${aiHintHTML(i)}
       ${(() => { const sg = stageOf(i), nx = nextStep(i); return `<div class="steps s5">${STAGES.map((s, n) => `<button data-sg="${n}" class="${n <= sg ? 'on' : ''} ${n === sg ? 'cur' : ''}"><span>${n < sg || (n === sg && n > 0) ? I.check : n + 1}</span>${s}</button>`).join('')}</div>
       ${nx ? `<button class="btn pri full big" id="nextst">${nx.t} ${I.check}</button>` : ''}
       ${sg === 2 || sg === 3 ? `<label class="chk dubchk ${i.dub ? 'on' : ''}"><input type="checkbox" id="dub" ${i.dub ? 'checked' : ''}><span>Potřebuju dodabovat</span></label>` : ''}`; })()}
@@ -2337,6 +2340,7 @@ function shotsHTML(i) {
       <div class="btnrow"><button class="btn sm" id="shfrom">Z banky B-rollů</button><button class="btn sm pri" id="shadd">Přidat záběr</button></div></div>`;
 }
 function bindShots(ed, i) {
+  const ao = $('#aiorig', ed); if (ao) ao.onclick = () => aiOrigSheet(i);
   $$('[data-shi]', ed).forEach(r => { const s = i.shots[+r.dataset.shi];
     $('[data-shd]', r).onclick = () => { s.done = !s.done; touch(); renderEditor(); };
     $('[data-shb]', r).onclick = () => toast(toBank(s.text, s.place) ? 'Uloženo do banky B-rollů' : 'V bance už je');
@@ -2494,15 +2498,36 @@ try { aiData = JSON.parse(localStorage.getItem('studio.ai') || 'null'); } catch 
 function loadAI() {
   fetch('navrhy.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.ok ? r.json() : null).then(d => {
     if (!d || !Array.isArray(d.ideas)) return;
-    const s = JSON.stringify(d); if (s === JSON.stringify(aiData)) return;
-    aiData = d; try { localStorage.setItem('studio.ai', s); } catch (e) {}
-    if ((view === 'today' || view === 'insp') && $('#modal').hidden && !cur && !typing()) render();
+    const s = JSON.stringify(d), same = s === JSON.stringify(aiData);
+    if (!same) { aiData = d; try { localStorage.setItem('studio.ai', s); } catch (e) {} }
+    aiBackfill();
+    if (!same && (view === 'today' || view === 'insp') && $('#modal').hidden && !cur && !typing()) render();
   }).catch(() => {});
 }
 const aiDec = id => db.aiDec.find(x => x.id === id);
 const aiOpen = () => aiData ? aiData.ideas.filter(x => !aiDec(x.id)) : [];
 function setAiDec(id, dec, note) { const ex = aiDec(id); if (ex) Object.assign(ex, { dec, note: note || '', updated: Date.now() }); else db.aiDec.push({ id, dec, note: note || '', updated: Date.now() }); }
 const aiCatId = s => { const c = s && db.cats.find(c => tkey(catAbbr(c)) === tkey(s) || tkey(c.name) === tkey(s)); return c ? c.id : ''; };
+// původní znění od AI – uloží se k videu, aby se Claude mohl učit z toho, jak si to přepíšeš
+const aiSnap = x => { const h = x.hook || {}, e = x.end || '';
+  return { title: String(x.title || ''), hook: { say: h.say || '', see: h.see || '', txt: h.txt || '' },
+    body: (Array.isArray(x.body) ? x.body : []).map(b => typeof b === 'string' ? { say: b, see: '' } : { say: b.say || '', see: b.see || '' }),
+    end: typeof e === 'string' ? e : (e.say || ''), cta: x.cta || '', cap: x.caption || '' }; };
+function aiBackfill() { // videa vzatá dřív, než appka původní verzi ukládala
+  if (!aiData || !Array.isArray(aiData.ideas)) return; let n = 0;
+  db.ideas.forEach(i => { if (i.ai && !i.aiOrig) { const x = aiData.ideas.find(x => x.id === i.ai); if (x) { i.aiOrig = aiSnap(x); n++; } } });
+  if (n) save(true);
+}
+function aiHintHTML(i) {
+  if (!i.aiOrig) return '';
+  const fin = i.status === 'shot' || i.status === 'done';
+  return `<div class="aihint"><span>${fin ? '✓ Natočeno – Claude se příště učí z tvojí verze.' : '✨ Od AI – přepiš si to po svém. Až dáš <b>Natočeno</b>, Claude se naučí z tvojí verze.'}</span><button class="btn quiet sm" id="aiorig">Původní verze</button></div>`;
+}
+function aiOrigSheet(i) {
+  const o = i.aiOrig || {}, h = o.hook || {}, p = (k, v) => v ? `<p><em>${k}</em>${esc(v)}</p>` : '';
+  openModal(`<h3>Původní verze od AI</h3><p class="muted">Jen pro porovnání – tvoje úpravy zůstávají.</p>
+    <div class="aisc">${p('Název', o.title)}${p('Hook', h.say)}${p('Vidět', h.see)}${p('Text', h.txt)}${(o.body || []).map((b, n) => `<p><em>${n + 1}.</em>${esc(b.say || '')}${b.see ? `<span>(${esc(b.see)})</span>` : ''}</p>`).join('')}${p('Konec', o.end)}${p('CTA', o.cta)}${p('Popisek', o.cap)}</div>`);
+}
 function aiToVideo(x, redo) {
   const fmt = x.format ? ((fmtDef(x.format) || addFmt(x.format, aiCatId(x.category))).name) : '';
   const it = newVideo(String(x.title || 'Návrh od AI').slice(0, 140), fmt);
@@ -2513,7 +2538,7 @@ function aiToVideo(x, redo) {
   it.cta = x.cta || ''; it.cap = x.caption || '';
   it.shots = (Array.isArray(x.shots) ? x.shots : []).map(s => ({ id: uid(), text: s.text || String(s), type: s.type === 'me' ? 'me' : 'broll', place: s.place || '', done: false }));
   it.note = [redo ? 'Předělat: ' + redo : '', x.why ? 'Proč: ' + x.why : ''].filter(Boolean).join('\n\n');
-  it.status = redo ? 'idea' : 'script'; it.ai = x.id;
+  it.status = redo ? 'idea' : 'script'; it.ai = x.id; it.aiOrig = aiSnap(x);
   db.ideas.unshift(it); return it;
 }
 function aiCardHTML(x, open) {

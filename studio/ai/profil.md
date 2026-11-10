@@ -78,3 +78,16 @@ Jeho scénáře a rozhodnutí z minulých týdnů jsou v soukromém gistu. Když
 → pole `ideas` (videa se scénáři v `sc`)
 a `aiDec` (co u minulých návrhů řekl: `yes` / `no` / `redo` + poznámka). Ber si z toho styl a poučení.
 Když gist načíst nejde, pokračuj bez něj.
+
+### Nejdůležitější: jak si přepisuje tvoje návrhy
+
+Návrhy, které vezme (Beru), si v appce přepisuje do svých slov. Video z návrhu má v gistu pole `ai`
+(id návrhu) a `aiOrig` = **tvoje původní znění** (`title`, `hook`, `body`, `end`, `cta`, `cap`).
+Jeho aktuální text je v `sc` (+ `title`, `cta`, `cap`).
+
+- Video se `status` `shot` nebo `done` (Natočeno / Vydáno) = **jeho finální verze**. Porovnej ji s `aiOrig`:
+  jaká slova a obraty vyměnil, jak zkrátil věty, co vyhodil, co přidal, jak změnil hook a konec.
+  Tyhle rozdíly jsou nejcennější – piš rovnou tak, jak by to přepsal on.
+- Video ve stavu `idea` / `script` možná ještě přepsané není – ber ho jen jako slabou nápovědu.
+- Jeho vlastní videa (bez `ai`) se scénářem, hlavně natočená a vydaná, ukazují, jak mluví, když píše sám.
+- Kde se jeho text od `aiOrig` skoro neliší, tvoje verze mu sedla – tenhle typ drž.
