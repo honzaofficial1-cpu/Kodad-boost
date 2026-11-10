@@ -296,6 +296,9 @@ textarea.ttl{border:0;background:none;padding:2px 0;font:800 30px/1.12 var(--fd)
 .ed h2{margin-top:26px}
 .part{background:var(--surf);border:1px solid var(--line);border-radius:var(--r);padding:6px 14px 10px;margin-bottom:8px}
 .part .ph{display:flex;align-items:center;justify-content:space-between;font-size:12.5px;font-weight:700;color:var(--tx3);padding-top:4px}
+.part .pmv{display:flex;gap:2px}
+.part.moved{animation:moved .7s ease}
+@keyframes moved{0%{background:#FFF1E6}100%{background:transparent}}
 .part .ph input{border:0;padding:4px 0;font-weight:700;font-size:15px;color:var(--ink)}
 .part textarea,.part input{border:0;padding:6px 0;border-radius:0;font-size:16.5px}
 .part textarea.see{font-size:15px;color:var(--tx2);border-top:1px dashed var(--line);padding-top:7px}
@@ -1764,7 +1767,7 @@ function renderEditor() {
       <div class="part" data-pk="hook">${HOOK3.map(([k, l, ph]) => `<label class="hl">${l}</label><textarea data-pf="${k}" rows="1" placeholder="${ph}">${esc(i.sc.hook[k] || '')}</textarea>`).join('')}</div>
       ${hookBank(i).length ? `<button class="btn sm" id="hbank">Hooky, co fungují (${hookBank(i).length})</button>` : ''}
       <h2>Tělo</h2>
-      ${i.sc.body.map((p, n) => `<div class="part" data-pk="b${n}"><div class="ph"><span>Bod ${n + 1}</span><button class="ico sm" data-prm>${I.x}</button></div>
+      ${i.sc.body.map((p, n) => `<div class="part" data-pk="b${n}"><div class="ph"><span>Bod ${n + 1}</span><span class="pmv">${n ? `<button class="ico sm" data-pmv="-1" aria-label="Posunout nahoru">↑</button>` : ''}${n < i.sc.body.length - 1 ? `<button class="ico sm" data-pmv="1" aria-label="Posunout dolů">↓</button>` : ''}<button class="ico sm" data-prm aria-label="Smazat bod">${I.x}</button></span></div>
         <textarea data-pf="say" rows="1" placeholder="Co říkám">${esc(p.say)}</textarea><textarea data-pf="see" rows="1" class="see" placeholder="Co je vidět">${esc(p.see)}</textarea></div>`).join('')}
       <button class="btn sm" id="addpart">+ Bod</button>
       <h2>Konec</h2>
@@ -1831,6 +1834,8 @@ function bindEditor() {
   $$('[data-pk]', ed).forEach(box => {
     const k = box.dataset.pk, p = k === 'hook' ? i.sc.hook : k === 'end' ? i.sc.end : i.sc.body[+k.slice(1)];
     $$('[data-pf]', box).forEach(el => el.oninput = () => { p[el.dataset.pf] = el.value; touch(); updStats(); if (k === 'hook') { const h = $('h2 .h3c', ed); if (h) h.outerHTML = hookChecks(p); } });
+    $$('[data-pmv]', box).forEach(b => b.onclick = () => { const a = +k.slice(1), z = a + +b.dataset.pmv, l = i.sc.body; if (z < 0 || z >= l.length) return;
+      [l[a], l[z]] = [l[z], l[a]]; touch(); renderEditor(); const el = $(`[data-pk="b${z}"]`, ed); if (el) { el.scrollIntoView({ block: 'center' }); el.classList.add('moved'); } });
     const rm = $('[data-prm]', box); if (rm) rm.onclick = () => { if ((p.say + p.see).trim() && !confirm('Smazat tenhle bod?')) return; i.sc.body.splice(+k.slice(1), 1); touch(); renderEditor(); };
   });
   $('#addpart').onclick = () => { i.sc.body.push({ id: uid(), say: '', see: '' }); touch(); renderEditor(); const l = $$('[data-pk^=b] [data-pf=say]', ed); l[l.length - 1].focus(); };
@@ -2579,10 +2584,8 @@ function bindAI(root = document) {
     const o = $('[data-aiopen]', card); if (o) o.onclick = () => { ui.aiOpen = x.id; render(); };
     $('[data-aiy]', card).onclick = () => { const it = aiToVideo(x); setAiDec(x.id, 'yes'); save(true); render(); toast('Ve Videích – kdy to vydáš?'); pickDate(it, 'date', render); };
     $('[data-ain]', card).onclick = () => { setAiDec(x.id, 'no'); save(true); render(); };
-    $('[data-air]', card).onclick = () => openModal(`<h3>Co předělat?</h3><p class="muted">${esc(x.title)}</p><textarea id="ain" rows="3" placeholder="Např. jiný hook, kratší, víc o mně, bez receptu…"></textarea><button class="btn pri full" id="aiok" style="margin-top:10px">Uložit mezi nápady</button>`, m => {
-      setTimeout(() => { const el = $('#ain', m); el && el.focus(); }, 60);
-      $('#aiok', m).onclick = () => { const n = $('#ain', m).value.trim(); aiToVideo(x, n || 'upravit'); setAiDec(x.id, 'redo', n); save(true); closeModal(); render(); toast('Mezi nápady s poznámkou, co předělat'); };
-    });
+    $('[data-air]', card).onclick = () => { // Předělat = vezmu si to a hned přepíšu po svém
+      const it = aiToVideo({ ...x, rework: true }); setAiDec(x.id, 'redo'); save(true); render(); toast('Přepiš si to po svém ✏️'); openEditor(it.id); };
   });
   $$('[data-aiu]', root).forEach(b => b.onclick = () => { const d = aiDec(b.dataset.aiu); if (d) { gone(d.id); db.aiDec = db.aiDec.filter(z => z !== d); save(true); render(); } });
 }

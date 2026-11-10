@@ -82,6 +82,17 @@ Nepovinná pole u videa (appka je umí):
 - Názvy přidej do `historie.txt`.
 - V neděli pak návrhy s `rework: true`, o kterých ještě nerozhodl (jejich id není v `aiDec`), v souboru nech.
 
+## Tier listy, rychlovky a všechno do kamery
+
+- **Mluví od první vteřiny.** Žádné intro, žádný hlas ani ticho na začátku – první věta je hned jeho nejostřejší
+  hodnocení („Kreatin? Jen A tier.“, „Burger po tréninku? Jasně.“). Hook = on do kamery.
+- **1–2 nečekaná umístění** v každém tier listu – něco, co by lidi dali jinam a začnou se hádat v komentářích.
+  Třeba kreatin, který všichni dají do S, dá do A („funguje, ale to už všichni víte“). Jedno dej do hooku,
+  druhé jako pointu ke konci. Vždycky s krátkým proč.
+- Používá i vlastní řádky – F tier a „SATAN tier“ pro úplně nejhorší věci.
+- Body jsou položky v pořadí, jak půjdou ve videu: „Hlas: X. → Tier. Proč (1–2 krátké věty).“
+  Pořadí si v appce přehazuje, takže drž jednu položku na bod.
+
 ## Jak psát jako on
 
 Když máš k dispozici jeho scénáře (viz níže), napodob jeho slovník, délku vět a typ hooků.
