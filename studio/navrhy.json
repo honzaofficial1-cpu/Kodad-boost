@@ -1,0 +1,339 @@
+{
+ "week": "2026-11-09",
+ "created": "2026-11-10",
+ "by": "Claude",
+ "ideas": [
+  {
+   "id": "2026-11-09-1",
+   "title": "Proč v listopadu všichni přestanou cvičit",
+   "category": "KAM",
+   "format": "Head talk",
+   "why": "Listopad = tma, únava a konec zářijové motivace. Lidi to řeší teď.",
+   "hook": {
+    "say": "V listopadu skončí většina lidí, co v září začali cvičit. A není to leností.",
+    "see": "Já v mikině venku, ve čtyři je tma",
+    "txt": "Proč v listopadu všichni končí"
+   },
+   "body": [
+    {
+     "say": "Tma a únava ti berou energii. Ráno si dej světlo do očí a ven, i kdyby na 10 minut.",
+     "see": "Ranní procházka, světlo lampy"
+    },
+    {
+     "say": "Motivace odejde vždycky. Drží tě jen systém – stejný čas, stejný trénink, žádné vyjednávání.",
+     "see": "Já v gymu, hodinky, zapisuju trénink"
+    },
+    {
+     "say": "A hlavně: o 1 % lepší každý den. Ne hrdina na týden, ale člověk, co přijde i v listopadu.",
+     "see": "Detail – zápisník, 1 %"
+    }
+   ],
+   "end": "Já jsem to taky zažil. Tak si to ulož na den, kdy se ti nebude chtít.",
+   "cta": "Ulož si to na krizi",
+   "caption": "Listopad je test. Kdo projde, ten má jaro 💪 #fitness #motivace #gym",
+   "shots": [
+    {
+     "text": "Tma venku v 16:30 – ulice, lampy",
+     "type": "broll",
+     "place": "Venku"
+    },
+    {
+     "text": "Já do kamery v mikině",
+     "type": "me",
+     "place": "Venku"
+    },
+    {
+     "text": "Zapisuju trénink do zápisníku",
+     "type": "broll",
+     "place": "Gym"
+    }
+   ]
+  },
+  {
+   "id": "2026-11-09-2",
+   "title": "Dýňové proteinové palačinky za 10 minut",
+   "category": "DAB",
+   "format": "Recept",
+   "why": "Dýně je teď všude a proteinové snídaně jdou pořád dobře.",
+   "hook": {
+    "say": "Podzim v jedné pánvi. 35 gramů bílkovin a chutná to jako dezert.",
+    "see": "Detail lití těsta na pánev",
+    "txt": "35 g bílkovin · 10 minut"
+   },
+   "body": [
+    {
+     "say": "Dýňové pyré, vejce, ovesné vločky a odměrka proteinu. Všechno do mixéru.",
+     "see": "Suroviny shora, mixér"
+    },
+    {
+     "say": "Na pánvi minutu z každé strany, ať se nepřipálí.",
+     "see": "Otáčení palačinky"
+    },
+    {
+     "say": "Navrch řecký jogurt a skořice. Hotovo.",
+     "see": "Servírování, detail"
+    }
+   ],
+   "end": "Na neděli ráno ideální.",
+   "cta": "Ulož si recept",
+   "caption": "Dýňové palačinky, co tě udrží do oběda 🎃 #recept #protein #snidane",
+   "shots": [
+    {
+     "text": "Suroviny na lince shora",
+     "type": "broll",
+     "place": "Kuchyň"
+    },
+    {
+     "text": "Mixování těsta",
+     "type": "broll",
+     "place": "Kuchyň"
+    },
+    {
+     "text": "Otáčení palačinky – zpomaleně",
+     "type": "broll",
+     "place": "Kuchyň"
+    },
+    {
+     "text": "Servírování s jogurtem",
+     "type": "broll",
+     "place": "Kuchyň"
+    }
+   ]
+  },
+  {
+   "id": "2026-11-09-3",
+   "title": "Otužování: den 1 vs. den 30",
+   "category": "EZ",
+   "format": "EZ s textem",
+   "why": "Sezóna otužování právě začíná – lidi hledají, jestli to má smysl.",
+   "hook": {
+    "say": "",
+    "see": "Vstup do studené vody, první reakce",
+    "txt": "Den 1 otužování vs. den 30"
+   },
+   "body": [
+    {
+     "say": "",
+     "see": "Den 1: křik, 20 sekund a ven"
+    },
+    {
+     "say": "",
+     "see": "Den 10: dýchám, 1 minuta"
+    },
+    {
+     "say": "",
+     "see": "Den 30: klid, 3 minuty, úsměv"
+    }
+   ],
+   "end": "",
+   "cta": "Zkusíš to se mnou?",
+   "caption": "Den 1 vs. den 30 🥶 Kdo jde do toho se mnou? #otuzovani #coldplunge #disciplina",
+   "shots": [
+    {
+     "text": "Vstup do vody – den 1 reakce",
+     "type": "broll",
+     "place": "Venku"
+    },
+    {
+     "text": "Studená sprcha – detail",
+     "type": "broll",
+     "place": "Koupelna"
+    },
+    {
+     "text": "Klidný dech ve vodě",
+     "type": "broll",
+     "place": "Venku"
+    }
+   ]
+  },
+  {
+   "id": "2026-11-09-4",
+   "title": "Kolik bílkovin doopravdy potřebuješ",
+   "category": "KAM",
+   "format": "Mluvení u tabule",
+   "why": "Věčná otázka v komentářích; jednoduchý výpočet na tabuli je sdílitelný.",
+   "hook": {
+    "say": "Kolik bílkovin potřebuješ? Spočítáme to za 30 sekund.",
+    "see": "Píšu na tabuli velké G",
+    "txt": "Kolik bílkovin? 30 s výpočet"
+   },
+   "body": [
+    {
+     "say": "Vezmi svoji váhu a vynásob ji 1,6 až 2. Mám 80 kilo – to je 130 až 160 gramů.",
+     "see": "Píšu výpočet na tabuli"
+    },
+    {
+     "say": "Rozděl to do 4 jídel. 35 až 40 gramů na jídlo.",
+     "see": "Kreslím 4 talíře"
+    },
+    {
+     "say": "A ne, nemusíš pít jen shaky – vejce, tvaroh, maso, luštěniny.",
+     "see": "Seznam jídel na tabuli"
+    }
+   ],
+   "end": "Napiš do komentářů svoji váhu a já ti řeknu číslo.",
+   "cta": "Napiš svoji váhu",
+   "caption": "Kolik bílkovin potřebuješ ty? Napiš váhu 👇 #protein #vyziva #fitness",
+   "shots": [
+    {
+     "text": "Já u tabule – celý výpočet",
+     "type": "me",
+     "place": "Doma"
+    },
+    {
+     "text": "Detail psaní na tabuli",
+     "type": "broll",
+     "place": "Doma"
+    }
+   ]
+  },
+  {
+   "id": "2026-11-09-5",
+   "title": "Meal prep na 3 dny za 30 minut",
+   "category": "EZ",
+   "format": "Recept edit",
+   "why": "Meal prep videa s hudbou mají vysoké uložení – lidi si je ukládají na neděli.",
+   "hook": {
+    "say": "",
+    "see": "Šest krabiček najednou na lince",
+    "txt": "Meal prep na 3 dny · 30 minut"
+   },
+   "body": [
+    {
+     "say": "",
+     "see": "Rýže a kuře do trouby najednou"
+    },
+    {
+     "say": "",
+     "see": "Zelenina na pánvi"
+    },
+    {
+     "say": "",
+     "see": "Plnění krabiček, víčka, lednice"
+    }
+   ],
+   "end": "",
+   "cta": "Ulož si na neděli",
+   "caption": "3 dny jídla za 30 minut ✅ #mealprep #fitnessjidlo #recept",
+   "shots": [
+    {
+     "text": "Krabičky shora na lince",
+     "type": "broll",
+     "place": "Kuchyň"
+    },
+    {
+     "text": "Kuře do trouby",
+     "type": "broll",
+     "place": "Kuchyň"
+    },
+    {
+     "text": "Krájení zeleniny – rychlý střih",
+     "type": "broll",
+     "place": "Kuchyň"
+    },
+    {
+     "text": "Zavírání lednice",
+     "type": "broll",
+     "place": "Kuchyň"
+    }
+   ]
+  },
+  {
+   "id": "2026-11-09-6",
+   "title": "3 věci, které chlapi ignorují (Movember)",
+   "category": "KAM",
+   "format": "Head talk",
+   "why": "Listopad je Movember – měsíc mužského zdraví. Sedí na téma testosteron, spánek, prevence.",
+   "hook": {
+    "say": "Listopad je měsíc mužského zdraví. A tyhle tři věci chlapi ignorují nejvíc.",
+    "see": "Já do kamery, knír nakreslený prstem",
+    "txt": "3 věci, co chlapi ignorují"
+   },
+   "body": [
+    {
+     "say": "Spánek. Pod šest hodin ti padá testosteron a s ním i výkon v gymu.",
+     "see": "Postel, telefon pryč"
+    },
+    {
+     "say": "Prevence. Jednou za rok krev a prohlídka. Zabere to hodinu.",
+     "see": "Kalendář, objednávka"
+    },
+    {
+     "say": "A třetí – mluvit o tom. Fakt to není slabost.",
+     "see": "Já s kámošem v gymu"
+    }
+   ],
+   "end": "Pošli to kámošovi, který to potřebuje slyšet.",
+   "cta": "Pošli to kámošovi",
+   "caption": "Movember: postarej se o sebe, chlape 🥸 #movember #muzskezdravi #testosteron",
+   "shots": [
+    {
+     "text": "Já do kamery – celý text",
+     "type": "me",
+     "place": "Doma"
+    },
+    {
+     "text": "Telefon odkládám před spaním",
+     "type": "broll",
+     "place": "Doma"
+    },
+    {
+     "text": "Kámoš a já v gymu",
+     "type": "broll",
+     "place": "Gym"
+    }
+   ]
+  }
+ ],
+ "daily": [
+  {
+   "date": "2026-11-10",
+   "title": "POV: je 6:00, venku tma a stejně jdeš trénovat",
+   "how": "Budík, bunda, tmavá ulice, rozsvícený gym. Text: „Nikdo nevidí, ale počítá se to.“",
+   "format": "EZ s textem",
+   "place": "Gym"
+  },
+  {
+   "date": "2026-11-11",
+   "title": "Moje snídaně vs. tvoje snídaně",
+   "how": "Dvě misky vedle sebe, text s gramy bílkovin, rychlý střih na hudbu.",
+   "format": "EZ s textem",
+   "place": "Kuchyň"
+  },
+  {
+   "date": "2026-11-12",
+   "title": "3 cviky, které narovnají záda",
+   "how": "Tři krátké záběry cviků, u každého text s počtem opakování.",
+   "format": "EZ s textem",
+   "place": "Gym"
+  },
+  {
+   "date": "2026-11-13",
+   "title": "Sauna → studená sprcha: reakce",
+   "how": "Detail páry, pak studená voda, zpomalená reakce. Text: „Restart hlavy za 5 minut.“",
+   "format": "EZ s textem",
+   "place": "Koupelna"
+  },
+  {
+   "date": "2026-11-14",
+   "title": "Co si dávám před tréninkem (bez řečí)",
+   "how": "Kafe, banán, voda – tři záběry, text u každého.",
+   "format": "EZ s textem",
+   "place": "Kuchyň"
+  },
+  {
+   "date": "2026-11-15",
+   "title": "Týden v gymu za 10 sekund",
+   "how": "Sestřih krátkých záběrů z celého týdne, text: „1 % lepší každý den“.",
+   "format": "EZ s textem",
+   "place": "Gym"
+  },
+  {
+   "date": "2026-11-16",
+   "title": "Pondělní ranní rutina za 15 sekund",
+   "how": "Studená sprcha, kafe, plán na týden – rychlé střihy, text s časy.",
+   "format": "EZ s textem",
+   "place": "Doma"
+  }
+ ]
+}
