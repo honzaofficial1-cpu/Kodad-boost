@@ -4,6 +4,510 @@
  "by": "Claude",
  "ideas": [
   {
+   "id": "2026-11-12-v1",
+   "rework": true,
+   "title": "Za co bych dal svoje prachy ve fitku",
+   "category": "KAM",
+   "format": "RYCHLOVKY ⚡",
+   "why": "",
+   "how": "Hlas mimo kameru řekne položku, ty hned odpovíš verdiktem a krátkým důvodem. Verdikt velkým textem na obrazovku, rychlé střihy.",
+   "hook": {
+    "say": "Hlas: Gymshark? → Nepřiplatím. Stačí mi cokoliv, v čem se mi dobře cvičí.",
+    "see": "Já do kamery – mluvím od první vteřiny",
+    "txt": "ZA CO BYCH DAL SVOJE PRACHY VE FITKU"
+   },
+   "body": [
+    {
+     "say": "Hlas: Trenér? → Zaplatím. Když mi pomůže s technikou a nastaví plán, má to smysl.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Drahý krabičky na jídlo? → Nepřiplatím. Obyčejný stačí, osobně mám rád skleněný.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Dražší členství? → Připlatím, pokud tam mají lepší vybavení, který využiju.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Trhačky? → Zaplatím. Posunuly mi trénink na jinej level.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Placená aplikace na trénink? → Nezaplatím. Váhy a opakování si napíšu do notísku.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Drahý sluchátka? → Nepřiplatím. Stačí mi obyčejný, hlavně ať hrajou.",
+     "see": ""
+    }
+   ],
+   "end": "",
+   "cta": "",
+   "caption": "",
+   "shots": [
+    {
+     "text": "Já do kamery – všechny odpovědi",
+     "type": "me",
+     "place": "Gym"
+    }
+   ]
+  },
+  {
+   "id": "2026-11-12-v2",
+   "rework": true,
+   "title": "Koupil bych znova, nebo už nikdy?",
+   "category": "KAM",
+   "format": "RYCHLOVKY ⚡",
+   "why": "",
+   "how": "Hlas mimo kameru řekne položku, ty hned odpovíš verdiktem a krátkým důvodem. Verdikt velkým textem na obrazovku, rychlé střihy. Před natáčením: Whoop byl odsouhlasen podmíněně – potvrď, zda tahle věta vystihuje tvoji skutečnou zkušenost. Zmínku o horkovzdušné fritéze ověř podle toho, že ji skutečně používáš; přepis byl v tom místě nejasný.",
+   "hook": {
+    "say": "Hlas: Protein? → Znova. Rychlý doplnění bílkovin, když se mi to hodí.",
+    "see": "Já do kamery – mluvím od první vteřiny",
+    "txt": "KOUPIL BYCH ZNOVA, NEBO UŽ NIKDY?"
+   },
+   "body": [
+    {
+     "say": "Hlas: Kreatin? → Znova. Je to pro mě základ suplementace.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Předtréninkovka? → Znova. Občas mi ten trénink nakopne, ale nedávám si ji každej den.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Trhačky? → Znova. Nechci, aby mi při tréninku zad jako první odcházel úchop.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Gymshark? → Už ne. Na cvičení mi stačí obyčejný oblečení.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Horkovzdušná fritéza? → Znova. Jednoduchý jídlo v ní zvládneš, i když vaření moc nedáváš.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Whoop? → Už ne, pokud podle těch údajů stejně nic neměním.",
+     "see": ""
+    }
+   ],
+   "end": "",
+   "cta": "",
+   "caption": "",
+   "shots": [
+    {
+     "text": "Já do kamery – všechny odpovědi",
+     "type": "me",
+     "place": "Doma"
+    }
+   ]
+  },
+  {
+   "id": "2026-11-12-v3",
+   "rework": true,
+   "title": "Co bych řešil, kdybych začínal cvičit",
+   "category": "KAM",
+   "format": "RYCHLOVKY ⚡",
+   "why": "",
+   "how": "Hlas mimo kameru řekne položku, ty hned odpovíš verdiktem a krátkým důvodem. Verdikt velkým textem na obrazovku, rychlé střihy.",
+   "hook": {
+    "say": "Hlas: Nakopávač? → Neřešil bych. Nejdřív si vytvořím návyk chodit cvičit.",
+    "see": "Já do kamery – mluvím od první vteřiny",
+    "txt": "CO BYCH ŘEŠIL, KDYBYCH ZAČÍNAL CVIČIT"
+   },
+   "body": [
+    {
+     "say": "Hlas: Trenér? → Řešil bych. Pomůže mi s technikou a nastaví plán.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Návody na YouTube? → Beru. Každej se odněkud učí, jen záleží, od koho.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Spánek? → Řešil bych. Chci mít energii na trénink a prostor na regeneraci.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Strava? → Řešil bych. Chci, aby moje jídlo odpovídalo tomu, čeho chci dosáhnout.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Dny volna? → Řešil bych. Regenerace patří do plánu stejně jako trénink.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Doma, nebo fitko? → Za mě fitko. Kvůli vybavení a prostředí.",
+     "see": ""
+    }
+   ],
+   "end": "",
+   "cta": "",
+   "caption": "",
+   "shots": [
+    {
+     "text": "Já do kamery – všechny odpovědi",
+     "type": "me",
+     "place": "Gym"
+    }
+   ],
+   "for": "mvv70u7p35zno"
+  },
+  {
+   "id": "2026-11-12-v4",
+   "rework": true,
+   "title": "Co mi v gymu vadí a nevadí",
+   "category": "KAM",
+   "format": "RYCHLOVKY ⚡",
+   "why": "",
+   "how": "Hlas mimo kameru řekne položku, ty hned odpovíš verdiktem a krátkým důvodem. Verdikt velkým textem na obrazovku, rychlé střihy.",
+   "hook": {
+    "say": "Hlas: Natáčení? → Nevadí. Ať si každej natočí svůj trénink.",
+    "see": "Já do kamery – mluvím od první vteřiny",
+    "txt": "CO MI V GYMU VADÍ A NEVADÍ"
+   },
+   "body": [
+    {
+     "say": "Hlas: Sundaný tričko? → Nevadí. Když si někdo kontroluje formu, nemám s tím problém.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Nevyžádaný rady? → Vadí. Pokud si ale někdo může ublížit, slušně ho upozornit je v pohodě.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Někdo se nechce vystřídat na stroji? → Vadí. Pokud se můžeme rozumně prostřídat, nevidím důvod, proč ne.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Hlasitá hudba? → Nevadí. Mám svoje sluchátka, okolní hudbu stejně moc nevnímám.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Smradlavý hadry? → Vadí. Čistý oblečení je za mě základ.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Zabírání více strojů najednou? → Vadí. Zvlášť když na nich chtějí cvičit i ostatní.",
+     "see": ""
+    }
+   ],
+   "end": "",
+   "cta": "",
+   "caption": "",
+   "shots": [
+    {
+     "text": "Já do kamery – všechny odpovědi",
+     "type": "me",
+     "place": "Gym"
+    }
+   ]
+  },
+  {
+   "id": "2026-11-12-v5",
+   "rework": true,
+   "title": "Za co si připlatím v obchodě",
+   "category": "KAM",
+   "format": "RYCHLOVKY ⚡",
+   "why": "",
+   "how": "Hlas mimo kameru řekne položku, ty hned odpovíš verdiktem a krátkým důvodem. Verdikt velkým textem na obrazovku, rychlé střihy. Před natáčením: V ústním souhrnu se omylem dvakrát opakoval chleba. Pátou položkou jsou původně odsouhlasená vejce. Mražená zelenina a losos ustoupily dvěma proteinovým položkám.",
+   "hook": {
+    "say": "Hlas: Ochucená rýžová kaše? → Nepřiplatím. Skořici a kakao si tam zvládnu nasypat sám.",
+    "see": "Já do kamery – mluvím od první vteřiny",
+    "txt": "ZA CO SI PŘIPLATÍM V OBCHODĚ"
+   },
+   "body": [
+    {
+     "say": "Hlas: Kváskovej chleba? → Připlatím. Za mě jeden z nejlepších chlebů, co si můžeš koupit.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Kvalitní hovězí? → Připlatím. Když už si ho dávám, chci si na něm pochutnat.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Protein s oblíbenou příchutí? → Připlatím. Radši dám víc za něco, na co se těším, než dopíjet něco, co mi nechutná.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Vejce z volnýho chovu? → Připlatím. Záleží mi i na tom, odkud jsou.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Olivovej olej? → Připlatím za kvalitu.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Výrobky s nápisem protein? → Jen za ten nápis nepřiplatím. Nepotřebuju mít protein i v kmínu.",
+     "see": ""
+    }
+   ],
+   "end": "",
+   "cta": "",
+   "caption": "",
+   "shots": [
+    {
+     "text": "Já do kamery – všechny odpovědi",
+     "type": "me",
+     "place": "Kuchyň"
+    }
+   ]
+  },
+  {
+   "id": "2026-11-12-v6",
+   "rework": true,
+   "title": "Co beru a neberu do fitka",
+   "category": "KAM",
+   "format": "RYCHLOVKY ⚡",
+   "why": "",
+   "how": "Hlas mimo kameru řekne položku, ty hned odpovíš verdiktem a krátkým důvodem. Verdikt velkým textem na obrazovku, rychlé střihy. Před natáčením: Osmá položka je slovní absurdní vtip, původních sedm zůstává. U rukavic jde o osobní názor, ne o tvrzení, že jejich používání znamená špatnou techniku.",
+   "hook": {
+    "say": "Hlas: Trhačky? → Beru. Posunuly mi trénink zad na jinej level, úchop mě tolik neomezuje.",
+    "see": "Já do kamery – mluvím od první vteřiny",
+    "txt": "CO BERU A NEBERU DO FITKA"
+   },
+   "body": [
+    {
+     "say": "Hlas: Pevný boty? → Beru. Chci mít při cvičení stabilitu.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Ručník? → Beru. Dávám ho na lavičku a po sobě ji utřu.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Sluchátka? → Beru. Pomáhají mi soustředit se na trénink.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Pásek na těžký série? → Beru, když ho při tom tréninku využiju.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Předtréninkovka v tašce? → Neberu. Když už si ji dávám, dám si ji před cestou podle návodu konkrétního produktu.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Rukavice? → Neberu. Za mě ve fitku zbytečnost.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Vystřelovák? → Neberu. Nechci ohrozit lidi v gymu.",
+     "see": ""
+    }
+   ],
+   "end": "",
+   "cta": "",
+   "caption": "",
+   "shots": [
+    {
+     "text": "Já do kamery – všechny odpovědi",
+     "type": "me",
+     "place": "Gym"
+    }
+   ],
+   "for": "mvwlpq17j8x7z"
+  },
+  {
+   "id": "2026-11-12-v7",
+   "rework": true,
+   "title": "Jdu do fitka, nebo zůstávám doma?",
+   "category": "KAM",
+   "format": "RYCHLOVKY ⚡",
+   "why": "",
+   "how": "Hlas mimo kameru řekne položku, ty hned odpovíš verdiktem a krátkým důvodem. Verdikt velkým textem na obrazovku, rychlé střihy. Před natáčením: Druhá položka je tvoje nadsázka. Větu o dvou scoopech Fatality nepřebírám jako doporučení dávkování bez ověření etikety a obsahu stimulantů. Bolest kolena také nejde posoudit jen podle názvu příznaku.",
+   "hook": {
+    "say": "Hlas: Ráno po kalbě, jsem rozbitej? → Nejdu. Nebudu riskovat zranění kvůli jednomu tréninku.",
+    "see": "Já do kamery – mluvím od první vteřiny",
+    "txt": "JDU DO FITKA, NEBO ZŮSTÁVÁM DOMA?"
+   },
+   "body": [
+    {
+     "say": "Hlas: Přítelkyně chce do kina? → Jdu do fitka. Nenechám si od ní zničit progres.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Parťák zrušil trénink? → Jdu. Nepotřebuju doprovod.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Bolí mě koleno? → Podle toho, co s ním je. Pokud můžu bezpečně odcvičit vršek bez zatížení kolena, upravím trénink. Přes bolest nejedu.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Jsem unavenej z práce? → Když je to běžná únava, jdu a podle sebe upravím trénink. Když jsem vyčerpanej, odpočinu si.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Mám jen dvacet minut? → Jdu. Trénink zkrátím.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Venku sněží? → Jdu. Počasí mě nemůže zastavit — pokud se tam bezpečně dostanu.",
+     "see": ""
+    }
+   ],
+   "end": "",
+   "cta": "",
+   "caption": "",
+   "shots": [
+    {
+     "text": "Já do kamery – všechny odpovědi",
+     "type": "me",
+     "place": "Doma"
+    }
+   ],
+   "for": "mvv9hqv2mdxl1"
+  },
+  {
+   "id": "2026-11-12-v8",
+   "rework": true,
+   "title": "Co si dát v restauraci",
+   "category": "KAM",
+   "format": "RYCHLOVKY ⚡",
+   "why": "",
+   "how": "Hlas mimo kameru řekne položku, ty hned odpovíš verdiktem a krátkým důvodem. Verdikt velkým textem na obrazovku, rychlé střihy. Před natáčením: Původní označení nuggetek pouze jako „kvalitní bílko“ by jejich složení zjednodušovalo. Nejde o žebříček jídel platný pro každou velikost porce a úpravu.",
+   "hook": {
+    "say": "Hlas: Steak s bramborama? → Dát. Bílkoviny, sacharidy, za mě skvělý jídlo.",
+    "see": "Já do kamery – mluvím od první vteřiny",
+    "txt": "CO SI DÁT V RESTAURACI"
+   },
+   "body": [
+    {
+     "say": "Hlas: Sushi? → Dát. Rýže, ryba, super. Jen bacha na smažený varianty a hodně majonézy.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Smažák s hranolkama a tatarkou? → Spíš nedat. Na mě moc smaženýho a tuku v jednom jídle.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Burger? → Dát. Maso, pečivo, zelenina, všechno pohromadě. Záleží samozřejmě na porci a omáčkách.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Kuře s rýží? → Spíš nedat. Jím ho pořád, v restauraci si radši dám něco jinýho. Jestli na něj máš chuť, dej si ho.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Dezert? → Spíš nedat. Já si radši užiju hlavní jídlo.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Nuggetky z Mekáče? → Dát, když na ně mám chuť. Nějaký bílkoviny tam jsou, ale pořád je to obalovaný smažený jídlo.",
+     "see": ""
+    }
+   ],
+   "end": "Ve finále si dej, na co máš chuť. Jedno jídlo samo o sobě nerozhodne o tvým progresu.",
+   "cta": "",
+   "caption": "",
+   "shots": [
+    {
+     "text": "Já do kamery – všechny odpovědi",
+     "type": "me",
+     "place": "Venku"
+    }
+   ]
+  },
+  {
+   "id": "2026-11-12-v9",
+   "rework": true,
+   "title": "Pět knížek pro lidi, co chodí do gymu",
+   "category": "KAM",
+   "format": "HEAD TALK 🗣️",
+   "why": "",
+   "how": "Mluvíš do kamery od první vteřiny, u každé knížky ukaž obálku. Před natáčením: Doplnit přesný titul a obálku Grznárovy knihy – „bible cvičení“ je tvoje hodnocení, ne ověřený název. U ostatních knih netvrdit, že jsi je přečetl, pokud to tak není. Gogginsův příběh není návod ignorovat bolest a Walkerovu populárně naučnou knihu neprezentovat jako neomylný zdroj všech tvrzení o spánku.",
+   "hook": {
+    "say": "Pět knížek, který podle mě stojí za přečtení, když chodíš do gymu.",
+    "see": "Já do kamery – mluvím od první vteřiny",
+    "txt": "PĚT KNÍŽEK PRO LIDI, CO CHODÍ DO GYMU"
+   },
+   "body": [
+    {
+     "say": "David Goggins – Nic mě nezlomí. „Silnej příběh o vytrvalosti a o tom, jak přistupuješ k překážkám.“",
+     "see": "Obálka knihy"
+    },
+    {
+     "say": "Kniha Filipa Grznára – přesný titul doplnit. „Za mě bible cvičení.“",
+     "see": "Obálka knihy"
+    },
+    {
+     "say": "Lukáš Roubík a kolektiv – Moderní výživa ve fitness a silových sportech. „Když chceš pochopit stravu, suplementy a zorientovat se ve výživovejch mýtech.“",
+     "see": "Obálka knihy"
+    },
+    {
+     "say": "James Clear – Atomové návyky. „Aby cvičení nebylo jen něco, co děláš, když máš zrovna motivaci.“",
+     "see": "Obálka knihy"
+    },
+    {
+     "say": "Matthew Walker – Proč spíme. „Protože vedle tréninku a jídla má smysl řešit taky spánek.“",
+     "see": "Obálka knihy"
+    }
+   ],
+   "end": "",
+   "cta": "",
+   "caption": "",
+   "shots": [
+    {
+     "text": "Já do kamery – všechny odpovědi",
+     "type": "me",
+     "place": "Doma"
+    }
+   ],
+   "src": "https://www.fitexpert.cz/kniha-moderni-vyziva-ve-fitness-a-silovych-sportech–lukas-roubik-a-kolektiv/ · https://www.melvil.cz/kniha-atomove-navyky/ · https://www.melvil.cz/kniha-proc-spime/"
+  },
+  {
+   "id": "2026-11-12-v10",
+   "rework": true,
+   "title": "Co si dám, když nestíhám jídlo",
+   "category": "KAM",
+   "format": "RYCHLOVKY ⚡",
+   "why": "",
+   "how": "Hlas mimo kameru řekne položku, ty hned odpovíš verdiktem a krátkým důvodem. Verdikt velkým textem na obrazovku, rychlé střihy.",
+   "hook": {
+    "say": "Hlas: Skyr a banán? → Dám. Bílkoviny, sacharidy, nemusím nic připravovat. Na rychlou svačinu super.",
+    "see": "Já do kamery – mluvím od první vteřiny",
+    "txt": "CO SI DÁM, KDYŽ NESTÍHÁM JÍDLO"
+   },
+   "body": [
+    {
+     "say": "Hlas: Samotnej protein místo oběda? → Samotnej nedám. Ale když k němu přidám i něco k jídlu, může to být fajn rychlovka.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Rohlík se šunkou? → Dám. Když nestíhám, je to jednoduchá varianta.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Bageta z benzínky? → Spíš nedám. Já bych se tam podíval i po něčem jiným, třeba po skyru a ovoci.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Instantní ovesná kaše do kelímku? → Dám. Za mě super rychlý jídlo.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Čokoláda místo jídla? → Nedám. Jako sladkost klidně, ale oběd mi nenahradí.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Rýžový chlebíčky s medem? → Dám před tréninkem. Za mě jedna z nejlepších rychlejch svačin.",
+     "see": ""
+    }
+   ],
+   "end": "",
+   "cta": "",
+   "caption": "",
+   "shots": [
+    {
+     "text": "Já do kamery – všechny odpovědi",
+     "type": "me",
+     "place": "Kuchyň"
+    }
+   ]
+  },
+  {
    "id": "2026-11-10-t1",
    "rework": true,
    "title": "Tier list: suplementy",
