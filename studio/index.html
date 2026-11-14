@@ -229,6 +229,7 @@ h2 .dot{width:8px;height:8px}
 .vtabs button b{font-weight:700;color:var(--tx3)}.vtabs button.on{background:var(--ink);color:#fff;border-color:var(--ink)}.vtabs button.on b{color:#fff;opacity:.7}
 .row.vid .btn.sm{flex:none;align-self:center;margin-left:8px}
 .fstock{display:block;font-size:12.5px;font-weight:500;color:var(--tx3);margin-top:2px}
+.evtips .rt small{white-space:normal}
 .strz{background:#F3EEFC}.strz b{color:#5B3BB0}
 .c.k-term{background:var(--ink);color:#fff}
 .c.dn{opacity:.45;text-decoration:line-through}
@@ -1639,7 +1640,7 @@ function renderCal() {
   });
   bindPlan($('.daypanel'));
   $$('[data-rt]').forEach(b => b.onclick = () => { gone(b.dataset.rt); db.terms = db.terms.filter(z => z.id !== b.dataset.rt); save(true); render(); });
-  $$('[data-evo]').forEach(b => b.onclick = e => { e.stopPropagation(); eventSheet(b.dataset.evo); });
+  $$('[data-evo]').forEach(b => b.onclick = e => { e.stopPropagation(); eventSheet(b.dataset.evo); }); bindEventTips();
   $$('[data-rp],[data-rs],[data-re]').forEach(b => b.onclick = e => { e.stopPropagation(); const i = byId(b.dataset.rp || b.dataset.rs || b.dataset.re); if (b.dataset.rp) { i.date = ''; i.part = ''; } else if (b.dataset.re) i.edit = ''; else i.shoot = ''; touchV(i); save(true); render(); });
   $$('[data-add]').forEach(b => b.onclick = () => b.dataset.add === 'term' ? termSheet(sel) : assignSheet(sel, b.dataset.add));
   const cs = $('#calshoot'); if (cs) cs.onclick = () => shootMode(sel);
@@ -2717,7 +2718,21 @@ function eventsHTML() {
   return `<h2>📅 Události <span class="cnt">${l.length}</span></h2>${l.length ? `<div class="list">${l.map(x => {
     const v = db.ideas.filter(i => i.term === x.id), rd = v.filter(i => ['ready', 'done'].includes(vtab(i))).length;
     return row(`<b>${esc(x.title)}</b>`, `${whenEv(x.date)} · ${v.length ? `${v.length} ${plural(v.length, 'video', 'videa', 'videí')}, hotová ${rd}` : 'zatím žádné video'}`, `<button class="btn sm" data-evo="${x.id}">Videa</button>`);
-  }).join('')}</div>` : '<p class="muted">Žádná událost. U dne dej „+ Událost“ (závody, Black Friday, Vánoce, spolupráce…) a připrav na ni videa.</p>'}`;
+  }).join('')}</div>` : '<p class="muted">Žádná událost. U dne dej „+ Událost“ (závody, Black Friday, Vánoce, spolupráce…) a připrav na ni videa.</p>'}${eventTipsHTML()}`;
+}
+// tipy na události od Clauda (navrhy.json → events): + Přidat zapíše událost i nápady na videa k ní
+const eventTips = () => { const t = today(); return (aiData && Array.isArray(aiData.events) ? aiData.events : []).filter(e => e.date >= t && !db.terms.some(x => x.date === e.date && tkey(x.title) === tkey(e.title))); };
+function eventTipsHTML() {
+  const l = eventTips(); if (!l.length) return '';
+  return `<h2>💡 Tipy na události <span class="cnt">${l.length}</span></h2><div class="list evtips">${l.map(e => row(`<b>${esc(e.title)}</b>`, `${whenEv(e.date)}${e.prep ? ' · ' + esc(e.prep) : ''}${e.why ? '<br>' + esc(e.why) : ''}${(e.ideas || []).length ? '<br>🎬 ' + e.ideas.map(esc).join(' · ') : ''}`, `<button class="btn sm" data-evadd="${esc(e.date + '|' + e.title)}">+ Přidat</button>`)).join('')}</div>`;
+}
+function bindEventTips() {
+  $$('[data-evadd]').forEach(b => b.onclick = e => {
+    e.stopPropagation(); const x = eventTips().find(z => z.date + '|' + z.title === b.dataset.evadd); if (!x) return;
+    const id = uid(); db.terms.push({ id, title: x.title, date: x.date, updated: Date.now() });
+    (x.ideas || []).forEach(t => { const v = newVideo(String(t).slice(0, 140)); v.term = id; v.note = x.why ? 'Na událost: ' + x.title + '. ' + x.why : ''; db.ideas.unshift(v); });
+    save(true); render(); toast('Přidáno do kalendáře ✓'); eventSheet(id);
+  });
 }
 function eventSheet(id) {
   const x = db.terms.find(z => z.id === id); if (!x) return;

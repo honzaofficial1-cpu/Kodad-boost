@@ -1388,5 +1388,88 @@
    "format": "EZ s textem",
    "place": "Doma"
   }
+ ],
+ "events": [
+  {
+   "date": "2026-11-27",
+   "title": "Black Friday",
+   "prep": "vydat 24.–26. 11.",
+   "why": "Lidi teď řeší, co koupit. Navazuje na tvoje „Za co bych dal prachy“ a „Koupil bych znova?“.",
+   "ideas": [
+    "Black Friday: co bych koupil a na co neletím",
+    "Kreatin a protein ve slevě – jak nenaletět"
+   ]
+  },
+  {
+   "date": "2026-12-05",
+   "title": "Mikuláš",
+   "prep": "vydat 3.–5. 12.",
+   "why": "Čert a anděl = tvůj SATAN tier. Rychlá a vtipná věc.",
+   "ideas": [
+    "Anděl, nebo čert? Jídlo do diety (tier list se SATAN řádkem)"
+   ]
+  },
+  {
+   "date": "2026-12-21",
+   "title": "Vánoce – poslední týden",
+   "prep": "vydat do 21. 12.",
+   "why": "Hledání fitness vrcholí těsně před Vánoci. Dieta přes svátky řeší každý.",
+   "ideas": [
+    "Cukroví tier list",
+    "Vánoce a dieta: co si dát a co nedat",
+    "Jak nepřibrat 3 kila přes svátky"
+   ]
+  },
+  {
+   "date": "2026-12-31",
+   "title": "Silvestr a předsevzetí",
+   "prep": "vydat 28.–31. 12.",
+   "why": "Lidi plánují nový rok. Tvoje „o 1 % lepší“ je přesně na tohle.",
+   "ideas": [
+    "Předsevzetí, které vydrží: o 1 % lepší každý den",
+    "Můj rok v gymu za 30 sekund"
+   ]
+  },
+  {
+   "date": "2027-01-04",
+   "title": "Lednový nával do fitka",
+   "prep": "vydávat celý leden",
+   "why": "Leden je největší měsíc nových členů. Začátečníci hledají, kde začít.",
+   "ideas": [
+    "Co bych řešil, kdybych začínal cvičit (máš scénář)",
+    "Red flag / green flag pro nováčky v gymu",
+    "První týden v gymu: co dělat"
+   ]
+  },
+  {
+   "date": "2027-02-14",
+   "title": "Valentýn",
+   "prep": "vydat 12.–14. 2.",
+   "why": "Hodí se na tvůj koncept „SMS od přítelkyně → vařím“ a vtip „přítelkyně chce do kina“.",
+   "ideas": [
+    "SMS od přítelkyně: chce burger → nakupuju → vařím (fit verze)",
+    "Přítelkyně vs. trénink"
+   ]
+  },
+  {
+   "date": "2027-02-19",
+   "title": "HYROX Katowice (nejbližší Hyrox)",
+   "prep": "série od ledna",
+   "why": "Nejbližší Hyrox k Česku. Když poběžíš, minisérie „cesta na Hyrox“ ti dá obsah na 6 týdnů.",
+   "ideas": [
+    "Přihlásil jsem se na Hyrox – 6 týdnů příprava",
+    "Hyrox: co to je za 30 sekund"
+   ]
+  },
+  {
+   "date": "2027-05-01",
+   "title": "Do plavek – jarní vlna",
+   "prep": "začít v dubnu",
+   "why": "Po lednu je druhý největší nával lidí před létem.",
+   "ideas": [
+    "8 týdnů do léta: můj plán",
+    "Co jím, když shazuju před létem"
+   ]
+  }
  ]
 }

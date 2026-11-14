@@ -75,6 +75,13 @@ Nepovinná pole u videa (appka je umí):
   a nevznikne druhé video. Jeho nápadů bez scénáře je hodně – klidně z nich vybírej.
 - `rework: true` – „k dopracování“: video se uloží jako Nápad se štítkem „dopracovat“ a on ho přepíše.
 
+## Tipy na události (pole `events`)
+
+Každou neděli udržuj v `navrhy.json` pole `events` – svátky, akce a sezóny na příštích ~3 měsíce, na které se vyplatí
+připravit videa: `{"date": "RRRR-MM-DD", "title": "…", "prep": "kdy vydat / začít", "why": "proč", "ideas": ["název videa", …]}`.
+Appka je ukáže v Kalendáři v sekci „💡 Tipy na události“ a „+ Přidat“ zapíše událost i nápady. Minulé vyhoď, ověř data
+(Hyrox, závody, Black Friday…). Leden je největší měsíc nových lidí ve fitku, druhá vlna je duben–květen.
+
 ## Na objednávku (když si Honza řekne v chatu, třeba „udělej mi 10 videí na téma X“)
 
 - Nové návrhy **přidej na začátek** `ideas` k těm stávajícím, nic nemaž. Id: `<dnešní datum>-<písmeno><číslo>`.
