@@ -13,6 +13,16 @@ Appka ho načte a tvůrce si v neděli návrhy projde (Beru / Předělat / Ne) a
 - Nemíří na celou republiku na „high level“ – jde o autentičnost a pravidelnost.
 - Funguje mu: hook do 2 vteřin, jedna myšlenka na video, konec s CTA, minisérie.
 
+## Vize (cíl na rok)
+
+- **10 000 sledujících a první spolupráce se značkou.** Obsah je pro něj priorita.
+- Pozice: **„ten, co dělá všechno na 100 %, ví, co říká, rozumí tomu – a je fajn“.** Každé video musí sedět aspoň na jedno:
+  1. **Ví, o čem mluví** – fakta podložená studiemi, žádné mýty, zdroje v `src`.
+  2. **Dělá to na 100 %** – jeho vlastní cesta: trénink, strava, závody, Hyrox, důkazy z praxe.
+  3. **Je fajn** – humor, nadsázka, SATAN tier, red flagy, skeče, přítelkyně.
+- Každý týden mix: ~2 videa na dosah a sdílení (tier listy, rychlovky, „označ kámoše“), 1 odborné na uložení,
+  1 z jeho cesty (proč ho sledovat), 1 jídlo. Návrhy s věcmi, které sám používá, se hodí na budoucí spolupráci.
+
 ## Kategorie (vždy jedna z těchto tří, v JSON jako zkratka)
 
 | Zkratka | Kategorie | Jak video vzniká |
