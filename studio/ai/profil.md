@@ -122,6 +122,13 @@ Jeho scénáře a rozhodnutí z minulých týdnů jsou v soukromém gistu. Když
 a `aiDec` (co u minulých návrhů řekl: `yes` / `no` / `redo` + poznámka). Ber si z toho styl a poučení.
 Když gist načíst nejde, pokračuj bez něj.
 
+### Rozbory cizích videí (pravidlo 3×)
+
+V gistu je pole `insp` – položky s `kind: "rb"` jsou jeho rozbory videí jiných tvůrců, která měla aspoň 3× víc zhlédnutí
+(`views`) než má tvůrce sledujících (`subs`, nebo `channels[].subs` přes `ch`). Mají `hook` (say/see/txt), `shot` (jak je
+natočené), `topic`, `edit`, `why` (proč to fungovalo) a `take` (co si z toho vezme). `channels` jsou jeho sledovaní tvůrci
+v pilířích (`pillars`). Tyhle vzorce (typ hooku, styl natočení, téma) přenášej do návrhů – je to to, co prokazatelně funguje.
+
 ### Nejdůležitější: jak si přepisuje tvoje návrhy
 
 Návrhy, které vezme (Beru), si v appce přepisuje do svých slov. Video z návrhu má v gistu pole `ai`
