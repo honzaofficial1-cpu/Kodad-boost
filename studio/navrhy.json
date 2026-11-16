@@ -4,6 +4,256 @@
  "by": "Claude",
  "ideas": [
   {
+   "id": "2026-11-16-g1",
+   "rework": true,
+   "title": "Legit, nebo ego lifting?",
+   "category": "KAM",
+   "format": "RYCHLOVKY ⚡",
+   "why": "Rychlovka na dnešní gym – natočíš za pár minut mezi sériemi.",
+   "how": "Celé v gymu, mluvíš od první vteřiny. Hlas mimo kameru (převod textu na řeč v CapCutu) řekne položku, ty hned verdikt a jednu větu proč. Verdikt velkým textem na obrazovku. Natoč všech 5 najednou – mezi videi jen změň místo v gymu.",
+   "hook": {
+    "say": "Hlas: Mrtvej tah s kulatejma zádama? → Ego. Váha nahoře, záda v háji.",
+    "see": "Já do kamery v gymu – mluvím od první vteřiny",
+    "txt": "LEGIT, NEBO EGO LIFTING?"
+   },
+   "body": [
+    {
+     "say": "Hlas: Pomalý negativy? → Legit. Sval dostane víc práce i s menší váhou.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Bench, kde ti kámoš zvedá půlku váhy? → Ego. To zvedá on, ne ty.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Plnej rozsah s menší váhou? → Legit. Na sval dělá víc než půlka pohybu s velkou.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Bicepsovej zdvih celým tělem? → Ego. Houpeš se, biceps odpočívá.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Zapsat si a příště přidat opakování? → Legit. Tohle je celý tajemství progresu.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Fotka váhy na stories? → Ego… ale chápu tě.",
+     "see": ""
+    }
+   ],
+   "end": "Váha není cíl. Cíl je sval a zdravý záda.",
+   "cta": "Označ kámoše, co dělá ego lifting 😅",
+   "caption": "Legit, nebo ego lifting? 🏋️ Kdo se poznal? #gym #fitness #egolifting #rychlovky",
+   "shots": [
+    {
+     "text": "Já do kamery v gymu – všechny odpovědi",
+     "type": "me",
+     "place": "Gym"
+    }
+   ]
+  },
+  {
+   "id": "2026-11-16-g2",
+   "rework": true,
+   "title": "Cvik, nebo zbytečnost?",
+   "category": "KAM",
+   "format": "RYCHLOVKY ⚡",
+   "why": "Rychlovka na dnešní gym – natočíš za pár minut mezi sériemi.",
+   "how": "Celé v gymu, mluvíš od první vteřiny. Hlas mimo kameru (převod textu na řeč v CapCutu) řekne položku, ty hned verdikt a jednu větu proč. Verdikt velkým textem na obrazovku. Natoč všech 5 najednou – mezi videi jen změň místo v gymu.",
+   "hook": {
+    "say": "Hlas: Bulharskej dřep? → Cvik. Nenávidím ho, ale funguje.",
+    "see": "Já do kamery v gymu – mluvím od první vteřiny",
+    "txt": "CVIK, NEBO ZBYTEČNOST?"
+   },
+   "body": [
+    {
+     "say": "Hlas: Kickbacky s jednoručkou? → Spíš zbytečnost. Na triceps jsou lepší tlaky a stahování na kladce.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Shyby? → Cvik. Záda, ruce, úchop – všechno najednou.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Ruský twisty? → Zbytečnost. Hodně točení, málo práce.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Hip thrust? → Cvik. Na zadek jeden z nejlepších.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Abdukce na stroji? → Cvik, když ji děláš pořádně a pomalu.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Kroucení s tyčí na zádech? → Zbytečnost. Záda ti za to nepoděkujou.",
+     "see": ""
+    }
+   ],
+   "end": "Nejlepší cvik je ten, kterej děláš pořádně a pravidelně.",
+   "cta": "Kterej cvik bys zrušil ty? 👇",
+   "caption": "Cvik, nebo zbytečnost? Gym edice 💪 #gym #cviky #fitness #rychlovky",
+   "shots": [
+    {
+     "text": "Já do kamery v gymu – všechny odpovědi",
+     "type": "me",
+     "place": "Gym"
+    }
+   ]
+  },
+  {
+   "id": "2026-11-16-g3",
+   "rework": true,
+   "title": "Začátečník, nebo pokročilý?",
+   "category": "KAM",
+   "format": "RYCHLOVKY ⚡",
+   "why": "Rychlovka na dnešní gym – natočíš za pár minut mezi sériemi.",
+   "how": "Celé v gymu, mluvíš od první vteřiny. Hlas mimo kameru (převod textu na řeč v CapCutu) řekne položku, ty hned verdikt a jednu větu proč. Verdikt velkým textem na obrazovku. Natoč všech 5 najednou – mezi videi jen změň místo v gymu.",
+   "hook": {
+    "say": "Hlas: Cvičí bez plánu, co ho zrovna napadne? → Začátečník.",
+    "see": "Já do kamery v gymu – mluvím od první vteřiny",
+    "txt": "ZAČÁTEČNÍK, NEBO POKROČILÝ?"
+   },
+   "body": [
+    {
+     "say": "Hlas: Zapisuje si váhy a opakování? → Pokročilý. I kdyby cvičil půl roku.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Každej trénink jede do úplnýho vyčerpání? → Začátečník. Pokročilej ví, kdy přestat.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Dělá rozcvičku lehčíma sériema? → Pokročilý.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Mění program každej týden? → Začátečník. Progres chce čas.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Přijde i když se mu nechce? → Pokročilý. Tohle je ta největší úroveň.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Ptá se, když neví? → Pokročilý. Ego nechává v šatně.",
+     "see": ""
+    }
+   ],
+   "end": "Pokročilej neni ten, kdo zvedne nejvíc. Je to ten, kdo to dělá chytře.",
+   "cta": "Kolik bodů máš ty? 👇",
+   "caption": "Začátečník, nebo pokročilý? Tohle neni o váze 😉 #gym #fitness #zacatecnik #rychlovky",
+   "shots": [
+    {
+     "text": "Já do kamery v gymu – všechny odpovědi",
+     "type": "me",
+     "place": "Gym"
+    }
+   ]
+  },
+  {
+   "id": "2026-11-16-g4",
+   "rework": true,
+   "title": "Pravda, nebo výmluva?",
+   "category": "KAM",
+   "format": "RYCHLOVKY ⚡",
+   "why": "Rychlovka na dnešní gym – natočíš za pár minut mezi sériemi.",
+   "how": "Celé v gymu, mluvíš od první vteřiny. Hlas mimo kameru (převod textu na řeč v CapCutu) řekne položku, ty hned verdikt a jednu větu proč. Verdikt velkým textem na obrazovku. Natoč všech 5 najednou – mezi videi jen změň místo v gymu.",
+   "hook": {
+    "say": "Hlas: Nemám čas? → Výmluva. Dvacet minut najdeš.",
+    "see": "Já do kamery v gymu – mluvím od první vteřiny",
+    "txt": "PRAVDA, NEBO VÝMLUVA?"
+   },
+   "body": [
+    {
+     "say": "Hlas: Bolí mě koleno? → Pravda – tak uprav trénink, ne vynech celej gym.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Venku je tma? → Výmluva. V gymu se svítí.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Nemám na trenéra? → Pravda, ale na YouTube je zadarmo spousta dobrejch návodů.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Jsem moc unavenej? → Někdy pravda. Většinou stačí přijít a dát lehčí trénink.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Začnu od pondělka? → Výmluva. Začni dneska.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Nevím, co mám cvičit? → Pravda – tak si vezmi jeden jednoduchej plán a drž se ho.",
+     "see": ""
+    }
+   ],
+   "end": "Výmluvu najdeš vždycky. Výsledky jen když přijdeš.",
+   "cta": "Pošli to kámošovi, co začíná od pondělka 😅",
+   "caption": "Pravda, nebo výmluva? Kterou používáš ty? 👀 #motivace #gym #fitness #disciplina",
+   "shots": [
+    {
+     "text": "Já do kamery v gymu – všechny odpovědi",
+     "type": "me",
+     "place": "Gym"
+    }
+   ]
+  },
+  {
+   "id": "2026-11-16-g5",
+   "rework": true,
+   "title": "Pomůže, nebo nepomůže na svaly?",
+   "category": "KAM",
+   "format": "RYCHLOVKY ⚡",
+   "why": "Rychlovka na dnešní gym – natočíš za pár minut mezi sériemi.",
+   "how": "Celé v gymu, mluvíš od první vteřiny. Hlas mimo kameru (převod textu na řeč v CapCutu) řekne položku, ty hned verdikt a jednu větu proč. Verdikt velkým textem na obrazovku. Natoč všech 5 najednou – mezi videi jen změň místo v gymu.",
+   "hook": {
+    "say": "Hlas: Víc spánku? → Pomůže. Nejlevnější suplement na světě.",
+    "see": "Já do kamery v gymu – mluvím od první vteřiny",
+    "txt": "POMŮŽE, NEBO NEPOMŮŽE NA SVALY?"
+   },
+   "body": [
+    {
+     "say": "Hlas: Pít protein hned do 30 minut po tréninku? → Skoro nepomůže. Důležitější je, kolik bílkovin sníš za celej den.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Postupně přidávat váhu nebo opakování? → Pomůže. Bez toho sval nemá důvod růst.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Svalovice každej den? → Nepomůže. Neni to ukazatel, že rosteš.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Kreatin? → Pomůže. Nejprozkoumanější suplement.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Trénovat každej den do selhání? → Nepomůže. Nestihneš regenerovat.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Jíst dost? → Pomůže. Ze vzduchu sval nepostavíš.",
+     "see": ""
+    }
+   ],
+   "end": "Svaly staví nuda: trénink, jídlo, spánek. Pořád dokola.",
+   "cta": "Co ti nejvíc pomohlo? 👇",
+   "caption": "Pomůže, nebo nepomůže na svaly? 💪 #svaly #gym #fitness #rychlovky",
+   "shots": [
+    {
+     "text": "Já do kamery v gymu – všechny odpovědi",
+     "type": "me",
+     "place": "Gym"
+    }
+   ]
+  },
+  {
    "id": "2026-11-16-1",
    "title": "Přeceňovaný, nebo podceňovaný?",
    "category": "KAM",
