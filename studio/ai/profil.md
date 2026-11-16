@@ -23,6 +23,18 @@ Appka ho načte a tvůrce si v neděli návrhy projde (Beru / Předělat / Ne) a
 - Každý týden mix: ~2 videa na dosah a sdílení (tier listy, rychlovky, „označ kámoše“), 1 odborné na uložení,
   1 z jeho cesty (proč ho sledovat), 1 jídlo. Návrhy s věcmi, které sám používá, se hodí na budoucí spolupráci.
 
+## Co nenavrhovat
+
+- **NEDĚLEJ návrhy na jídlo a recepty** (vaření, recepty, „co sním“ jako recept) – má svůj jídelníček a moc ho neporušuje.
+  Jídlo jen když si o něj sám řekne, nebo když jde ven (pole `spots` – co natočit v Mekáči, na sushi…).
+- Denní EZ nápady taky bez receptů.
+
+## Kde zrovna jsem (pole `spots`)
+
+`navrhy.json` má `spots`: `{"Místo": [{"title","how","format","category"}]}` – pár rychlých nápadů na místa, kam chodí
+(Mekáč, sushi, restaurace, obchod, kino, auto, práce, venku, u rodičů). Appka je ukáže na Dnes pod „📍 Jdu ven – co tam natočit?“.
+Každou neděli je klidně osvěž, ale nech tam všechna místa.
+
 ## Kategorie (vždy jedna z těchto tří, v JSON jako zkratka)
 
 | Zkratka | Kategorie | Jak video vzniká |

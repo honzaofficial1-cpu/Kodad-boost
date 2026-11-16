@@ -422,62 +422,6 @@
    ]
   },
   {
-   "id": "2026-11-16-4",
-   "title": "Hot honey bowl s hovězím a batátama",
-   "category": "DAB",
-   "format": "Recept",
-   "why": "Hot honey bowl a cottage cheese jsou teď mezi nejsdílenějšíma high protein recepty na TikToku. Tvoje česká verze, zahřeje v zimě.",
-   "how": "Vaříš, já mluvím přes to. Záběr shora na pánev, kapka medu zpomaleně. Makra jako text na konci.",
-   "hook": {
-    "say": "Tohle teď vaří půlka TikToku. A má to přes 40 gramů bílkovin.",
-    "see": "Med s chilli stéká zpomaleně na hovězí v misce",
-    "txt": "HOT HONEY BOWL"
-   },
-   "body": [
-    {
-     "say": "Batáty na kostky, trochu oleje, sůl, paprika. Fritéza na 200 stupňů, dvacet minut.",
-     "see": "Batáty do fritézy, cvak"
-    },
-    {
-     "say": "Mezitím hovězí. Pět procent tuku, česnek, sůl, chvilku na pánvi a hotovo.",
-     "see": "Hovězí na pánvi, syčí"
-    },
-    {
-     "say": "Hot honey: lžička medu a chilli vločky. Víc nepotřebuješ.",
-     "see": "Míchám med s chilli v hrnku"
-    },
-    {
-     "say": "Do misky batáty, maso, cottage a navrch med. Sladký, pálivý, za mě top.",
-     "see": "Skládám misku, pak první sousto"
-    }
-   ],
-   "end": "Zhruba 45 gramů bílkovin, něco přes 500 kalorií. Za 25 minut.",
-   "cta": "Ulož si to na večer 🔥",
-   "caption": "Hot honey bowl: hovězí, batáty, cottage, med s chilli. ~45 g bílkovin, ~520 kcal 🍯🌶️ #recept #highprotein #vareni #fitnesscz",
-   "shots": [
-    {
-     "text": "Batáty do fritézy",
-     "type": "broll",
-     "place": "Kuchyň"
-    },
-    {
-     "text": "Hovězí na pánvi",
-     "type": "broll",
-     "place": "Kuchyň"
-    },
-    {
-     "text": "Med + chilli zpomaleně",
-     "type": "broll",
-     "place": "Kuchyň"
-    },
-    {
-     "text": "Skládání misky shora + první sousto",
-     "type": "broll",
-     "place": "Kuchyň"
-    }
-   ]
-  },
-  {
    "id": "2026-11-16-5",
    "title": "17. listopadu: volno, ale ne od gymu",
    "category": "EZ",
@@ -526,57 +470,6 @@
      "text": "Moje těžká série",
      "type": "broll",
      "place": "Gym"
-    }
-   ]
-  },
-  {
-   "id": "2026-11-16-6",
-   "title": "Tvaroh 4 způsoby, co tě nezačnou nudit",
-   "category": "EZ",
-   "format": "Recept edit",
-   "why": "Cottage cheese a tvarohové hacky teď letí ve food obsahu. Levný bílkoviny, co máš doma, a lidi si to ukládají.",
-   "how": "4 rychlé mini recepty, každej 4–5 vteřin, záběr shora. Gramy bílkovin jako text u každýho.",
-   "hook": {
-    "say": "",
-    "see": "Plácnu vaničku tvarohu na linku",
-    "txt": "Tvaroh 4 způsoby (25 g bílkovin každej)"
-   },
-   "body": [
-    {
-     "say": "",
-     "see": "Tvaroh + kakao + banán – text: Puding"
-    },
-    {
-     "say": "",
-     "see": "Tvaroh + skořice + jablko – text: Štrúdl bez pečení"
-    },
-    {
-     "say": "",
-     "see": "Tvaroh + česnek + bylinky + zelenina – text: Dip"
-    },
-    {
-     "say": "",
-     "see": "Tvaroh + mražený maliny, mixér – text: Zmrzlina"
-    }
-   ],
-   "end": "Text: Kterej dáš první?",
-   "cta": "Ulož si to 📌",
-   "caption": "Tvaroh 4 způsoby, každej kolem 25 g bílkovin 🥄 #tvaroh #highprotein #recept #fitnesscz",
-   "shots": [
-    {
-     "text": "Vanička tvarohu na lince",
-     "type": "broll",
-     "place": "Kuchyň"
-    },
-    {
-     "text": "4 mini recepty shora",
-     "type": "broll",
-     "place": "Kuchyň"
-    },
-    {
-     "text": "Mixér s malinami",
-     "type": "broll",
-     "place": "Kuchyň"
     }
    ]
   },
@@ -660,10 +553,10 @@
   },
   {
    "date": "2026-11-18",
-   "title": "Tvarohovej puding za 30 vteřin",
-   "how": "Tvaroh, kakao, banán, zamíchat, lžíce. Text: „25 g bílkovin. 30 vteřin.“",
+   "title": "Středa: 3 tréninky z 5 odškrtnutý",
+   "how": "Odškrtávám v zápisníku třetí trénink, záběr na zápisník a na mě v gymu. Text: „Půlka týdne. Žádný vyjednávání.“",
    "format": "EZ s textem",
-   "place": "Kuchyň"
+   "place": "Gym"
   },
   {
    "date": "2026-11-19",
@@ -776,5 +669,151 @@
     "Co jím, když shazuju před létem"
    ]
   }
- ]
+ ],
+ "spots": {
+  "Mekáč": [
+   {
+    "title": "Dát, nebo nedat? Mekáč edice",
+    "how": "Stojíš u kiosku, hlas řekne položku (McWrap, nuggety, hranolky, McFlurry…), ty verdikt a 1 větu proč. Čísla vezmi z appky McDonald's.",
+    "format": "RYCHLOVKY ⚡",
+    "category": "KAM"
+   },
+   {
+    "title": "Kolik bílkovin má moje objednávka?",
+    "how": "Ukážeš tác, text s gramy bílkovin a kaloriemi z appky McDonald's. Pointa: i tady se dá jíst chytře.",
+    "format": "EZ s textem",
+    "category": "EZ"
+   },
+   {
+    "title": "POV: držím formu a kámoši chtějí do Mekáče",
+    "how": "Krátká scénka s kámošema – oni menu, ty si v klidu vybereš. Text: „Jedno jídlo progres nezničí.“",
+    "format": "EZ s textem",
+    "category": "EZ"
+   }
+  ],
+  "Sushi": [
+   {
+    "title": "Sushi: dát, nebo nedat?",
+    "how": "Hlas řekne kousek (losos nigiri, tempura rolka, edamame, majonéza…), ty verdikt a proč. Smažené a hodně majonézy = spíš nedat.",
+    "format": "RYCHLOVKY ⚡",
+    "category": "KAM"
+   },
+   {
+    "title": "Tipni si: kolik kalorií má tahle večeře?",
+    "how": "Záběr na plato, text „Tipni si 👇“, v komentářích pak odpovíš. Hodnoty dohledej v menu.",
+    "format": "EZ s textem",
+    "category": "EZ"
+   },
+   {
+    "title": "Jak jím sushi, když držím formu",
+    "how": "3 rychlé záběry: co beru, co vynechám, kolik toho sním. Text u každého.",
+    "format": "EZ s textem",
+    "category": "EZ"
+   }
+  ],
+  "Restaurace": [
+   {
+    "title": "Co si dám, když držím formu",
+    "how": "Menu do kamery, vyberu jídlo a řeknu proč. Navazuje na tvoje „Co si dát v restauraci“.",
+    "format": "RYCHLOVKY ⚡",
+    "category": "KAM"
+   },
+   {
+    "title": "Číšník vs. já na dietě",
+    "how": "Skeč: „Ještě hranolky?“ – tvůj pohled do kamery. Text na obrazovce.",
+    "format": "EZ s textem",
+    "category": "EZ"
+   }
+  ],
+  "Obchod": [
+   {
+    "title": "Fit, nebo fake? Produkty s nápisem protein",
+    "how": "V regálu bereš produkty, hlas řekne název, ty verdikt podle etikety. Navazuje na „Za co si připlatím v obchodě“.",
+    "format": "RYCHLOVKY ⚡",
+    "category": "KAM"
+   },
+   {
+    "title": "Co mám v košíku na týden",
+    "how": "Košík shora, každá věc 1 záběr, text proč ji beru.",
+    "format": "EZ s textem",
+    "category": "EZ"
+   },
+   {
+    "title": "Etiketa za 5 vteřin: na co se kouknout",
+    "how": "Detail etikety, ukazuješ prstem bílkoviny / cukr / porci. Text u každého.",
+    "format": "EZ s textem",
+    "category": "EZ"
+   }
+  ],
+  "Kino": [
+   {
+    "title": "Popcorn, nebo nachos? Rychlovka",
+    "how": "U baru, hlas řekne věc, ty verdikt. Pointa: jednou za čas v pohodě.",
+    "format": "RYCHLOVKY ⚡",
+    "category": "KAM"
+   },
+   {
+    "title": "Co si beru do kina, když držím formu",
+    "how": "Vytáhnu z kapsy co mám s sebou. Text: „Film 2 hodiny, hlad nula.“",
+    "format": "EZ s textem",
+    "category": "EZ"
+   }
+  ],
+  "Auto": [
+   {
+    "title": "Jedna myšlenka cestou do gymu",
+    "how": "Head talk z auta (stojíš, ne za jízdy): jedna věc, co tě dneska napadla – motivace, chyba, tip. Max 30 s.",
+    "format": "HEAD TALK 🗣️",
+    "category": "KAM"
+   },
+   {
+    "title": "Co poslouchám cestou do gymu",
+    "how": "Detail displeje / telefonu, 3 písničky nebo podcast, text proč.",
+    "format": "EZ s textem",
+    "category": "EZ"
+   }
+  ],
+  "Práce": [
+   {
+    "title": "2 minuty, co zvládneš i v práci",
+    "how": "Dřepy u stolu, kliky o stůl, protažení. Text: „Žádná výmluva.“ Rychlý střih.",
+    "format": "EZ s textem",
+    "category": "EZ"
+   },
+   {
+    "title": "Pravda, nebo výmluva? Pracovní edice",
+    "how": "Hlas: „Nemám čas, jsem v práci do šesti“ → ty verdikt. Natoč na chodbě nebo u stolu.",
+    "format": "RYCHLOVKY ⚡",
+    "category": "KAM"
+   }
+  ],
+  "Venku": [
+   {
+    "title": "Japonská chůze: 30 minut",
+    "how": "3 záběry: rychle / pomalu / rychle, text s časem a tepovkou.",
+    "format": "EZ s textem",
+    "category": "EZ"
+   },
+   {
+    "title": "Kolik nachodím za den, když jsem aktivní",
+    "how": "Ráno 0 kroků, večer číslo z hodinek, mezi tím rychlé střihy dne.",
+    "format": "EZ s textem",
+    "category": "EZ"
+   }
+  ],
+  "U rodičů": [
+   {
+    "title": "Mamka vs. moje dieta",
+    "how": "Skeč: „Ještě si přidej!“ – ty se smíchem bereš druhej talíř. Text: „Jedno jídlo nic nezničí.“",
+    "format": "EZ s textem",
+    "category": "EZ"
+   },
+   {
+    "title": "Táta zkouší můj trénink",
+    "how": "Natoč tátu / rodinu na jednom cviku, text s reakcí. Lidi to sdílí.",
+    "format": "EZ s textem",
+    "category": "EZ"
+   }
+  ]
+ }
 }
