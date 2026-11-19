@@ -20,9 +20,29 @@ const ON = () => { const f = F(); f.online = f.online || {}; f.onlineCustom = f.
 const onId = id => String(id).replace(/^(z|step|sw):/, '');
 const onNote = (s, fallback) => { const o = ON().online[s]; if (!o) return fallback; const b = o.baleni ? `po ${o.baleni}` : ''; return [o.kde, b].filter(Boolean).join(' · ') || (fallback ? `${fallback} · doplň, kde to kupuješ` : 'doplň, kde to kupuješ'); };
 CATS.push('Online');
+// kolik objednat dopředu: spotřeba podle jídelníčku (aktuální krok, záměny) na zvolený počet týdnů → počet balení
+const onWeeks = () => ON().onlineWeeks || 3;
+let _onCache = null;
+function onSums() {
+  const f = F(); const from = f.start && f.start > today() ? f.start : today(); const n = onWeeks() * 7; const key = [from, n, f.step, JD.meta?.verze, JSON.stringify(f.swaps || {}).length].join('|');
+  if (_onCache && _onCache.key === key) return _onCache; const R = RX(), sum = {}; const add = (x, g) => { if (x && g) sum[x] = (sum[x] || 0) + g; };
+  for (let i = 0; i < n; i++) { const k = dkey(addDays(pdate(from), i)); const c = f.start ? cyc(k) : null; if (!c || c.before) continue; const day = planDayF(c.w, c.di, k); if (!day) continue;
+    SLOTS.forEach(([sl]) => { const r = R[day.jidla[sl]]; if (r) r.suroviny.forEach(x => add(x.surovina, x.g)); }); (day.upravy || []).forEach(u => add(u.surovina, u.g)); Object.values(stepMods(f.step, day)).flat().forEach(m => add(m.surovina, m.g)); }
+  return (_onCache = { key, sum, from, to: dkey(addDays(pdate(from), n - 1)) });
+}
+// „120 g“, „1 kg“, „0,75 l“; u konzerv bere hmotnost po slití ze závorky („konzerva 400 g (240 g slitá)“)
+function pkgG(t) { if (!t) return null; t = String(t).replace(',', '.'); const inner = /\(~?\s*([\d.]+)\s*(g|kg|ml|l)\b/i.exec(t); const m = inner || /([\d.]+)\s*(g|kg|ml|l)\b/i.exec(t); if (!m) return null; const v = parseFloat(m[1]) * (/^(kg|l)$/i.test(m[2]) ? 1000 : 1); return v > 0 ? v : null; }
+function onQty(s) {
+  const need = Math.max(0, Math.round(onSums().sum[s] || 0)); const o = ON().online[s] || {}; const pk = pkgG(o.baleni) || pkgG(JD.suroviny[s]?.baleni); const wk = `na ${onWeeks()} ${onWeeks() < 5 ? 'týdny' : 'týdnů'}`;
+  const gtxt = v => v >= 1000 ? `${nf(v / 1000, 2).replace(/,?0+$/, '')} kg` : `${v} g`;
+  if (!need) return { short: '–', long: `${wk} není v jídelníčku`, need, n: 0 };
+  if (!pk) return { short: gtxt(need), long: `${wk} ${gtxt(need)}`, need, n: null };
+  const n = Math.ceil(need / pk); return { short: `${n}×`, long: `${wk} ${gtxt(need)} = ${n}× po ${gtxt(pk)}${n * pk - need >= 1 ? `, zbyde ${gtxt(Math.round(n * pk - need))}` : ''}`, need, n };
+}
 function onMark(items, withCustom) {
   const O = ON().online;
-  items.forEach(i => { if (i.own != null || String(i.id).startsWith('c:')) return; const s = onId(i.id); if (!O[s]) return; i.kat = 'Online'; i.pozn = onNote(s, i.pozn); });
+  items.forEach(i => { if (i.own != null || String(i.id).startsWith('c:')) return; const s = onId(i.id); if (!O[s]) return; i.kat = 'Online';
+    const q = onQty(s); i.mnozstvi = q.short; i.pozn = [q.long, onNote(s, '')].filter(Boolean).join(' · '); });
   if (withCustom) ON().onlineCustom.forEach((c, n) => items.push({ id: 'oc:' + n, nazev: c.nazev, mnozstvi: '', pozn: [c.kde, c.baleni ? `po ${c.baleni}` : ''].filter(Boolean).join(' · '), kat: 'Online' }));
   return items;
 }
@@ -39,9 +59,13 @@ function onSheet() {
   const f = ON(); const all = Object.keys(JD.suroviny).sort((a, b) => SUR(a).nazev.localeCompare(SUR(b).nazev, 'cs'));
   const mine = all.filter(s => f.online[s]); const rest = all.filter(s => !f.online[s]);
   const orphan = Object.keys(f.online).filter(s => !JD.suroviny[s]); // surovina zmizela z plánu – nech, ať se nemaže
-  const row = (a, id, name, o, extra) => `<button class="li" data-a="${a}" data-v="${esc(id)}"><div class="t"><b>${esc(name)}</b><small>${esc([o.kde, o.baleni ? 'po ' + o.baleni : ''].filter(Boolean).join(' · ') || 'doplň, kde a po kolika se prodává')}${extra || ''}</small></div>${ico('chev')}</button>`;
+  const row = (a, id, name, o, extra, q) => `<button class="li" data-a="${a}" data-v="${esc(id)}"><div class="t"><b>${esc(name)}</b>${q ? `<small class="fonq">${esc(q.long)}</small>` : ''}<small>${esc([o.kde, o.baleni ? 'po ' + o.baleni : ''].filter(Boolean).join(' · ') || 'doplň, kde a po kolika se prodává')}${extra || ''}</small></div>${q && q.n ? `<span class="fonn">${q.n}×</span>` : ''}${ico('chev')}</button>`;
+  const S0 = onSums();
   return `<h2>Co kupuju online</h2><p class="mut" style="margin:4px 0 0">Tyhle položky zmizí z nákupu v obchodě a ukážou se dole v seznamu jako „Online – objednat“. Zůstanou i po nahrání nové verze jídelníčku.</p>
-    <div class="list" style="margin-top:14px">${mine.map(s => row('on-edit', s, SUR(s).nazev, f.online[s])).join('')}
+    <div class="lbl" style="margin:16px 2px 8px">Objednávám dopředu na</div>
+    <div class="seg">${[3, 6, 9, 12].map(w => `<button data-a="on-wk" data-v="${w}" class="${w === onWeeks() ? 'on' : ''}">${w} ${w < 5 ? 'týdny' : 'týdnů'}</button>`).join('')}</div>
+    <p class="mut" style="font-size:12px;margin:8px 2px 0">${fday(S0.from)} – ${fday(S0.to)} podle jídelníčku v kroku ${sg(f.step, 0)}. Počet balení se počítá z „po kolika se prodává“.</p>
+    <div class="list" style="margin-top:14px">${mine.map(s => row('on-edit', s, SUR(s).nazev, f.online[s], '', onQty(s))).join('')}
       ${f.onlineCustom.map((c, i) => row('on-cedit', i, c.nazev, c, ' · vlastní')).join('')}
       ${orphan.map(s => row('on-edit', s, s, f.online[s], ' · v aktuálním plánu není')).join('')}
       ${!mine.length && !f.onlineCustom.length ? '<p class="mut" style="margin:6px 2px">Zatím nic. Vyber surovinu dole.</p>' : ''}</div>
@@ -53,9 +77,10 @@ function onSheet() {
 }
 const onEditSheet = (title, o, del, sv, id) => sheet(`<h2>${esc(title)}</h2><div class="form">
     <label class="f">Kde (obchod, web)<input id="on-kde" value="${esc(o.kde || '')}" placeholder="např. vilgain.cz"></label>
-    <label class="f">Po kolika se prodává<input id="on-bal" value="${esc(o.baleni || '')}" placeholder="např. 120 g, 1 kg, 6 ks"></label></div>
+    <label class="f">Po kolika se prodává<input id="on-bal" value="${esc(o.baleni || '')}" placeholder="např. 120 g, 1 kg"></label><p class="mut" style="font-size:12px;margin:0 2px">U konzerv napiš hmotnost po slití, např. „120 g (85 g slitá)“.</p></div>
     <div class="actions"><button class="btn" data-a="${del}" data-v="${esc(id)}">${del === 'on-del' ? 'Vrátit do obchodu' : 'Smazat'}</button><button class="btn white" data-a="${sv}" data-v="${esc(id)}">Uložit</button></div>`);
 A['on-man'] = () => sheet(onSheet());
+A['on-wk'] = b => { ON().onlineWeeks = +b.dataset.v; save(true); sheet(onSheet()); render(); };
 A['on-close'] = () => { closeSheet(); render(); };
 A['on-add'] = b => { ON().online[b.dataset.v] = { kde: '', baleni: '' }; save(true); A['on-edit'](b); };
 A['on-edit'] = b => { const s = b.dataset.v; const o = ON().online[s] || {}; onEditSheet(JD.suroviny[s] ? SUR(s).nazev : s, o, 'on-del', 'on-save', s); };
