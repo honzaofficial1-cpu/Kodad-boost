@@ -83,18 +83,24 @@ XV['f-nakup'] = function () {
   const segs = `<div class="seg">${[['N1', 'Víkend'], ['N2', 'Středa'], ['R', 'Vlastní'], ['Z', 'Zásoba']].map(([v, l]) => `<button data-a="f-list" data-v="${v}" class="${v === (view.list || 'N1') ? 'on' : ''}">${l}</button>`).join('')}</div>`;
   if (view.list !== 'R') return _20nakup().replace(/<div class="seg">(?:(?!<\/div>)[\s\S])*?data-a="f-list"[\s\S]*?<\/div>/, segs);
   const f = F(); if (!f.start) return XV['f-den']();
-  const r = f.rng = f.rng && f.rng.to >= today() ? f.rng : { from: today(), to: nextSun(today()) };
+  const r = f.rng = f.rng && f.rng.to >= today() ? f.rng : { from: today(), to: nextSun(today()) }; if (!r.buy || r.buy < today()) r.buy = today(); if (r.from < r.buy) r.from = r.buy; if (r.to < r.from) r.to = r.from;
   const key = `R:${r.from}:${r.to}`; const st = f.shop[key] = f.shop[key] || {};
   const { items, days, meals } = rangeItems(r.from, r.to); (f.custom[key] || []).forEach((n, i) => items.push({ id: 'c:' + i, nazev: n, mnozstvi: '', pozn: '', kat: 'Vlastní', own: i }));
   const done = items.filter(i => st[i.id]).length;
   const groups = [...CATS.filter(c => c !== 'Zásoba'), 'Zásoba'].map(cat => { const its = items.filter(i => i.kat === cat).sort((a, b) => (st[a.id] ? 1 : 0) - (st[b.id] ? 1 : 0)); if (!its.length) return '';
     const body = its.map(i => `<button class="fsi ${st[i.id] ? 'on' : ''}" data-a="f-chk" data-key="${key}" data-id="${esc(i.id)}"><span class="cb">${st[i.id] ? ico('check') : ''}</span><span class="t"><b>${esc(i.nazev)}</b>${i.pozn ? `<small>${esc(i.pozn)}</small>` : ''}</span><span class="q">${esc(i.mnozstvi)}</span>${i.own != null ? `<span class="x" data-a="f-cdel" data-key="${key}" data-i="${i.own}" aria-label="Smazat">${ico('x')}</span>` : ''}</button>`).join('');
     return cat === 'Zásoba' ? `<details class="kmore fsg"><summary>Ze zásoby – zkontroluj doma (${its.length})</summary>${body}</details>` : `<div class="fsg"><div class="lbl">${cat}</div>${body}</div>`; }).join('');
-  const quick = [['Do neděle', today(), nextSun(today())], ['3 dny', today(), dkey(addDays(new Date(), 2))], ['Týden', today(), dkey(addDays(new Date(), 6))]];
+  const nMon = k => { const d = pdate(k); return dkey(addDays(d, (8 - d.getDay()) % 7 || 7)); }; const pm = nMon(r.buy);
+  const quick = [['Do neděle', r.buy, nextSun(r.buy)], ['Po–St', pm, dkey(addDays(pdate(pm), 2))], ['Čt–Ne', dkey(addDays(pdate(pm), 3)), dkey(addDays(pdate(pm), 6))], ['Týden', r.buy, dkey(addDays(pdate(r.buy), 6))]];
+  const strip = [...Array(14)].map((_, i) => dkey(addDays(pdate(r.buy), i)));
+  const buys = [...Array(7)].map((_, i) => dkey(addDays(new Date(), i)));
   return `<div class="wrap">${fHdr('Nákup')}${segs}
-    <div class="form" style="margin-top:12px"><div class="two"><label class="f">Od<input type="date" id="rg-from" value="${r.from}"></label><label class="f">Do (včetně)<input type="date" id="rg-to" value="${r.to}" min="${r.from}"></label></div></div>
+    <div class="lbl" style="margin:14px 2px 8px">Kdy jdu nakupovat</div>
+    <div class="rgbuy">${buys.map(k => `<button class="${k === r.buy ? 'on' : ''}" data-a="rg-buy" data-v="${k}"><small>${k === today() ? 'dnes' : k === dkey(addDays(new Date(), 1)) ? 'zítra' : DOW[pdate(k).getDay()]}</small><b>${pdate(k).getDate()}.</b></button>`).join('')}</div>
+    <div class="lbl" style="margin:16px 2px 8px">Na které dny <i class="mut" style="font-style:normal;text-transform:none;letter-spacing:0;font-weight:500">klepni na první a poslední den</i></div>
+    <div class="rgdays">${strip.map(k => { const d = pdate(k); const inr = k >= r.from && k <= r.to; return `<button class="${inr ? 'in' : ''} ${k === r.from ? 'a' : ''} ${k === r.to ? 'b' : ''} ${d.getDay() === 1 ? 'mo' : ''}" data-a="rg-day" data-v="${k}"><small>${DOW[d.getDay()]}</small><b>${d.getDate()}.</b></button>`; }).join('')}</div>
     <div class="chips" style="margin-top:10px">${quick.map(([l, a, b]) => `<button class="chip ${a === r.from && b === r.to ? 'on' : ''}" data-a="rg-q" data-f="${a}" data-t="${b}">${l}</button>`).join('')}</div>
-    <div class="fshi" style="margin-top:12px"><div><span>Na období</span><b>${fday(r.from)} – ${fday(r.to)}</b><small>${days} ${nDays(days)} · ${meals} jídel</small></div><div><span>Počítá</span><b>den po dni</b><small>podle jídelníčku vč. záměn a kroku</small></div></div>
+    <div class="fshi" style="margin-top:12px"><div><span>Nakupuješ</span><b>${flong(r.buy).replace(/^./, c => c.toUpperCase())}</b><small>${r.buy === today() ? 'dnes' : inDays(r.buy)}</small></div><div><span>Na dny</span><b>${fday(r.from)} – ${fday(r.to)}</b><small>${days} ${nDays(days)} · ${meals} jídel</small></div></div>
     <div class="fsbar"><span>${done} / ${items.length} v košíku</span><button class="btn" data-a="f-reset" data-key="${key}">Nový nákup</button></div>
     ${groups || '<p class="mut">V tomhle období jídelníček nic nemá.</p>'}
     <div class="fadd"><input id="f-own" placeholder="Přidat vlastní položku"><button class="btn white" data-a="f-cadd" data-key="${key}">Přidat</button></div>
@@ -115,7 +121,9 @@ function rangeItems(from, to) {
     .sort((a, b) => a.nazev.localeCompare(b.nazev, 'cs'));
   return { items, days, meals };
 }
-A['rg-q'] = b => { F().rng = { from: b.dataset.f, to: b.dataset.t }; save(); render(); };
+A['rg-q'] = b => { const r = F().rng; r.from = b.dataset.f; r.to = b.dataset.t; view.rgPick = false; save(); render(); };
+A['rg-buy'] = b => { const r = F().rng; r.buy = b.dataset.v; if (r.from < r.buy) { const len = daysBetween(r.from, r.to); r.from = r.buy; r.to = dkey(addDays(pdate(r.buy), len)); } view.rgPick = false; save(); render(); };
+A['rg-day'] = b => { const r = F().rng; const k = b.dataset.v; if (!view.rgPick) { r.from = k; r.to = k; view.rgPick = true; } else { if (k < r.from) r.from = k; else r.to = k; view.rgPick = false; } save(); const y = $('#app').scrollTop; render(); $('#app').scrollTop = y; };
 document.addEventListener('change', e => { if (!['rg-from', 'rg-to'].includes(e.target.id)) return; const f = F(); const a = $('#rg-from').value, b = $('#rg-to').value; if (!a || !b) return;
   f.rng = { from: a, to: b < a ? a : b }; save(); render(); });
 
