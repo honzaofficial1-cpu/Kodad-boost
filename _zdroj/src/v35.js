@@ -17,7 +17,7 @@ const groupOf = kod => kod[0] === 'S' ? 'S' : kod[0] === 'P' ? 'P' : 'H';
 function swapWarn(k, s, cand) {
   const c = cyc(k); if (!c || c.before) return []; const day = planDayF(c.w, c.di, k); const R = RX(); const W = [];
   const mine = protOf(cand); Object.entries(day.jidla).forEach(([s2, kod]) => { if (s2 === s || !R[kod]) return; protOf(R[kod]).forEach(p => { if (mine.has(p)) W.push(`${p} už je ${s2 === 'obed' ? 'k obědu' : s2 === 'vecere' ? 'k večeři' : s2 === 'snidane' ? 'ke snídani' : 've svačině'}`); }); });
-  if (s === 'svacina' && day.trenink && !['P1', 'P4', 'P5'].includes(cand.kod)) W.push('před tréninkem jen P1, P4 nebo P5');
+  if (s === 'svacina' && cand.svacina_typ) { if (day.trenink && cand.svacina_typ !== 'pred_treninkem') W.push('tohle je svačina na volný den, ne před trénink'); if (!day.trenink && cand.svacina_typ === 'pred_treninkem') W.push('tohle je svačina před trénink'); } else if (s === 'svacina' && day.trenink && !['P1', 'P4', 'P5'].includes(cand.kod)) W.push('před tréninkem jen P1, P4 nebo P5');
   if (mine.has('tuňák')) { const mon = dkey(addDays(pdate(k), -dIdx(k))); let n = 0; for (let i = 0; i < 7; i++) { const kk = dkey(addDays(pdate(mon), i)); const cc = cyc(kk); if (!cc || cc.before) continue; const dd = planDayF(cc.w, cc.di, kk); Object.entries(dd.jidla).forEach(([s2, kod]) => { if (kk === k && s2 === s) return; if (R[kod] && protOf(R[kod]).has('tuňák')) n++; }); } if (n) W.push('tuňák už tento týden je (max 1×)'); }
   return W;
 }

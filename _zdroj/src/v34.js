@@ -16,6 +16,8 @@ function jlApply() { const L = jlLoad(); const it = L.act !== 'default' && L.ite
 jlApply();
 
 const jdRow = (id, j, act, added) => `<div class="fjl ${act ? 'on' : ''}"><button class="t" data-a="f-jdact" data-id="${id}"><span class="rd"></span><span><b>${esc(j.meta?.nazev || 'Jídelníček')}</b><small>verze ${esc(j.meta?.verze || '–')} · ${j.recepty.length} receptů${added ? ' · nahráno ' + fday(added) : ' · v aplikaci'}</small></span></button>${id !== 'default' ? `<button class="round" style="width:38px;height:38px" data-a="f-jddel" data-id="${id}" aria-label="Smazat">${ico('trash')}</button>` : ''}</div>`;
+function snackInfo() { const R = RX(); const t = {}; JD.recepty.forEach(r => { if (r.svacina_typ) (t[r.svacina_typ] = t[r.svacina_typ] || []).push(r.kod); });
+  return t.pred_treninkem ? `Při přepnutí dne se vymění jen svačina: před tréninkem ${t.pred_treninkem.join(', ')}, volný den ${(t.volny_den || []).join(', ')}. Energie dne se přepočítá z receptů.` : 'Svačiny se přehodí podle tréninkových dnů.'; }
 XV['f-set'] = function () {
   const f = F(); const td = tDays(); const L = jlLoad();
   return `<div class="wrap">${fHdr('Nastavení jídla', '<span></span>')}
@@ -25,7 +27,7 @@ XV['f-set'] = function () {
       <label class="btn white block" style="margin-top:12px">${ico('plus')} Nahrát jiný jídelníček<input type="file" id="f-imp2" accept="application/json,.json" hidden></label>
       <p class="mut" style="font-size:12px;margin:8px 2px 0">Soubor .json ve stejném formátu (suroviny, recepty, cyklus). Přepnutím se změní jen jídla a nákupy – měření, odškrtnutí, suplementy a krok zůstanou.</p></div>
     <div class="fsec"><div class="lbl">Tréninkové dny</div><div class="fdays">${DNY.map(d => `<button data-a="f-td" data-v="${d}" class="${td.includes(d) ? 'on' : ''}">${d}</button>`).join('')}</div>
-      <p class="mut" style="font-size:13px;margin:8px 2px 0">${f.tdays ? 'Vlastní volba.' : 'Podle tvého plánu v gymu.'} Svačiny P1/P4/P5 se dají do tréninkových dnů, P3/P6 do volných.</p></div>
+      <p class="mut" style="font-size:13px;margin:8px 2px 0">${f.tdays ? 'Vlastní volba.' : 'Podle tvého plánu v gymu.'} ${snackInfo()}</p></div>
     <div class="fsec"><button class="btn block" data-a="f-export">${ico('share')} Export pro výživu</button></div>
     <p class="mut" style="font-size:12px;margin:16px 2px">${esc(JD.meta.upozorneni || '')}</p>
   </div>${tabs()}`;

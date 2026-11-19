@@ -36,7 +36,8 @@ XV['f-tyden'] = withUP(function () {
   const lunchDays = (rk, wk) => { const ds = wk.dny.map((d, i) => d.jidla.obed === rk && (d.z_varky || []).includes('obed') ? i : -1).filter(i => i >= 0); return ds.length ? DNY[ds[0]] + (ds.length > 1 ? '–' + DNY[ds[ds.length - 1]] : '') : ''; };
   const isT = x => c && !c.before && c.w === w && c.di === x.di;
   const tag = (x, s, r) => { const t = [];
-    if ((x.day.z_varky || []).includes(s)) t.push('ze zásoby');
+    if ((x.day.z_varky || []).includes(s)) t.push(dailyCook(w) ? 'z krabičky – včerejší večeře' : 'ze zásoby');
+    if (s === 'vecere' && dailyCook(w)) t.push('uvař 2 porce');
     if (s === 'svacina' && x.day.trenink) t.push('před tréninkem');
     if (s === 'vecere' && x.di === 2 && r.kod === W.varka_streda) t.push(`do zásoby (${portions(r.kod, W) + 1} porce)`);
     if (s === 'vecere' && x.di === 6 && r.kod === nextW.varka_nedele) t.push('do zásoby na další týden');
@@ -56,7 +57,7 @@ XV['f-tyden'] = withUP(function () {
   const fo = PN().ferment || {};
   return `<div class="wrap wtyd">${fHdr('Týden ' + w)}
     <div class="seg">${order.map(x => `<button data-a="f-week" data-v="${x}" class="${x === w ? 'on' : ''}">Týden ${x}</button>`).join('')}</div>
-    <p class="wsub"><b>Jídelníček · krok ${sgn(f.step)} · ~${thou(r10(avg.kcal))} kcal</b><br>Vaření do zásoby: neděle předem <b>${esc(R[W.varka_nedele]?.nazev || '')}</b> (večeře + obědy ${lunchDays(W.varka_nedele, W)}) · středa <b>${esc(R[W.varka_streda]?.nazev || '')}</b> (večeře + obědy ${lunchDays(W.varka_streda, W)})</p>
+    <p class="wsub"><b>Jídelníček · krok ${sgn(f.step)} · ~${thou(r10(avg.kcal))} kcal</b>${dailyCook(w) ? `<br>Vaření: ${esc(W.vareni || JD.meta.vareni || 'každý večer 2 porce')}` : `<br>Vaření do zásoby: neděle předem <b>${esc(R[W.varka_nedele]?.nazev || '')}</b> (večeře + obědy ${lunchDays(W.varka_nedele, W)}) · středa <b>${esc(R[W.varka_streda]?.nazev || '')}</b> (večeře + obědy ${lunchDays(W.varka_streda, W)})`}</p>
     <div class="wscroll">${grid}</div>
     <p class="wfoot"><b>Průměr týdne: ~${thou(r10(avg.kcal))} kcal · B ${r0(avg.bilkoviny_g)} g · S ${r0(avg.sacharidy_g)} g · T ${r0(avg.tuky_g)} g · vláknina ${r0(avg.vlaknina_g)} g.</b></p>
     <p class="wfoot">Jednotky: ${esc(JD.meta.jednotky || '')}. ${esc(fo.poznamka || '')} ${esc(JD.meta.upozorneni || '')}</p>
@@ -103,11 +104,11 @@ function remindToday() {
   const weekMon = dkey(monday(d)); const waistDone = Object.entries(BD().meas).some(([k, m]) => k >= weekMon && m.waist != null);
   return L.filter(p => { const k = (p.kdy || '').toLowerCase(); const n = /každé\s+(\d+)\s+týdn/.exec(k);
     let due = /denně/.test(k) || DOWN.some((x, i) => i === dow && k.includes(x)) || (n && dow === 0 && (wk + 1) % +n[1] === 0);
-    if (/ráno/.test(k) && h >= 12) due = false;
+    if (/ráno/.test(k) && h >= 12) due = false; if (/večer/.test(k) && h < 15) due = false;
     const co = (p.co || '').toLowerCase();
     if (/zvážit|vážen/.test(co) && BD().days[today()]?.weight != null) due = false;
     if (/^pas/.test(co) && waistDone && f.weeks[weekMon]?.energy) due = false;
-    return due; }).map(p => { const co = (p.co || '').toLowerCase(); const go = /nákup/.test(co) ? 'f-nakup' : /várk|vaření/.test(co) ? 'f-tyden' : /pas|hodnocen/.test(co) ? 'f-vyvoj' : 'mery'; return { t: p.co, go }; });
+    return due; }).map(p => { const co = (p.co || '').toLowerCase(); const go = /nákup/.test(co) ? 'f-nakup' : /uvař|várk|vaření/.test(co) ? 'f-den' : /pas|hodnocen/.test(co) ? 'f-vyvoj' : 'mery'; return { t: p.co.split(',')[0].replace(/\s*\([^)]*\)/g, ''), go }; });
 }
 const _21vHome = vHome;
 vHome = function () { const h = _21vHome(); const R = remindToday(); if (!R.length) return h;

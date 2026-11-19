@@ -30,6 +30,8 @@ function cyc(k) {
   return { wi, w: order[wi % order.length], di: d % 7, mon: dkey(addDays(pdate(f.start), wi * 7)) };
 }
 // tréninkové dny: vlastní volba → plán z gymu → výchozí z dat
+// v2+: každý večer 1 jídlo na 2 porce (varka_nedele/streda = null)
+const dailyCook = w => { const W = JD.cyklus[w]; return !!W && !W.varka_nedele && !W.varka_streda; };
 function tDays() {
   const f = F(); if (f.tdays) return f.tdays;
   const p = typeof prog === 'function' && prog(); if (p) return Object.keys(p.days).map(d => DNY[(+d + 6) % 7]);
@@ -41,10 +43,13 @@ function planDayF(w, di) {
   const dataT = W.dny.map(d => d.trenink), myT = DNY.map(d => td.includes(d));
   const day = JSON.parse(JSON.stringify(base)); day.trenink = myT[di];
   if (dataT.some((t, i) => t !== myT[i])) {
-    const pre = W.dny.filter(d => d.trenink).map(d => d.jidla.svacina), rest = W.dny.filter(d => !d.trenink).map(d => d.jidla.svacina);
+    // svacina_typ (v2+): pred_treninkem patří k tréninkovému dni, volny_den k volnému; jinak podle dnů v datech
+    const R0 = RX(); const typed = W.dny.every(d => R0[d.jidla.svacina]?.svacina_typ);
+    const pre = W.dny.filter(d => typed ? R0[d.jidla.svacina].svacina_typ === 'pred_treninkem' : d.trenink).map(d => d.jidla.svacina), rest = W.dny.filter(d => typed ? R0[d.jidla.svacina].svacina_typ !== 'pred_treninkem' : !d.trenink).map(d => d.jidla.svacina);
     const nT = myT.slice(0, di).filter(Boolean).length, nR = myT.slice(0, di).filter(x => !x).length;
     const src = myT[di] ? (pre.length ? pre : rest) : (rest.length ? rest : pre); const idx = myT[di] ? nT : nR;
-    const ns = src[idx % src.length]; if (ns && ns !== day.jidla.svacina) { const R = RX(); const old = R[day.jidla.svacina], nw = R[ns]; if (old && nw) addN(day.soucet_dne, nw.hodnoty_porce), addN(day.soucet_dne, old.hodnoty_porce, -1); day.jidla.svacina = ns; day.swapped = true; }
+    const okNow = typed ? (R0[day.jidla.svacina].svacina_typ === 'pred_treninkem') === myT[di] : false;
+    const ns = okNow ? day.jidla.svacina : src[idx % src.length]; if (ns && ns !== day.jidla.svacina) { const R = RX(); const old = R[day.jidla.svacina], nw = R[ns]; if (old && nw) addN(day.soucet_dne, nw.hodnoty_porce), addN(day.soucet_dne, old.hodnoty_porce, -1); day.jidla.svacina = ns; day.swapped = true; }
   }
   return day;
 }
@@ -78,7 +83,7 @@ XV['f-den'] = function () {
   const day = planDayF(c.w, c.di, k), R = RX(), M = stepMods(f.step, day), tot = dayTotals(day, f.step);
   const meals = SLOTS.map(([s, l, t]) => { const r = R[day.jidla[s]]; if (!r) return ''; const box = (day.z_varky || []).includes(s); const mods = M[s];
     const kc = r.hodnoty_porce.kcal + mods.reduce((a, m) => a + nutOf(m.surovina, m.g).kcal, 0);
-    return `<button class="fmeal" data-a="f-meal" data-id="${r.kod}" data-s="${s}" data-k="${k}"><span class="fmt"><i>${l}</i><small>${t}</small></span><span class="fmn"><b>${esc(r.nazev)}</b><small>${box ? '<em class="tag">z krabičky</em>' : ''}${s === 'svacina' && day.trenink ? '<em class="tag o">před tréninkem</em>' : ''}${mods.length ? `<em class="tag o">${mods.map(m => `${m.g > 0 ? '+' : ''}${m.g} g ${SUR(m.surovina).nazev.split(' (')[0].toLowerCase()}`).join(', ')}</em>` : ''}</small></span><span class="fmk"><span>${r0(kc)}<small> kcal</small></span><em>B ${r0(r.hodnoty_porce.bilkoviny_g + mods.reduce((a, m) => a + nutOf(m.surovina, m.g).bilkoviny_g, 0))} g</em></span></button>`; }).join('');
+    return `<button class="fmeal" data-a="f-meal" data-id="${r.kod}" data-s="${s}" data-k="${k}"><span class="fmt"><i>${l}</i><small>${t}</small></span><span class="fmn"><b>${esc(r.nazev)}</b><small>${box ? `<em class="tag">${dailyCook(c.w) ? 'z krabičky – včerejší večeře' : 'z krabičky'}</em>` : ''}${s === 'vecere' && dailyCook(c.w) ? '<em class="tag o">uvař 2 porce, druhou do 1 h do krabičky</em>' : ''}${s === 'svacina' && day.trenink ? '<em class="tag o">před tréninkem</em>' : ''}${mods.length ? `<em class="tag o">${mods.map(m => `${m.g > 0 ? '+' : ''}${m.g} g ${SUR(m.surovina).nazev.split(' (')[0].toLowerCase()}`).join(', ')}</em>` : ''}</small></span><span class="fmk"><span>${r0(kc)}<small> kcal</small></span><em>B ${r0(r.hodnoty_porce.bilkoviny_g + mods.reduce((a, m) => a + nutOf(m.surovina, m.g).bilkoviny_g, 0))} g</em></span></button>`; }).join('');
   const up = (day.upravy || []).map(u => `<li>${esc(u.text)}</li>`).join('');
   const W = JD.cyklus[c.w]; const cook = c.di === 6 && W ? JD.cyklus[(JD.meta.poradi_cyklu || ['A', 'B', 'C'])[(c.wi + 1) % 3]]?.varka_nedele : c.di === 2 ? W.varka_streda : null;
   return `<div class="wrap">${fHdr('Jídlo')}${remindersF(k)}${nav}
@@ -145,7 +150,8 @@ XV['f-nakup'] = function () {
   const done = items.filter(i => st[i.id]).length;
   const groups = CATS.map(cat => { const its = items.filter(i => i.kat === cat).sort((a, b) => (st[a.id] ? 1 : 0) - (st[b.id] ? 1 : 0)); if (!its.length) return '';
     return `<div class="fsg"><div class="lbl">${cat}</div>${its.map(i => `<button class="fsi ${st[i.id] ? 'on' : ''}" data-a="f-chk" data-key="${key}" data-id="${esc(i.id)}"><span class="cb">${st[i.id] ? ico('check') : ''}</span><span class="t"><b>${esc(i.nazev)}</b>${i.pozn ? `<small>${esc(i.pozn)}</small>` : ''}</span><span class="q">${esc(i.mnozstvi)}</span>${i.own != null ? `<span class="x" data-a="f-cdel" data-key="${key}" data-i="${i.own}">${ico('x')}</span>` : ''}</button>`).join('')}</div>`; }).join('');
-  const when = list === 'N1' ? `na ne ${fday(dkey(addDays(pdate(mon), -1))).replace(/^\S+ /, '')} – st ${fday(dkey(addDays(pdate(mon), 2))).replace(/^\S+ /, '')}` : `na st ${fday(dkey(addDays(pdate(mon), 2))).replace(/^\S+ /, '')} – ne ${fday(dkey(addDays(pdate(mon), 6))).replace(/^\S+ /, '')}`;
+  const dd = (n) => fday(dkey(addDays(pdate(mon), n))).replace(/^\S+ /, ''); const when0 = dailyCook(w) ? (list === 'N1' ? `na po ${dd(0)} – st ${dd(2)}` : `na čt ${dd(3)} – ne ${dd(6)}`) : null;
+  const when = when0 || (list === 'N1' ? `na ne ${fday(dkey(addDays(pdate(mon), -1))).replace(/^\S+ /, '')} – st ${fday(dkey(addDays(pdate(mon), 2))).replace(/^\S+ /, '')}` : `na st ${fday(dkey(addDays(pdate(mon), 2))).replace(/^\S+ /, '')} – ne ${fday(dkey(addDays(pdate(mon), 6))).replace(/^\S+ /, '')}`);
   const info = shopInfo(list, wi, mon, w);
   return `<div class="wrap">${fHdr('Nákup')}
     <div class="seg">${[['N1', 'Víkend (N1)'], ['N2', 'Středa (N2)'], ['Z', 'Zásoba']].map(([v, l]) => `<button data-a="f-list" data-v="${v}" class="${v === list ? 'on' : ''}">${l}</button>`).join('')}</div>
@@ -358,10 +364,10 @@ function shopInfo(list, wi, mon, w) {
   if (list === 'Z') { const c0 = dkey(addDays(pdate(F().start), Math.floor(wi / 3) * 21)); const c1 = dkey(addDays(pdate(c0), 20)); const nx = dkey(addDays(pdate(c1), -1));
     return `<div class="fshi"><div><span>Na období</span><b>${fday(c0)} – ${fday(c1)}</b><small>celý cyklus A → B → C (3 týdny)</small></div><div><span>Další zásoba</span><b>${fday(nx)}</b><small>${inDays(nx)}</small></div></div>`; }
   const buy = list === 'N1' ? dkey(addDays(pdate(mon), -2)) : dkey(addDays(pdate(mon), 2));
-  const from = list === 'N1' ? dkey(addDays(pdate(mon), -1)) : buy, to = list === 'N1' ? dkey(addDays(pdate(mon), 2)) : dkey(addDays(pdate(mon), 6));
+  const dc = dailyCook(w); const from = list === 'N1' ? dkey(addDays(pdate(mon), dc ? 0 : -1)) : dkey(addDays(pdate(mon), dc ? 3 : 2)), to = list === 'N1' ? dkey(addDays(pdate(mon), 2)) : dkey(addDays(pdate(mon), 6));
   const cookK = list === 'N1' ? W.varka_nedele : W.varka_streda; const cookD = list === 'N1' ? from : buy;
   return `<div class="fshi"><div><span>Nakoupit</span><b>${fl(buy)}</b><small>${inDays(buy)}</small></div>
-    <div><span>Vystačí</span><b>${fday(from)} – ${fday(to)}</b><small>${list === 'N1' ? 'nedělní vaření + jídla Po–St' : 'středeční vaření + jídla Čt–Ne'}</small></div>
+    <div><span>Vystačí</span><b>${fday(from)} – ${fday(to)}</b><small>${dc ? (list === 'N1' ? 'jídla Po–St · vaří se každý večer' : 'jídla Čt–Ne · vaří se každý večer') : list === 'N1' ? 'nedělní vaření + jídla Po–St' : 'středeční vaření + jídla Čt–Ne'}</small></div>
     ${R[cookK] ? `<div class="w"><span>Vaří se do zásoby</span><b>${esc(R[cookK].nazev)} × 4</b><small>${fl(cookD)}</small></div>` : ''}</div>`;
 }
 
