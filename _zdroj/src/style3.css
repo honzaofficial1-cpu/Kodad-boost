@@ -564,3 +564,8 @@ svg.rchart .pt{fill:var(--rb);stroke:var(--ra);stroke-width:2}svg.rchart .pt.on{
 .rgdays button.in{background:#1F3A2A;color:var(--hot)}.rgdays button.in b{color:var(--hot)}.rgdays button.a{border-top-left-radius:12px;border-bottom-left-radius:12px}.rgdays button.b{border-top-right-radius:12px;border-bottom-right-radius:12px}
 .rgdays button.a,.rgdays button.b{background:var(--hot);color:#06210F}.rgdays button.a b,.rgdays button.b b{color:#06210F}
 .rgdays button:not(.in){box-shadow:inset 1px 0 0 #0B0B0C}
+
+/* v2.26 nákup online */
+.fonl{display:flex!important;align-items:center;justify-content:space-between}.fonl button{font:inherit;color:var(--hot);letter-spacing:inherit}
+.fonm{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;margin-top:18px;padding:14px 16px;background:var(--card);border-radius:16px;text-align:left;color:var(--fg)}.fonm span{display:flex;flex-direction:column}.fonm b{font-weight:600;font-size:15px}.fonm small{color:var(--mut);font-size:12px;margin-top:2px}.fonm svg{width:18px;height:18px;color:var(--mut)}
+.fonch{max-height:220px;overflow:auto}

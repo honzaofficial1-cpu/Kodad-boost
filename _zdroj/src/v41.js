@@ -36,7 +36,7 @@ XV['f-tyden'] = withUP(function () {
   const lunchDays = (rk, wk) => { const ds = wk.dny.map((d, i) => d.jidla.obed === rk && (d.z_varky || []).includes('obed') ? i : -1).filter(i => i >= 0); return ds.length ? DNY[ds[0]] + (ds.length > 1 ? '–' + DNY[ds[ds.length - 1]] : '') : ''; };
   const isT = x => c && !c.before && c.w === w && c.di === x.di;
   const tag = (x, s, r) => { const t = [];
-    if ((x.day.z_varky || []).includes(s)) t.push(dailyCook(w) ? 'z krabičky – včerejší večeře' : 'ze zásoby');
+    if ((x.day.z_varky || []).includes(s)) t.push(dailyCook(w) ? 'z krabičky – včerejší večeře' : 'z krabičky');
     if (s === 'vecere' && dailyCook(w)) t.push('uvař 2 porce');
     if (s === 'svacina' && x.day.trenink) t.push('před tréninkem');
     if (s === 'vecere' && x.di === 2 && r.kod === W.varka_streda) t.push(`do zásoby (${portions(r.kod, W) + 1} porce)`);
