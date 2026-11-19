@@ -87,9 +87,9 @@ XV['f-nakup'] = function () {
   const key = `R:${r.from}:${r.to}`; const st = f.shop[key] = f.shop[key] || {};
   const { items, days, meals } = rangeItems(r.from, r.to); (f.custom[key] || []).forEach((n, i) => items.push({ id: 'c:' + i, nazev: n, mnozstvi: '', pozn: '', kat: 'Vlastní', own: i }));
   const done = items.filter(i => st[i.id]).length;
-  const groups = [...CATS.filter(c => c !== 'Zásoba'), 'Zásoba'].map(cat => { const its = items.filter(i => i.kat === cat).sort((a, b) => (st[a.id] ? 1 : 0) - (st[b.id] ? 1 : 0)); if (!its.length) return '';
+  const groups = CATS.map(cat => { const its = items.filter(i => i.kat === cat); if (!its.length) return '';
     const body = its.map(i => `<button class="fsi ${st[i.id] ? 'on' : ''}" data-a="f-chk" data-key="${key}" data-id="${esc(i.id)}"><span class="cb">${st[i.id] ? ico('check') : ''}</span><span class="t"><b>${esc(i.nazev)}</b>${i.pozn ? `<small>${esc(i.pozn)}</small>` : ''}</span><span class="q">${esc(i.mnozstvi)}</span>${i.own != null ? `<span class="x" data-a="f-cdel" data-key="${key}" data-i="${i.own}" aria-label="Smazat">${ico('x')}</span>` : ''}</button>`).join('');
-    return cat === 'Zásoba' ? `<details class="kmore fsg"><summary>Ze zásoby – zkontroluj doma (${its.length})</summary>${body}</details>` : `<div class="fsg"><div class="lbl">${cat}</div>${body}</div>`; }).join('');
+    return `<div class="fsg"><div class="lbl">${cat === 'Zásoba' ? 'Zásoba – zkontroluj doma' : cat}</div>${body}</div>`; }).join('');
   const nMon = k => { const d = pdate(k); return dkey(addDays(d, (8 - d.getDay()) % 7 || 7)); }; const pm = nMon(r.buy);
   const quick = [['Do neděle', r.buy, nextSun(r.buy)], ['Po–St', pm, dkey(addDays(pdate(pm), 2))], ['Čt–Ne', dkey(addDays(pdate(pm), 3)), dkey(addDays(pdate(pm), 6))], ['Týden', r.buy, dkey(addDays(pdate(r.buy), 6))]];
   const strip = [...Array(14)].map((_, i) => dkey(addDays(pdate(r.buy), i)));

@@ -148,7 +148,7 @@ XV['f-nakup'] = function () {
   const order = JD.meta.poradi_cyklu || ['A', 'B', 'C']; const w = order[wi % 3]; const key = list === 'Z' ? `Z${Math.floor(wi / 3)}` : `${wi}:${list}`;
   const st = f.shop[key] = f.shop[key] || {}; const items = shopItems(wi, list); const mon = dkey(addDays(pdate(f.start), wi * 7));
   const done = items.filter(i => st[i.id]).length;
-  const groups = CATS.map(cat => { const its = items.filter(i => i.kat === cat).sort((a, b) => (st[a.id] ? 1 : 0) - (st[b.id] ? 1 : 0)); if (!its.length) return '';
+  const groups = CATS.map(cat => { const its = items.filter(i => i.kat === cat); if (!its.length) return '';
     return `<div class="fsg"><div class="lbl">${cat}</div>${its.map(i => `<button class="fsi ${st[i.id] ? 'on' : ''}" data-a="f-chk" data-key="${key}" data-id="${esc(i.id)}"><span class="cb">${st[i.id] ? ico('check') : ''}</span><span class="t"><b>${esc(i.nazev)}</b>${i.pozn ? `<small>${esc(i.pozn)}</small>` : ''}</span><span class="q">${esc(i.mnozstvi)}</span>${i.own != null ? `<span class="x" data-a="f-cdel" data-key="${key}" data-i="${i.own}">${ico('x')}</span>` : ''}</button>`).join('')}</div>`; }).join('');
   const dd = (n) => fday(dkey(addDays(pdate(mon), n))).replace(/^\S+ /, ''); const when0 = dailyCook(w) ? (list === 'N1' ? `na po ${dd(0)} – st ${dd(2)}` : `na čt ${dd(3)} – ne ${dd(6)}`) : null;
   const when = when0 || (list === 'N1' ? `na ne ${fday(dkey(addDays(pdate(mon), -1))).replace(/^\S+ /, '')} – st ${fday(dkey(addDays(pdate(mon), 2))).replace(/^\S+ /, '')}` : `na st ${fday(dkey(addDays(pdate(mon), 2))).replace(/^\S+ /, '')} – ne ${fday(dkey(addDays(pdate(mon), 6))).replace(/^\S+ /, '')}`);
