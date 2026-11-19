@@ -570,3 +570,8 @@ svg.rchart .pt{fill:var(--rb);stroke:var(--ra);stroke-width:2}svg.rchart .pt.on{
 .fonm{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;margin-top:18px;padding:14px 16px;background:var(--card);border-radius:16px;text-align:left;color:var(--fg)}.fonm span{display:flex;flex-direction:column}.fonm b{font-weight:600;font-size:15px}.fonm small{color:var(--mut);font-size:12px;margin-top:2px}.fonm svg{width:18px;height:18px;color:var(--mut)}
 .fonch{max-height:220px;overflow:auto}
 .fonq{color:var(--hot)!important;white-space:normal!important;overflow:visible!important}.fonn{font-family:var(--fd);font-weight:800;font-style:italic;font-size:24px;margin-left:auto;padding-right:2px}
+/* v2.27 porcování */
+.fpo{margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}.fpoh{display:flex;align-items:center;justify-content:space-between;gap:10px}.fpoh b{font-family:var(--fd);font-weight:700;font-size:20px}
+.fpoh label{display:flex;align-items:center;gap:6px;color:var(--mut);font-size:13px}.fpoh input{width:76px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 10px;color:var(--fg);font-size:16px;text-align:right}
+.fpor{display:grid;grid-template-columns:72px 1fr;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}.fpor>b{font-family:var(--fd);font-weight:800;font-style:italic;font-size:22px}.fpor.b>b{color:var(--hot)}
+.fpor span{display:flex;flex-direction:column;font-size:14px}.fpor small{color:var(--mut);font-size:12px;margin-top:2px}.fpon{margin:8px 2px 0;font-size:13px;color:var(--hot)}
