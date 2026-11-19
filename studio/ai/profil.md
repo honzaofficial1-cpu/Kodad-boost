@@ -96,6 +96,13 @@ Nepovinná pole u videa (appka je umí):
 - `for` – id jeho existujícího nápadu bez scénáře na stejné téma (z gistu). „Beru“ pak scénář doplní do něj
   a nevznikne druhé video. Jeho nápadů bez scénáře je hodně – klidně z nich vybírej.
 - `rework: true` – „k dopracování“: video se uloží jako Nápad se štítkem „dopracovat“ a on ho přepíše.
+- `kind: "long"` – dlouhé video na YouTube. Místo `body` vyplň `chapters: [{"t": "název kapitoly", "txt": "celý mluvený text + [pokyny pro střih]"}]`
+  a `thumb` (popis miniatury). „Beru“ ho uloží mezi YouTube videa s kapitolami.
+
+## Série „PŘÍBĚHY LEGEND 🏆“ (od 19. 11. 2026)
+
+Jednou týdně příběh slavného kulturisty: short (DAB, jeho hlas přes fotky) + dlouhé video na YouTube.
+Hotovo: Ronnie Coleman, Arnold Schwarzenegger. Fakta vždycky ověř a dej do `src`. Osobní pasáže nech jako [SEM DEJ …] – nevymýšlej jeho zážitky.
 
 ## Tipy na události (pole `events`)
 

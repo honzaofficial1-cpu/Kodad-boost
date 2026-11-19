@@ -2604,6 +2604,11 @@ function aiToVideo(x, redo) {
   it.sc.body = (Array.isArray(x.body) ? x.body : []).map(b => typeof b === 'string' ? { say: b } : b).map(b => ({ id: uid(), say: b.say || '', see: b.see || '' }));
   it.sc.end = { say: (x.end && x.end.say !== undefined ? x.end.say : x.end) || '', see: (x.end && x.end.see) || '' };
   it.cta = x.cta || it.cta || ''; it.cap = x.caption || it.cap || '';
+  if (x.kind === 'long') { // dlouhé video na YouTube: kapitoly + miniatura
+    it.kind = 'long';
+    if (Array.isArray(x.chapters) && x.chapters.length) it.chapters = x.chapters.map(c => ({ id: uid(), t: c.t || 'Kapitola', txt: c.txt || '' }));
+    if (x.thumb) it.thumb = x.thumb;
+  }
   it.shots = [...(it.shots || []), ...(Array.isArray(x.shots) ? x.shots : []).map(s => ({ id: uid(), text: s.text || String(s), type: s.type === 'me' ? 'me' : 'broll', place: s.place || '', done: false }))];
   const add = [redo ? 'Předělat: ' + redo : '', x.how ? 'Jak natočit: ' + x.how : '', x.why ? 'Proč: ' + x.why : '', x.src ? 'Zdroje (ověř si): ' + x.src : ''].filter(Boolean).join('\n\n');
   it.note = [add, it.note].filter(Boolean).join('\n\n');
@@ -2619,6 +2624,7 @@ function aiCardHTML(x, open) {
     ${aiTarget(x) ? `<p class="aifor">Doplní se do tvého nápadu „${esc(aiTarget(x).title)}“</p>` : ''}
     <div class="aisc"><p><em>Hook</em>${esc(h.say || '')}</p>${h.see ? `<p><em>Vidět</em>${esc(h.see)}</p>` : ''}${h.txt ? `<p><em>Text</em>${esc(h.txt)}</p>` : ''}
       ${open ? `${x.how ? `<p><em>Jak</em>${esc(x.how)}</p>` : ''}${(x.body || []).map((b, n) => `<p><em>${n + 1}.</em>${esc(typeof b === 'string' ? b : b.say)}${b.see ? `<span>(${esc(b.see)})</span>` : ''}</p>`).join('')}
+        ${(x.chapters || []).map(c => `<p><em>${esc(c.t || 'Kapitola')}</em>${esc(String(c.txt || '').split('\n')[0].slice(0, 160))}…</p>`).join('')}
         ${x.end ? `<p><em>Konec</em>${esc(x.end.say !== undefined ? x.end.say : x.end)}</p>` : ''}${x.cta ? `<p><em>CTA</em>${esc(x.cta)}</p>` : ''}
         ${(x.shots || []).length ? `<p><em>Natočit</em>${x.shots.map(s => esc((s.text || s) + (s.place ? ' (' + s.place + ')' : ''))).join(' · ')}</p>` : ''}` : `<button class="btn quiet sm" data-aiopen>Celý scénář ▾</button>`}</div>
     <div class="btnrow"><button class="btn pri" data-aiy>Beru</button><button class="btn" data-air>Předělat</button><button class="btn quiet" data-ain>Ne</button></div></div>`;

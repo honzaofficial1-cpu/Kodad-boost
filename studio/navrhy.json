@@ -4,6 +4,409 @@
  "by": "Claude",
  "ideas": [
   {
+   "id": "2026-11-19-h1",
+   "rework": true,
+   "title": "Ronnie Coleman: 8× nejlepší na světě, dneska na vozíku",
+   "category": "DAB",
+   "format": "PŘÍBĚHY LEGEND 🏆",
+   "why": "1. díl série příběhů legend (1× týdně). Kontrast vrchol vs. cena vyvolá šok a lidi to dokoukají.",
+   "how": "Celé je to tvůj hlas přes fotky a archivní záběry, ty v záběru nejsi. Hlas nahraj do MV7+ najednou, klidně, ale bez pauz mezi větama. Na každou větu jiná fotka a na každou lehký pomalý zoom (Scale 100 → 108 %). Čísla (8×, 360 kilo, 13 operací) velkým textem. Archivní videa jen krátké úryvky po pár vteřinách – celé cizí záběry si na YouTube můžou nárokovat autorská práva.",
+   "hook": {
+    "say": "Tenhle chlap byl osmkrát nejlepší kulturista na světě. Dneska nemůže chodit bez pomoci.",
+    "see": "Ronnie na pódiu s trofejí Olympie → tvrdý střih na fotku na vozíku",
+    "txt": "8× NEJLEPŠÍ NA SVĚTĚ. DNESKA NA VOZÍKU."
+   },
+   "body": [
+    {
+     "say": "Ronnie Coleman. Vystudoval účetnictví, práci nesehnal, tak rozvážel pizzu. Pak šel k policii v Texasu.",
+     "see": "Mladý Ronnie v policejní uniformě"
+    },
+    {
+     "say": "Kolega ho vzal do gymu. Majitel mu dal permanentku zadarmo, když ho nechá připravit na soutěž. Ronnie ji vyhrál. A porazil i toho majitele.",
+     "see": "Fotky z Metroflexu a Mistra Texasu 1990"
+    },
+    {
+     "say": "Na první Olympii skončil poslední. Šest let byl jen jeden z mnoha. A pak osm výher v řadě.",
+     "see": "Rychlý sled fotek z pódia, na obrazovce počítadlo 1 → 8"
+    },
+    {
+     "say": "Dřep přes 360 kilo. Dvakrát. A u toho řval: Light weight, baby!",
+     "see": "Slavný záběr dřepu z jeho tréninkového videa"
+    },
+    {
+     "say": "Cena? Třináct operací. Záda, krk, obě kyčle. Šrouby v páteři mu praskaly. Loni málem umřel na otravu krve.",
+     "see": "Ronnie o berlích / na vozíku"
+    }
+   ],
+   "end": "A víš, co na to říká? Že ničeho nelituje.",
+   "cta": "Každej týden jeden příběh legendy. Koho chceš příště? Napiš.",
+   "caption": "Ronnie Coleman. 8× Mr. Olympia, 13 operací. Stálo to za to? 👇 #kulturistika #ronniecoleman #gym #legendy",
+   "src": "Wikipedia – Ronnie Coleman (umístění na Olympii 1992–2007, Domino's, Metroflex a Brian Dobson, dřep 800 lb × 2 v roce 2003); Fitness Volt 2022 a rozhovor u Joe Rogana (8 operací zad, 3 krku, kyčle; ‚no regrets'); Fitness Volt 3/2025 (praskající šrouby, operace pohyb nezlepšily); Generation Iron 7/2025 (sepse).",
+   "shots": [
+    {
+     "text": "Hlas – celý text najednou do mikrofonu",
+     "type": "broll",
+     "place": "Doma"
+    },
+    {
+     "text": "Fotky a krátké archivní úryvky Ronnieho (pódium, policie, dřep, vozík)",
+     "type": "broll",
+     "place": "Doma"
+    }
+   ]
+  },
+  {
+   "id": "2026-11-19-h2",
+   "rework": true,
+   "title": "Arnold v 18 utekl z armády kvůli soutěži",
+   "category": "DAB",
+   "format": "PŘÍBĚHY LEGEND 🏆",
+   "why": "2. díl série legend. Útěk z armády zná málokdo, takže v prvních vteřinách funguje zvědavost.",
+   "how": "Stejně jako Ronnie: tvůj hlas a přes to fotky, ty v záběru nejsi. Staré černobílé fotky Arnolda + pomalý zoom. Na větu o pláči na hotelu dej na půl vteřiny ticho a tmu, ať to dosedne.",
+   "hook": {
+    "say": "V osmnácti utekl z armády. Ne kvůli holce. Kvůli soutěži v kulturistice.",
+    "see": "Černobílá fotka mladého Arnolda",
+    "txt": "UTEKL Z ARMÁDY KVŮLI SVALŮM"
+   },
+   "body": [
+    {
+     "say": "Vesnice v Rakousku. Doma maso jednou týdně. Přísnej táta, co si víc cenil staršího bráchy.",
+     "see": "Fotky vesnice Thal, malý Arnold s rodinou"
+    },
+    {
+     "say": "Na vojně řídil tank. Pak zdrhnul z kasáren na Junior Mistra Evropy. Vyhrál. A skončil ve vojenským vězení.",
+     "see": "Fotka z vojny, tank"
+    },
+    {
+     "say": "Ve dvaceti nejmladší Mister Universe v historii. Přiletí do Ameriky a prohraje s menším chlapem. Celou noc brečel na hotelu.",
+     "see": "Arnold 1967 s trofejí → Frank Zane"
+    },
+    {
+     "say": "Ráno si řekl: byl lepší. Tak s ním začal trénovat.",
+     "see": "Arnold a Zane spolu v gymu"
+    },
+    {
+     "say": "Sedmkrát Mister Olympia. Milionář z nemovitostí dřív, než natočil Conana. Terminátor. Guvernér Kalifornie.",
+     "see": "Rychlý sled: Olympia, Conan, Terminátor, guvernér"
+    }
+   ],
+   "end": "A celý to začalo tím, že kluk z vesnice zdrhnul z kasáren, protože věděl, co chce.",
+   "cta": "Příště další legenda. Koho chceš? Napiš.",
+   "caption": "Arnold. Z rakouský vesnice až na guvernéra Kalifornie 🇦🇹➡️🇺🇸 #arnold #kulturistika #gym #legendy",
+   "src": "Junior Mr. Europe 1965, útěk z vojny a pár dní ve vězení – sám Arnold (AP/NBC 2012, dokument Arnold's Blueprint); nejmladší Mr. Universe 1967 – Encyclopedia.com; prohra se Zanem 1968 a pláč na hotelu – Arnoldovy vlastní texty (Essentially Sports); milionář z nemovitostí před Conanem – Arnold na konferenci 10X (2023).",
+   "shots": [
+    {
+     "text": "Hlas – celý text najednou",
+     "type": "broll",
+     "place": "Doma"
+    },
+    {
+     "text": "Staré fotky Arnolda (Thal, vojna, 1967, Zane, filmy, guvernér)",
+     "type": "broll",
+     "place": "Doma"
+    }
+   ]
+  },
+  {
+   "id": "2026-11-19-h3",
+   "rework": true,
+   "title": "Zdravý, nebo jen vypadá zdravě?",
+   "category": "KAM",
+   "format": "RYCHLOVKY ⚡",
+   "why": "Verdikty jdou proti očekávání: brambory ano, rýžové chlebíčky ne. Lidi se budou hádat a video si uloží.",
+   "how": "Kuchyň. Hlas mimo kameru (převod textu na řeč v CapCutu) řekne položku a ty hned dáš verdikt a jednu větu proč. U každé položky tu věc drž v ruce nebo ji měj na lince. Verdikt velkým textem: ZDRAVÝ / JEN VYPADÁ. Brambory dej schválně na začátek, protože to nikdo nečeká.",
+   "hook": {
+    "say": "Hlas: Brambory? → Zdravý. Ve studii zasytily nejvíc ze všech jídel. Víc než ovesná kaše.",
+    "see": "Já v kuchyni s bramborou v ruce – mluvím od první vteřiny",
+    "txt": "ZDRAVÝ, NEBO JEN VYPADÁ?"
+   },
+   "body": [
+    {
+     "say": "Hlas: Granola? → Jen vypadá. Je to müsli zapečený s cukrem a olejem. Kalorií má jako sušenky.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Smoothie? → Jen vypadá. Ovoce je fajn, ale vypitý tě zasytí míň než snědený.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Sushi? → Zdravý. Ryba, rýže, řasa. Jen ne rolky s majonézou a tempurou.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Proteinová tyčinka? → Půl na půl. Lepší než čokoláda, ale jídlo to nenahradí.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Rýžový chlebíčky? → Jen vypadají. Málo kalorií, ale taky skoro žádný jídlo. Za hodinu máš hlad.",
+     "see": ""
+    }
+   ],
+   "end": "Zdravý není to, co tak vypadá. Je to to, co tě zasytí.",
+   "cta": "Pošli to tomu, kdo snídá granolu a diví se, že nehubne.",
+   "caption": "Zdravý, nebo jen vypadá zdravě? 🥔 Co tě překvapilo nejvíc? #fitness #zdravejidlo #hubnuti #rychlovky",
+   "src": "Holt a kol. 1995, European Journal of Clinical Nutrition – index sytosti: vařené brambory 323 % (nejvíc z 38 jídel), ovesná kaše 209 %, celozrnný chléb 157 %. Flood-Obbagy & Rolls 2009, Appetite – celé jablko zasytilo víc než jablečné pyré a džus se stejnými kaloriemi.",
+   "shots": [
+    {
+     "text": "Já do kamery v kuchyni – všechny verdikty, u každého ta věc v ruce",
+     "type": "me",
+     "place": "Kuchyň"
+    }
+   ]
+  },
+  {
+   "id": "2026-11-19-h4",
+   "rework": true,
+   "title": "Měřím 197 cm a tohle v gymu nikdo neřeší",
+   "category": "KAM",
+   "format": "Head talk",
+   "why": "Výška je tvoje poznávací znamení. Video tě představí novým lidem a vysocí kluci ho budou sdílet.",
+   "how": "Head talk v gymu, kamera nízko, ať výška vynikne. Body 3 a 4 jsou jen tipy – nech tam jen to, co reálně zažíváš, a přidej svoje. Bod 1 klidně ukaž: bench z boku, ať je vidět, jak dlouhou dráhu činka jede.",
+   "hook": {
+    "say": "Měřím 197 a každý opakování na benchi je pro mě delší cesta než pro tebe. Doslova.",
+    "see": "Já na benchi z boku, kamera nízko – činka jede dlouhou dráhu",
+    "txt": "197 CM V GYMU"
+   },
+   "body": [
+    {
+     "say": "Delší ruce, delší dráha. Na benchi i na dřepu udělám s každým opakováním víc práce. Proto vysokej chlap často zvedá míň, i když není slabší.",
+     "see": "Bench z boku, pak dřep z boku"
+    },
+    {
+     "say": "Svaly se roztáhnou na delší kosti. Stejně svalů a na mně jich vypadá míň. Musím nabrat víc, aby to bylo vidět.",
+     "see": "Já do kamery"
+    },
+    {
+     "say": "[TIP – nech, jen pokud to platí] Trička jsou vždycky krátký, v letadle mám kolena v sedačce před sebou.",
+     "see": "Já do kamery"
+    },
+    {
+     "say": "[TIP] A každej druhej se ptá: hraješ basket?",
+     "see": "Já do kamery, ušklíbnu se"
+    }
+   ],
+   "end": "Takže až uvidíš vysokýho chlapa, co na benchi zvedá míň než ty, nesměj se. Jeho činka jede o kus dál.",
+   "cta": "Jsi taky vysokej? Napiš, kolik měříš a co tě na tom nejvíc štve.",
+   "caption": "197 cm v gymu. Výhoda, nebo handicap? 📏 #vysokej #gym #fitness #kulturistika",
+   "src": "Mechanická práce = síla × dráha: delší končetiny = delší dráha činky na opakování (fyzika, bez konkrétního čísla).",
+   "shots": [
+    {
+     "text": "Já do kamery v gymu – celé mluvení",
+     "type": "me",
+     "place": "Gym"
+    },
+    {
+     "text": "Bench a dřep z boku, kamera nízko",
+     "type": "broll",
+     "place": "Gym"
+    }
+   ]
+  },
+  {
+   "id": "2026-11-19-h5",
+   "rework": true,
+   "title": "Nejhorší rada, kterou jsem v gymu dostal",
+   "category": "KAM",
+   "format": "Head talk",
+   "why": "Divák chce slyšet, jaká rada to byla, takže dokouká. Zároveň tě postaví do role, že víš, o čem mluvíš.",
+   "how": "Napsal jsem to na radu „kardio ti spálí svaly“, protože k tvojí cestě (běh, Hyrox) sedí nejlíp. Jestli jsi ji ale nikdy neslyšel, vyměň ji za radu, kterou jsi opravdu dostal – video musí být pravdivé. [X] doplň: kolik let jsi tomu věřil.",
+   "hook": {
+    "say": "Tuhle radu jsem v gymu poslouchal [X] let. A byla úplně blbě.",
+    "see": "Já do kamery v gymu, vážně",
+    "txt": "NEJHORŠÍ RADA Z GYMU"
+   },
+   "body": [
+    {
+     "say": "Kardio ti spálí svaly. Nechoď běhat, nebo přijdeš o všechno, co jsi nabral.",
+     "see": "Já do kamery"
+    },
+    {
+     "say": "[TVOJE ZKUŠENOST – co ti to udělalo, třeba: Tak jsem neběhal. A kondici jsem měl takovou, že mě zadejchaly schody.]",
+     "see": "B-roll: schody, vydýchávání"
+    },
+    {
+     "say": "Pravda? Velká analýza z roku 2022 dala dohromady desítky studií. Kardio k posilovně růst svalů ani sílu nezastavilo. Trochu to brzdí jen výbušnou sílu.",
+     "see": "Já do kamery, text: KARDIO NESPÁLÍ SVALY"
+    },
+    {
+     "say": "[UPRAV PODLE PRAVDY] Dneska běhám a chystám se na Hyrox. A svaly mám pořád.",
+     "see": "B-roll: běh, Hyrox trénink"
+    }
+   ],
+   "end": "Kardio ti svaly nesebere. Sebere ti je, když budeš málo jíst a málo spát.",
+   "cta": "Jakou nejhorší radu jsi v gymu dostal ty? Napiš.",
+   "caption": "Nejhorší rada, kterou jsem v gymu dostal 🤦‍♂️ Jakou jsi slyšel ty? #gym #fitness #kardio #hyrox",
+   "src": "Schumann a kol. 2022, Sports Medicine – meta-analýza 43 studií: souběžný aerobní a silový trénink nezhoršil hypertrofii ani maximální sílu, zhoršil jen explozivní sílu.",
+   "shots": [
+    {
+     "text": "Já do kamery v gymu",
+     "type": "me",
+     "place": "Gym"
+    },
+    {
+     "text": "Běh venku / Hyrox trénink",
+     "type": "broll",
+     "place": "Venku"
+    }
+   ]
+  },
+  {
+   "id": "2026-11-19-y1",
+   "rework": true,
+   "kind": "long",
+   "title": "Ronnie Coleman: 8× nejlepší na světě, 13 operací. Stálo to za to?",
+   "category": "DAB",
+   "format": "PŘÍBĚHY LEGEND 🏆",
+   "why": "Dlouhé video k shortu o Ronniem, 1. díl série legend na YouTube (cca 8 minut mluvení). Short na Reels/TikToku na něj může odkazovat.",
+   "how": "Kombinace: ty do kamery (úvod kapitol, osobní části, závěr) a tvůj hlas přes fotky a archivní úryvky. Hook podle masterclassu: první záběr je dřep 2003 a hned kontrast s vozíkem. Na fotky pomalý zoom. Archivní videa jen krátké úryvky po pár vteřinách a komentuj je – celé cizí záběry si na YouTube můžou nárokovat. Hranaté závorky jsou pokyny pro střih, ty se nečtou. Místa označená SEM DEJ doplň svými slovy. Alternativní titulky: „Nejsilnější kulturista v historii už nemůže chodit“ · „Byl poslední. Pak vyhrál 8× v řadě.“",
+   "hook": {
+    "say": "Texas, rok 2003. Chlap, kterej ještě pár let zpátky nosil policejní odznak, si naloží na záda přes 360 kilo.",
+    "see": "Černobílý zpomalený dřep → střih do černé → fotka na vozíku",
+    "txt": ""
+   },
+   "body": [],
+   "end": "",
+   "cta": "Odběr + napiš, koho chceš příště.",
+   "caption": "Ronnie Coleman – účetní, rozvozce pizzy, policajt a 8× Mr. Olympia. A cena, kterou za to zaplatil. Díl 1 série o legendách kulturistiky.",
+   "thumb": "Vlevo Ronnie na pódiu v teplém zlatém světle, vpravo Ronnie na vozíku ve studeném modrém tónu, mezi nimi tenký předěl. Text jen tři slova: STÁLO TO ZA TO? – bílá, tučně, ‚ZA TO?‘ v Electric Coral. Nic dalšího.",
+   "chapters": [
+    {
+     "t": "Úvod – hook",
+     "txt": "[B-roll: černobílý zpomalený záběr – Ronnie pod činkou na dřepu, bez zvuku. Pomalý zoom.]\n\nTexas, rok 2003. Chlap, kterej ještě pár let zpátky nosil policejní odznak, si naloží na záda přes 360 kilo. A dřepne s tím. Dvakrát. A u toho řve: „Light weight, baby!“\n\n[Střih do černé. 1 vteřina ticho.]\n\nO dvaadvacet let později ho rodina veze do nemocnice. Otrava krve. Nikdo neví, jestli to přežije. A chodit bez pomoci nemůže už roky.\n\n[Fotka: Ronnie na vozíku. Pomalý zoom.]\n\nRonnie Coleman. Osmkrát nejlepší kulturista na planetě. Pro hodně lidí nejlepší v historii.\n\nTohle je jeho příběh. Jak se z účetního, co nesehnal práci, stal král. A kolik ho ta koruna stála.\n\nA na konci ti řeknu, co si z toho beru já – jako kluk, co sám stojí na pódiu."
+    },
+    {
+     "t": "Kluk, co chtěl být účetní",
+     "txt": "[Já do kamery – krátce, pak B-roll: Louisiana, staré fotky z univerzity, americký fotbal]\n\nRonnie se narodil v roce 1964 v Monroe v Louisianě. Žádnej zázrak od dětství, žádnej plán stát se nejsilnějším chlapem světa.\n\nŠel na univerzitu Grambling State. Hrál tam americkej fotbal jako linebacker a vystudoval účetnictví. S vyznamenáním.\n\nA pak přišla realita. Práci v účetnictví nesehnal. Tak šel dělat do Domino's. Rozvážel pizzu – a podle vlastních slov každej den jedl tu, co dostal zadarmo.\n\n[Text na obrazovce: ÚČETNÍ → ROZVOZ PIZZY → POLICAJT]\n\nV roce 1989 nastoupil k policii v Arlingtonu v Texasu.\n\nTakže si to shrňme. Pětadvacet let, účetní bez práce, policajt. Nic, z čeho bys tipoval budoucí legendu."
+    },
+    {
+     "t": "Permanentka zadarmo",
+     "txt": "[B-roll: fotky Metroflexu, staré fotky z 90. let]\n\nNa policii měl kolegu, Gustava Arlottu. Ten mu řekl: pojď se mnou do Metroflexu.\n\nMetroflex byl gym v Arlingtonu. Majitel Brian Dobson, sám amatérskej kulturista, Ronnieho uviděl a hned mu nabídl dohodu. Permanentka zadarmo. Doživotně. Jediná podmínka: Ronnie se nechá od Briana připravit na soutěž Mister Texas.\n\nRok 1990. Ronnie jde na Mistra Texasu. Vyhraje svoji váhovku. Vyhraje absolutně. A jeden z chlapů, který porazil, byl… Brian Dobson. Ten, co mu dal permanentku.\n\n[Text na obrazovce: NEJLEPŠÍ OBCHOD V HISTORII GYMU]\n\nO rok později vyhraje amatérský mistrovství světa a stane se profesionálem. V Hollywoodu by tady přišel happy end. Jenže tohle není film."
+    },
+    {
+     "t": "Poslední místo",
+     "txt": "[Já do kamery]\n\nRok 1992. Ronnie poprvé na Mister Olympia. To je mistrovství světa profíků – výš už v kulturistice nejde.\n\nSkončí šestnáctej. Poslední.\n\n[Text na obrazovce, čísla naskakují jedno po druhém: 1992 – 16. · 1994 – 15. · 1995 – 11. · 1996 – 6. · 1997 – 9.]\n\nDalší pokus? Patnáctej. Pak jedenáctej. Pak šestej. A pak zase spadne na devátý místo.\n\nŠest let. Šest let ráno služba u policie, večer gym, a na pódiu pořád jen jeden z mnoha. Většina lidí by to zabalila po prvním posledním místě.\n\n[SEM DEJ SVOJI VĚTU – jak ses cítil po svých prvních závodech, nebo co tě na nich nejvíc zabolelo. Nech ji krátkou a upřímnou.]\n\nRonnie to nezabalil. A v roce 1998 přišla Olympia v Madison Square Garden v New Yorku."
+    },
+    {
+     "t": "Král",
+     "txt": "[B-roll: vyhlášení 1998, pak rychlý sled pódií 1999–2005]\n\nRok 1998. Ronnie přijede jako outsider. Odjede jako Mister Olympia a se šekem na sto deset tisíc dolarů.\n\nA pak? Vyhraje znova. A znova. Osmkrát v řadě, od roku 1998 do 2005. Vyrovná tím rekord Leeho Haneyho.\n\nV roce 2001 vyhraje v jednom roce Olympii i Arnold Classic – jako první v historii. Za kariéru posbírá 26 profesionálních titulů. Další rekord.\n\nA čísla z tréninku? Znějí jako vtip.\n\n[Text na obrazovce postupně, ke každému krátký úryvek z jeho tréninkových videí:]\nDřep – přes 360 kilo, dvakrát.\nMrtvej tah – přes 360 kilo, dvakrát.\nBench – 227 kilo, pětkrát.\nLeg press – přes tunu, osmkrát.\n\nA k tomu ty hlášky. „Yeah buddy!“ „Light weight, baby!“ „Ain't nothin' but a peanut!“\n\nNa pódiu v roce 2003 vážil kolem 132 kilo. Při výšce kolem 180 centimetrů.\n\n[Já do kamery: Pro srovnání – já měřím 197 a vážím [TVOJE VÁHA]. Nech na obrazovce oba údaje vedle sebe.]"
+    },
+    {
+     "t": "Pád",
+     "txt": "[B-roll: Olympia 2006, Jay Cutler]\n\nRok 2006. Jay Cutler, kterej za Ronniem roky končil druhej, ho konečně porazí. O rok později je Ronnie čtvrtej. A končí.\n\nA tady začíná ta část, o který se moc nemluví.\n\n[B-roll: ilustrační rentgen páteře se šrouby, nemocniční chodba]\n\nV roce 2007 jde poprvé pod nůž. Záda.\n\nPak další operace. A další. Dneska jich má třináct. Osm na zádech, tři na krku. A obě kyčle vyměněný.\n\nŠrouby, který mu dali do páteře, začaly praskat. Sám řekl, že čím víc operací měl, tím hůř na tom záda byla. Pohyb mu nezlepšily – spíš naopak.\n\nLéčba ho stála miliony dolarů. Chodit bez pomoci nemůže a na delší vzdálenosti jezdí na vozíku.\n\n[Střih do černé, 1 vteřina.]\n\nA v létě 2025 přijde to nejhorší. Otrava krve. Sepse. Rodina píše, že je pod intenzivním dohledem.\n\nZvládl to. A sám říká, že bez jeho třináctiletý dcery by to asi nepřežil."
+    },
+    {
+     "t": "Stálo to za to?",
+     "txt": "[Já do kamery, klidně, bez hudby]\n\nTakže – stálo to za to? Ronnie na to odpovídá pořád stejně: ničeho nelituje.\n\nJá bych byl opatrnej, co si z toho vzít.\n\nZa prvý: tohle není příběh o tom, že těžký váhy jsou špatně. Je to příběh o tom, co se stane, když roky jedeš úplně na hraně. Extrémní váhy, extrémní hmota, extrémní tělo. A kulturistika na tý úrovni není natural sport – i to je součást ceny.\n\nZa druhý: nejcennější na Ronniem nejsou ty kila. Je to šest let, kdy prohrával, a nepřestal. Ráno služba, večer gym. Žádný výmluvy.\n\n[SEM DEJ, JAK TO MÁŠ TY – práce / škola + trénink + závody. Jedna dvě věty.]\n\nTakže já si beru jeho hlavu, ne jeho váhy. Trénovat tvrdě, ale chytře. Abych v šedesáti ještě mohl chodit."
+    },
+    {
+     "t": "Závěr",
+     "txt": "[B-roll: Ronnie dnes v gymu s lehkými vahami – pokud seženeš, jinak jeho fotka s úsměvem]\n\nRonnie Coleman. Účetní, co rozvážel pizzu. Policajt. Osminásobnej Mister Olympia. A chlap, kterej i po třinácti operacích pořád cvičí – aspoň s lehkýma váhama.\n\nLight weight, baby.\n\n[Já do kamery]\n\nTohle je první díl série o legendách. Každej týden jeden příběh. Příště Arnold – kluk z rakouský vesnice, kterej utekl z armády kvůli soutěži. Dej odběr, ať ti to neuteče. A napiš do komentářů, koho chceš dál."
+    }
+   ],
+   "src": "Wikipedia – Ronnie Coleman (Domino's, policie 1989–2000, Metroflex/Dobson, Mr. Texas 1990, umístění na Olympii 1992–2007, 26 profi titulů, Olympia + Arnold Classic 2001, cviky z tréninkových videí: dřep a mrtvý tah 800 lb × 2, bench 500 lb × 5, leg press 2 400 lb × 8, 292 lb na pódiu 2003, sepse 2025, trénuje s lehkými vahami). Fitness Volt 2022 + rozhovor u Joe Rogana (8 záda, 3 krk, kyčle; ‚no regrets'). Fitness Volt 3/2025 (praskající šrouby, horší pohyb). Essentially Sports (první operace 2007, laminektomie). TMZ (dcera mu podle něj zachránila život). Ověř si ještě aktuální stav těsně před vydáním.",
+   "shots": [
+    {
+     "text": "Já do kamery – úvody kapitol, osobní části, závěr",
+     "type": "me",
+     "place": "Doma"
+    },
+    {
+     "text": "Hlas přes B-roll – všechny příběhové pasáže",
+     "type": "broll",
+     "place": "Doma"
+    },
+    {
+     "text": "Fotky a krátké archivní úryvky Ronnieho",
+     "type": "broll",
+     "place": "Doma"
+    }
+   ]
+  },
+  {
+   "id": "2026-11-19-y2",
+   "rework": true,
+   "kind": "long",
+   "title": "Arnold utekl z armády kvůli svalům. Pak dobyl svět",
+   "category": "DAB",
+   "format": "PŘÍBĚHY LEGEND 🏆",
+   "why": "Dlouhé video k shortu o Arnoldovi, 2. díl série legend na YouTube (cca 9 minut mluvení). Hodně lidí zná Terminátora, málokdo útěk z armády, pláč v Miami a milion z cihel.",
+   "how": "Stejný styl jako Ronnie: ty do kamery v osobních částech a tvůj hlas přes fotky. Nejsilnější moment je noc v Miami – tam zpomal, dej ticho a pak lekci do kamery. Hranaté závorky jsou pokyny pro střih, nečtou se. Alternativní titulky: „Arnold celou noc brečel. Druhej den změnil život.“ · „Arnold: milionář dřív, než natočil Terminátora“.",
+   "hook": {
+    "say": "Rakousko, rok 1965. Osmnáctiletej voják zdrhne v noci z kasáren. Nejde za holkou.",
+    "see": "Černobílá fotka 18letého Arnolda, pomalý zoom",
+    "txt": ""
+   },
+   "body": [],
+   "end": "",
+   "cta": "Odběr + napiš, koho chceš příště.",
+   "caption": "Arnold Schwarzenegger – útěk z armády, nejmladší Mr. Universe, noc v Miami a milion z cihel. Díl 2 série o legendách kulturistiky.",
+   "thumb": "Černobílý mladý Arnold v póze vlevo, vpravo malá barevná fotka guvernéra. Text: UTEKL Z ARMÁDY – bílá, tučně, slovo ‚ARMÁDY‘ v Electric Coral. Žádný další text.",
+   "chapters": [
+    {
+     "t": "Úvod – hook",
+     "txt": "[B-roll: černobílá fotka 18letého Arnolda, pomalý zoom]\n\nRakousko, rok 1965. Osmnáctiletej voják zdrhne v noci z kasáren. Nejde za holkou. Nejde do hospody. Jede do Německa na soutěž v kulturistice.\n\nVyhraje ji. A pak ho zavřou do vojenský basy.\n\n[Střih do černé, 1 vteřina]\n\nO pár let později je z něj nejslavnější kulturista na světě. Milionář dřív, než natočí první velkej film. Terminátor. A nakonec guvernér Kalifornie.\n\nArnold Schwarzenegger. Asi nejznámější svalovec, kterej kdy žil. Jenže jeho příběh je temnější, než si myslíš. A je v něm jedna noc, kdy brečel v hotelovým pokoji – a ta mu změnila život víc než všechny jeho výhry."
+    },
+    {
+     "t": "Vesnice, kde bylo maso jednou týdně",
+     "txt": "[B-roll: fotky vesnice Thal, rodný dům (dnes muzeum), staré rodinné fotky]\n\nThal. Malá vesnice kousek od Grazu. Arnold se tam narodil v roce 1947, dva roky po válce.\n\nDoma žádnej luxus. Maso bylo jednou týdně.\n\nTáta Gustav byl místní velitel četníků. Přísnej, tvrdej chlap. A otevřeně dával přednost Arnoldovu staršímu bráchovi Meinhardovi. Arnold sám přiznal, že doma lítaly i rány.\n\n[Já do kamery]\n\nA tady je první věc, která mě na Arnoldovi fascinuje. O bráchovi později řekl zhruba tohle: co jeho zničilo, mě postavilo na nohy. Stejný dětství, dva úplně jiný konce. K tomu se ještě vrátíme.\n\nJako puberťák poprvé zvedne činku. A pochopí, že tohle je jeho cesta pryč z vesnice."
+    },
+    {
+     "t": "Útěk z kasáren",
+     "txt": "[B-roll: fotka z vojny, rakouský tank]\n\nV osmnácti musí na povinnou vojnu. Řídí tank.\n\nA armáda mu dá něco, co doma neměl: jídlo. Hodně masa, hodně bílkovin. Roste jako nikdy.\n\nJenže přijde soutěž Junior Mister Evropa. V Německu. A armáda ho nepustí.\n\nTak zdrhne. Bez povolení. Odjede, vyhraje. A když se vrátí do kasáren, zavřou ho do vojenskýho vězení. Sám říká, že na pár dní – a že ho pak pustili, protože to bylo trapný i důstojníkům.\n\n[Text na obrazovce: 1965 – ZDRHNUL Z ARMÁDY. VYHRÁL.]\n\nPozději to okomentoval tak, že ta soutěž pro něj znamenala tolik, že vůbec nepřemýšlel o následcích. Osmnáct let. Žádnej plán B."
+    },
+    {
+     "t": "Nejmladší Mister Universe",
+     "txt": "[B-roll: Londýn 60. léta, fotka Arnolda s trofejí 1967]\n\nRok 1966. Arnold poprvé v životě letí letadlem. Do Londýna, na Mister Universe. Anglicky skoro neumí.\n\nSkončí druhej. Ale potká tam svůj idol, Rega Parka.\n\nO rok později se vrátí. A vyhraje. Je mu dvacet. Nejmladší Mister Universe v historii.\n\n[Já do kamery]\n\nA teď ta noc, o který jsem mluvil."
+    },
+    {
+     "t": "Noc v Miami",
+     "txt": "[B-roll: Miami 1968, fotka Franka Zana]\n\nRok 1968. Joe Weider, nejmocnější chlap v kulturistice, ho pozve do Ameriky. Na další Mister Universe, tentokrát v Miami. Arnold má v ruce letenku do svýho snu. Je největší, nejsilnější, právě vyhrál v Londýně. Jede si pro jistou výhru.\n\nA prohraje. S Frankem Zanem. S chlapem, kterej byl o kus menší a na střední učil matiku. Jenže byl vyrýsovanější, měl lepší proporce a lepší břicho.\n\n[Text na obrazovce: PROHRÁL S UČITELEM MATIKY]\n\nArnold je v cizí zemi, neumí pořádně jazyk a právě ho porazil menší chlap. Zavře se na hotelu a celou noc brečí. Sám to tak popsal.\n\n[Střih do černé, 1 vteřina. Pak já do kamery.]\n\nA ráno přijde věc, kvůli který vlastně tohle video točím. Řekne si: Zane vyhrál, protože byl lepší. Ne kvůli porotě. Ne kvůli smůle. Byl prostě lepší. Takže musím makat víc.\n\nA co udělá? Začne se Zanem trénovat.\n\nTohle je podle mě nejdůležitější lekce z celýho Arnolda. Ne svaly, ne Terminátor. Ale říct si: byl jsem horší, tak se zlepším. A jít trénovat s tím, kdo tě porazil."
+    },
+    {
+     "t": "Král Olympie a Pumping Iron",
+     "txt": "[B-roll: Olympia 70. léta, záběry z Pumping Iron]\n\nPak už to jede. V roce 1970 vyhraje svoji první Mister Olympia. Pak znova. Šestkrát v řadě, až do roku 1975. A ohlásí konec.\n\nV roce 1977 vyjde dokument Pumping Iron. Ukáže Arnolda jako arogantního krále, kterej si se soupeřema hraje jako kočka s myší. A je v něm scéna, kde říká, že nejel na pohřeb vlastního táty, protože se chystal na soutěž.\n\nZní to jako totální chlad. Jenže Arnold později přiznal, že tuhle historku si vypůjčil od někoho jinýho. Byla to součást role. Psychologická hra.\n\n[Já do kamery, klidněji]\n\nCo je ale pravda: v roce 1971 zemřel jeho brácha Meinhard. Autonehoda, řídil opilej. O rok později umřel táta, na mrtvici. Arnold nebyl ani na jednom pohřbu – a důvody v průběhu let vysvětloval různě.\n\nVztah s tátou už nikdy nespravil. Ale bráchova syna Patricka pak podporoval. Zaplatil mu školu a pomohl mu do Ameriky.\n\nTakže ten chlap, co na plátně vypadá jako stroj, si nese docela těžkej batoh."
+    },
+    {
+     "t": "Milionář ještě před Hollywoodem",
+     "txt": "[B-roll: Santa Monica 70. léta, fotky Arnolda a Franca Columbu]\n\nA teď věc, kterou o Arnoldovi ví málokdo. Milionáře z něj neudělal Hollywood.\n\nPo příchodu do Ameriky založí s kamarádem, kulturistou Francem Columbem, zednickou firmu. Pokládají cihly. A peníze, co vydělá, neprohází – šetří.\n\nPak je investuje do nemovitostí. Koupí, prodá dráž, koupí víc. Činžáky, kanceláře na Main Street v Santa Monice. Mezitím vystuduje ekonomii.\n\n[Text na obrazovce: MILIONÁŘ JEŠTĚ PŘED HOLLYWOODEM]\n\nSám řekl: milionář jsem byl dřív, než jsem natočil Conana nebo Terminátora. Díky nemovitostem.\n\n[Já do kamery]\n\nA proč je to důležitý? Protože si díky tomu mohl dovolit říkat ne. Nemusel brát každou blbou roli, aby zaplatil nájem. Tohle si pamatuj, jestli chceš jednou žít ze svýho koníčka."
+    },
+    {
+     "t": "Hollywood, comeback a Kalifornie",
+     "txt": "[B-roll: Herkules v New Yorku, Conan, Terminátor, guvernér]\n\nHollywood ho přitom vůbec nechtěl. První film, Herkules v New Yorku, rok 1970. Producenti mu jméno změní na Arnold Strong, protože Schwarzenegger nikdo nevysloví. A jeho hlas předabujou. Celej. Kvůli přízvuku.\n\nJméno si nechal. Na angličtině makal roky.\n\nV roce 1980 se po pěti letech pauzy vrátí na Olympii. Na přípravu má zhruba osm týdnů. A vyhraje posedmý. Dodnes jedna z nejkontroverznějších výher v historii – spousta lidí si myslí, že vyhrát neměl.\n\nPak Conan, 1982. Terminátor, 1984. Zbytek znáš.\n\nV roce 1983 dostane americký občanství. A v roce 2003 se stane guvernérem Kalifornie. Kluk z vesnice, kde bylo maso jednou týdně, řídí stát, kterej je ekonomicky větší než většina zemí světa."
+    },
+    {
+     "t": "Srdce",
+     "txt": "[B-roll: novější fotky Arnolda v gymu]\n\nA ještě jedna věc, která tě možná překvapí. Arnold se narodil s vadou srdce. Chlopeň, která má mít tři cípy, má jen dva.\n\nOperovali ho v roce 1997, pak v roce 2018, pak v roce 2020. A v roce 2024 dostal kardiostimulátor. Sám to okomentoval tak, že je zase o kousek víc stroj.\n\nA pořád trénuje. Je mu sedmdesát devět."
+    },
+    {
+     "t": "Co si z toho beru",
+     "txt": "[Já do kamery, bez hudby]\n\nCo si z Arnolda beru já?\n\nNe to, že máš bejt arogantní. Ani to, že máš kašlat na rodinu.\n\nBeru si tři věci.\n\nJedna: věděl přesně, co chce. Už jako kluk měl v hlavě obraz – Amerika, titul, filmy. A každej krok k tomu vedl.\n\nDva: ta noc v Miami. Prohra není konec, je to informace. Byl horší, tak šel trénovat s tím, kdo ho porazil.\n\nTři: nespoléhal na jednu věc. Kulturistika, cihly, nemovitosti, filmy. Proto si mohl vybírat.\n\n[SEM DEJ SVOJI VĚTU – co z toho platí pro tebe a tvoji cestu.]"
+    },
+    {
+     "t": "Závěr",
+     "txt": "[B-roll: Arnold dnes / Arnold mladý, střih tam a zpátky]\n\nArnold Schwarzenegger. Zdrhnul z armády kvůli soutěži, celou noc brečel po prohře a nakonec řídil Kalifornii.\n\n[Já do kamery]\n\nTohle je druhej díl série o legendách kulturistiky. Jestli ti utekl první, o Ronniem Colemanovi, najdeš ho tady. A napiš do komentářů, koho chceš příště – Dorian Yates, Lee Haney, Frank Zane, nebo Chris Bumstead?"
+    }
+   ],
+   "src": "Junior Mr. Europe 1965, útěk a pár dní ve vězení – Arnold sám (AP / NBC 2012). Maso jednou týdně, tank, nejmladší Mr. Universe 1967 – Encyclopedia.com. Londýn 1966, 2. místo, Reg Park – víc zdrojů. Prohra se Zanem 1968 a pláč – Arnoldovy vlastní texty (Essentially Sports, Frank Zane web). Pumping Iron a vymyšlená historka o pohřbu – Wikipedia (Gustav Schwarzenegger). Meinhard 1971, Gustav 1972, Patrick – Wikipedia / en-academic. Zednická firma s Columbem a nemovitosti, ‚milionář před Conanem' – Arnold na konferenci 10X 2023, Fortune 2023. Herkules v NY 1970, dabing, Arnold Strong – víc zdrojů. Olympia 1980 po ~8 týdnech přípravy – Wikipedia, NFSA. Srdce 1997/2018/2020, kardiostimulátor 2024 – CNN/ABC 2024.",
+   "shots": [
+    {
+     "text": "Já do kamery – úvody, lekce, závěr",
+     "type": "me",
+     "place": "Doma"
+    },
+    {
+     "text": "Hlas přes B-roll – příběhové pasáže",
+     "type": "broll",
+     "place": "Doma"
+    },
+    {
+     "text": "Fotky a krátké archivní úryvky Arnolda",
+     "type": "broll",
+     "place": "Doma"
+    }
+   ]
+  },
+  {
    "id": "2026-11-16-g1",
    "rework": true,
    "title": "Legit, nebo ego lifting?",
