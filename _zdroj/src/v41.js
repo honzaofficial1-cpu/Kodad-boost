@@ -39,8 +39,8 @@ XV['f-tyden'] = withUP(function () {
     if ((x.day.z_varky || []).includes(s)) t.push(dailyCook(w) ? 'z krabičky – včerejší večeře' : 'z krabičky');
     if (s === 'vecere' && dailyCook(w)) t.push('uvař 2 porce');
     if (s === 'svacina' && x.day.trenink) t.push('před tréninkem');
-    if (s === 'vecere' && x.di === 2 && r.kod === W.varka_streda) t.push(`do zásoby (${portions(r.kod, W) + 1} porce)`);
-    if (s === 'vecere' && x.di === 6 && r.kod === nextW.varka_nedele) t.push('do zásoby na další týden');
+    if (s === 'vecere' && x.di === 2 && r.kod === thuBatch(w)) t.push(`do zásoby (${portions(r.kod, W) + 1} porce)`);
+    if (s === 'vecere' && x.di === 6 && r.kod === monBatch(order[(order.indexOf(w) + 1) % order.length])) t.push('do zásoby na další týden');
     return t.map(v => `<em class="wtg">${v}</em>`).join(''); };
   const cell = (x, s) => { const r = R[x.day.jidla[s]]; if (!r) return `<div class="wc ${isT(x) ? 'td' : ''}"></div>`; const mods = x.M[s] || [];
     const n = addN({ ...r.hodnoty_porce }, {}); mods.forEach(m => addN(n, nutOf(m.surovina, m.g)));
@@ -57,7 +57,7 @@ XV['f-tyden'] = withUP(function () {
   const fo = PN().ferment || {};
   return `<div class="wrap wtyd">${fHdr('Týden ' + w)}
     <div class="seg">${order.map(x => `<button data-a="f-week" data-v="${x}" class="${x === w ? 'on' : ''}">Týden ${x}</button>`).join('')}</div>
-    <p class="wsub"><b>Jídelníček · krok ${sgn(f.step)} · ~${thou(r10(avg.kcal))} kcal</b>${dailyCook(w) ? `<br>Vaření: ${esc(W.vareni || JD.meta.vareni || 'každý večer 2 porce')}` : `<br>Vaření do zásoby: neděle předem <b>${esc(R[W.varka_nedele]?.nazev || '')}</b> (večeře + obědy ${lunchDays(W.varka_nedele, W)}) · středa <b>${esc(R[W.varka_streda]?.nazev || '')}</b> (večeře + obědy ${lunchDays(W.varka_streda, W)})`}</p>
+    <p class="wsub"><b>Jídelníček · krok ${sgn(f.step)} · ~${thou(r10(avg.kcal))} kcal</b>${dailyCook(w) ? `<br>Vaření: ${esc(W.vareni || JD.meta.vareni || 'každý večer 2 porce')}` : `<br>Vaření do zásoby: neděle předem <b>${esc(R[monBatch(w)]?.nazev || '')}</b> (večeře + obědy ${lunchDays(monBatch(w), W)}) · středa <b>${esc(R[thuBatch(w)]?.nazev || '')}</b> (večeře + obědy ${lunchDays(thuBatch(w), W)})`}</p>
     <div class="wscroll">${grid}</div>
     <p class="wfoot"><b>Průměr týdne: ~${thou(r10(avg.kcal))} kcal · B ${r0(avg.bilkoviny_g)} g · S ${r0(avg.sacharidy_g)} g · T ${r0(avg.tuky_g)} g · vláknina ${r0(avg.vlaknina_g)} g.</b></p>
     <p class="wfoot">Jednotky: ${esc(JD.meta.jednotky || '')}. ${esc(fo.poznamka || '')} ${esc(JD.meta.upozorneni || '')}</p>

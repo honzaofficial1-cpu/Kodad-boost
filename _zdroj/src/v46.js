@@ -77,3 +77,13 @@ A['f-meal'] = b => {
   const rows = $$s('#sheet .fing > div:not(.add)');
   r.suroviny.forEach((i, n) => { if (JD.suroviny[i.surovina]?.zdroj_kategorie === 3 && rows[n]) rows[n].querySelector('span').insertAdjacentHTML('beforeend', '<small>hodnoty jsou obecný odhad</small>'); });
 };
+
+// ---------- start jídelníčku: pondělí 23. 11. 2026 = týden A, den 1 (jednorázově) ----------
+(function () {
+  const NEW = '2026-11-23'; if (S.settings.start2311) return; const f = F(); const old = f.start;
+  if (old && old !== NEW) { // odškrtnuté nákupy a vlastní položky posunout na nové číslování týdnů
+    const d = Math.round(daysBetween(old, NEW) / 7);
+    ['shop', 'custom'].forEach(n => { const o = f[n] || {}, x = {}; Object.entries(o).forEach(([k, v]) => { const m = /^(\d+):(N1|N2)$/.exec(k); if (!m) { x[k] = v; return; } const i = +m[1] - d; if (i >= 0) x[i + ':' + m[2]] = v; }); f[n] = x; });
+  }
+  f.start = NEW; S.settings.start2311 = 1; save(true);
+})();
