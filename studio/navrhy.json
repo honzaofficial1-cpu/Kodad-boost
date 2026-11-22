@@ -1,8 +1,360 @@
 {
- "week": "2026-11-16",
- "created": "2026-11-15",
+ "week": "2026-11-23",
+ "created": "2026-11-22",
  "by": "Claude",
  "ideas": [
+  {
+   "id": "2026-11-23-1",
+   "title": "Black Friday: koupit, nebo nechat?",
+   "category": "KAM",
+   "format": "RYCHLOVKY ⚡",
+   "why": "Black Friday je v pátek 27. 11. Navazuje na tvoje „Za co bych dal prachy“, které jsi bral.",
+   "how": "Mluvíš od první vteřiny. Hlas řekne položku, ty verdikt + 1 věta. Verdikt velkým textem. Natočíš v jednom záběru. Vydej 25.–26. 11.",
+   "hook": {
+    "say": "Hlas: Spalovač tuků ve slevě? → Nechat. Za plnou cenu ani ve slevě.",
+    "see": "Já do kamery – mluvím od první vteřiny",
+    "txt": "BLACK FRIDAY: KOUPIT, NEBO NECHAT?"
+   },
+   "body": [
+    {
+     "say": "Hlas: Kreatin ve slevě? → Koupit. Nezkazí se a bereš ho každej den.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Protein, co ti chutná? → Koupit. Ve slevě klidně do zásoby.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Značkový oblečení do gymu? → Nechat. Cvičí se ti stejně v obyčejným.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Trhačky? → Koupit, jestli je nemáš. Za pár stovek, posunou ti záda.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Fitness hodinky? → Jen když podle nich fakt něco změníš.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Jednoručky domů? → Koupit, jestli doma fakt cvičíš. Jinak budou držet dveře.",
+     "see": ""
+    }
+   ],
+   "end": "Nejlepší investice do formy je stejně zadarmo: spánek a pravidelnost.",
+   "cta": "Co sis koupil ty? 👇",
+   "caption": "Black Friday: koupit, nebo nechat? 💸 #blackfriday #gym #suplementy #rychlovky",
+   "shots": [
+    {
+     "text": "Já do kamery – všechny odpovědi",
+     "type": "me",
+     "place": "Gym"
+    }
+   ]
+  },
+  {
+   "id": "2026-11-23-2",
+   "title": "Tier list: předtréninkovky",
+   "category": "KAM",
+   "format": "TIER LIST 📊",
+   "why": "Máš to v nápadech bez scénáře. Suplementy jsi přepisoval nejvíc – tiery dáváš ostřeji, tak to tak píšu.",
+   "how": "Tabule S–F + SATAN. Mluvíš od první vteřiny, hlas (převod textu na řeč) řekne položku, ty tier a 1 větu. Kartička vyjede do řádku. 30–45 s.",
+   "hook": {
+    "say": "Předtréninkovka s obřím kofeinem? SATAN tier.",
+    "see": "Já před tabulí, plechovka letí do SATAN",
+    "txt": "TIER LIST: PŘEDTRÉNINKOVKY"
+   },
+   "body": [
+    {
+     "say": "Hlas: Obyčejný kafe. → S tier. Levnej kofein a funguje. Jo, nad předtréninkovkou.",
+     "see": "Kafe do S"
+    },
+    {
+     "say": "Hlas: Předtréninkovka s rozumným kofeinem. → B tier. Funguje hlavně díky kofeinu.",
+     "see": "Do B"
+    },
+    {
+     "say": "Hlas: Beta-alanin, to brnění. → B tier. Pomáhá na delší série, brnění je normální.",
+     "see": "Do B"
+    },
+    {
+     "say": "Hlas: Pumpa bez kofeinu. → C tier. Hezká na fotku, výkon moc nezvedne.",
+     "see": "Do C"
+    },
+    {
+     "say": "Hlas: Energeťák. → D tier. Cukr a kofein, dražší než kafe.",
+     "see": "Do D"
+    },
+    {
+     "say": "Hlas: Předtréninkovka v osm večer. → F tier. Trénink dobrej, spánek v háji.",
+     "see": "Do F"
+    }
+   ],
+   "end": "Nejlepší předtréninkovka? Spánek a jídlo. Zbytek je bonus.",
+   "cta": "Co bereš ty před tréninkem? 👇",
+   "caption": "Předtréninkovky od S po SATAN ☕ #tierlist #predtreninkovka #kofein #gym",
+   "shots": [
+    {
+     "text": "Já před tier tabulí – všechny odpovědi",
+     "type": "me",
+     "place": "Doma"
+    }
+   ],
+   "src": "EFSA 2015 – kofein: jednorázově do 200 mg, za den do 400 mg je pro dospělé bezpečné; Guest a kol. 2021, JISSN – kofein 3–6 mg/kg zvedá výkon; Hobson a kol. 2012, Amino Acids – beta-alanin pomáhá u zátěže 1–4 min; Trexler a kol. 2019, Sports Med – citrulin jen malý efekt",
+   "for": "mvv7543kffv3k"
+  },
+  {
+   "id": "2026-11-23-3",
+   "title": "Tier list: co dělat na dobrý spánek",
+   "category": "KAM",
+   "format": "TIER LIST 📊",
+   "why": "Máš to v nápadech. Spánek je tvoje téma (Tohle dělej každý večer) a „ranní návyky“ jsi bral.",
+   "how": "Tabule S–F + SATAN. Mluvíš od první vteřiny, hlas (převod textu na řeč) řekne položku, ty tier a 1 větu. Kartička vyjede do řádku. 30–45 s.",
+   "hook": {
+    "say": "Skleničku na lepší spaní? F tier. Usneš, ale spíš hůř.",
+    "see": "Já před tabulí, sklenice letí do F",
+    "txt": "TIER LIST: SPÁNEK"
+   },
+   "body": [
+    {
+     "say": "Hlas: Vstávat ve stejnou dobu i o víkendu. → S tier. Nejvíc podceňovaný.",
+     "see": "Do S"
+    },
+    {
+     "say": "Hlas: Tma a chladno v ložnici. → A tier.",
+     "see": "Do A"
+    },
+    {
+     "say": "Hlas: Poslední kafe do tří odpoledne. → A tier. Kofein v tobě sedí ještě večer.",
+     "see": "Do A"
+    },
+    {
+     "say": "Hlas: Melatonin. → C tier. Na posun času fajn, zázrak to neni.",
+     "see": "Do C"
+    },
+    {
+     "say": "Hlas: Spát o víkendu do oběda. → D tier. Rozhodí ti to celej týden.",
+     "see": "Do D"
+    },
+    {
+     "say": "Hlas: Telefon v posteli. → SATAN tier.",
+     "see": "Telefon do SATAN"
+    }
+   ],
+   "end": "Dobrej spánek je nejlevnější suplement, co existuje.",
+   "cta": "Kolik spíš ty? 👇",
+   "caption": "Spánek od S po SATAN 😴 #tierlist #spanek #regenerace #gym",
+   "shots": [
+    {
+     "text": "Já před tier tabulí – všechny odpovědi",
+     "type": "me",
+     "place": "Doma"
+    },
+    {
+     "text": "Ložnice večer: tma, telefon mimo postel",
+     "type": "broll",
+     "place": "Doma"
+    }
+   ],
+   "src": "Drake a kol. 2013, J Clin Sleep Med – kofein 6 h před spaním zkrátil spánek o víc než hodinu; Ebrahim a kol. 2013, Alcohol Clin Exp Res – alkohol zhoršuje druhou polovinu noci; Ferracioli-Oda a kol. 2013, PLoS One – melatonin jen malý efekt na usínání",
+   "for": "mvv75d87xvr3p"
+  },
+  {
+   "id": "2026-11-23-4",
+   "title": "Kdy brát suplementy",
+   "category": "KAM",
+   "format": "RYCHLOVKY ⚡",
+   "why": "Odborné video na uložení – máš to v nápadech. Navazuje na suplementy, které ti fungovaly.",
+   "how": "Mluvíš od první vteřiny. Hlas řekne položku, ty verdikt + 1 věta. Verdikt velkým textem. Natočíš v jednom záběru.",
+   "hook": {
+    "say": "Hlas: Kreatin? → Kdykoli. Hlavně každej den, načasování skoro neřeš.",
+    "see": "Já do kamery – mluvím od první vteřiny",
+    "txt": "KDY BRÁT SUPLEMENTY"
+   },
+   "body": [
+    {
+     "say": "Hlas: Kofein nebo předtréninkovka? → 30 až 60 minut před tréninkem. A ne večer.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Protein? → Kdykoli ti pomůže dorovnat bílkoviny za den.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Vitamín D? → K jídlu, kde je tuk. Líp se vstřebá.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Omega-3? → Taky k jídlu.",
+     "see": ""
+    },
+    {
+     "say": "Hlas: Hořčík? → Klidně večer – hlavně ať na něj nezapomeneš.",
+     "see": ""
+    }
+   ],
+   "end": "Důležitější než přesná minuta je brát je pravidelně.",
+   "cta": "Ulož si to 📌",
+   "caption": "Kdy brát suplementy? Rychle a jasně 💊 #suplementy #kreatin #protein #fitness",
+   "shots": [
+    {
+     "text": "Já do kamery – všechny odpovědi",
+     "type": "me",
+     "place": "Gym"
+    }
+   ],
+   "src": "Kreider a kol. 2017, JISSN – kreatin; Guest a kol. 2021, JISSN – kofein; Schoenfeld a kol. 2013, JISSN – načasování bílkovin; Dawson-Hughes a kol. 2015, J Acad Nutr Diet – vitamín D se líp vstřebá s tučnějším jídlem",
+   "for": "mwmcoeo4l7ata"
+  },
+  {
+   "id": "2026-11-23-5",
+   "title": "5 znaků, že už jsi gym člověk",
+   "category": "EZ",
+   "format": "EZ SHIT ✔️",
+   "why": "Máš to v nápadech. Rychlé EZ na sdílení – lidi se v tom poznají a označí kámoše.",
+   "how": "Bez mluvení, 5 rychlých záběrů do hudby, text u každého.",
+   "hook": {
+    "say": "",
+    "see": "Šejkr vytažený z tašky",
+    "txt": "5 ZNAKŮ, ŽE UŽ JSI GYM ČLOVĚK"
+   },
+   "body": [
+    {
+     "say": "",
+     "see": "1. Šejkr máš v každý tašce i v autě"
+    },
+    {
+     "say": "",
+     "see": "2. Dovolenou vybíráš podle toho, jestli tam je gym"
+    },
+    {
+     "say": "",
+     "see": "3. Víš, kolik bílkovin má tvaroh, ale ne kolik je hodin"
+    },
+    {
+     "say": "",
+     "see": "4. Kámošů se ptáš „kolik dáš na bench?“"
+    },
+    {
+     "say": "",
+     "see": "5. Fotíš se v zrcadle na stejným místě každej týden"
+    }
+   ],
+   "end": "",
+   "cta": "Kolik jich máš? 👇",
+   "caption": "Kolik z toho máš ty? 😅 Označ kámoše #gym #gymlife #fitness #gymhumor",
+   "shots": [
+    {
+     "text": "Šejkr z tašky a z auta",
+     "type": "broll",
+     "place": "Gym"
+    },
+    {
+     "text": "Zrcadlo v gymu – fotka",
+     "type": "broll",
+     "place": "Gym"
+    },
+    {
+     "text": "Telefon s mapou + gym",
+     "type": "broll",
+     "place": "Doma"
+    }
+   ],
+   "for": "mwmryeyi2re34"
+  },
+  {
+   "id": "2026-11-23-6",
+   "title": "Můj největší fail v gymu",
+   "category": "KAM",
+   "format": "HEAD TALK 🗣️",
+   "why": "#gymfails teď roste nejrychleji a příběhové hooky („tohle se mi stalo…“) mají nejvyšší úspěšnost. Ukáže, že jsi fajn.",
+   "how": "Řekni svůj SKUTEČNÝ příběh – nic nevymýšlej. Mluvíš od první vteřiny, krátce, s pointou. Max 40 s.",
+   "hook": {
+    "say": "Tohle se mi stalo v gymu a dodnes se za to stydím.",
+    "see": "Já do kamery, krátká pauza",
+    "txt": "MŮJ NEJVĚTŠÍ GYM FAIL 😳"
+   },
+   "body": [
+    {
+     "say": "[Co se stalo – tvůj skutečný fail, 2 věty]",
+     "see": ""
+    },
+    {
+     "say": "[Kdo to viděl a jak jsi reagoval]",
+     "see": ""
+    },
+    {
+     "say": "Co jsem se z toho naučil: [jedna věta]",
+     "see": ""
+    }
+   ],
+   "end": "Ego nech v šatně. Stane se to každýmu.",
+   "cta": "Napiš svůj největší gym fail 👇",
+   "caption": "Můj největší fail v gymu 😳 Teď ty 👇 #gymfails #gym #fitness #gymhumor",
+   "shots": [
+    {
+     "text": "Já do kamery – příběh",
+     "type": "me",
+     "place": "Doma"
+    }
+   ]
+  },
+  {
+   "id": "2026-11-23-7",
+   "title": "Tier list: cviky na velký ruce",
+   "category": "KAM",
+   "format": "TIER LIST 📊",
+   "why": "Máš to v nápadech. Ukázky cviků teď letí nejvíc – ke každé položce krátký záběr cviku. Navazuje na tvoje video o bicepsu.",
+   "how": "Tabule S–F + SATAN. Mluvíš od první vteřiny, hlas (převod textu na řeč) řekne položku, ty tier a 1 větu. Kartička vyjede do řádku. 30–45 s. Ke každému cviku natoč 2 s ukázky.",
+   "hook": {
+    "say": "Houpání celým tělem s obří činkou? SATAN tier.",
+    "see": "Já před tabulí, pak střih na houpání",
+    "txt": "TIER LIST: CVIKY NA RUCE"
+   },
+   "body": [
+    {
+     "say": "Hlas: Skotovka. → S tier. Biceps je dole nataženej a právě tam roste nejvíc.",
+     "see": "Ukázka skotovky"
+    },
+    {
+     "say": "Hlas: Tricepsovej tlak nad hlavou. → S tier. Triceps v natažení – roste víc než u stahování kladky.",
+     "see": "Ukázka francouzáku"
+    },
+    {
+     "say": "Hlas: Kladivovej zdvih. → A tier. Ruka vypadá silnější i z boku.",
+     "see": "Ukázka kladiv"
+    },
+    {
+     "say": "Hlas: Bradla. → A tier. Těžká váha na triceps.",
+     "see": "Ukázka bradel"
+    },
+    {
+     "say": "Hlas: Stahování kladky. → B tier. Dobrý, ale bez natažení.",
+     "see": "Ukázka kladky"
+    },
+    {
+     "say": "Hlas: Bicepsovej zdvih s tyčí. → B tier. Klasika, ale ne nejlepší.",
+     "see": "Ukázka zdvihu"
+    }
+   ],
+   "end": "Ruce nerostou z houpání. Rostou z natažení a pořádnýho rozsahu.",
+   "cta": "Kterej cvik děláš ty? 👇",
+   "caption": "Cviky na velký ruce od S po SATAN 💪 #tierlist #biceps #triceps #gym",
+   "shots": [
+    {
+     "text": "Já před tier tabulí – všechny odpovědi",
+     "type": "me",
+     "place": "Doma"
+    },
+    {
+     "text": "Ukázky cviků – 2 s každý (skotovka, francouzák, kladiva, bradla, kladka, tyč)",
+     "type": "broll",
+     "place": "Gym"
+    }
+   ],
+   "src": "Sato a kol. 2021, Front Physiol – trénink biceps v natažení = víc růstu; Maeo a kol. 2023, Eur J Sport Sci – tricepsový tlak nad hlavou víc růstu než stahování kladky",
+   "for": "mvv6w1x94wkrk"
+  },
   {
    "id": "2026-11-19-h1",
    "rework": true,
@@ -655,337 +1007,55 @@
      "place": "Gym"
     }
    ]
-  },
-  {
-   "id": "2026-11-16-1",
-   "title": "Přeceňovaný, nebo podceňovaný?",
-   "category": "KAM",
-   "format": "RYCHLOVKY ⚡",
-   "why": "Rychlovky ti sedí nejvíc – minulý týden jsi je bral skoro beze změn. Na Reels teď letí „maintenance“ a chůze místo hardcore plánů, tak to otoč na verdikty.",
-   "how": "Hlas mimo kameru řekne věc, ty hned verdikt a krátký proč. PŘECEŇOVANÝ / PODCEŇOVANÝ velkým textem, rychlé střihy. Jeden záběr na všechno.",
-   "hook": {
-    "say": "Hlas: Kardio nalačno? → Přeceňovaný. Tuk pálíš podle toho, kolik sníš za celej den, ne v kolik běháš.",
-    "see": "Já do kamery – mluvím od první vteřiny",
-    "txt": "PŘECEŇOVANÝ, NEBO PODCEŇOVANÝ?"
-   },
-   "body": [
-    {
-     "say": "Hlas: Chůze? → Podceňovaná. Kroky ti spálí víc než půlhodina na pásu a nijak tě nezničí.",
-     "see": ""
-    },
-    {
-     "say": "Hlas: Spánek? → Podceňovanej. Spíš pět hodin a pak se divíš, že nerosteš.",
-     "see": ""
-    },
-    {
-     "say": "Hlas: Strečink před tréninkem? → Přeceňovanej. Já dám radši pár lehčích sérií, rozehřeje mě to líp.",
-     "see": ""
-    },
-    {
-     "say": "Hlas: Zapisovat si váhy? → Podceňovaný. Bez toho nevíš, jestli se vůbec posouváš.",
-     "see": ""
-    },
-    {
-     "say": "Hlas: Kreatin? → Ani jedno. Funguje, ale zázrak to neni.",
-     "see": ""
-    },
-    {
-     "say": "Hlas: Motivace? → Přeceňovaná. Já chodím i když se mi nechce. To je celý tajemství.",
-     "see": ""
-    }
-   ],
-   "end": "Nejvíc podceňovaný je stejně chodit pravidelně.",
-   "cta": "Co je podle tebe nejvíc přeceňovaný? 👇",
-   "caption": "Přeceňovaný, nebo podceňovaný? Gym edice ⚡ #gym #fitness #rychlovky #fitnesscz",
-   "src": "Kardio nalačno: Schoenfeld a kol., 2014, J Int Soc Sports Nutr – při stejném deficitu žádný rozdíl v úbytku tuku nalačno vs. najedený.",
-   "shots": [
-    {
-     "text": "Já do kamery – všechny odpovědi",
-     "type": "me",
-     "place": "Gym"
-    }
-   ]
-  },
-  {
-   "id": "2026-11-16-2",
-   "title": "Tier list: co pít na tréninku",
-   "category": "KAM",
-   "format": "TIER LIST 📊",
-   "for": "mvv6yi6ppjoy9",
-   "why": "Máš to v nápadech bez scénáře. Tier listy jsi bral všechny a pivo jako SATAN tier navazuje na tvoje video Alkohol a svaly.",
-   "how": "Tabule S–F + SATAN. Mluvíš od první vteřiny, každá kartička jeden střih. Ionťák do D hned v hooku, voda do A jako pointa na hádku v komentářích.",
-   "hook": {
-    "say": "Ionťák z benzínky? D tier. Na hodinu v gymu ho fakt nepotřebuješ.",
-    "see": "Já před tabulí, ionťák rovnou letí do D",
-    "txt": "TIER LIST: CO PÍT NA TRÉNINKU"
-   },
-   "body": [
-    {
-     "say": "Hlas: Kafe hodinu předtím. → S tier. Jediný pití, co ti fakt zvedne výkon.",
-     "see": "Kafe do S"
-    },
-    {
-     "say": "Hlas: Voda. → A tier. Jo, A. Funguje, ale to už všichni víte.",
-     "see": "Voda do A, pokrčím rameny"
-    },
-    {
-     "say": "Hlas: Voda se špetkou soli. → A tier, když se hodně potíš nebo trénuješ přes hodinu.",
-     "see": "Sůl do A"
-    },
-    {
-     "say": "Hlas: Kokosová voda. → C tier. Drahá voda s draslíkem.",
-     "see": "Kokosová voda do C"
-    },
-    {
-     "say": "Hlas: Energeťák. → C tier. Ten cukr tam fakt nepotřebuješ.",
-     "see": "Energeťák do C"
-    },
-    {
-     "say": "Hlas: BCAA ve vodě. → F tier. Ochucená voda za tři stovky.",
-     "see": "BCAA do F"
-    },
-    {
-     "say": "Hlas: Pivo jako ionťák. → SATAN tier. Viděl jsi moje video.",
-     "see": "Pivo do SATAN tieru, zahodím kartičku"
-    }
-   ],
-   "end": "Hlavně pij. Už když ztratíš dvě procenta váhy vody, výkon jde dolů.",
-   "cta": "Co piješ v gymu ty? 👇",
-   "caption": "Co pít na tréninku od S po SATAN tier 💧 Voda jen A? #tierlist #gym #pitnyrezim #fitnesscz",
-   "src": "ACSM Position Stand (Sawka a kol., 2007): ztráta tekutin nad ~2 % hmotnosti zhoršuje výkon. Sacharidové nápoje dávají smysl hlavně u výkonu nad 60–90 min (Jeukendrup, 2014, Sports Med).",
-   "shots": [
-    {
-     "text": "Já u tabule – všechny položky",
-     "type": "me",
-     "place": "Gym"
-    },
-    {
-     "text": "Detail kartiček (ionťák, voda, pivo)",
-     "type": "broll",
-     "place": "Gym"
-    }
-   ]
-  },
-  {
-   "id": "2026-11-16-3",
-   "title": "Japonská chůze: 30 minut, co dají víc než kroky",
-   "category": "DAB",
-   "format": "STŘELA DO NEZNÁMA",
-   "for": "mvz5svhx0fsxg",
-   "why": "Intervalová „japonská“ chůze teď letí na TikToku. V listopadu se lidem nechce běhat, tohle zvládne každej a máš to v nápadech jako Chozeni.",
-   "how": "Natoč se venku v bundě: 3 min svižně, 3 min pomalu, hodinky na ruce. Čísla ze studie jako text. Hlas namluv doma.",
-   "hook": {
-    "say": "Tři minuty rychle, tři pomalu. Ve studii to dalo víc než osm tisíc kroků denně.",
-    "see": "Detail bot, rychlá chůze po mokrým chodníku, tma, lampy",
-    "txt": "JAPONSKÁ CHŮZE"
-   },
-   "body": [
-    {
-     "say": "V Japonsku dali lidem pět měsíců chodit. Jedni normálně, zhruba osm tisíc kroků denně. Druzí střídali tři minuty svižně a tři pomalu. Pět kol, čtyřikrát týdně.",
-     "see": "Text: 3 min rychle / 3 min pomalu · 5× · 4× týdně"
-    },
-    {
-     "say": "Ti, co chodili normálně, se skoro nezlepšili. Intervaly? Silnější nohy o víc než deset procent, lepší kondice a nižší tlak.",
-     "see": "Text: síla nohou +13 % · kondice +9 % · tlak dolů"
-    },
-    {
-     "say": "Jo, byli to lidi kolem šedesáti. Ale princip je stejnej – tělo potřebuje změnu tempa, ne jen kroky.",
-     "see": "Já na semaforu, hodinky ukazují tep"
-    },
-    {
-     "say": "Já to dávám ve dny bez gymu. Půl hodiny venku a hlava je taky v klidu.",
-     "see": "Já venku s kapucí, pomalá fáze, výdech"
-    }
-   ],
-   "end": "Nemusíš běhat. Stačí chodit chytřejc.",
-   "cta": "Zkus to zítra a napiš, jak to šlo 👇",
-   "caption": "Japonská intervalová chůze: 3 min rychle, 3 min pomalu. Ve studii po 5 měsících silnější nohy a lepší kondice než u běžné chůze. #chuze #kardio #fitnesscz #zdravi",
-   "src": "Nose a kol., 2007, Mayo Clinic Proceedings – intervalová chůze (5 měsíců) vs. běžná chůze: síla extenze kolene +13 %, flexe +17 %, VO2peak ~+9 %, systolický tlak ~−10 mmHg; u běžné chůze minimální změny. Účastníci průměrně ~63 let.",
-   "shots": [
-    {
-     "text": "Rychlá chůze – detail bot, mokrý chodník",
-     "type": "broll",
-     "place": "Venku"
-    },
-    {
-     "text": "Pomalá fáze, kapuce, výdech",
-     "type": "broll",
-     "place": "Venku"
-    },
-    {
-     "text": "Hodinky s tepem / časovačem",
-     "type": "broll",
-     "place": "Venku"
-    },
-    {
-     "text": "Semafor, lampy, tma",
-     "type": "broll",
-     "place": "Venku"
-    }
-   ]
-  },
-  {
-   "id": "2026-11-16-5",
-   "title": "17. listopadu: volno, ale ne od gymu",
-   "category": "EZ",
-   "format": "EZ SHIT ✔️",
-   "why": "V úterý je státní svátek a většina lidí má volno. Ideální den, kdy ukázat, že ty to neflákáš.",
-   "how": "Vydej v úterý ráno. Krátké střihy: budík, taška, prázdnej gym, tvoje série. Text po záběrech, hudba s beatem.",
-   "hook": {
-    "say": "",
-    "see": "Budík 7:30, venku zataženo",
-    "txt": "Státní svátek. Všichni spí."
-   },
-   "body": [
-    {
-     "say": "",
-     "see": "Beru tašku, zavírám dveře – text: Já taky měl volno."
-    },
-    {
-     "say": "",
-     "see": "Prázdnej gym – text: Nikdo tu neni."
-    },
-    {
-     "say": "",
-     "see": "Těžká série – text: Volno od práce. Ne od sebe."
-    }
-   ],
-   "end": "Text: O 1 % lepší i ve svátek.",
-   "cta": "Kdo dneska taky trénuje? 💪",
-   "caption": "Svátek = volno. Ale ne od tréninku 🫡 #gym #disciplina #fitnesscz",
-   "shots": [
-    {
-     "text": "Budík a okno",
-     "type": "broll",
-     "place": "Doma"
-    },
-    {
-     "text": "Taška, odchod",
-     "type": "broll",
-     "place": "Doma"
-    },
-    {
-     "text": "Prázdnej gym",
-     "type": "broll",
-     "place": "Gym"
-    },
-    {
-     "text": "Moje těžká série",
-     "type": "broll",
-     "place": "Gym"
-    }
-   ]
-  },
-  {
-   "id": "2026-11-16-7",
-   "title": "Co sním za den, když je ve čtyři tma",
-   "category": "EZ",
-   "format": "EZ s textem",
-   "for": "mvmfh2lzs5iyw",
-   "why": "„What I eat in a day“ funguje pořád. Máš to v nápadech jako Celý den jím a listopadová verze má jasný háček.",
-   "how": "Během jednoho dne natoč každý jídlo 3 vteřiny. Text: čas, jídlo, gramy bílkovin. Na konci celkový číslo.",
-   "hook": {
-    "say": "",
-    "see": "16:00, okno, venku už tma",
-    "txt": "Ve čtyři je tma. Já pořád jím."
-   },
-   "body": [
-    {
-     "say": "",
-     "see": "Snídaně – text: 7:00 · vajíčka + chleba · 30 g"
-    },
-    {
-     "say": "",
-     "see": "Oběd z krabičky – text: 12:00 · rýže + kuře · 45 g"
-    },
-    {
-     "say": "",
-     "see": "Před gymem – text: 16:30 · rýžový chlebíčky + skyr · 20 g"
-    },
-    {
-     "say": "",
-     "see": "Večeře + tvaroh – text: 20:00 · 60 g"
-    }
-   ],
-   "end": "Text: Celkem ~155 g bílkovin. Žádná věda.",
-   "cta": "Kolik dáš za den ty? 👇",
-   "caption": "Co sním za den v listopadu, bez kecání 🍽️ #whatieatinaday #protein #fitnesscz",
-   "shots": [
-    {
-     "text": "Okno v 16:00, tma",
-     "type": "broll",
-     "place": "Doma"
-    },
-    {
-     "text": "Snídaně",
-     "type": "broll",
-     "place": "Kuchyň"
-    },
-    {
-     "text": "Oběd z krabičky",
-     "type": "broll",
-     "place": "Doma"
-    },
-    {
-     "text": "Svačina před gymem",
-     "type": "broll",
-     "place": "Kuchyň"
-    },
-    {
-     "text": "Večeře + tvaroh",
-     "type": "broll",
-     "place": "Kuchyň"
-    }
-   ]
   }
  ],
  "daily": [
   {
-   "date": "2026-11-16",
-   "title": "Nestíháš gym? 3× denně 2 minuty",
-   "how": "3 krátké záběry z jednoho dne: ráno 20 dřepů u kafe, v poledne kliky u stolu, večer výpady na chodbě. Text: „Žádný čas? Tohle zvládne každej. 6 minut denně.“ Rychlý střih do hudby.",
-   "format": "EZ s textem",
-   "place": "Doma"
-  },
-  {
-   "date": "2026-11-17",
-   "title": "Svoboda? Tu mi dala disciplína",
-   "how": "3 záběry: budík ráno, otevírám dveře do gymu, poslední opakování. Text: „17. listopad. Den svobody. Nejvíc svobody mi dala disciplína.“ Klidná hudba.",
+   "date": "2026-11-23",
+   "title": "Pondělí 18:00: čekám na lavičku",
+   "how": "Záběr na plnej gym, ty čekáš u lavičky s ručníkem. Text: „Pondělí. Celá Morava dneska dělá prsa.“",
    "format": "EZ s textem",
    "place": "Gym"
   },
   {
-   "date": "2026-11-18",
-   "title": "Řekni, že chodíš do gymu, aniž bys to řekl",
-   "how": "5 rychlých záběrů: šejkr v každé tašce, mozoly na dlani, trička, co nejdou přes ramena, krabičky v lednici, budík na 6:00. Text u každého, na konci „Poznáš se? 😅“.",
+   "date": "2026-11-24",
+   "title": "1 cvik, kterej dělám každej trénink",
+   "how": "Ukázka jednoho cviku ze 3 úhlů, text proč ho dělám pořád.",
+   "format": "EZ s textem",
+   "place": "Gym"
+  },
+  {
+   "date": "2026-11-25",
+   "title": "3 songy na těžkou sérii",
+   "how": "Sluchátka, displej s písničkou, pak série. 3 krátké střihy, text s názvem songu.",
+   "format": "EZ s textem",
+   "place": "Gym"
+  },
+  {
+   "date": "2026-11-26",
+   "title": "Black Friday košík: co jsem nekoupil",
+   "how": "Prázdnej košík v e-shopu, odebírám věci. Text: „Ušetřeno: 2 400 Kč. Koupeno: kreatin.“",
    "format": "EZ s textem",
    "place": "Doma"
   },
   {
-   "date": "2026-11-19",
-   "title": "Den po leg day vs. schody",
-   "how": "Natoč se, jak jdeš ze schodů jako robot (držíš se zábradlí, každý schod zvlášť). Text: „Včera leg day. Dneska tohle.“ Na konci: „Stálo to za to.“",
+   "date": "2026-11-27",
+   "title": "Black Friday: jediná věc, co jsem koupil",
+   "how": "Rozbaluju balík – jedna věc. Text: „Black Friday. Koupil jsem jen tohle.“",
    "format": "EZ s textem",
    "place": "Doma"
   },
   {
-   "date": "2026-11-20",
-   "title": "Páteční kontrola týdne",
-   "how": "Zápisník / appka na stole, odškrtáváš: tréninky 4/4 ✓, kroky ✓, spánek 7 h ✓, alkohol 0 ✓. Text: „Ne dokonalej týden. Ale o 1 % lepší.“",
+   "date": "2026-11-28",
+   "title": "Sobota ráno: gym jen pro mě",
+   "how": "Prázdnej gym v 8:00, procházím mezi stroji. Text: „Sobota ráno. Nejlepší čas v tejdnu.“",
    "format": "EZ s textem",
-   "place": "Doma"
+   "place": "Gym"
   },
   {
-   "date": "2026-11-21",
-   "title": "Mráz a 30 minut chůze",
-   "how": "Ojíněná tráva, rychlá chůze, pára z pusy. Text: „−2 °C. Pořád se počítá.“",
-   "format": "EZ s textem",
-   "place": "Venku"
-  },
-  {
-   "date": "2026-11-22",
-   "title": "Neděle: plán na celej týden za 5 minut",
-   "how": "Kafe, telefon / zápisník, rychlé záběry: tréninky, natáčení, jídlo na týden. Text: „5 minut v neděli = klidnej týden.“",
+   "date": "2026-11-29",
+   "title": "1. advent: 4 týdny do Vánoc = 12 tréninků",
+   "how": "Kalendář / zápisník, odškrtávám. Text: „Do Vánoc 12 tréninků. Žádný lednový předsevzetí.“",
    "format": "EZ s textem",
    "place": "Doma"
   }
@@ -999,6 +1069,15 @@
    "ideas": [
     "Black Friday: co bych koupil a na co neletím",
     "Kreatin a protein ve slevě – jak nenaletět"
+   ]
+  },
+  {
+   "date": "2026-11-29",
+   "title": "1. advent",
+   "prep": "vydat 28.–29. 11.",
+   "why": "Začíná odpočet do Vánoc – „12 tréninků do Vánoc“ sedí na tvoje o 1 % lepší.",
+   "ideas": [
+    "12 tréninků do Vánoc – jdeš do toho se mnou?"
    ]
   },
   {
