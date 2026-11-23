@@ -114,7 +114,7 @@ A['plan-save'] = () => {
 // v týdenním režimu: když se ve formuláři mění select, readPlanDraft volá správnou verzi (viz výše); u cyklu přerenderovat
 document.addEventListener('change', ev => { if (view.n === 'planEdit' && planDraft && isCyc(planDraft) && ev.target.matches('#pl-start')) { readPlanDraft(); reEdit(); } });
 
-// jednorázově: Janův plán LOWER → UPPER → volno, dokola od 24. 11. 2026
+// jednorázově: Janův plán UPPER → LOWER → volno, dokola od 23. 11. 2026
 (function () {
   if (S.settings.migCyc1) return;
   const find = re => S.templates.find(t => re.test(t.name));
@@ -125,8 +125,18 @@ document.addEventListener('change', ev => { if (view.n === 'planEdit' && planDra
   const old = (S.program && S.program.days) || {};
   const cfg = (tp, focus) => { const o = Object.values(old).find(x => x && x.tid === tp.id); return { tid: tp.id, focus: o?.focus || focus, cardio: o?.cardio || null, stretch: !!o?.stretch, note: o?.note || '' }; };
   const nm = S.program && S.program.on && S.program.name && S.program.name !== 'Můj plán' ? S.program.name : 'Upper / Lower';
-  S.program = { name: nm, focus: (S.program && S.program.focus) || '', weeks: null, start: '2026-11-24', days: old, cycle: [cfg(lo, 'Spodek'), cfg(up, 'Vršek'), null], on: true };
+  S.program = { name: nm, focus: (S.program && S.program.focus) || '', weeks: null, start: '2026-11-23', days: old, cycle: [cfg(up, 'Vršek'), cfg(lo, 'Spodek'), null], on: true };
   S.templates.forEach(t => { delete t.dow; });
   if (S.food) S.food.tdays = null; // jídelníček ať bere tréninkové dny z cyklu
-  S.settings.weekGoal = 4; S.settings.migCyc1 = 1; save(true);
+  S.settings.weekGoal = 4; S.settings.migCyc1 = 1; S.settings.migCyc2 = 1; save(true);
+})();
+// oprava: začátek je pondělí 23. 11. UPPER, úterý LOWER, středa volno
+(function () {
+  if (S.settings.migCyc2) return; S.settings.migCyc2 = 1;
+  const p = S.program; if (isCyc(p) && p.cycle.length === 3 && !p.cycle[2]) {
+    const [a, b] = p.cycle; const nA = a && tplById(a.tid)?.name || '', nB = b && tplById(b.tid)?.name || '';
+    if (/lower/i.test(nA) && /upper/i.test(nB)) p.cycle = [b, a, null];
+    p.start = '2026-11-23';
+  }
+  save(true);
 })();
