@@ -140,3 +140,36 @@ document.addEventListener('change', ev => { if (view.n === 'planEdit' && planDra
   }
   save(true);
 })();
+
+// ===================== UPPER podle nové předlohy (tabulka „Ján Kodad tréning“, 24. 11. 2026) =====================
+// RIR 0 = do selhání (F), RIR 1 = 1 opakování v rezervě. Tempo 2-0-X-0 u všech.
+(function () {
+  if (S.settings.migUp1) return;
+  const p = S.program; const up = (isCyc(p) && p.cycle.map(x => x && tplById(x.tid)).find(t => t && /upper/i.test(t.name))) || S.templates.find(t => /upper/i.test(t.name));
+  if (!up) { S.settings.migUp1 = 1; save(true); return; }
+  const byName = n => S.exercises.find(e => e.name.toLowerCase() === n.toLowerCase());
+  const R = (min, max, rir) => rir.map(r => ({ min, max, fail: r === 0 }));
+  // [název, znovupoužít existující, partie, vedlejší, jednostranně, krok kg, série, RIR, tipy]
+  const L = [
+    ['Smith bench press', null, 'Hrudník', 'Přední delty, triceps', 0, 2.5, R(5, 8, [1, 1]), [1, 1], ['Lopatky stažené a dolů', 'Další rotace: 6–10 opakování']],
+    ['Preacher curls jednoruč (stroj)', null, 'Biceps', 'Brachialis', 1, 1.25, R(5, 8, [1, 1]), [1, 1], ['Dole plné protažení', 'Loket se nehýbe']],
+    ['Předpažování vleže na lavici na kladce', null, 'Přední delty', 'Horní hrudník', 0, 1.25, R(6, 9, [1]), [1], ['Bez švihu, trup na lavici']],
+    ['Overhand cable curls', null, 'Brachioradialis', 'Biceps, brachialis', 0, 1.25, R(6, 9, [1]), [1], ['Nadhmat, lokty u těla']],
+    ['Triceps extenze jednoruč na kladce', null, 'Triceps', '–', 1, 1.25, R(5, 8, [1, 0]), [1, 0], ['Lano, kabel nebo manžeta', 'Plné propnutí']],
+    ['Upažování na stroji', null, 'Boční delty', 'Trapézy', 0, 2.5, R(5, 8, [1, 0]), [1, 0], ['Vede loket', 'Bez švihu']],
+    ['Pronated lat pulldowns', null, 'Široký sval zádový', 'Horní záda, biceps', 0, 2.5, R(5, 8, [1]), [1], ['Nadhmat, široký úchop', 'Táhni lokty dolů k bokům']],
+    ['Stahování kladky podhmatem úzce', null, 'Široký sval zádový', 'Biceps', 0, 2.5, R(5, 8, [0]), [0], ['Podhmat, úzký úchop', 'Nahoře nech lopatky vyjet']],
+    ['Tlaky na ramena (stroj)', null, 'Přední delty', 'Triceps, boční delty', 0, 2.5, R(5, 8, [0]), [0], ['Zpevněný trup, bez záklonu']],
+    ['T bar rows', null, 'Horní záda', 'Široký sval zádový, zadní delty', 0, 2.5, R(5, 8, [1, 0]), [1, 0], ['Hrudník na opěrce, cíl mezilopatkové svaly', 'Po selhání ještě kelso shrugs']],
+  ];
+  const ex = [], n = {};
+  L.forEach(([name, , muscle, secondary, uni, inc, sets, rir, cues]) => {
+    let e = byName(name);
+    if (!e) { e = { id: uid(), name, muscle, secondary, uni: !!uni, inc, sets, cues, tempo: '2-0-X-0', partials: false, note: '' }; S.exercises.push(e); }
+    else { e.sets = sets; e.tempo = '2-0-X-0'; e.cues = cues; e.muscle = e.muscle || muscle; }
+    e.note = `RIR ${rir.join(' / ')}`;
+    ex.push(e.id); n[e.id] = sets.length;
+  });
+  up.ex = ex; up.n = n;
+  S.settings.migUp1 = 1; save(true);
+})();
