@@ -82,9 +82,12 @@ function target(ex, i, last) {
 }
 function cmpVals(w, r, pw, pr) { if (w == null || r == null) return null; if (pw == null || pr == null) return 'new'; if (w > pw + 1e-9) return 'up'; if (w < pw - 1e-9) return 'down'; return r > pr ? 'up' : r < pr ? 'down' : 'eq'; }
 function cmp(cur, prev, ex) { if (!hasData(cur, ex)) return null; if (!prev || !hasData(prev, ex)) return 'new'; return cmpVals(num(cur.w), repsOf(cur, ex), num(prev.w), repsOf(prev, ex)); }
-function cmpSide(cur, prev, ex, f) { const w = num(cur?.w), r = num(cur?.[f]); if (w == null || r == null) return null; if (!prev || num(prev.w) == null) return 'new'; const pr = num(prev[f]) ?? repsOf(prev, ex); return cmpVals(w, r, num(prev.w), pr); }
+// jednostranné cviky: každá strana může mít jinou váhu (wl / wr), st.w = slabší strana kvůli statistikám
+const sideW = (st, f) => st ? (num(st['w' + f]) ?? num(st.w)) : null;
+function cmpSide(cur, prev, ex, f) { const w = sideW(cur, f), r = num(cur?.[f]); if (w == null || r == null) return null; if (!prev || sideW(prev, f) == null) return 'new'; const pr = num(prev[f]) ?? repsOf(prev, ex); return cmpVals(w, r, sideW(prev, f), pr); }
 const ARROW = { up: '↑', down: '↓', eq: '', new: '' };
-const setTxt = (st, ex) => !hasData(st, ex) ? '–' : ex.uni ? `${kg(num(st.w))} × ${st.l ?? '–'}/${st.r ?? '–'}` : `${kg(num(st.w))} × ${st.reps}`;
+const uniW = st => { const a = sideW(st, 'l'), b = sideW(st, 'r'); return a != null && b != null && Math.abs(a - b) > 1e-9 ? `${kg(a)}/${kg(b)}` : kg(a ?? b); };
+const setTxt = (st, ex) => !hasData(st, ex) ? '–' : ex.uni ? `${uniW(st)} × ${st.l ?? '–'}/${st.r ?? '–'}` : `${kg(num(st.w))} × ${st.reps}`;
 const usedSets = (e, ex) => e.sets.slice(0, ex.sets.length);
 function stats(s) {
   let sets = 0, up = 0, down = 0, vol = 0;
@@ -93,7 +96,7 @@ function stats(s) {
     const prev = lastBefore(e.exId, s);
     usedSets(e, ex).forEach((st, i) => {
       if (!hasData(st, ex)) return; sets++;
-      vol += num(st.w) * (ex.uni ? (num(st.l) || 0) + (num(st.r) || 0) : num(st.reps));
+      vol += ex.uni ? (sideW(st, 'l') || 0) * (num(st.l) || 0) + (sideW(st, 'r') || 0) * (num(st.r) || 0) : num(st.w) * num(st.reps);
       const c = cmp(st, prev && prev.e.sets[i], ex); if (c === 'up') up++; if (c === 'down') down++;
     });
   }
@@ -283,10 +286,12 @@ function exBody(s, e, ex) {
     if (ex.uni) {
       for (const f of ['l', 'r']) {
         const a = cmpSide(st, prev, ex, f); const pr = f === 'r' && isPR(st, ex, best);
-        const ok = num(st.w) != null && num(st[f]) != null;
+        const ok = sideW(st, f) != null && num(st[f]) != null; const ts = targetSide(ex, i, last, f);
+        const sw = num(st['w' + f]) ?? (st.wl == null && st.wr == null ? num(st.w) : null);
+        const wph = f === 'r' && sideW(st, 'l') != null ? kg(sideW(st, 'l')) : ts.w != null ? kg(ts.w) : 'kg';
         rows += `<div class="tr" data-i="${i}" data-side="${f}"><span class="no">${i + 1}${f === 'l' ? 'L' : 'R'}</span>
-          <span><input inputmode="decimal" data-f="w" value="${kg(num(st.w))}" placeholder="kg" aria-label="Váha"></span>
-          <span class="rc"><input inputmode="numeric" data-f="${f}" value="${st[f] ?? ''}" placeholder="${ph}" aria-label="Opakování ${f === 'l' ? 'levá' : 'pravá'}">${arH(a, pr)}</span>
+          <span><input inputmode="decimal" data-f="w${f}" value="${kg(sw)}" placeholder="${wph}" aria-label="Váha ${f === 'l' ? 'levá' : 'pravá'}"></span>
+          <span class="rc"><input inputmode="numeric" data-f="${f}" value="${st[f] ?? ''}" placeholder="${ts.ph ?? ph}" aria-label="Opakování ${f === 'l' ? 'levá' : 'pravá'}">${arH(a, pr)}</span>
           ${f === 'l' ? rg : '<span></span>'}<button class="ck ${ok ? 'ok' : ''}" data-ck data-a="ck" aria-label="Potvrdit sérii"><span>${ico('check')}</span></button></div>`;
       }
     } else {
@@ -304,7 +309,24 @@ function exBody(s, e, ex) {
     <textarea class="notep" data-in="exnote" rows="1" placeholder="Napiš poznámku…">${esc(ex.note)}</textarea>
   </div>`;
 }
+function targetSide(ex, i, last, f) {
+  const cfg = ex.sets[i]; const ls = last && last.e.sets[i]; const w = sideW(ls, f), r = ls ? num(ls[f]) : null;
+  if (!cfg || w == null || r == null) return { kind: 'new', w: null, ph: null };
+  if (topHit(r, cfg)) return { kind: 'up', w: r2(w + (ex.inc || 0)), lastW: w, lastR: r, ph: String(cfg.min) };
+  return { kind: 'same', w, lastW: w, lastR: r, ph: String(Math.max(r + 1, cfg.min)) };
+}
 function nextLines(s, e, ex, last) {
+  if (ex.uni) return ex.sets.map((c, i) => ['l', 'r'].map(f => {
+    const st = e.sets[i], n = `${ex.sets.length > 1 ? i + 1 : ''}${f === 'l' ? 'L' : 'R'}: `, w = sideW(st, f), r = st ? num(st[f]) : null, tg = targetSide(ex, i, last, f);
+    if (w != null && r != null) {
+      if (topHit(r, c)) return `<span class="up">${n}↑ nad rozsahem → příště <b>${kg(r2(w + ex.inc))} kg</b></span>`;
+      if (r < c.min) return `<span class="down">${n}pod rozsahem → příště zase ${kg(w)} kg</span>`;
+      return `<span>${n}v rozsahu → příště <b>${kg(w)} kg</b> a o opáčko víc</span>`;
+    }
+    if (tg.kind === 'up') return `<span class="up">${n}↑ přidej váhu: <b>${kg(tg.w)} kg</b> (minule ${kg(tg.lastW)} × ${tg.lastR})</span>`;
+    if (tg.kind === 'same') return `<span>${n}cíl <b>${tg.ph}+ opak.</b> na ${kg(tg.w)} kg</span>`;
+    return `<span>${n}zapiš váhu a opakování (${c.min}–${c.max})</span>`;
+  }).join('')).join('');
   return ex.sets.map((c, i) => {
     const st = e.sets[i]; const tg = target(ex, i, last); const n = ex.sets.length > 1 ? `${i + 1}. série: ` : '';
     if (hasData(st, ex)) {
@@ -327,7 +349,7 @@ function updateCard(card, s, e) {
     const pr = (!f || f === 'r') && isPR(st, ex, best); const ar = $('[data-ar]', row); ar.className = 'ar ' + (pr ? 'pr' : a || ''); ar.textContent = pr ? 'PR' : ARROW[a] || '';
     const ok = f ? num(st.w) != null && num(st[f]) != null : hasData(st, ex);
     $('[data-ck]', row).classList.toggle('ok', ok);
-    if (f) { const wi = $('[data-f=w]', row); if (document.activeElement !== wi) wi.value = kg(num(st.w)); }
+    if (f === 'r') { const wi = $('[data-f=wr]', row); if (wi && sideW(st, 'l') != null) wi.placeholder = kg(sideW(st, 'l')); }
   });
 
   const stt = exState(e, ex); card.classList.remove('done', 'part'); if (stt) card.classList.add(stt);
@@ -803,7 +825,7 @@ async function storyExercise(s, e) {
     rows.forEach(({ st, i }) => {
       const a = cmp(st, prev && prev.e.sets[i], ex); const isP = isPR(st, ex, best);
       x.fillStyle = '#6C6C70'; x.font = `600 30px ${CF}`; x.fillText(`${i + 1}.`, X, y);
-      x.fillStyle = '#F5F5F7'; x.font = `700 52px ${CF}`; const t = `${kg(num(st.w))} kg × ${ex.uni ? `${st.l ?? '–'}/${st.r ?? '–'}` : st.reps}`; x.fillText(t, X + 52, y + 2);
+      x.fillStyle = '#F5F5F7'; x.font = `700 52px ${CF}`; const t = `${ex.uni ? uniW(st) : kg(num(st.w))} kg × ${ex.uni ? `${st.l ?? '–'}/${st.r ?? '–'}` : st.reps}`; x.fillText(t, X + 52, y + 2);
       const w = x.measureText(t).width;
       if (isP) { x.fillStyle = '#F4C542'; x.font = `800 30px ${CF}`; x.fillText('PR', X + 76 + w, y - 4); }
       else if (a === 'up' || a === 'down') { x.fillStyle = a === 'up' ? '#35D0C9' : '#E5484D'; x.font = `800 44px ${CF}`; x.fillText(ARROW[a], X + 70 + w, y); }
@@ -1026,9 +1048,11 @@ document.addEventListener('input', e => {
   if (t.dataset.in === 'exnote') { ex.note = t.value; save(); autoGrow(t); return; }
   const row = t.closest('.tr'); if (!row || !t.dataset.f) return;
   const f = t.dataset.f, i = +row.dataset.i;
-  let v = t.value.replace(/[^\d.,]/g, ''); if (f !== 'w') v = v.replace(/[.,]/g, '');
+  const isW = f === 'w' || f === 'wl' || f === 'wr';
+  let v = t.value.replace(/[^\d.,]/g, ''); if (!isW) v = v.replace(/[.,]/g, '');
   if (v !== t.value) t.value = v;
-  en.sets[i][f] = f === 'w' ? num(v) : (v === '' ? null : parseInt(v, 10));
+  en.sets[i][f] = isW ? num(v) : (v === '' ? null : parseInt(v, 10));
+  if (f === 'wl' || f === 'wr') { const st = en.sets[i]; const ws = [num(st.wl), num(st.wr)].filter(x => x != null); st.w = ws.length ? Math.min(...ws) : null; }
   save(); updateCard(card, s, en);
 });
 document.addEventListener('change', async e => {

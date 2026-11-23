@@ -143,7 +143,11 @@ Object.assign(A, {
 A.ck = b => {
   const row = b.closest('.tr'), card = b.closest('.ex'); const s = sesById(view.id); if (!s || !row) return;
   const en = s.entries[+card.dataset.idx]; const i = +row.dataset.i; const f = row.dataset.side || 'reps'; const st = en.sets[i];
-  const wi = $('[data-f=w]', row), ri = $(`[data-f=${f}]`, row);
+  const wi = $('[data-f^=w]', row), ri = $(`[data-f=${f}]`, row);
+  if (row.dataset.side) { const side = row.dataset.side, o = side === 'l' ? 'r' : 'l';
+    if (num(st['w' + side]) == null && st.wl == null && st.wr == null && num(st.w) != null) { st.wl = st.wr = num(st.w); }
+    if (num(st['w' + side]) == null) { const v = num(st['w' + o]) ?? num(wi.placeholder); if (v == null) { wi.focus(); return toast('Nejdřív váha'); } st['w' + side] = v; wi.value = kg(v); }
+    const ws = [num(st.wl), num(st.wr)].filter(x => x != null); st.w = ws.length ? Math.min(...ws) : null; }
   if (num(st.w) == null) { wi.focus(); return toast('Nejdřív váha'); }
   if (st[f] == null || st[f] === '') { const v = parseInt(ri.placeholder, 10); if (!isNaN(v)) { st[f] = v; ri.value = v; save(); updateCard(card, s, en); toast(`Zapsáno ${v} opak.`); } else ri.focus(); }
   else { ri.focus(); }
