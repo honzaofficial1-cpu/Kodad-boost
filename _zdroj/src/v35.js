@@ -7,7 +7,7 @@ const FX = () => { const f = F(); f.eaten = f.eaten || {}; f.swaps = f.swaps || 
 // ---------- záměny jídel ----------
 const _35planDayF = planDayF;
 planDayF = function (w, di, k) {
-  const d = _35planDayF(w, di); if (!d || !k) return d; const sw = (FX().swaps[k]) || {}; const R = RX();
+  const d = _35planDayF(w, di, k); if (!d || !k) return d; const sw = (FX().swaps[k]) || {}; const R = RX();
   Object.entries(sw).forEach(([s, kod]) => { const o = R[d.jidla[s]], n = R[kod]; if (!n || !o || o.kod === kod) return; addN(d.soucet_dne, o.hodnoty_porce, -1); addN(d.soucet_dne, n.hodnoty_porce); d.jidla[s] = kod; d.z_varky = (d.z_varky || []).filter(x => x !== s); (d.swapped2 = d.swapped2 || []).push(s); });
   return d;
 };
@@ -23,7 +23,7 @@ function swapWarn(k, s, cand) {
 }
 A['f-swap'] = b => {
   const k = b.dataset.k, s = b.dataset.s; const c = cyc(k); if (!c || c.before) return; const day = planDayF(c.w, c.di, k); const cur = day.jidla[s]; const R = RX();
-  const base = _35planDayF(c.w, c.di).jidla[s]; const wasBox = (_35planDayF(c.w, c.di).z_varky || []).includes(s);
+  const base = _35planDayF(c.w, c.di, k).jidla[s]; const wasBox = (_35planDayF(c.w, c.di, k).z_varky || []).includes(s);
   const cands = JD.recepty.filter(r => groupOf(r.kod) === groupOf(cur) && r.kod !== cur).map(r => ({ r, w: swapWarn(k, s, r) })).sort((a, b) => a.w.length - b.w.length);
   sheet(`<h2>Vyměnit ${({ snidane: 'snídani', obed: 'oběd', svacina: 'svačinu', vecere: 'večeři' })[s]}</h2><p class="mut" style="margin:4px 0 0">${flong(k)} · teď ${esc(R[cur].nazev)}</p>
     ${wasBox ? '<p class="whint" style="margin-top:10px">Tohle jídlo je z várky – várku uvaříš stejně, porce půjde do mrazáku.</p>' : ''}
@@ -41,7 +41,7 @@ const _35shopItems = shopItems;
 shopItems = function (wi, list) {
   const items = _35shopItems(wi, list); if (list === 'Z') return items; const f = FX(); const R = RX();
   const order = JD.meta.poradi_cyklu || ['A', 'B', 'C']; const w = order[wi % order.length]; const rng = list === 'N1' ? [0, 1, 2] : [3, 4, 5, 6]; const add = {};
-  rng.forEach(di => { const k = dkey(addDays(pdate(f.start), wi * 7 + di)); const sw = f.swaps[k]; if (!sw) return; const base = _35planDayF(w, di);
+  rng.forEach(di => { const k = dkey(addDays(pdate(f.start), wi * 7 + di)); const sw = f.swaps[k]; if (!sw) return; const base = _35planDayF(w, di, k);
     Object.entries(sw).forEach(([s, kod]) => { const o = R[base.jidla[s]], n = R[kod]; if (!o || !n) return; if (!(base.z_varky || []).includes(s)) o.suroviny.forEach(i => add[i.surovina] = (add[i.surovina] || 0) - i.g); n.suroviny.forEach(i => add[i.surovina] = (add[i.surovina] || 0) + i.g); }); });
   Object.entries(add).forEach(([s, g]) => { if (Math.abs(g) >= 1) items.push({ id: 'sw:' + s, nazev: SUR(s).nazev, mnozstvi: `${g > 0 ? '+' : ''}${g} g`, pozn: g > 0 ? 'kvůli výměně jídla' : 'kvůli výměně – kup o tolik méně', kat: 'Kvůli záměnám' }); });
   return items;

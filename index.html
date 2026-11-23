@@ -1247,7 +1247,7 @@ svg.rchart .pt{fill:var(--rb);stroke:var(--ra);stroke-width:2}svg.rchart .pt.on{
 </head>
 <body>
 <div id="app"></div><div id="sheet" hidden></div><div id="toast" role="status" aria-live="polite"></div>
-<script>const APP_VERSION = "2.27.0";
+<script>const APP_VERSION = "2.28.0";
 const MARK = "<svg aria-hidden=\"true\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 994 296\"><path fill=\"currentColor\" d=\"M612 5L611 4L571 4L570 5L567 5L566 4L561 4L560 5L448 5L447 6L442 6L441 5L439 6L438 5L435 5L434 6L430 6L429 5L426 5L425 6L414 6L413 5L409 5L408 6L385 5L378 11L366 27L355 39L352 44L335 63L323 79L316 86L312 92L282 127L274 138L267 145L263 151L233 186L233 187L219 203L219 204L210 213L210 214L202 222L202 223L192 232L186 236L171 243L169 243L162 246L155 247L154 248L149 248L148 249L140 249L139 250L85 250L84 251L78 251L77 250L37 250L29 258L29 259L24 264L19 271L13 277L13 278L4 288L0 294L1 295L48 295L49 296L51 295L58 295L59 296L94 296L95 295L97 295L98 296L100 296L101 295L154 295L155 294L184 294L185 293L202 293L203 292L232 291L233 290L241 290L242 289L253 289L254 288L263 288L264 287L271 287L272 286L281 286L282 285L288 285L289 284L294 284L295 283L301 283L302 282L313 281L314 280L328 278L332 276L336 276L337 275L352 272L358 269L361 269L362 268L367 267L369 265L379 262L393 255L408 245L433 221L436 216L448 203L456 192L477 168L485 157L492 150L494 146L506 133L506 132L521 115L525 109L544 88L548 82L560 69L563 64L570 57L570 56L578 48L578 47L589 35L594 28L602 20L604 16L611 9ZM994 1L993 0L974 0L973 1L967 1L966 0L964 0L963 1L866 1L865 2L860 2L859 1L842 2L840 1L839 2L804 2L794 7L792 7L786 11L784 11L777 15L775 15L760 23L758 23L749 28L747 28L734 35L732 35L717 43L715 43L706 48L704 48L696 53L694 53L689 56L685 57L683 59L681 59L670 65L668 65L658 70L656 72L647 76L645 78L636 82L634 84L629 86L624 90L619 92L614 96L606 100L586 115L579 119L575 123L559 135L554 140L553 140L537 155L536 155L502 190L502 193L509 191L512 189L529 184L532 182L538 181L549 176L555 175L558 173L566 171L569 169L586 164L589 162L597 160L606 168L606 169L620 185L632 201L655 228L663 239L677 255L680 260L686 266L694 277L704 288L749 288L750 287L755 287L756 288L760 288L761 287L914 287L916 286L916 284L896 264L895 264L827 199L826 199L797 171L796 171L776 151L775 151L766 142L765 142L757 133L749 127L736 113L736 109L742 104L747 103L757 98L762 97L767 94L777 91L782 88L784 88L787 86L789 86L792 84L794 84L797 82L802 81L807 78L809 78L812 76L814 76L817 74L824 72L829 69L831 69L844 63L849 62L854 59L856 59L861 56L863 56L866 54L873 52L878 49L880 49L883 47L885 47L898 41L903 40L910 36L912 36L920 32L925 31L937 25L939 25L942 23L944 23L947 21L949 21L952 19L954 19L957 17L959 17L962 15L969 13L974 10L976 10L979 8L981 8L984 6L993 3Z\"/></svg>";
 // ===== Výchozí knihovna cviků (informace jsou skryté pod „Info o cviku“) =====
 const R = (min, max, fail = true) => ({ min, max, fail });
@@ -4433,9 +4433,9 @@ function tDays() {
   return JD.meta.treninkove_dny_vychozi || ['Po', 'Út', 'Čt', 'So'];
 }
 // den podle cyklu, se svačinami prohozenými podle tvých tréninkových dnů
-function planDayF(w, di) {
+function planDayF(w, di, k) {
   const W = JD.cyklus[w]; if (!W) return null; const base = W.dny[di]; const td = tDays();
-  const dataT = W.dny.map(d => d.trenink), myT = DNY.map(d => td.includes(d));
+  const dataT = W.dny.map(d => d.trenink), myT = DNY.map((d, i) => { const t = k && !F().tdays && typeof trainOn === 'function' ? trainOn(dkey(addDays(pdate(k), i - di))) : null; return t == null ? td.includes(d) : t; });
   const day = JSON.parse(JSON.stringify(base)); day.trenink = myT[di];
   if (dataT.some((t, i) => t !== myT[i])) {
     // svacina_typ (v2+): pred_treninkem patří k tréninkovému dni, volny_den k volnému; jinak podle dnů v datech
@@ -4845,7 +4845,7 @@ const FX = () => { const f = F(); f.eaten = f.eaten || {}; f.swaps = f.swaps || 
 // ---------- záměny jídel ----------
 const _35planDayF = planDayF;
 planDayF = function (w, di, k) {
-  const d = _35planDayF(w, di); if (!d || !k) return d; const sw = (FX().swaps[k]) || {}; const R = RX();
+  const d = _35planDayF(w, di, k); if (!d || !k) return d; const sw = (FX().swaps[k]) || {}; const R = RX();
   Object.entries(sw).forEach(([s, kod]) => { const o = R[d.jidla[s]], n = R[kod]; if (!n || !o || o.kod === kod) return; addN(d.soucet_dne, o.hodnoty_porce, -1); addN(d.soucet_dne, n.hodnoty_porce); d.jidla[s] = kod; d.z_varky = (d.z_varky || []).filter(x => x !== s); (d.swapped2 = d.swapped2 || []).push(s); });
   return d;
 };
@@ -4861,7 +4861,7 @@ function swapWarn(k, s, cand) {
 }
 A['f-swap'] = b => {
   const k = b.dataset.k, s = b.dataset.s; const c = cyc(k); if (!c || c.before) return; const day = planDayF(c.w, c.di, k); const cur = day.jidla[s]; const R = RX();
-  const base = _35planDayF(c.w, c.di).jidla[s]; const wasBox = (_35planDayF(c.w, c.di).z_varky || []).includes(s);
+  const base = _35planDayF(c.w, c.di, k).jidla[s]; const wasBox = (_35planDayF(c.w, c.di, k).z_varky || []).includes(s);
   const cands = JD.recepty.filter(r => groupOf(r.kod) === groupOf(cur) && r.kod !== cur).map(r => ({ r, w: swapWarn(k, s, r) })).sort((a, b) => a.w.length - b.w.length);
   sheet(`<h2>Vyměnit ${({ snidane: 'snídani', obed: 'oběd', svacina: 'svačinu', vecere: 'večeři' })[s]}</h2><p class="mut" style="margin:4px 0 0">${flong(k)} · teď ${esc(R[cur].nazev)}</p>
     ${wasBox ? '<p class="whint" style="margin-top:10px">Tohle jídlo je z várky – várku uvaříš stejně, porce půjde do mrazáku.</p>' : ''}
@@ -4879,7 +4879,7 @@ const _35shopItems = shopItems;
 shopItems = function (wi, list) {
   const items = _35shopItems(wi, list); if (list === 'Z') return items; const f = FX(); const R = RX();
   const order = JD.meta.poradi_cyklu || ['A', 'B', 'C']; const w = order[wi % order.length]; const rng = list === 'N1' ? [0, 1, 2] : [3, 4, 5, 6]; const add = {};
-  rng.forEach(di => { const k = dkey(addDays(pdate(f.start), wi * 7 + di)); const sw = f.swaps[k]; if (!sw) return; const base = _35planDayF(w, di);
+  rng.forEach(di => { const k = dkey(addDays(pdate(f.start), wi * 7 + di)); const sw = f.swaps[k]; if (!sw) return; const base = _35planDayF(w, di, k);
     Object.entries(sw).forEach(([s, kod]) => { const o = R[base.jidla[s]], n = R[kod]; if (!o || !n) return; if (!(base.z_varky || []).includes(s)) o.suroviny.forEach(i => add[i.surovina] = (add[i.surovina] || 0) - i.g); n.suroviny.forEach(i => add[i.surovina] = (add[i.surovina] || 0) + i.g); }); });
   Object.entries(add).forEach(([s, g]) => { if (Math.abs(g) >= 1) items.push({ id: 'sw:' + s, nazev: SUR(s).nazev, mnozstvi: `${g > 0 ? '+' : ''}${g} g`, pozn: g > 0 ? 'kvůli výměně jídla' : 'kvůli výměně – kup o tolik méně', kat: 'Kvůli záměnám' }); });
   return items;
@@ -6196,7 +6196,7 @@ const stepOn = k => { let s = JD.meta.vychozi_krok || 0; (F().stepLog || []).for
 const nextK = k => dkey(addDays(pdate(k), 1));
 const stepsOf = k => BD().days[nextK(k)]?.steps ?? wDay(k)?.steps ?? null;
 const sleepOf = k => BD().days[k]?.sleep ?? wDay(k)?.sleepH ?? null;
-function planDay(k) { const e = (F().eaten || {})[k]; if (e && Object.keys(e).length >= 4) return Object.values(e).every(v => v === 'ok') ? 'ano' : 'ne'; const a = BD().days[nextK(k)]?.adherence; return a === 'Ano' ? 'ano' : a ? 'ne' : null; }
+function foodDay(k) { const e = (F().eaten || {})[k]; if (e && Object.keys(e).length >= 4) return Object.values(e).every(v => v === 'ok') ? 'ano' : 'ne'; const a = BD().days[nextK(k)]?.adherence; return a === 'Ano' ? 'ano' : a ? 'ne' : null; }
 function bestSetWeek(exId, mon) { const ex = exById(exId); let b = null; finished().filter(s => s.date >= mon && s.date <= dkey(addDays(pdate(mon), 6))).forEach(s => { const e = s.entries.find(x => x.exId === exId); if (!e) return;
   usedSets(e, ex).forEach(st => { if (!hasData(st, ex)) return; const w = num(st.w), r = repsOf(st, ex), v = e1(w, r); if (!b || v > b.v) b = { w, r, v }; }); }); return b; }
 function mainEx() { const sel = (S.settings.repEx || []).filter(id => exById(id)); if (sel.length) return sel.slice(0, 3);
@@ -6244,7 +6244,7 @@ XV['f-report'] = function () {
   const mRowsR = inW ? MF.filter(([k]) => inW[1][k] != null).slice(0, 6).map(([k, l]) => { const p = prevM(k); const dd = p ? inW[1][k] - p[1][k] : null; return `<div><span>${l}</span><b>${nf(inW[1][k], 1)} cm</b><small>${dd != null ? (dd > 0 ? '+' : dd < 0 ? '−' : '±') + nf(Math.abs(dd), 1) + ' cm od ' + fday(p[0]).replace(/^\S+ /, '') : 'první měření'}</small></div>`; }).join('') : '';
   const ib = inW && (inW[1].muscle != null || inW[1].bf != null) ? `<div><span>InBody</span><b>${inW[1].muscle != null ? nf(inW[1].muscle, 1) + ' kg svaly' : ''}</b><small>${inW[1].bf != null ? nf(inW[1].bf, 1) + ' % tuku' : ''}</small></div>` : '';
   // 5) kontext
-  const wd = wDays(mon); const pd = wd.map(planDay); const onPlan = pd.filter(x => x === 'ano').length, known = pd.filter(x => x).length;
+  const wd = wDays(mon); const pd = wd.map(foodDay); const onPlan = pd.filter(x => x === 'ano').length, known = pd.filter(x => x).length;
   const dev = wd.map(k => BD().days[nextK(k)]?.deviation).filter(Boolean); const jin = wd.reduce((a, k) => a + Object.values((f.eaten || {})[k] || {}).filter(v => v === 'jinak').length, 0);
   const ss = finished().filter(s => s.date >= mon && s.date <= sun); const up = ss.reduce((a, s) => a + stats(s).up, 0), dn = ss.reduce((a, s) => a + stats(s).down, 0);
   const perf = !ss.length ? '–' : up > dn ? 'lépe' : dn > up ? 'hůř' : 'stejně';
@@ -6531,6 +6531,139 @@ XV['f-nakup'] = function () {
   const h = _47nakup(); const l = view.list || 'N1'; if (l !== 'N1' && l !== 'N2') return h;
   return h.replace('<div class="lbl">Maso a ryby</div>', '<div class="lbl fonl"><span>Maso a ryby</span><button data-a="po-man">Jak naporcovat</button></div>');
 };
+
+
+// ===================== v2.28: plán DOKOLA (LOWER → UPPER → volno → …) =====================
+// Plán může jet buď podle dnů v týdnu (p.days), nebo jako cyklus od data začátku (p.cycle: [den | null = volno]).
+const isCyc = p => !!(p && Array.isArray(p.cycle) && p.cycle.length);
+const cycIdx = (p, k) => { const n = Math.round((toU(k) - toU(p.start)) / 864e5), L = p.cycle.length; return ((n % L) + L) % L; };
+const _48pd = planDay;
+planDay = function (k) {
+  const p = prog(); if (!isCyc(p)) return _48pd(k);
+  if (k < p.start || (p.weeks && k > planEnd(p))) return null;
+  const d = p.cycle[cycIdx(p, k)]; return d && d.tid && tplById(d.tid) ? d : null;
+};
+// pro jídelníček: je v daný den podle cyklu trénink? (null = plán dokola neběží)
+function trainOn(k) { const p = typeof prog === 'function' && prog(); if (!isCyc(p) || k < p.start) return null; return !!planDay(k); }
+const _48td = tDays;
+tDays = function () {
+  const f = F(); if (f.tdays) return f.tdays; const p = prog(); if (!isCyc(p)) return _48td();
+  const mon = monday(new Date()); return DNY.filter((_, i) => planDay(dkey(addDays(mon, i))));
+};
+const cycName = d => { const tp = d && d.tid && tplById(d.tid); return tp ? tp.name : 'volno'; };
+const cycLine = p => p.cycle.map(cycName).join(' → ');
+const fdm = k => { const d = pdate(k); return `${d.getDate()}. ${d.getMonth() + 1}.`; };
+
+// přehled plánu – při cyklu po datech (tento a příští týden)
+const _48vPlan = XV.plan;
+XV.plan = function () {
+  const p = S.program; if (!p || !p.on || !isCyc(p)) return _48vPlan();
+  const mon = dkey(monday(new Date())), wk = planWeek(mon), pw = planWeek(dkey(addDays(pdate(mon), -7)));
+  const weekN = Math.max(1, Math.floor((toU(mon) - toU(dkey(monday(pdate(p.start))))) / 7 / 864e5) + 1);
+  const row = k => {
+    const d = planDay(k), dw = pdate(k).getDay(), tp = d && tplById(d.tid);
+    if (!tp) return `<button class="li pday off ${k === today() ? 'today' : ''}" data-a="day" data-k="${k}"><span class="dw">${DOW[dw]}</span><div class="t"><b class="mut">Volno</b><small>${fdm(k)}</small></div>${k === today() ? '<span class="pst today">Dnes</span>' : ''}</button>`;
+    const st = planState(k) || 'plan';
+    const lab = { done: 'Hotovo', moved: 'Dohnáno', skip: 'Vynecháno', miss: 'Zmeškáno', today: 'Dnes', plan: '' }[st];
+    return `<button class="li pday ${st}" data-a="day" data-k="${k}"><span class="dw">${DOW[dw]}</span><div class="t"><b>${esc(tp.name)}</b><small>${[fdm(k), planDayDesc(d) || CVK(tp.ex.length)].filter(Boolean).map(esc).join(' · ')}</small></div>${lab ? `<span class="pst ${st}">${lab}</span>` : ''}</button>`;
+  };
+  const days = off => [...Array(7)].map((_, i) => dkey(addDays(pdate(mon), off + i)));
+  const nx = planWeek(dkey(addDays(pdate(mon), 7)));
+  return `<div class="wrap">
+    ${hdr(backBtn('gym'), '<h1>Plán</h1>', `<button class="round" data-a="plan-edit" aria-label="Upravit plán">${ico('more')}</button>`)}
+    <div class="plhero"><h2>${esc(p.name)}</h2>
+      <div class="chips"><span class="chip">${esc(cycLine(p))}</span><span class="chip">dokola od ${fdm(p.start)}</span>${p.focus ? `<span class="chip">${esc(p.focus)}</span>` : ''}${p.weeks ? `<span class="chip">${p.weeks} týdnů</span>` : ''}</div>
+      <div class="plprog"><span class="plring big">${ringSVG(wk.done, wk.n, 96, 8, 'var(--hot)')}<i>${wk.done}/${wk.n}</i></span>
+        <div><div class="lbl">${p.weeks ? `Týden ${Math.min(weekN, p.weeks)} z ${p.weeks}` : `Týden ${weekN}`}</div><p>Tento týden máš hotovo ${wk.done} z ${wk.n}.</p>${weekN > 1 ? `<p class="mut">Minulý týden ${pw.done}/${pw.n}</p>` : ''}</div></div></div>
+    <div class="lbl" style="margin:22px 6px 10px">Tento týden</div>
+    <div class="list">${days(0).map(row).join('')}</div>
+    <div class="lbl" style="margin:22px 6px 10px">Příští týden · ${nx.n} ${nx.n >= 5 ? 'tréninků' : 'tréninky'}</div>
+    <div class="list">${days(7).map(row).join('')}</div>
+  </div>${tabs()}`;
+};
+
+// editor: přepínač Dny v týdnu / Dokola
+const _48vPlanEdit = XV.planEdit;
+XV.planEdit = function () {
+  const d = planDraft; if (!d) return XV.plan();
+  const modeSeg = `<div class="seg" style="margin:0 0 14px"><button data-a="pl-mode" data-v="week" class="${isCyc(d) ? '' : 'on'}">Dny v týdnu</button><button data-a="pl-mode" data-v="cyc" class="${isCyc(d) ? 'on' : ''}">Dokola</button></div>`;
+  let h = _48vPlanEdit();
+  if (!isCyc(d)) return h.replace('<div class="lbl" style="margin:22px 6px 10px">Dny v týdnu</div>', `<div class="lbl" style="margin:22px 6px 10px">Jak plán jede</div>${modeSeg}`);
+  const slots = d.cycle.map((x, i) => {
+    const tp = x && x.tid && tplById(x.tid); x = x || {};
+    return `<div class="pde pce ${tp ? 'on' : ''}" data-ci="${i}"><div class="pdh"><b>Den ${i + 1}</b>
+      <div style="display:flex;gap:8px;align-items:center;max-width:70%"><select data-pf="tid" style="max-width:none"><option value="">Volno</option>${S.templates.map(t => `<option value="${t.id}" ${x.tid === t.id ? 'selected' : ''}>${esc(t.name)}</option>`).join('')}</select>
+      ${d.cycle.length > 1 ? `<button class="round" style="width:40px;height:40px;flex:none" data-a="pc-del" aria-label="Odebrat den">${ico('x')}</button>` : ''}</div></div>
+      ${tp ? `<div class="form" style="margin-top:12px;gap:10px">
+        <label class="f">Zaměření dne<input data-pf="focus" value="${esc(x.focus || '')}" placeholder="např. Spodek, Vršek"></label>
+        <div class="two"><label class="f">Kardio po tréninku<select data-pf="ck"><option value="">Žádné</option>${CARDIO_KINDS.map(o => `<option ${x.cardio?.kind === o ? 'selected' : ''}>${o}</option>`).join('')}</select></label>
+          <div class="two" ${x.cardio ? '' : 'hidden'}><label class="f">Min<input data-pf="cmin" inputmode="numeric" value="${x.cardio?.min ?? ''}" placeholder="15"></label><label class="f">Tep<input data-pf="cbpm" inputmode="numeric" value="${x.cardio?.bpm ?? ''}" placeholder="120"></label></div></div>
+        <button class="sw ${x.stretch ? 'on' : ''}" data-a="pf-stretch"><span>Doporučit strečink<small>Připomene se při dokončení</small></span><span class="k"></span></button>
+        <label class="f">Poznámka k dni<input data-pf="note" value="${esc(x.note || '')}" placeholder="např. bez kardia, když je box"></label></div>` : ''}</div>`;
+  }).join('');
+  const prev = [...Array(9)].map((_, i) => { const k = dkey(addDays(pdate(d.start), i)); const x = d.cycle[i % d.cycle.length]; return `${DOW[pdate(k).getDay()]} ${fdm(k)} ${cycName(x)}`; }).join(' · ');
+  const block = `<div class="lbl" style="margin:22px 6px 10px">Jak plán jede</div>${modeSeg}
+    <p class="mut" style="font-size:14px;margin:0 4px 12px">Dny jdou za sebou pořád dokola od data začátku, bez ohledu na den v týdnu. Když trénink nestihneš, aplikace se zeptá – nic se neposouvá.</p>
+    <p style="font-size:14px;margin:0 4px 12px">${esc(prev)} …</p>
+    <div class="pdl">${slots}</div>
+    <button class="btn block" style="margin-top:10px" data-a="pc-add">${ico('plus')} Přidat den</button>`;
+  return h.replace(/<div class="lbl" style="margin:22px 6px 10px">Dny v týdnu<\/div>[\s\S]*?<div class="pdl">[\s\S]*?<\/div>\s*<div class="bottom-acts"/, block + '\n    <div class="bottom-acts"');
+};
+const _48read = readPlanDraft;
+readPlanDraft = function () {
+  const d = planDraft; if (!d || !isCyc(d)) return _48read();
+  if (!$('#pl-name')) return;
+  d.name = $('#pl-name').value.trim() || 'Můj plán'; d.focus = $('#pl-focus').value.trim(); d.weeks = num($('#pl-weeks').value) || null; d.start = $('#pl-start').value || d.start;
+  $$('.pce').forEach(el => {
+    const i = +el.dataset.ci, v = f => $(`[data-pf="${f}"]`, el);
+    const tid = v('tid').value; if (!tid) { d.cycle[i] = null; return; }
+    const x = d.cycle[i] = d.cycle[i] && d.cycle[i].tid === tid ? d.cycle[i] : { tid, focus: '', cardio: null, stretch: false, note: '' };
+    if (v('focus')) { x.focus = v('focus').value.trim(); x.note = v('note').value.trim(); const ck = v('ck').value; x.cardio = ck ? { kind: ck, min: num(v('cmin').value), bpm: num(v('cbpm').value) } : null; }
+  });
+};
+const reEdit = () => { const a = $('#app'), y = a ? a.scrollTop : 0; render(); if (a) a.scrollTop = y; };
+A['pl-mode'] = b => {
+  readPlanDraft(); const d = planDraft, want = b.dataset.v === 'cyc'; if (want === isCyc(d)) return;
+  if (want) {
+    d.cycle = d.cycleOff || (() => { const ws = WEEK_ORDER.map(dw => d.days[dw]).filter(Boolean); return ws.length ? ws.map(x => JSON.parse(JSON.stringify(x))).concat([null]) : [null]; })();
+    if (d.start < today() && !d.cycleOff) d.start = today();
+  } else { d.cycleOff = d.cycle; d.cycle = null; }
+  reEdit();
+};
+A['pc-add'] = () => { readPlanDraft(); planDraft.cycle.push(null); reEdit(); };
+A['pc-del'] = b => { readPlanDraft(); const i = +b.closest('.pce').dataset.ci; planDraft.cycle.splice(i, 1); reEdit(); };
+const _48stretch = A['pf-stretch'];
+A['pf-stretch'] = b => {
+  const el = b.closest('.pce'); if (!el) return _48stretch(b);
+  readPlanDraft(); const x = planDraft.cycle[+el.dataset.ci]; if (x) { x.stretch = !x.stretch; b.classList.toggle('on', x.stretch); }
+};
+const _48save = A['plan-save'];
+A['plan-save'] = () => {
+  const d = planDraft; if (!d || !isCyc(d)) { if (d) { d.cycle = null; } return _48save(); }
+  readPlanDraft(); const nT = d.cycle.filter(x => x && x.tid).length; if (!nT) return toast('Vyber aspoň jeden trénink');
+  S.program = { ...d, on: true }; delete S.program.cycleOff;
+  S.settings.weekGoal = Math.max(1, Math.floor(nT * 7 / d.cycle.length));
+  planDraft = null; save(true); go('plan'); toast('Plán uložen');
+};
+// v týdenním režimu: když se ve formuláři mění select, readPlanDraft volá správnou verzi (viz výše); u cyklu přerenderovat
+document.addEventListener('change', ev => { if (view.n === 'planEdit' && planDraft && isCyc(planDraft) && ev.target.matches('#pl-start')) { readPlanDraft(); reEdit(); } });
+
+// jednorázově: Janův plán LOWER → UPPER → volno, dokola od 24. 11. 2026
+(function () {
+  if (S.settings.migCyc1) return;
+  const find = re => S.templates.find(t => re.test(t.name));
+  const byName = n => S.exercises.find(e => e.name.toLowerCase() === n.toLowerCase());
+  const mk = (name, list) => { const ex = [], n = {}; list.forEach(([nm, c]) => { const e = byName(nm); if (e) { ex.push(e.id); n[e.id] = c; } }); const t = { id: uid(), name, ex, n, finisher: '' }; S.templates.unshift(t); return t; };
+  const lo = find(/^\s*lower\s*$/i) || find(/lower/i) || mk('LOWER', [['One leg leg press', 2], ['Zákopy v sedě', 2], ['Předkopy', 1], ['Lýtka ve stoji', 2], ['Seated hip adductions', 2], ['Decline bench crunches', 2], ['DB wrist curls', 2]]);
+  const up = find(/^\s*upper\s*$/i) || find(/upper/i) || mk('UPPER', [['Triceps na kladce', 2], ['Incline preacher curls', 2], ['Banded Smith shoulder press', 2], ['Pronated lat pulldowns', 2], ['Pec deck flys', 2], ['T bar rows', 2], ['Rameno na kladce', 1]]);
+  const old = (S.program && S.program.days) || {};
+  const cfg = (tp, focus) => { const o = Object.values(old).find(x => x && x.tid === tp.id); return { tid: tp.id, focus: o?.focus || focus, cardio: o?.cardio || null, stretch: !!o?.stretch, note: o?.note || '' }; };
+  const nm = S.program && S.program.on && S.program.name && S.program.name !== 'Můj plán' ? S.program.name : 'Upper / Lower';
+  S.program = { name: nm, focus: (S.program && S.program.focus) || '', weeks: null, start: '2026-11-24', days: old, cycle: [cfg(lo, 'Spodek'), cfg(up, 'Vršek'), null], on: true };
+  S.templates.forEach(t => { delete t.dow; });
+  if (S.food) S.food.tdays = null; // jídelníček ať bere tréninkové dny z cyklu
+  S.settings.weekGoal = 4; S.settings.migCyc1 = 1; save(true);
+})();
 
 render();
 </script>

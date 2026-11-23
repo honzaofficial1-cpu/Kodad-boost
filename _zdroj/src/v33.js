@@ -42,9 +42,9 @@ function tDays() {
   return JD.meta.treninkove_dny_vychozi || ['Po', 'Út', 'Čt', 'So'];
 }
 // den podle cyklu, se svačinami prohozenými podle tvých tréninkových dnů
-function planDayF(w, di) {
+function planDayF(w, di, k) {
   const W = JD.cyklus[w]; if (!W) return null; const base = W.dny[di]; const td = tDays();
-  const dataT = W.dny.map(d => d.trenink), myT = DNY.map(d => td.includes(d));
+  const dataT = W.dny.map(d => d.trenink), myT = DNY.map((d, i) => { const t = k && !F().tdays && typeof trainOn === 'function' ? trainOn(dkey(addDays(pdate(k), i - di))) : null; return t == null ? td.includes(d) : t; });
   const day = JSON.parse(JSON.stringify(base)); day.trenink = myT[di];
   if (dataT.some((t, i) => t !== myT[i])) {
     // svacina_typ (v2+): pred_treninkem patří k tréninkovému dni, volny_den k volnému; jinak podle dnů v datech

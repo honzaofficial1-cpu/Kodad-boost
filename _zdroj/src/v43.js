@@ -14,7 +14,7 @@ const stepOn = k => { let s = JD.meta.vychozi_krok || 0; (F().stepLog || []).for
 const nextK = k => dkey(addDays(pdate(k), 1));
 const stepsOf = k => BD().days[nextK(k)]?.steps ?? wDay(k)?.steps ?? null;
 const sleepOf = k => BD().days[k]?.sleep ?? wDay(k)?.sleepH ?? null;
-function planDay(k) { const e = (F().eaten || {})[k]; if (e && Object.keys(e).length >= 4) return Object.values(e).every(v => v === 'ok') ? 'ano' : 'ne'; const a = BD().days[nextK(k)]?.adherence; return a === 'Ano' ? 'ano' : a ? 'ne' : null; }
+function foodDay(k) { const e = (F().eaten || {})[k]; if (e && Object.keys(e).length >= 4) return Object.values(e).every(v => v === 'ok') ? 'ano' : 'ne'; const a = BD().days[nextK(k)]?.adherence; return a === 'Ano' ? 'ano' : a ? 'ne' : null; }
 function bestSetWeek(exId, mon) { const ex = exById(exId); let b = null; finished().filter(s => s.date >= mon && s.date <= dkey(addDays(pdate(mon), 6))).forEach(s => { const e = s.entries.find(x => x.exId === exId); if (!e) return;
   usedSets(e, ex).forEach(st => { if (!hasData(st, ex)) return; const w = num(st.w), r = repsOf(st, ex), v = e1(w, r); if (!b || v > b.v) b = { w, r, v }; }); }); return b; }
 function mainEx() { const sel = (S.settings.repEx || []).filter(id => exById(id)); if (sel.length) return sel.slice(0, 3);
@@ -62,7 +62,7 @@ XV['f-report'] = function () {
   const mRowsR = inW ? MF.filter(([k]) => inW[1][k] != null).slice(0, 6).map(([k, l]) => { const p = prevM(k); const dd = p ? inW[1][k] - p[1][k] : null; return `<div><span>${l}</span><b>${nf(inW[1][k], 1)} cm</b><small>${dd != null ? (dd > 0 ? '+' : dd < 0 ? '−' : '±') + nf(Math.abs(dd), 1) + ' cm od ' + fday(p[0]).replace(/^\S+ /, '') : 'první měření'}</small></div>`; }).join('') : '';
   const ib = inW && (inW[1].muscle != null || inW[1].bf != null) ? `<div><span>InBody</span><b>${inW[1].muscle != null ? nf(inW[1].muscle, 1) + ' kg svaly' : ''}</b><small>${inW[1].bf != null ? nf(inW[1].bf, 1) + ' % tuku' : ''}</small></div>` : '';
   // 5) kontext
-  const wd = wDays(mon); const pd = wd.map(planDay); const onPlan = pd.filter(x => x === 'ano').length, known = pd.filter(x => x).length;
+  const wd = wDays(mon); const pd = wd.map(foodDay); const onPlan = pd.filter(x => x === 'ano').length, known = pd.filter(x => x).length;
   const dev = wd.map(k => BD().days[nextK(k)]?.deviation).filter(Boolean); const jin = wd.reduce((a, k) => a + Object.values((f.eaten || {})[k] || {}).filter(v => v === 'jinak').length, 0);
   const ss = finished().filter(s => s.date >= mon && s.date <= sun); const up = ss.reduce((a, s) => a + stats(s).up, 0), dn = ss.reduce((a, s) => a + stats(s).down, 0);
   const perf = !ss.length ? '–' : up > dn ? 'lépe' : dn > up ? 'hůř' : 'stejně';
