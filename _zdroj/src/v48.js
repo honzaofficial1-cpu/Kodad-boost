@@ -173,3 +173,34 @@ document.addEventListener('change', ev => { if (view.n === 'planEdit' && planDra
   up.ex = ex; up.n = n;
   S.settings.migUp1 = 1; save(true);
 })();
+
+// ===================== LOWER podle nové předlohy (24. 11. 2026) =====================
+(function () {
+  if (S.settings.migLo1) return;
+  const p = S.program; const lo = (isCyc(p) && p.cycle.map(x => x && tplById(x.tid)).find(t => t && /lower/i.test(t.name))) || S.templates.find(t => /lower/i.test(t.name));
+  if (!lo) { S.settings.migLo1 = 1; save(true); return; }
+  const byName = n => S.exercises.find(e => e.name.toLowerCase() === n.toLowerCase());
+  const R = (min, max, rir) => rir.map(r => ({ min, max, fail: r === 0 }));
+  // [název, partie, vedlejší, jednostranně, krok kg, série, RIR (null = neuvedeno), tempo, tipy]
+  const L = [
+    ['Předkopy jednonož', 'Kvadricepsy', '–', 1, 1.25, R(5, 8, [1, 1]), null, '2-0-X-0', ['Nahoře krátký stisk', 'Další rotace: 6–10 opakování']],
+    ['Mrtvý tah s propnutými koleny', 'Hamstringy', 'Hýždě, vzpřimovače', 0, 2.5, R(5, 8, [1]), [1], '2-0-X-0', ['Kolena propnutá, pohyb z kyčlí', 'Neutrální záda']],
+    ['Rumunský mrtvý tah', 'Hamstringy', 'Hýždě, vzpřimovače', 0, 2.5, R(5, 8, [1]), [1], '2-0-X-0', ['Boky dozadu, kolena lehce pokrčená', 'Osa u nohou']],
+    ['Seated hip adductions', 'Adduktory', '–', 0, 2.5, R(6, 9, [1]), [1], '2-0-X-0', ['Začni z maximálního protažení', 'Kontrola v obou fázích']],
+    ['Zákopy v sedě', 'Hamstringy', 'Lýtka', 0, 2.5, R(5, 8, [0]), [0], '2-0-X-0', ['Lehký předklon trupu = víc protažení', 'Kontrolovaný návrat']],
+    ['Pendulum squats', 'Kvadricepsy', 'Hýždě', 0, 2.5, R(5, 8, [0]), [0], '2-0-X-0', ['Jdi hluboko', 'Záda celou dobu u opěry']],
+    ['Lýtka ve stoji', 'Lýtka', '–', 0, 2.5, R(5, 8, [1, 1]), null, '3-2-X-0', ['Ve stoje, nebo vsedě s propnutými koleny', 'Dole 2 s pauza v protažení']],
+    ['Stroj na zkracovačky', 'Břicho', '–', 0, 2.5, R(5, 8, [1, 1]), null, '2-0-X-0', ['Stáčej páteř, ne kyčle', 'Výdech při kontrakci']],
+    ['Barbell wrist curls', 'Předloktí (flexory)', '–', 0, 1.25, R(5, 8, [1, 1]), null, '2-0-X-0', ['Plný rozsah v zápěstí', 'Předloktí opřené']],
+  ];
+  const ex = [], n = {};
+  L.forEach(([name, muscle, secondary, uni, inc, sets, rir, tempo, cues]) => {
+    let e = byName(name);
+    if (!e) { e = { id: uid(), name, muscle, secondary, uni: !!uni, inc, sets, cues, tempo, partials: false, note: '' }; S.exercises.push(e); }
+    else { e.sets = sets; e.tempo = tempo; e.cues = cues; }
+    e.note = rir ? `RIR ${rir.join(' / ')}` : '';
+    ex.push(e.id); n[e.id] = sets.length;
+  });
+  lo.ex = ex; lo.n = n;
+  S.settings.migLo1 = 1; save(true);
+})();
