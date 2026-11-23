@@ -248,7 +248,9 @@ function addEntry(s, exId, n) {
   const base = exById(exId); if (!base) return;
   const e = { exId, n: n && n !== base.sets.length ? n : undefined, sets: [], note: '' }; const ex = exE(e);
   const last = lastBefore(exId, s);
-  e.sets = ex.sets.map((c, i) => ({ w: target(ex, i, last).w, reps: null, l: null, r: null })); s.entries.push(e);
+  e.sets = ex.sets.map((c, i) => { if (!ex.uni) return { w: target(ex, i, last).w, reps: null, l: null, r: null };
+    const wl = targetSide(ex, i, last, 'l').w, wr = targetSide(ex, i, last, 'r').w; const ws = [wl, wr].filter(x => x != null);
+    return { w: ws.length ? Math.min(...ws) : null, wl, wr, reps: null, l: null, r: null }; }); s.entries.push(e);
 }
 
 // ===================== WORKOUT =====================
@@ -304,6 +306,7 @@ function exBody(s, e, ex) {
   });
   return `<div class="exb">
     <div class="tools"><div class="chips">${chips}</div><button class="tb cdb" data-a="cd-start" aria-label="Odpočet před pracovní sérií">${ico('timer')}<span>${fcd(cdOf(ex))}</span></button>${ex.plates ? `<button class="tb" data-a="plates" aria-label="Kalkulačka kotoučů">${ico('plate')}</button>` : ''}<button class="tb" data-a="prog-ex" data-id="${ex.id}" aria-label="Statistiky cviku">${ico('bars')}</button><button class="tb" data-a="story-ex" aria-label="Uložit na story">${ico('share')}</button><button class="tb" data-a="ex-menu" aria-label="Možnosti">${ico('more')}</button></div>
+    <div class="last">${warmTxt(ex, last)}</div>
     <div class="last">${last ? `Minule · ${fday(last.s.date)} — <b class="num">${usedSets(last.e, ex).map(x => setTxt(x, ex)).join(' · ')}</b>` : 'První záznam tohoto cviku'}</div>
     <div class="tbl"><div class="th"><span>#</span><span>Kg</span><span>Opak.</span><span>Rozsah</span><span>${ico('check')}</span></div>${rows}</div>
     <textarea class="notep" data-in="exnote" rows="1" placeholder="Napiš poznámku…">${esc(ex.note)}</textarea>
@@ -314,6 +317,12 @@ function targetSide(ex, i, last, f) {
   if (!cfg || w == null || r == null) return { kind: 'new', w: null, ph: null };
   if (topHit(r, cfg)) return { kind: 'up', w: r2(w + (ex.inc || 0)), lastW: w, lastR: r, ph: String(cfg.min) };
   return { kind: 'same', w, lastW: w, lastR: r, ph: String(Math.max(r + 1, cfg.min)) };
+}
+// zahřívací série podle návodu: 50 % × 8–12, 70–75 % × 5–7, případně 90 % × 2–3 (min. 1 série, ne do selhání, pauza cca 1 min)
+function warmTxt(ex, last) {
+  const tw = ex.uni ? targetSide(ex, 0, last, 'l').w : target(ex, 0, last).w; const st = ex.inc || 1;
+  const w = p => { const v = Math.round(tw * p / st) * st; return kg(r2(v)) + ' kg'; };
+  return tw ? `Zahřátí: <b class="num">${w(.5)} × 8–12</b> · <b class="num">${w(.72)} × 5–7</b> · <span class="mut">těžké cviky ${w(.9)} × 2–3</span>` : 'Zahřátí: 50 % × 8–12 · 70–75 % × 5–7 · těžké cviky 90 % × 2–3';
 }
 function nextLines(s, e, ex, last) {
   if (ex.uni) return ex.sets.map((c, i) => ['l', 'r'].map(f => {

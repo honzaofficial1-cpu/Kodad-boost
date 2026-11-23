@@ -204,3 +204,6 @@ document.addEventListener('change', ev => { if (view.n === 'planEdit' && planDra
   lo.ex = ex; lo.n = n;
   S.settings.migLo1 = 1; save(true);
 })();
+
+// návod Tier 1: váha nahoru už při dosažení horní hranice rozsahu
+(function () { if (S.settings.migRule1) return; S.settings.rule = 'reach'; S.settings.migRule1 = 1; save(true); })();
