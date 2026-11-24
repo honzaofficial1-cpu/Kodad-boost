@@ -13,6 +13,7 @@ const JD_KEY = 'kodadboost.jd';
 let JD = (() => { try { const s = localStorage.getItem(JD_KEY); if (s) { const j = JSON.parse(s); if (j && j.cyklus && j.recepty) return j; } } catch (e) { } return JD_DEFAULT; })();
 const RX = () => Object.fromEntries(JD.recepty.map(r => [r.kod, r]));
 const SUR = k => JD.suroviny[k] || { nazev: k, na_100g: {} };
+const stepBase = () => { const L = (S.food && S.food.stepLog) || []; return L.length ? L[0].from : (S.food ? S.food.step : (JD.meta.vychozi_krok || 0)); };
 const F = () => (S.food = S.food || { start: null, step: JD.meta.vychozi_krok || 0, stepLog: [], tdays: null, shop: {}, custom: {}, sup: [], supWarn: 7, weeks: {}, checks: {}, reviewAt: null, dismiss: {} });
 const SLOTS = [['snidane', 'Snídaně', '7:30'], ['obed', 'Oběd', '11:30'], ['svacina', 'Svačina', '15:00'], ['vecere', 'Večeře', '19:00']];
 const DNY = ['Po', 'Út', 'St', 'Čt', 'Pá', 'So', 'Ne'];
@@ -134,14 +135,17 @@ A['f-week'] = b => { view.w = b.dataset.v; render(); };
 // ---------- NÁKUP ----------
 const CATS = ['Maso a ryby', 'Lednice', 'Ovoce a zelenina', 'Mražené', 'Zásoba', 'Navíc kvůli kroku', 'Vlastní'];
 function shopWeek() { const f = F(); const c = cyc(today()); if (!c || c.before) return 0; const dow = dIdx(today()); return c.wi + (dow >= 5 && (view.list || 'N1') === 'N1' ? 1 : 0); }
+// nákupní seznam pro krok: cyklus[w].nakup_podle_kroku[krok]; když krok v seznamu není, nejbližší nižší (nad 0 → krok 0) a zbytek dopočítají moduly; bez nakup_podle_kroku cyklus[w].nakup (krok 0)
+function shopBase(w, step) { const W = JD.cyklus[w]; const P = W.nakup_podle_kroku; if (P && P[String(step)]) return { step, lists: P[String(step)] };
+  const ks = P ? Object.keys(P).map(Number).filter(k => k <= step).sort((a, b) => b - a) : []; return ks.length ? { step: ks[0], lists: P[String(ks[0])] } : { step: 0, lists: W.nakup }; }
 function shopItems(wi, list) {
   const order = JD.meta.poradi_cyklu || ['A', 'B', 'C']; const w = order[wi % order.length]; const f = F();
   if (list === 'Z') return JD.zasoba_na_cyklus.map(z => ({ id: 'z:' + z.surovina, nazev: z.nazev, mnozstvi: `${z.spotreba_3_tydny_g} g za 3 týdny`, pozn: `balení ${z.baleni}`, kat: 'Zásoba' }));
-  const src = JD.cyklus[w].nakup[list === 'N1' ? 'N1_vikend' : 'N2_streda'] || [];
+  const NB = shopBase(w, f.step); const src = NB.lists[list === 'N1' ? 'N1_vikend' : 'N2_streda'] || [];
   const items = src.filter(i => i.kategorie !== 'Zásoba').map(i => ({ id: i.surovina, nazev: i.nazev, mnozstvi: i.mnozstvi, pozn: i.poznamka || '', kat: i.kategorie }));
   // navíc kvůli kroku: N1 = Po–St, N2 = Čt–Ne
-  if (f.step) { const add = {}; const rng = list === 'N1' ? [0, 1, 2] : [3, 4, 5, 6];
-    rng.forEach(di => { const day = planDayF(w, di, dkey(addDays(pdate(f.start), wi * 7 + di))); Object.values(stepMods(f.step, day)).flat().forEach(m => add[m.surovina] = (add[m.surovina] || 0) + m.g); });
+  if (f.step !== NB.step) { const add = {}; const rng = list === 'N1' ? [0, 1, 2] : [3, 4, 5, 6];
+    rng.forEach(di => { const day = planDayF(w, di, dkey(addDays(pdate(f.start), wi * 7 + di))); Object.values(stepMods(f.step, day)).flat().forEach(m => add[m.surovina] = (add[m.surovina] || 0) + m.g); if (NB.step) Object.values(stepMods(NB.step, day)).flat().forEach(m => add[m.surovina] = (add[m.surovina] || 0) - m.g); });
     Object.entries(add).forEach(([s, g]) => { if (g) items.push({ id: 'step:' + s, nazev: SUR(s).nazev, mnozstvi: `${g > 0 ? '+' : ''}${g} g`, pozn: g > 0 ? `krok ${sg(f.step, 0)}` : `krok ${sg(f.step, 0)} – kup o tolik méně`, kat: 'Navíc kvůli kroku' }); }); }
   (f.custom[`${wi}:${list}`] || []).forEach((n, i) => items.push({ id: 'c:' + i, nazev: n, mnozstvi: '', pozn: '', kat: 'Vlastní', own: i }));
   return items;
@@ -163,7 +167,7 @@ XV['f-nakup'] = function () {
     <div class="fsbar"><span>${done} / ${items.length} v košíku</span><button class="btn" data-a="f-reset" data-key="${key}">Nový nákup</button></div>
     ${groups}
     <div class="fadd"><input id="f-own" placeholder="Přidat vlastní položku"><button class="btn white" data-a="f-cadd" data-key="${key}">Přidat</button></div>
-    <p class="mut" style="font-size:12px;margin:14px 2px 0">Množství jsou podle cyklu v kroku 0, ve stavu jako v receptech (syrové maso, suché přílohy). Balení v obchodě ověř.</p>
+    <p class="mut" style="font-size:12px;margin:14px 2px 0">Množství jsou pro krok ${sg(f.step, 0).replace('–', '0')}, ve stavu jako v receptech (syrové maso, suché přílohy). Balení v obchodě ověř.</p>
   </div>${tabs()}`;
 };
 A['f-list'] = b => { view.list = b.dataset.v; view.wi = undefined; render(); };
@@ -274,7 +278,7 @@ XV['f-vyvoj'] = function () {
       ${[['hunger', 'Hlad'], ['digest', 'Trávení'], ['sleep', 'Spánek'], ['energy', 'Energie']].map(([k, l]) => `<div class="fsc"><span>${l}</span><div class="seg">${[1, 2, 3, 4, 5].map(v => `<button data-a="f-wk" data-m="${lastMon}" data-k="${k}" data-v="${v}" class="${wk[k] === v ? 'on' : ''}">${v}</button>`).join('')}</div></div>`).join('')}
       <button class="sw ${wk.exc ? 'on' : ''}" data-a="f-exc" data-m="${lastMon}"><span>Výjimka<small>Nemoc, cesta, hodně slané jídlo, změna tréninku – týden se nehodnotí</small></span><span class="k"></span></button>
       ${wk.exc ? `<input class="inp" id="f-excwhy" data-m="${lastMon}" placeholder="Co se dělo" value="${esc(wk.excWhy || '')}">` : ''}</div>
-    <div class="fsec"><div class="lbl">Krok příjmu</div><div class="fstep"><button class="round" data-a="f-setstep" data-v="${f.step - 1}" ${f.step <= -4 ? 'disabled' : ''}>−</button><div><b>${sg(f.step, 0).replace('–', '0')}</b><small>${thou(stepAvg(f.step))} kcal/den průměr</small></div><button class="round" data-a="f-setstep" data-v="${f.step + 1}" ${f.step >= 10 ? 'disabled' : ''}>+</button></div>${stepWhat(f.step)}</div>
+    <div class="fsec"><div class="lbl">Krok příjmu</div><div class="fstep"><button class="round" data-a="f-setstep" data-v="${f.step - 1}" ${f.step <= stepMin() ? 'disabled' : ''}>−</button><div><b>${sg(f.step, 0).replace('–', '0')}</b><small>${thou(stepAvg(f.step))} kcal/den průměr</small></div><button class="round" data-a="f-setstep" data-v="${f.step + 1}" ${f.step >= stepMax() ? 'disabled' : ''}>+</button></div>${stepWhat(f.step)}</div>
     <div class="two" style="margin-top:18px"><button class="btn" data-a="tab" data-v="mery">${ico('ruler')} Zapsat váhu / míry</button><button class="btn" data-a="f-export">${ico('share')} Export pro výživu</button></div>
   </div>${tabs()}`;
 };
@@ -315,7 +319,7 @@ A['f-export'] = async () => {
   const f = F(); const E = evalData(); const b = BD();
   const rows = [['datum', 'vaha_kg', 'kroky', 'spanek_h', 'pas_cm', 'ostatni_obvody', 'fotky', 'vyjimka_tydne', 'krok_prijmu']];
   const keys = [...new Set([...Object.keys(b.days), ...Object.keys(b.meas)])].sort();
-  const stepAt = k => { let s = JD.meta.vychozi_krok || 0; f.stepLog.forEach(l => { if (l.d <= k) s = l.to; }); return s; };
+  const stepAt = k => { let s = stepBase(); f.stepLog.forEach(l => { if (l.d <= k) s = l.to; }); return s; };
   keys.forEach(k => { const d = b.days[k] || {}, m = b.meas[k] || {}; const wk = f.weeks[dkey(monday(pdate(k)))] || {}; const other = Object.entries(m).filter(([x, v]) => typeof v === 'number' && x !== 'waist' && x !== 'savedAt').map(([x, v]) => `${x}=${v}`).join(' ');
     rows.push([k, d.weight ?? '', d.steps ?? '', d.sleep ?? '', m.waist ?? '', other, m.photos || '', wk.exc ? (wk.excWhy || 'ano') : '', stepAt(k)]); });
   const csv = rows.map(r => r.map(v => /[;"\n]/.test(String(v)) ? `"${String(v).replace(/"/g, '""')}"` : v).join(';')).join('\n');

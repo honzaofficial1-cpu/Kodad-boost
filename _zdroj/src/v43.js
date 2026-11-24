@@ -9,7 +9,7 @@ const kgS = v => (v > 0 ? '+' : v < 0 ? '−' : '±') + nf(Math.abs(v), 2) + ' k
 const repMon = () => view.rw || dkey(addDays(monday(new Date()), new Date().getDay() === 0 ? 0 : -7));
 const wDays = mon => [...Array(7)].map((_, i) => dkey(addDays(pdate(mon), i)));
 function wAvg(mon) { const v = wDays(mon).map(k => BD().days[k]?.weight).filter(x => x != null); return { n: v.length, avg: v.length ? v.reduce((a, b) => a + b, 0) / v.length : null }; }
-const stepOn = k => { let s = JD.meta.vychozi_krok || 0; (F().stepLog || []).forEach(l => { if (l.d <= k) s = l.to; }); return s; };
+const stepOn = k => { let s = stepBase(); (F().stepLog || []).forEach(l => { if (l.d <= k) s = l.to; }); return s; };
 // kroky a dodržení zapsané ráno patří ke dni předtím; spánek k ránu
 const nextK = k => dkey(addDays(pdate(k), 1));
 const stepsOf = k => BD().days[nextK(k)]?.steps ?? wDay(k)?.steps ?? null;

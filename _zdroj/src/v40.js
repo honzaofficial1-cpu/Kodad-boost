@@ -73,12 +73,14 @@ function calibState() {
     if (A.valid && B.valid) { pair = [i, A, i + gap, B]; } break; }
   const out = { week, len: need, end: dkey(addDays(pdate(mon(need)), 6)), skipped: [...new Set(skipped)] };
   if (!pair) return out;
-  const intake = stepRow(calibStep())?.prumer_den?.kcal || 0; const kk = K.kcal_na_kg || 7700, dni = K.dni_mezi_porovnanymi_tydny || 14, zao = K.zaokrouhlit_na_kcal || 50;
+  const intake = calibIntake(mon(pair[0]), K.dni_mezi_porovnanymi_tydny || 14); const kk = K.kcal_na_kg || 7700, dni = K.dni_mezi_porovnanymi_tydny || 14, zao = K.zaokrouhlit_na_kcal || 50;
   const ch = pair[3].avg - pair[1].avg; const corr = ch * kk / dni; const maint = Math.round((intake - corr) / zao) * zao;
   const target = maint + (PN().start_nabirani?.nadbytek_kcal ?? 250);
   const best = KROKY().reduce((a, b) => Math.abs(b.prumer_den.kcal - target) < Math.abs(a.prumer_den.kcal - target) ? b : a);
   return Object.assign(out, { pair, intake, ch, corr, maint, target, step: best.krok, stepKcal: best.prumer_den.kcal, kk, dni });
 }
+// průměrná energie kroků, podle kterých se v porovnávaném období jedlo (od středu prvního do středu druhého týdne); při zamčeném kroku = energie kroku kalibrace
+function calibIntake(mon1, dni) { let s = 0, n = 0; for (let i = 3; i < 3 + dni; i++) { const k = dkey(addDays(pdate(mon1), i)); const st = typeof stepOn === 'function' ? stepOn(k) : calibStep(); s += stepRow(st)?.prumer_den?.kcal || stepRow(calibStep())?.prumer_den?.kcal || 0; n++; } return Math.round(s / Math.max(1, n)); }
 function calibHTML(c, full) {
   if (!c) return '';
   if (!c.pair) return `<div class="frec idle"><b>${esc(phaseDef('kalibrace').nazev || 'Kalibrace')} – týden ${Math.min(c.week, c.len)} ze ${c.len}</b><span>${esc(phaseDef('kalibrace').popis || '')}${c.skipped.length ? ` Týden ${c.skipped.join(' a ')} je neplatný (málo vážení nebo výjimka) – kalibrace se prodlužuje.` : ''} Výpočet po ${fday(c.end)}.</span></div>`;

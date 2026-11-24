@@ -73,7 +73,7 @@ mDen = function () {
 function calib() {
   const f = FX(); if (!f.start) return null; const w1 = f.start, w3 = dkey(addDays(pdate(f.start), 14)); if (toU(today()) < toU(w3) + 7 * DMS) return { wait: Math.ceil((toU(w3) + 7 * DMS - toU(today())) / DMS) };
   const a1 = weekAvg(w1), a3 = weekAvg(w3); if (a1.n < 5 || a3.n < 5) return { few: true };
-  const stepAt = kk => { let s = JD.meta.vychozi_krok || 0; (f.stepLog || []).forEach(l => { if (l.d <= kk) s = l.to; }); return s; };
+  const stepAt = kk => { let s = stepBase(); (f.stepLog || []).forEach(l => { if (l.d <= kk) s = l.to; }); return s; };
   let sum = 0, n = 0, other = 0; for (let i = 7; i < 21; i++) { const kk = dkey(addDays(pdate(f.start), i)); const c = cyc(kk); const d = planDayF(c.w, c.di, kk); sum += dayTotals(d, stepAt(kk)).kcal; n++; other += Object.values(f.eaten[kk] || {}).filter(v => v === 'jinak').length; }
   const intake = sum / n, ch = a3.avg - a1.avg; const maint = Math.round((intake - ch * 7700 / 14) / 50) * 50; const target = maint + 250;
   const best = JD.urovne_prijmu.kroky.reduce((a, b) => Math.abs(b.prumer_den.kcal - target) < Math.abs(a.prumer_den.kcal - target) ? b : a);
