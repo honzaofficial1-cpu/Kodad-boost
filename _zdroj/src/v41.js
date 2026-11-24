@@ -81,7 +81,9 @@ XV['f-prep'] = withUP(function () {
   const chip = (on, a, v, l, extra = '') => `<button class="chip ${on ? 'on' : ''}" data-a="${a}" data-v="${v}" ${extra}>${l}</button>`;
   return `<div class="wrap">${fHdr('Předpříprava', '<span></span>')}
     <p class="mut" style="margin:0 2px 12px;font-size:14px">Dnes je ${flong(today())}. Vyber dny, na které si chceš jídlo připravit dopředu, a která jídla.</p>
-    <div class="lbl" style="margin:0 2px 8px">Dny</div><div class="prd">${next.map(k => { const d = pdate(k); return `<button class="${sel.includes(k) ? 'on' : ''}" data-a="pr-day" data-v="${k}"><small>${k === today() ? 'dnes' : DOW[d.getDay()]}</small><b>${d.getDate()}.</b></button>`; }).join('')}</div>
+    <div class="lbl" style="margin:0 2px 8px">Na kolik dní vaříš</div><div class="chips">${[1, 2, 3, 4, 5].map(n => chip(prRun(sel) === `${n}|${P.from || 0}`, 'pr-n', n, n === 1 ? '1 den' : n < 5 ? n + ' dny' : n + ' dní')).join('')}</div>
+    <div class="chips" style="margin-top:8px">${chip(!P.from, 'pr-from', 0, 'Od dneška')}${chip(P.from === 1, 'pr-from', 1, 'Od zítřka')}</div>
+    <div class="lbl" style="margin:16px 2px 8px">Dny</div><div class="prd">${next.map(k => { const d = pdate(k); return `<button class="${sel.includes(k) ? 'on' : ''}" data-a="pr-day" data-v="${k}"><small>${k === today() ? 'dnes' : DOW[d.getDay()]}</small><b>${d.getDate()}.</b></button>`; }).join('')}</div>
     <div class="lbl" style="margin:16px 2px 8px">Jídla</div><div class="chips">${SLOTS.map(([s, l]) => chip(P.slots.includes(s), 'pr-slot', s, l)).join('')}${chip(P.slots.length === 4, 'pr-slot', 'all', 'Vše')}</div>
     ${!rows.length ? '<div class="empty" style="margin-top:18px"><b>Vyber dny a jídla</b><span>Třeba středu a čtvrtek, jen obědy a svačiny. Ukáže se, co uvařit, kolik porcí a do kterých krabiček.</span></div>' : `
     <div class="fsec"><div class="lbl">Co kdy · ${rows.length} ${rows.length === 1 ? 'porce' : rows.length < 5 ? 'porce' : 'porcí'}</div>
@@ -90,7 +92,11 @@ XV['f-prep'] = withUP(function () {
     <div class="fsec"><div class="lbl">Suroviny celkem</div>${ingr.map(([x, g]) => `<div class="fwr"><span>${esc(x.nazev)}</span><b>${g >= 1000 ? nf(g / 1000, 2) + ' kg' : r0(g) + ' g'}</b><small>${esc(x.kategorie_nakupu || '')}</small></div>`).join('')}</div>`}
   </div>${tabs()}`;
 });
-A['pr-day'] = b => { const P = F().prep; const i = P.days.indexOf(b.dataset.v); if (i >= 0) P.days.splice(i, 1); else P.days.push(b.dataset.v); save(); const y = $('#app').scrollTop; render(); $('#app').scrollTop = y; };
+// rychlá volba: N dní za sebou od dneška / od zítřka
+function prRun(sel) { const f = F().prep || {}; const st = f.from || 0; if (!sel.length) return ''; const exp = [...Array(sel.length)].map((_, i) => dkey(addDays(new Date(), st + i))); return exp.every((k, i) => sel[i] === k) ? `${sel.length}|${st}` : ''; }
+A['pr-n'] = b => { const P = F().prep; const n = +b.dataset.v, st = P.from || 0; P.n = n; P.days = [...Array(n)].map((_, i) => dkey(addDays(new Date(), st + i))); save(); const y = $('#app').scrollTop; render(); $('#app').scrollTop = y; };
+A['pr-from'] = b => { const P = F().prep; const run = prRun(P.days.filter(k => k >= today()).sort()); if (run) P.n = +run.split('|')[0]; P.from = +b.dataset.v; if (P.n) P.days = [...Array(P.n)].map((_, i) => dkey(addDays(new Date(), P.from + i))); save(); const y = $('#app').scrollTop; render(); $('#app').scrollTop = y; };
+A['pr-day'] = b => { const P = F().prep; P.n = 0; const i = P.days.indexOf(b.dataset.v); if (i >= 0) P.days.splice(i, 1); else P.days.push(b.dataset.v); save(); const y = $('#app').scrollTop; render(); $('#app').scrollTop = y; };
 A['pr-slot'] = b => { const P = F().prep; if (b.dataset.v === 'all') P.slots = P.slots.length === 4 ? ['obed'] : SLOTS.map(s => s[0]); else { const i = P.slots.indexOf(b.dataset.v); if (i >= 0) P.slots.splice(i, 1); else P.slots.push(b.dataset.v); } save(); const y = $('#app').scrollTop; render(); $('#app').scrollTop = y; };
 const _21tabs3 = tabs;
 tabs = () => view.n === 'f-prep' ? _21tabs3().replace('data-v="f-tyden" class="', 'data-v="f-tyden" class="on ') : _21tabs3();
