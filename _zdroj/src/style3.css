@@ -607,3 +607,10 @@ svg.rchart .pt{fill:var(--rb);stroke:var(--ra);stroke-width:2}svg.rchart .pt.on{
 .fvgh>span{flex:1;min-width:0;display:flex;flex-direction:column}.fvgh>span b{font-size:15px;font-weight:600;font-family:inherit}.fvgh>span small{font-size:12px;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .fvgh>b{font-family:var(--fd);font-weight:700;font-size:17px;white-space:nowrap}.fvgh i{display:flex;color:var(--mut);transform:rotate(90deg);transition:transform .15s}.fvgh.on i{transform:rotate(-90deg)}
 .fvg{padding-left:12px!important}
+/* v2.34: vaření lidsky, dochucení */
+.fvar>.fvc{display:block;padding:12px 14px}
+.fvch{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:4px}.fvch b{font-size:14px;color:var(--hot)}.fvch small{margin:0;font-size:12px;color:var(--mut)}
+.fvci{display:flex;justify-content:space-between;gap:12px;padding:6px 0;border-top:1px solid var(--line)}.fvch+.fvci{border-top:0}
+.fvci span{font-size:15px;line-height:1.35}.fvci b{white-space:nowrap;font-family:var(--fd);font-weight:700;font-size:16px}
+.fvc>p{margin:6px 0 0;font-size:12px;color:var(--mut)}
+.flbl2{margin:14px 2px 2px;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--mut)}

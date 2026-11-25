@@ -1275,11 +1275,18 @@ svg.rchart .pt{fill:var(--rb);stroke:var(--ra);stroke-width:2}svg.rchart .pt.on{
 .fvgh>span{flex:1;min-width:0;display:flex;flex-direction:column}.fvgh>span b{font-size:15px;font-weight:600;font-family:inherit}.fvgh>span small{font-size:12px;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .fvgh>b{font-family:var(--fd);font-weight:700;font-size:17px;white-space:nowrap}.fvgh i{display:flex;color:var(--mut);transform:rotate(90deg);transition:transform .15s}.fvgh.on i{transform:rotate(-90deg)}
 .fvg{padding-left:12px!important}
+/* v2.34: vaření lidsky, dochucení */
+.fvar>.fvc{display:block;padding:12px 14px}
+.fvch{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:4px}.fvch b{font-size:14px;color:var(--hot)}.fvch small{margin:0;font-size:12px;color:var(--mut)}
+.fvci{display:flex;justify-content:space-between;gap:12px;padding:6px 0;border-top:1px solid var(--line)}.fvch+.fvci{border-top:0}
+.fvci span{font-size:15px;line-height:1.35}.fvci b{white-space:nowrap;font-family:var(--fd);font-weight:700;font-size:16px}
+.fvc>p{margin:6px 0 0;font-size:12px;color:var(--mut)}
+.flbl2{margin:14px 2px 2px;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--mut)}
 </style>
 </head>
 <body>
 <div id="app"></div><div id="sheet" hidden></div><div id="toast" role="status" aria-live="polite"></div>
-<script>const APP_VERSION = "2.33.0";
+<script>const APP_VERSION = "2.34.0";
 const MARK = "<svg aria-hidden=\"true\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 994 296\"><path fill=\"currentColor\" d=\"M612 5L611 4L571 4L570 5L567 5L566 4L561 4L560 5L448 5L447 6L442 6L441 5L439 6L438 5L435 5L434 6L430 6L429 5L426 5L425 6L414 6L413 5L409 5L408 6L385 5L378 11L366 27L355 39L352 44L335 63L323 79L316 86L312 92L282 127L274 138L267 145L263 151L233 186L233 187L219 203L219 204L210 213L210 214L202 222L202 223L192 232L186 236L171 243L169 243L162 246L155 247L154 248L149 248L148 249L140 249L139 250L85 250L84 251L78 251L77 250L37 250L29 258L29 259L24 264L19 271L13 277L13 278L4 288L0 294L1 295L48 295L49 296L51 295L58 295L59 296L94 296L95 295L97 295L98 296L100 296L101 295L154 295L155 294L184 294L185 293L202 293L203 292L232 291L233 290L241 290L242 289L253 289L254 288L263 288L264 287L271 287L272 286L281 286L282 285L288 285L289 284L294 284L295 283L301 283L302 282L313 281L314 280L328 278L332 276L336 276L337 275L352 272L358 269L361 269L362 268L367 267L369 265L379 262L393 255L408 245L433 221L436 216L448 203L456 192L477 168L485 157L492 150L494 146L506 133L506 132L521 115L525 109L544 88L548 82L560 69L563 64L570 57L570 56L578 48L578 47L589 35L594 28L602 20L604 16L611 9ZM994 1L993 0L974 0L973 1L967 1L966 0L964 0L963 1L866 1L865 2L860 2L859 1L842 2L840 1L839 2L804 2L794 7L792 7L786 11L784 11L777 15L775 15L760 23L758 23L749 28L747 28L734 35L732 35L717 43L715 43L706 48L704 48L696 53L694 53L689 56L685 57L683 59L681 59L670 65L668 65L658 70L656 72L647 76L645 78L636 82L634 84L629 86L624 90L619 92L614 96L606 100L586 115L579 119L575 123L559 135L554 140L553 140L537 155L536 155L502 190L502 193L509 191L512 189L529 184L532 182L538 181L549 176L555 175L558 173L566 171L569 169L586 164L589 162L597 160L606 168L606 169L620 185L632 201L655 228L663 239L677 255L680 260L686 266L694 277L704 288L749 288L750 287L755 287L756 288L760 288L761 287L914 287L916 286L916 284L896 264L895 264L827 199L826 199L797 171L796 171L776 151L775 151L766 142L765 142L757 133L749 127L736 113L736 109L742 104L747 103L757 98L762 97L767 94L777 91L782 88L784 88L787 86L789 86L792 84L794 84L797 82L802 81L807 78L809 78L812 76L814 76L817 74L824 72L829 69L831 69L844 63L849 62L854 59L856 59L861 56L863 56L866 54L873 52L878 49L880 49L883 47L885 47L898 41L903 40L910 36L912 36L920 32L925 31L937 25L939 25L942 23L944 23L947 21L949 21L952 19L954 19L957 17L959 17L962 15L969 13L974 10L976 10L979 8L981 8L984 6L993 3Z\"/></svg>";
 // ===== Výchozí knihovna cviků (informace jsou skryté pod „Info o cviku“) =====
 const R = (min, max, fail = true) => ({ min, max, fail });
@@ -6003,7 +6010,7 @@ const DNYL = ['Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek', 'Sobota',
 const r10 = v => Math.round(v / 10) * 10;
 const shortN = n => String(n || '').replace(/\s*\((syrov[áéý]|syrové|bez slupky|dužina)\)/i, '');
 function cellIngr(r, mods) {
-  const base = ingSorted(r).filter(x => x.g < 3).map(x => ({ ...x.i, grp: x.g })); const vegG = ingSorted(r).filter(x => x.g === 3 && !isVolna(x.i)).reduce((a, x) => a + (x.i.g || 0), 0); const extra = [];
+  const base = ingSorted(r).filter(x => x.g < 4).map(x => ({ ...x.i, grp: x.g })); const vegG = ingSorted(r).filter(x => x.g === 4 && !isVolna(x.i)).reduce((a, x) => a + (x.i.g || 0), 0); const extra = [];
   mods.forEach(m => { const x = base.find(i => i.surovina === m.surovina); if (x) x.g += m.g; else extra.push({ surovina: m.surovina, nazev: SUR(m.surovina).nazev, g: m.g, plus: 1 }); });
   const small = i => i.g <= 15 && ((SUR(i.surovina).na_100g || {}).kcal || 0) < 80;
   const fmt = i => { if (i.grp === 1 && i.surovina === 'vejce') return `${esc(shortN(i.nazev))} ${eggKs(i)} ks`; const ks = /(\d+)\s*ks/.exec(i.poznamka || ''); return `${esc(shortN(i.nazev))} ${ks && i.g === r.suroviny.find(x => x.surovina === i.surovina)?.g ? `${ks[1]} ks` : `${i.plus && i.g > 0 ? '+' : ''}${i.g} g`}`; };
@@ -6902,27 +6909,30 @@ function volnaNote() {
 
 // ---------- detail jídla: maso → vejce (ks) → ostatní → zelenina (sbalená, po klepnutí) ----------
 const MEAT_RX = /^(krevety|sardinky|tunak|losos)/;
+const COND_RX = /^(olej_|citron|limetka|sojova|rybi_omacka|horcice|ryzovy_ocet|cukr|sezam|nori|kakao|med$|maslo|parmazan|vlasske)/;
 function ingGroup(i) {
   const x = JD.suroviny[i.surovina] || {}; const kat = x.kategorie_nakupu || ''; const b = x.na_100g?.bilkoviny_g || 0;
   if (kat === 'Maso a ryby' || MEAT_RX.test(i.surovina)) return 0;
   if (i.surovina === 'vejce') return 1;
   if (i.skupina === 'ovoce') return 2;
-  if (isVolna(i) || (kat === 'Ovoce a zelenina' && !/^(avokado|citron|limetka)/.test(i.surovina)) || (kat === 'Mražené' && b < 8)) return 3;
+  if (isVolna(i) || (kat === 'Ovoce a zelenina' && !/^(avokado|citron|limetka)/.test(i.surovina)) || (kat === 'Mražené' && b < 8)) return 4;
+  if (COND_RX.test(i.surovina) || (i.g || 0) <= 10) return 3; // jen dochucení: oleje, šťávy, omáčky, koření, posyp
   return 2;
 }
 const eggKs = i => { const m = /(\d+)\s*ks/.exec(i.poznamka || ''); return m ? +m[1] : Math.max(1, Math.round((i.g || 0) / 55)); };
 const ingSorted = r => r.suroviny.map((i, n) => ({ i, n, g: ingGroup(i) })).sort((a, b) => a.g - b.g || (a.g === 0 ? (b.i.g || 0) - (a.i.g || 0) : a.n - b.n));
 function ingRows(r) {
-  const fr = JD.nahrady_ovoce; let out = ''; const L = ingSorted(r); const veg = L.filter(x => x.g === 3 && !isVolna(x.i)); const zv = volnaG(r);
+  const fr = JD.nahrady_ovoce; let out = ''; const L = ingSorted(r); const veg = L.filter(x => x.g === 4 && !isVolna(x.i)); const zv = volnaG(r);
   const row = ({ i, n, g }, cls) => { const pov = i.povinne === true, ov = i.skupina === 'ovoce' && fr && (fr.polozky || []).length;
     const tag = pov ? `<button class="ftg" data-a="f-ingx" data-v="p${n}">povinné</button>` : ov ? `<button class="ftg sw" data-a="f-ingx" data-v="o${n}" aria-label="Náhrady ovoce">⇄</button>` : '';
     const q = g === 1 ? `${eggKs(i)} ks<small>${i.g} g</small>` : i.g ? i.g + ' g' : 'dle chuti';
-    const pz = g === 1 ? (i.poznamka || '').replace(/\d+\s*ks\s*/, '').trim() : i.poznamka;
+    const pz = (g === 1 ? (i.poznamka || '').replace(/\d+\s*ks\s*/, '') : (i.poznamka || '')).replace(/^\s*\d+\s*→\s*\d+\s*:?\s*/, '').trim(); // „100 → 120“ = změna mezi verzemi plánu, nezobrazovat
     let h = `<div data-i="${n}"${cls ? ` class="${cls}" hidden` : ''}><span>${esc(i.nazev)}${tag}${pz ? `<small>${esc(pz)}</small>` : ''}</span><b>${q}</b></div>`;
     if (pov) h += `<section class="fexp" id="fx-p${n}" hidden>${esc(r.povinne_duvod || 'Tahle zelenina je součást jídla – nevynechávej ji.')}</section>`;
     if (ov) h += `<section class="fexp" id="fx-o${n}" hidden>${fr.princip ? `<p>${esc(fr.princip)}</p>` : ''}<div class="fswt">${fr.polozky.map(x => `<div><span>${esc(x.nazev)}</span><b>${x.g} g</b></div>`).join('')}</div></section>`;
     return h; };
   L.filter(x => x.g < 3).forEach(x => out += row(x));
+  const cond = L.filter(x => x.g === 3); if (cond.length) { out += '<p class="flbl2">Na dochucení</p>'; cond.forEach(x => out += row(x)); }
   if (veg.length || zv > 0) {
     const tot = veg.reduce((a, x) => a + (x.i.g || 0), 0) + zv; const np = veg.filter(x => x.i.povinne).length;
     out += `<button class="fvgh" data-a="f-veg"><span><b>Zelenina</b><small>${veg.length ? veg.map(x => esc(x.i.nazev.split(' (')[0].toLowerCase())).join(', ') : ''}${veg.length && zv ? ' + ' : ''}${zv ? `~${zv} g jakékoli` : ''}${np ? ` · ${np}× povinné` : ''}</small></span><b>~${tot} g</b><i>${ico('chev')}</i></button>`;
@@ -6966,9 +6976,31 @@ function cookFor(w, di) {
   if (di === 6) L.push(...(JD.cyklus[nextW(w)]?.vareni || []).filter(v => v.blok === 'Po–Út').map(v => ({ ...v, dalsi: nextW(w) })));
   return L;
 }
-const cookRow = v => `<div><b>${esc(v.kdy)}</b><span>${esc(v.co)}<small>blok ${esc(v.blok)}${v.dalsi ? ' · na týden ' + esc(v.dalsi) : ''}${v.poznamka ? ' · ' + esc(v.poznamka) : ''}</small></span></div>`;
-function cookTodayHTML(c) { const k = view.d || today(); if (typeof tripSkip === 'function' && tripSkip(k).length >= SLOTS.length) return ''; const L = cookFor(c.w, c.di); return L.length ? `<div class="fsec"><div class="lbl">Vaření dnes</div><div class="fvar">${L.map(cookRow).join('')}</div></div>` : ''; }
-function cookWeekHTML(w) { const L = JD.cyklus[w]?.vareni || []; return L.length ? `<div class="fsec" style="margin-top:4px"><div class="lbl">Vaření</div><div class="fvar">${L.map(cookRow).join('')}</div></div>` : ''; }
+// vaření lidsky: skutečné datum, celé názvy jídel, počet porcí, poznámka
+const VAR_OFF = { 'Po–Út': -1, 'St–Čt': 1, 'Pá–So': 3, 'Ne': 6 };
+const DNYD = ['Neděle', 'Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek', 'Sobota'];
+const BLOKN = { 'Po–Út': 'na pondělí a úterý', 'St–Čt': 'na středu a čtvrtek', 'Pá–So': 'na pátek a sobotu', 'Ne': 'na neděli' };
+function cookParts(co) {
+  const R = RX(); const STOP = /^(večer|ráno|poledne|neděli|čerstvě|uvařená|mrazáku|vývaru|cyklu|sudém)$/;
+  return String(co || '').split(/;\s*|\s+a\s+(?=[HSP][-\w]*\s)/).map(p => p.trim()).filter(Boolean).map(p => {
+    let t = p, when = ''; const tm = /^(večer|ráno|v poledne)\s+/i.exec(t); if (tm) { when = tm[1]; t = t.slice(tm[0].length); }
+    let r = null; const km = /^([HSP][-\w]*)\s+/.exec(t); if (km && R[km[1]]) { r = R[km[1]]; t = t.slice(km[0].length); }
+    if (!r) { const w = (t.toLowerCase().match(/[a-záčďéěíňóřšťúůýž]{4,}/g) || []).filter(x => !STOP.test(x)); r = JD.recepty.find(x => w.some(y => x.nazev.toLowerCase().includes(y))) || null; }
+    const pm = /×\s*(\d+)/.exec(t); let note = pm ? t.slice(pm.index + pm[0].length) : (/(čerstvě|z vývaru.*|z mrazáku.*)$/.exec(t) || [''])[0];
+    note = note.replace(/\s*\(\s*/g, ' · ').replace(/\)/g, '').replace(/^[\s,·]+|[\s,·]+$/g, '').replace(/\s*,\s*/g, ', ');
+    return { r, name: r ? r.nazev : t.replace(/×\s*\d+.*/, '').trim(), n: pm ? +pm[1] : null, note: [when, note].filter(Boolean).join(' · ') }; });
+}
+function cookRow(v, mon) {
+  const d = mon != null && VAR_OFF[v.blok] != null ? pdate(dkey(addDays(pdate(mon), VAR_OFF[v.blok]))) : null;
+  const tm = (/(večer nebo ráno[^)]*|večer|poledne|ráno)/.exec(v.kdy) || [''])[0];
+  const head = d ? `${DNYD[d.getDay()]} ${d.getDate()}. ${d.getMonth() + 1}.${tm ? ' · ' + tm : ''}` : v.kdy;
+  return `<div class="fvc"><div class="fvch"><b>${esc(head)}</b><small>${BLOKN[v.blok] || 'blok ' + esc(v.blok)}${v.dalsi ? ' (týden ' + esc(v.dalsi) + ')' : ''}</small></div>
+    ${cookParts(v.co).map(x => `<div class="fvci"><span>${esc(x.name)}${x.note ? `<small>${esc(x.note)}</small>` : ''}</span>${x.n ? `<b>${x.n} ${x.n < 5 ? 'porce' : 'porcí'}</b>` : ''}</div>`).join('')}
+    ${v.poznamka ? `<p>${esc(v.poznamka)}</p>` : ''}</div>`;
+}
+function cookTodayHTML(c) { const k = view.d || today(); if (typeof tripSkip === 'function' && tripSkip(k).length >= SLOTS.length) return ''; const L = cookFor(c.w, c.di); const mon = dkey(addDays(pdate(k), -c.di));
+  return L.length ? `<div class="fsec"><div class="lbl">Vaření dnes</div><div class="fvar">${L.map(v => cookRow(v, v.dalsi ? dkey(addDays(pdate(mon), 7)) : mon)).join('')}</div></div>` : ''; }
+function cookWeekHTML(w) { const L = JD.cyklus[w]?.vareni || []; const mon = weekDateFor(w, 0); return L.length ? `<div class="fsec" style="margin-top:4px"><div class="lbl">Vaření</div><div class="fvar">${L.map(v => cookRow(v, mon)).join('')}</div></div>` : ''; }
 // týden: nadpisy bloků nad dvojicemi dnů
 function blockRow(days) { const g = []; days.forEach(x => { const b = x.day.blok || ''; if (g.length && g[g.length - 1].b === b) g[g.length - 1].n++; else g.push({ b, n: 1 }); });
   return `<div class="wh0 wbk0"></div>${g.map(x => `<div class="wbk" style="grid-column:span ${x.n}">${x.b ? 'blok ' + esc(x.b) : ''}</div>`).join('')}`; }
@@ -6980,7 +7012,7 @@ function shopInfo3(list, mon, w) {
   const bl = { N1: ['Po–Út'], N2: ['St–Čt'], N3: ['Pá–So', 'Ne'] }[list] || []; const V = (JD.cyklus[w]?.vareni || []).filter(v => bl.includes(v.blok));
   return `<div class="fshi"><div><span>Nakoupit</span><b>${fl(buy)}</b><small>${inDays(buy)}${list === 'N1' ? ' (nebo v sobotu)' : ''}</small></div>
     <div><span>Vystačí</span><b>${fday(from)} – ${fday(to)}</b><small>${{ N1: 'nedělní večeře + blok Po–Út', N2: 'blok St–Čt', N3: 'blok Pá–So + neděle' }[list] || ''}</small></div>
-    ${V.length ? `<div class="w"><span>Vaří se</span>${V.map(v => `<b class="fvb">${esc(v.kdy)}</b><small>${esc(v.co)}</small>`).join('')}</div>` : ''}</div>`;
+    ${V.length ? `<div class="w"><span>Vaří se</span>${V.map(v => `<b class="fvb">${esc(v.kdy.replace(/\s*\([^)]*\)/, ''))}</b><small>${cookParts(v.co).map(x => esc(x.name) + (x.n ? ' × ' + x.n : '')).join(', ')}</small>`).join('')}</div>` : ''}</div>`;
 }
 function shopDefault() { return ({ 0: 'N1', 6: 'N1', 1: 'N2', 2: 'N2', 3: 'N3', 4: 'N3', 5: 'N3' })[new Date().getDay()]; }
 // porcování masa: várky = jídla z krabičky v bloku (+ nedělní večeře pro N1), čerstvá = ostatní

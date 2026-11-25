@@ -21,9 +21,31 @@ function cookFor(w, di) {
   if (di === 6) L.push(...(JD.cyklus[nextW(w)]?.vareni || []).filter(v => v.blok === 'Po–Út').map(v => ({ ...v, dalsi: nextW(w) })));
   return L;
 }
-const cookRow = v => `<div><b>${esc(v.kdy)}</b><span>${esc(v.co)}<small>blok ${esc(v.blok)}${v.dalsi ? ' · na týden ' + esc(v.dalsi) : ''}${v.poznamka ? ' · ' + esc(v.poznamka) : ''}</small></span></div>`;
-function cookTodayHTML(c) { const k = view.d || today(); if (typeof tripSkip === 'function' && tripSkip(k).length >= SLOTS.length) return ''; const L = cookFor(c.w, c.di); return L.length ? `<div class="fsec"><div class="lbl">Vaření dnes</div><div class="fvar">${L.map(cookRow).join('')}</div></div>` : ''; }
-function cookWeekHTML(w) { const L = JD.cyklus[w]?.vareni || []; return L.length ? `<div class="fsec" style="margin-top:4px"><div class="lbl">Vaření</div><div class="fvar">${L.map(cookRow).join('')}</div></div>` : ''; }
+// vaření lidsky: skutečné datum, celé názvy jídel, počet porcí, poznámka
+const VAR_OFF = { 'Po–Út': -1, 'St–Čt': 1, 'Pá–So': 3, 'Ne': 6 };
+const DNYD = ['Neděle', 'Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek', 'Sobota'];
+const BLOKN = { 'Po–Út': 'na pondělí a úterý', 'St–Čt': 'na středu a čtvrtek', 'Pá–So': 'na pátek a sobotu', 'Ne': 'na neděli' };
+function cookParts(co) {
+  const R = RX(); const STOP = /^(večer|ráno|poledne|neděli|čerstvě|uvařená|mrazáku|vývaru|cyklu|sudém)$/;
+  return String(co || '').split(/;\s*|\s+a\s+(?=[HSP][-\w]*\s)/).map(p => p.trim()).filter(Boolean).map(p => {
+    let t = p, when = ''; const tm = /^(večer|ráno|v poledne)\s+/i.exec(t); if (tm) { when = tm[1]; t = t.slice(tm[0].length); }
+    let r = null; const km = /^([HSP][-\w]*)\s+/.exec(t); if (km && R[km[1]]) { r = R[km[1]]; t = t.slice(km[0].length); }
+    if (!r) { const w = (t.toLowerCase().match(/[a-záčďéěíňóřšťúůýž]{4,}/g) || []).filter(x => !STOP.test(x)); r = JD.recepty.find(x => w.some(y => x.nazev.toLowerCase().includes(y))) || null; }
+    const pm = /×\s*(\d+)/.exec(t); let note = pm ? t.slice(pm.index + pm[0].length) : (/(čerstvě|z vývaru.*|z mrazáku.*)$/.exec(t) || [''])[0];
+    note = note.replace(/\s*\(\s*/g, ' · ').replace(/\)/g, '').replace(/^[\s,·]+|[\s,·]+$/g, '').replace(/\s*,\s*/g, ', ');
+    return { r, name: r ? r.nazev : t.replace(/×\s*\d+.*/, '').trim(), n: pm ? +pm[1] : null, note: [when, note].filter(Boolean).join(' · ') }; });
+}
+function cookRow(v, mon) {
+  const d = mon != null && VAR_OFF[v.blok] != null ? pdate(dkey(addDays(pdate(mon), VAR_OFF[v.blok]))) : null;
+  const tm = (/(večer nebo ráno[^)]*|večer|poledne|ráno)/.exec(v.kdy) || [''])[0];
+  const head = d ? `${DNYD[d.getDay()]} ${d.getDate()}. ${d.getMonth() + 1}.${tm ? ' · ' + tm : ''}` : v.kdy;
+  return `<div class="fvc"><div class="fvch"><b>${esc(head)}</b><small>${BLOKN[v.blok] || 'blok ' + esc(v.blok)}${v.dalsi ? ' (týden ' + esc(v.dalsi) + ')' : ''}</small></div>
+    ${cookParts(v.co).map(x => `<div class="fvci"><span>${esc(x.name)}${x.note ? `<small>${esc(x.note)}</small>` : ''}</span>${x.n ? `<b>${x.n} ${x.n < 5 ? 'porce' : 'porcí'}</b>` : ''}</div>`).join('')}
+    ${v.poznamka ? `<p>${esc(v.poznamka)}</p>` : ''}</div>`;
+}
+function cookTodayHTML(c) { const k = view.d || today(); if (typeof tripSkip === 'function' && tripSkip(k).length >= SLOTS.length) return ''; const L = cookFor(c.w, c.di); const mon = dkey(addDays(pdate(k), -c.di));
+  return L.length ? `<div class="fsec"><div class="lbl">Vaření dnes</div><div class="fvar">${L.map(v => cookRow(v, v.dalsi ? dkey(addDays(pdate(mon), 7)) : mon)).join('')}</div></div>` : ''; }
+function cookWeekHTML(w) { const L = JD.cyklus[w]?.vareni || []; const mon = weekDateFor(w, 0); return L.length ? `<div class="fsec" style="margin-top:4px"><div class="lbl">Vaření</div><div class="fvar">${L.map(v => cookRow(v, mon)).join('')}</div></div>` : ''; }
 // týden: nadpisy bloků nad dvojicemi dnů
 function blockRow(days) { const g = []; days.forEach(x => { const b = x.day.blok || ''; if (g.length && g[g.length - 1].b === b) g[g.length - 1].n++; else g.push({ b, n: 1 }); });
   return `<div class="wh0 wbk0"></div>${g.map(x => `<div class="wbk" style="grid-column:span ${x.n}">${x.b ? 'blok ' + esc(x.b) : ''}</div>`).join('')}`; }
@@ -35,7 +57,7 @@ function shopInfo3(list, mon, w) {
   const bl = { N1: ['Po–Út'], N2: ['St–Čt'], N3: ['Pá–So', 'Ne'] }[list] || []; const V = (JD.cyklus[w]?.vareni || []).filter(v => bl.includes(v.blok));
   return `<div class="fshi"><div><span>Nakoupit</span><b>${fl(buy)}</b><small>${inDays(buy)}${list === 'N1' ? ' (nebo v sobotu)' : ''}</small></div>
     <div><span>Vystačí</span><b>${fday(from)} – ${fday(to)}</b><small>${{ N1: 'nedělní večeře + blok Po–Út', N2: 'blok St–Čt', N3: 'blok Pá–So + neděle' }[list] || ''}</small></div>
-    ${V.length ? `<div class="w"><span>Vaří se</span>${V.map(v => `<b class="fvb">${esc(v.kdy)}</b><small>${esc(v.co)}</small>`).join('')}</div>` : ''}</div>`;
+    ${V.length ? `<div class="w"><span>Vaří se</span>${V.map(v => `<b class="fvb">${esc(v.kdy.replace(/\s*\([^)]*\)/, ''))}</b><small>${cookParts(v.co).map(x => esc(x.name) + (x.n ? ' × ' + x.n : '')).join(', ')}</small>`).join('')}</div>` : ''}</div>`;
 }
 function shopDefault() { return ({ 0: 'N1', 6: 'N1', 1: 'N2', 2: 'N2', 3: 'N3', 4: 'N3', 5: 'N3' })[new Date().getDay()]; }
 // porcování masa: várky = jídla z krabičky v bloku (+ nedělní večeře pro N1), čerstvá = ostatní
