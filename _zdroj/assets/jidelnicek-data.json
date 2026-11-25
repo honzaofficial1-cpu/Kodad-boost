@@ -39,7 +39,7 @@
    "Pá–So",
    "Ne"
   ],
-  "zmeny_3_0": "Cyklus 2 týdny (T1, T2) místo A/B/C, jídla ve 2denních blocích. Vypadly S-Čt (tuňáková pomazánka) a S-Ne C; P4 jen záměna. P-V1 a P2 celý kelímek jogurtu (140 g), H5 bílý jogurt 75 g, H4 řecký jogurt 80 g. Ferment: kefír 100 ml v Po a Út T1. Nové pořadí ubírání kroků (krok −7 = olej k obědu −11 g místo přílohy). Nákupy N1 neděle / N2 úterý / N3 čtvrtek. Rýže max. 24 h v lednici."
+  "zmeny_3_0": "Cyklus 2 týdny (T1, T2) místo A/B/C, jídla ve 2denních blocích. Vypadly S-Čt (tuňáková pomazánka) a S-Ne C; P4 jen záměna. P-V1 a P2 celý kelímek jogurtu (140 g), H5 bílý jogurt 75 g, H4 řecký jogurt 80 g. Ferment: kefír 100 ml v Po a Út T1. Nové pořadí ubírání kroků (krok −7 = olej k obědu −11 g místo přílohy). Nákupy N1 neděle / N2 úterý / N3 čtvrtek. Rýže max. 24 h v lednici. Maso u receptů jako doporučený kus s náhradou (kuřecí prsa/stehna, hovězí zadní/kližka, krůtí/kuřecí prsa); výpočty a nákup s doporučeným kusem."
  },
  "plan_nabirani": {
   "verze": "3.0 (25. 11. 2026)",
@@ -2480,7 +2480,7 @@
     },
     {
      "surovina": "krut_prsa",
-     "nazev": "Krůtí prsa (syrová)",
+     "nazev": "Krůtí maso – doporučeno prsa (syrová)",
      "g": 80,
      "poznamka": "krůtí nebo kuřecí prsa, kus z mrazáku",
      "skupina": "hlavni",
@@ -2568,9 +2568,9 @@
    "suroviny": [
     {
      "surovina": "kur_prsa",
-     "nazev": "Kuřecí prsa (syrová)",
+     "nazev": "Kuřecí maso – doporučeno prsa (syrová)",
      "g": 130,
-     "poznamka": "syrová",
+     "poznamka": "jde i stehna bez kůže (~+15 kcal, −4 g bílkovin na porci)",
      "skupina": "hlavni",
      "povinne": false
     },
@@ -2633,9 +2633,9 @@
    "suroviny": [
     {
      "surovina": "kur_prsa",
-     "nazev": "Kuřecí prsa (syrová)",
+     "nazev": "Kuřecí maso – doporučeno prsa (syrová)",
      "g": 150,
-     "poznamka": null,
+     "poznamka": "jde i stehna bez kůže (~+15 kcal, −4 g bílkovin na porci)",
      "skupina": "hlavni",
      "povinne": false
     },
@@ -3051,9 +3051,9 @@
    "suroviny": [
     {
      "surovina": "hov_zadni",
-     "nazev": "Hovězí zadní (syrové)",
+     "nazev": "Hovězí libové – doporučeno zadní (syrové)",
      "g": 120,
-     "poznamka": "syrové, na tenké plátky",
+     "poznamka": "na tenké plátky; jde i jiný libový kus, ne kližka",
      "skupina": "hlavni",
      "povinne": false
     },
@@ -3245,9 +3245,9 @@
    "suroviny": [
     {
      "surovina": "hov_klizka",
-     "nazev": "Hovězí kližka (syrová)",
+     "nazev": "Hovězí libové – doporučeno kližka (syrová)",
      "g": 120,
-     "poznamka": "syrová",
+     "poznamka": "jde i zadní (kratší dušení); nutričně stejné",
      "skupina": "hlavni",
      "povinne": false
     },
@@ -3350,9 +3350,9 @@
    "suroviny": [
     {
      "surovina": "hov_zadni",
-     "nazev": "Hovězí zadní (syrové)",
+     "nazev": "Hovězí libové – doporučeno zadní (syrové)",
      "g": 160,
-     "poznamka": "syrové",
+     "poznamka": "jde i jiný libový kus; kližka jen na dlouhé dušení",
      "skupina": "hlavni",
      "povinne": false
     },
@@ -3455,9 +3455,9 @@
    "suroviny": [
     {
      "surovina": "kur_stehna",
-     "nazev": "Kuřecí stehna vykostěná bez kůže (syrová)",
+     "nazev": "Kuřecí maso – doporučeno stehna bez kůže (syrová)",
      "g": 130,
-     "poznamka": "vykostěná, syrová",
+     "poznamka": "vykostěná, syrová; jde i prsa (~−15 kcal, +4 g bílkovin na porci); stehna jsou šťavnatější",
      "skupina": "hlavni",
      "povinne": false
     },
@@ -3568,9 +3568,9 @@
    "suroviny": [
     {
      "surovina": "kur_prsa",
-     "nazev": "Kuřecí prsa (syrová)",
+     "nazev": "Kuřecí maso – doporučeno prsa (syrová)",
      "g": 110,
-     "poznamka": "syrová",
+     "poznamka": "jde i stehna bez kůže (~+15 kcal, −4 g bílkovin na porci)",
      "skupina": "hlavni",
      "povinne": false
     },
@@ -3761,9 +3761,9 @@
    "suroviny": [
     {
      "surovina": "krut_prsa",
-     "nazev": "Krůtí prsa (syrová)",
+     "nazev": "Krůtí maso – doporučeno prsa (syrová)",
      "g": 120,
-     "poznamka": "syrová",
+     "poznamka": "jde i kuřecí prsa",
      "skupina": "hlavni",
      "povinne": false
     },

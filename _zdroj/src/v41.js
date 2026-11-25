@@ -96,7 +96,7 @@ XV['f-prep'] = withUP(function () {
 function prIngr(r, L) {
   const sum = {}; const n = L.length; r.suroviny.forEach(i => sum[i.surovina] = (sum[i.surovina] || 0) + (i.g || 0) * n); L.forEach(x => x.mods.forEach(m => sum[m.surovina] = (sum[m.surovina] || 0) + m.g));
   const seen = new Set(); const G = ingSorted(r).filter(x => !seen.has(x.i.surovina) && seen.add(x.i.surovina));
-  const nm = i => esc(shortN(SUR(i.surovina).nazev || i.nazev).split(' (')[0]);
+  const nm = i => esc(shortN(ingGroup(i) === 0 ? i.nazev : SUR(i.surovina).nazev || i.nazev).split(' (')[0]);
   const q = x => x.g === 1 && x.i.surovina === 'vejce' ? `${eggKs(x.i) * n} ks` : `${r0(sum[x.i.surovina])} g`;
   const main = G.filter(x => x.g < 3 && sum[x.i.surovina] > 0).map(x => `<span><em>${nm(x.i)}</em><b>${q(x)}</b></span>`).join('');
   const cond = G.filter(x => x.g === 3 && sum[x.i.surovina] > 0).map(x => `${nm(x.i).toLowerCase()} ${r0(sum[x.i.surovina])} g`).join(', ');
