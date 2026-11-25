@@ -618,3 +618,9 @@ svg.rchart .pt{fill:var(--rb);stroke:var(--ra);stroke-width:2}svg.rchart .pt.on{
 .prig{margin:8px 0 4px;padding:10px 12px;border-radius:12px;background:#0E0E10}.prig .lbl{margin:0 0 6px}
 .prig>span{display:flex;justify-content:space-between;gap:10px;padding:3px 0;font-size:14px}.prig em{font-style:normal}.prig b{font-family:var(--fd);font-weight:700;font-size:15px;white-space:nowrap}
 .prig p{margin:6px 0 0;font-size:12px;color:var(--mut);line-height:1.4}
+/* v2.36: jednoduchá jídla na cestu */
+.ftez{display:flex;flex-direction:column;gap:1px;margin-top:10px;background:var(--line);border-radius:12px;overflow:hidden}
+.ftezm{padding:10px 12px;background:#0E0E10}.ftezh{display:grid;grid-template-columns:1fr auto;gap:0 10px}.ftezh i{grid-column:1/-1;font-style:normal;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}
+.ftezh b{font-size:15px}.ftezh span{font-size:12px;color:var(--mut);align-self:end;white-space:nowrap}
+.ftezi{margin-top:6px}.ftezi span{display:flex;justify-content:space-between;padding:2px 0;font-size:14px}.ftezi em{font-style:normal}.ftezi b{font-family:var(--fd);font-weight:700}
+.ftezm small{display:block;margin-top:4px;font-size:12px;color:var(--mut)}

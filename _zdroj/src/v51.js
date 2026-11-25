@@ -92,6 +92,7 @@ function travelTexts() {
   return o;
 }
 const TRV = () => { const T = travelTexts(); return [
+  ['easy', 'Jednoduchá jídla', 'vejce s chlebem, kuře s rýží, mleté s tortillou, rýžová kaše', 'easy'],
   ['krabicky', 'Krabičky s sebou', 'jíš podle plánu, jídla vezeš z domova', T.krabicky],
   ['kuchyne', T.kuchTitle ? T.kuchTitle.replace(/^\d+\s*dny\s*/i, '').replace(/^./, c => c.toUpperCase()) : 'Mimo domov s kuchyňkou', 'cestovní chilli + jednoduché snídaně a svačiny', T.kuch.d2 || ''],
   ['bez', 'Den bez vaření', 'porce z mrazáku + čerstvá rýže', T.bez],
@@ -100,7 +101,7 @@ const TF = () => { const f = F(); f.trips = f.trips || []; f.tripShop = f.tripSh
 const tripDays = t => [...Array(t.n)].map((_, i) => dkey(addDays(pdate(t.from), i)));
 function tripOn(k) { for (const t of TF().trips) { const i = daysBetween(t.from, k); if (i >= 0 && i < t.n) return { t, i }; } return null; }
 // které sloty plánu doma ten den odpadají (pro nákup na vlastní období)
-function tripSkip(k) { const x = tripOn(k); if (!x || x.t.v !== 'kuchyne') return []; return x.i === 0 ? ['vecere'] : SLOTS.map(s => s[0]); }
+function tripSkip(k) { const x = tripOn(k); if (x && x.t.v === 'easy') return SLOTS.map(s => s[0]); if (!x || x.t.v !== 'kuchyne') return []; return x.i === 0 ? ['vecere'] : SLOTS.map(s => s[0]); }
 const plain = s => mdInline(s || '');
 function tripMenu(txt) { // „snídaně …; svačina …; oběd a večeře …. Kefír …“ → řádky
   const parts = String(txt || '').split(/;\s*/).map(x => x.trim()).filter(Boolean);
@@ -111,9 +112,10 @@ function tripCard(k) {
   if (t.v === 'kuchyne') {
     if (i === 0) body = `<p>${plain(T.kuch.d1)}</p>${T.kuch.home ? `<p class="mut"><b>Z domova:</b> ${plain(T.kuch.home)}</p>` : ''}`;
     else body = `${tripMenu(T.kuch.d2)}${T.kuch.kcal ? `<p class="mut">${plain(T.kuch.kcal)}</p>` : ''}${i >= 3 ? '<p class="mut">Plán z dat je na 3 dny. Další den jez stejně jako den 2–3; až chilli dojde, uvař novou várku.</p>' : ''}`;
-  } else body = `<p>${plain(V[3])}</p>`;
+  } else if (t.v === 'easy') body = easyHTML(F().step);
+  else body = `<p>${plain(V[3])}</p>`;
   return `<div class="ftrip"><div class="ftrh"><span><small>Na cestě · den ${i + 1} z ${t.n}</small><b>${esc(V[1])}</b></span><button data-a="trip-open">Upravit</button></div>${body}
-    ${t.v === 'kuchyne' ? `<button class="ftrb" data-a="trip-shop" data-id="${t.id}">Co vzít a co koupit na místě</button>` : ''}</div>`;
+    ${t.v === 'kuchyne' || t.v === 'easy' ? `<button class="ftrb" data-a="trip-shop" data-id="${t.id}">${t.v === 'easy' ? 'Co nakoupit na cestu' : 'Co vzít a co koupit na místě'}</button>` : ''}</div>`;
 }
 const _51fden = XV['f-den'];
 XV['f-den'] = function () {
@@ -122,13 +124,13 @@ XV['f-den'] = function () {
   h = h.replace(/(<\/div>)(<nav class="tabs)/, `${btn}$1$2`);
   if (!x) return h;
   h = h.replace(/(<div class="fdnav">[\s\S]*?<\/div><button class="round" data-a="f-day" data-v="1"[^>]*>[\s\S]*?<\/button><\/div>)/, `$1${tripCard(k)}`);
-  if (x.t.v === 'kuchyne' && x.i > 0) h = h.replace('<div class="fmeals">', '<p class="ftroff">Plán doma – dnes neplatí, jíš podle karty nahoře</p><div class="fmeals ftrip-off">').replace('<div class="fsum2">', '<div class="fsum2 ftrip-off">');
+  if ((x.t.v === 'kuchyne' && x.i > 0) || x.t.v === 'easy') h = h.replace('<div class="fmeals">', '<p class="ftroff">Plán doma – dnes neplatí, jíš podle karty nahoře</p><div class="fmeals ftrip-off">').replace('<div class="fsum2">', '<div class="fsum2 ftrip-off">');
   return h;
 };
 
 // ---------- nastavení cesty ----------
 function tripSheet() {
-  const f = TF(); const d = view.trip || (view.trip = (() => { const x = tripOn(view.d || today()); return x ? { ...x.t } : { id: 't' + Date.now(), from: view.d && view.d > today() ? view.d : today(), n: 3, v: 'kuchyne', exc: false }; })());
+  const f = TF(); const d = view.trip || (view.trip = (() => { const x = tripOn(view.d || today()); return x ? { ...x.t } : { id: 't' + Date.now(), from: view.d && view.d > today() ? view.d : today(), n: 3, v: 'easy', exc: false }; })());
   const strip = [...Array(14)].map((_, i) => dkey(addDays(new Date(), i))); const V = TRV(); const editing = f.trips.some(t => t.id === d.id);
   const others = f.trips.filter(t => t.id !== d.id && dkey(addDays(pdate(t.from), t.n - 1)) >= today());
   return `<h2>Na cestě</h2><p class="mut" style="margin:4px 0 0">Vyber dny a jak budeš jíst. Den se pak v Jídle ukáže s kartou „Na cestě“.</p>
@@ -168,7 +170,7 @@ function tripLists(t) {
   return { home: home.map(x => ({ t: x })), buy };
 }
 function tripShopSheet(id) {
-  const f = TF(); const t = f.trips.find(x => x.id === id); if (!t) return '<h2>Cesta nenalezena</h2>'; const st = f.tripShop[id] = f.tripShop[id] || {}; const { home, buy } = tripLists(t);
+  const f = TF(); const t = f.trips.find(x => x.id === id); if (!t) return '<h2>Cesta nenalezena</h2>'; if (t.v === 'easy') return easyShop(t); const st = f.tripShop[id] = f.tripShop[id] || {}; const { home, buy } = tripLists(t);
   const row = (p, x, i) => { const key = p + i; return `<button class="fsi ${st[key] ? 'on' : ''}" data-a="trip-chk" data-id="${id}" data-k="${key}"><span class="cb">${st[key] ? ico('check') : ''}</span><span class="t"><b>${esc(x.t)}</b>${x.pozn ? `<small>${esc(x.pozn)}</small>` : ''}</span></button>`; };
   return `<h2>Na cestu</h2><p class="mut" style="margin:4px 0 0">${fday(t.from)} – ${fday(dkey(addDays(pdate(t.from), t.n - 1)))} · s kuchyňkou</p>
     <div class="lbl" style="margin:16px 2px 8px">Vzít z domova</div>${home.map((x, i) => row('h', x, i)).join('')}
@@ -189,3 +191,35 @@ XV['f-nakup'] = function () {
   const note = `<p class="whint ftrn">Na cestě ${hit.map(k => fday(k).replace(/^\S+ /, '')).join(', ')}${kuch.length ? ` – jídla z dnů ${kuch.map(k => DNY[dIdx(k)]).join(', ')} nekupuj, jíš podle cestovního plánu (seznam „Na cestu“ v Jídle).` : ' – jídla vezeš s sebou, nákup zůstává.'}</p>`;
   return h.replace('<div class="fsbar">', note + '<div class="fsbar">');
 };
+
+// ---------- jednoduchá jídla na cestu (4 jídla, přílohy dopočítané na průměr dne v aktuálním kroku) ----------
+// c = příloha, která se škáluje podle kroku; ks = gramů na kus
+const EASY = [
+  ['snidane', 'Vejce s chlebem a cottage', [['vejce', 165, 0, 55], ['cottage', 100], ['chleb_zitny', 140, 1]], 'vejce natvrdo nebo míchaná, k tomu zelenina podle chuti'],
+  ['obed', 'Kuřecí s rýží', [['kur_prsa', 160], ['basmati', 110, 1], ['olej_olivovy', 10]], 'rýže a kuře klidně uvařené dopředu v krabičce; + zelenina'],
+  ['svacina', 'Rýžová kaše s proteinem', [['ryzova_kase', 70, 1], ['mleko', 300], ['whey', 25], ['banan', 120], ['med', 15]], 'kaši zalij horkým mlékem, protein vmíchej, až trochu vychladne'],
+  ['vecere', 'Mleté maso s tortillou', [['hov_mlete5', 160], ['tortilla_cz', 160, 1, 40], ['recky_jogurt_0', 80], ['olej_olivovy', 5]], 'maso orestuj s kořením, jogurt jako dresink, zelenina do tortilly']];
+function easyDay(step) {
+  const kc = (s, g) => (SUR(s).na_100g?.kcal || 0) * g / 100; let fix = 0, car = 0;
+  EASY.forEach(([, , L]) => L.forEach(([s, g, c]) => { if (!JD.suroviny[s]) return; if (c) car += kc(s, g); else fix += kc(s, g); }));
+  const tgt = stepAvg(step) || fix + car; const k = car ? Math.max(0.6, (tgt - fix) / car) : 1;
+  return EASY.map(([slot, nazev, L, tip]) => { const items = L.filter(([s]) => JD.suroviny[s]).map(([s, g, c, ks]) => { let gg = c ? g * k : g; gg = ks ? Math.max(1, Math.round(gg / ks)) * ks : Math.round(gg / (gg >= 100 ? 10 : 5)) * (gg >= 100 ? 10 : 5); return { s, g: gg, ks: ks ? gg / ks : 0 }; });
+    const n = {}; items.forEach(i => addN(n, nutOf(i.s, i.g))); return { slot, nazev, items, tip, n }; });
+}
+const easyNm = s => esc((SUR(s).nazev || s).split(' (')[0].replace(/^Celozrnná tortilla.*/, 'Celozrnná tortilla'));
+function easyHTML(step) {
+  const D = easyDay(step); const tot = {}; D.forEach(m => addN(tot, m.n)); const SL = Object.fromEntries(SLOTS.map(([s, l]) => [s, l]));
+  return `<div class="ftez">${D.map(m => `<div class="ftezm"><div class="ftezh"><i>${SL[m.slot]}</i><b>${esc(m.nazev)}</b><span>${thou(r0(m.n.kcal))} kcal · B ${r0(m.n.bilkoviny_g)} g</span></div>
+    <div class="ftezi">${m.items.map(i => `<span><em>${easyNm(i.s)}</em><b>${i.ks ? i.ks + ' ks' : i.g + ' g'}</b></span>`).join('')}</div><small>${esc(m.tip)}</small></div>`).join('')}</div>
+    <p class="mut">Den ~${thou(r10(tot.kcal))} kcal · B ${r0(tot.bilkoviny_g)} g · S ${r0(tot.sacharidy_g)} g · T ${r0(tot.tuky_g)} g – přílohy jsou dopočítané na krok ${sgn(step)}${verzeOf(step) ? ' (verze ' + esc(verzeOf(step)) + ')' : ''}.</p>`;
+}
+function easyShop(t) {
+  const f = TF(); const st = f.tripShop[t.id] = f.tripShop[t.id] || {}; const D = easyDay(f.step); const sum = {};
+  D.forEach(m => m.items.forEach(i => { const x = sum[i.s] = sum[i.s] || { g: 0, ks: 0 }; x.g += i.g * t.n; x.ks += i.ks * t.n; }));
+  const q = (s, x) => s === 'vejce' ? `${x.ks} ks` : x.ks ? `${x.ks} ks (${x.g} g)` : x.g >= 1000 ? `${nf(x.g / 1000, 1)} ${s === 'mleko' ? 'l' : 'kg'}` : `${x.g} ${s === 'mleko' ? 'ml' : 'g'}`;
+  const rows = Object.entries(sum).sort((a, b) => ingGroup({ surovina: a[0] }) - ingGroup({ surovina: b[0] })).map(([s, x]) => `<button class="fsi ${st[s] ? 'on' : ''}" data-a="trip-chk" data-id="${t.id}" data-k="${s}"><span class="cb">${st[s] ? ico('check') : ''}</span><span class="t"><b>${easyNm(s)}</b></span><span class="q">${q(s, x)}</span></button>`).join('');
+  return `<h2>Nákup na cestu</h2><p class="mut" style="margin:4px 0 0">${fday(t.from)} – ${fday(dkey(addDays(pdate(t.from), t.n - 1)))} · jednoduchá jídla na ${t.n} ${t.n === 1 ? 'den' : t.n < 5 ? 'dny' : 'dní'} · krok ${sgn(f.step)}</p>
+    <div style="margin-top:14px">${rows}</div>
+    <p class="mut" style="font-size:12px;margin:12px 2px 0">K tomu zelenina podle chuti. Kuře, mleté a rýži můžeš uvařit doma dopředu – v lednici max. 3 dny, rýže 24 h, převážet v chladicí tašce.</p>
+    <div class="actions"><button class="btn white" data-a="close">Hotovo</button></div>`;
+}
