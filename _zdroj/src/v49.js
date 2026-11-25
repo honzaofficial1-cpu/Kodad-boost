@@ -18,15 +18,11 @@ XV['f-vyvoj'] = function () {
 const _49plan = XV['f-plan'];
 XV['f-plan'] = function () { const h = _49plan(); return isCalib() && !stepLocked() ? h.replace(' · zamčený</small>', ' · reverse dieta</small>') : h; };
 
-// ---------- jednorázově: krok z meta.aktualni_krok při prvním použití verze plánu ----------
-// měření, historie a ostatní data zůstávají; změna se zapíše do historie kroků k pondělí aktuálního týdne
+// ---------- verze plánu: krok se při nahrání nemění ----------
 function applyPlanStep() {
+  // od v2.31 (doplněk 2.6): nahrání plánu krok NEMĚNÍ – krok se mění jen ručně; jen si poznamenáme, že verze plánu byla použita
   const m = JD.meta || {}; if (typeof m.aktualni_krok !== 'number') return; const V = (m.verze || '') + '@' + (m.datum || '');
-  const f = F(); f.planStepSet = f.planStepSet || {}; if (f.planStepSet[V]) return; f.planStepSet[V] = today();
-  const v = Math.max(stepMin(), Math.min(stepMax(), m.aktualni_krok));
-  if (v !== f.step) { const mon = dkey(monday(new Date())); const d = f.start && mon < f.start ? f.start : mon;
-    f.stepLog = [...(f.stepLog || []), { d, from: f.step, to: v, why: `plán ${m.verze}: ${m.nazev || 'nový výchozí krok'}` }]; f.step = v; }
-  save(true);
+  const f = F(); f.planStepSet = f.planStepSet || {}; if (f.planStepSet[V]) return; f.planStepSet[V] = today(); save(true);
 }
 const _49jlApply = jlApply; jlApply = function () { _49jlApply(); applyPlanStep(); }; applyPlanStep();
 

@@ -107,7 +107,7 @@ A['f-meal'] = b => {
   sheet(`<h2>${esc(r.nazev)}</h2><p class="mut" style="margin:4px 0 0">${esc(r.slot)} · ${r.kod}</p>
     <p class="fsheet-n">${nutLine(tot)}</p>
     <div class="lbl" style="margin:16px 2px 8px">Suroviny</div>
-    <div class="fing">${r.suroviny.map(i => `<div><span>${esc(i.nazev)}${i.poznamka ? `<small>${esc(i.poznamka)}</small>` : ''}</span><b>${i.g ? i.g + ' g' : 'dle chuti'}</b></div>`).join('')}
+    <div class="fing">${ingRows(r)}
       ${mods.map(m => `<div class="add"><span>${esc(SUR(m.surovina).nazev)}<small>${m.g > 0 ? 'navíc' : 'méně'} – krok ${sg(F().step, 0)} (${m.typ})</small></span><b>${m.g > 0 ? '+' : ''}${m.g} g</b></div>`).join('')}</div>
     <div class="lbl" style="margin:16px 2px 8px">Příprava</div><p class="ftext">${esc(r.priprava)}</p>
     <div class="lbl" style="margin:16px 2px 8px">Skladování</div><p class="ftext">${esc(r.skladovani)}</p>

@@ -20,12 +20,12 @@ const DNYL = ['Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek', 'Sobota',
 const r10 = v => Math.round(v / 10) * 10;
 const shortN = n => String(n || '').replace(/\s*\((syrov[áéý]|syrové|bez slupky|dužina)\)/i, '');
 function cellIngr(r, mods) {
-  const base = r.suroviny.map(i => ({ ...i })); const extra = [];
+  const base = r.suroviny.filter(i => !isVolna(i)).map(i => ({ ...i })); const extra = [];
   mods.forEach(m => { const x = base.find(i => i.surovina === m.surovina); if (x) x.g += m.g; else extra.push({ surovina: m.surovina, nazev: SUR(m.surovina).nazev, g: m.g, plus: 1 }); });
   const small = i => i.g <= 15 && ((SUR(i.surovina).na_100g || {}).kcal || 0) < 80;
   const fmt = i => { const ks = /(\d+)\s*ks/.exec(i.poznamka || ''); return `${esc(shortN(i.nazev))} ${ks && i.g === r.suroviny.find(x => x.surovina === i.surovina)?.g ? `${ks[1]} ks` : `${i.plus && i.g > 0 ? '+' : ''}${i.g} g`}`; };
   const big = [...base, ...extra].filter(i => i.g && !small(i)), sm = [...base, ...extra].filter(i => i.g && small(i));
-  return `<ul>${big.map(i => `<li>${fmt(i)}</li>`).join('')}</ul>${sm.length ? `<p class="wsm">${sm.map(fmt).join(', ')}</p>` : ''}`;
+  const zv = volnaG(r); return `<ul>${big.map(i => `<li>${fmt(i)}</li>`).join('')}${zv ? `<li>+ zelenina ~${zv} g</li>` : ''}</ul>${sm.length ? `<p class="wsm">${sm.map(fmt).join(', ')}</p>` : ''}`;
 }
 XV['f-tyden'] = withUP(function () {
   const f = F(); if (!f.start) return XV['f-den']();
@@ -76,7 +76,7 @@ XV['f-prep'] = withUP(function () {
   const rows = []; sel.forEach(k => { const c = cyc(k); if (!c || c.before) return; const d = planDayF(c.w, c.di, k); const M = stepMods(f.step, d);
     SLOTS.forEach(([s, l, t]) => { if (!P.slots.includes(s)) return; const r = R[d.jidla[s]]; if (r) rows.push({ k, s, l, t, r, mods: M[s] || [] }); }); });
   const byR = {}; rows.forEach(x => { (byR[x.r.kod] = byR[x.r.kod] || { r: x.r, L: [] }).L.push(x); });
-  const sum = {}; rows.forEach(x => { x.r.suroviny.forEach(i => sum[i.surovina] = (sum[i.surovina] || 0) + i.g); x.mods.forEach(m => sum[m.surovina] = (sum[m.surovina] || 0) + m.g); });
+  const sum = {}; rows.forEach(x => { x.r.suroviny.forEach(i => sum[shopSur(i)] = (sum[shopSur(i)] || 0) + i.g); x.mods.forEach(m => sum[m.surovina] = (sum[m.surovina] || 0) + m.g); });
   const ingr = Object.entries(sum).filter(([, g]) => g > 0).map(([s, g]) => [SUR(s), g, s]).sort((a, b) => (a[0].kategorie_nakupu || '').localeCompare(b[0].kategorie_nakupu || '') || a[0].nazev.localeCompare(b[0].nazev, 'cs'));
   const chip = (on, a, v, l, extra = '') => `<button class="chip ${on ? 'on' : ''}" data-a="${a}" data-v="${v}" ${extra}>${l}</button>`;
   return `<div class="wrap">${fHdr('Předpříprava', '<span></span>')}

@@ -112,7 +112,7 @@ function rangeItems(from, to) {
   const R = RX(), f = F(), sum = {}; let days = 0, meals = 0; const add = (s, g) => { if (s && g) sum[s] = (sum[s] || 0) + g; };
   for (let k = from, i = 0; k <= to && i < 60; k = dkey(addDays(pdate(k), 1)), i++) {
     const c = cyc(k); if (!c || c.before) continue; const day = planDayF(c.w, c.di, k); if (!day) continue; days++;
-    SLOTS.forEach(([s]) => { const r = R[day.jidla[s]]; if (!r) return; meals++; r.suroviny.forEach(x => add(x.surovina, x.g)); });
+    SLOTS.forEach(([s]) => { const r = R[day.jidla[s]]; if (!r) return; meals++; r.suroviny.forEach(x => add(shopSur(x), x.g)); });
     (day.upravy || []).forEach(u => add(u.surovina, u.g)); Object.values(stepMods(f.step, day)).flat().forEach(m => add(m.surovina, m.g));
   }
   const items = Object.entries(sum).filter(([, g]) => g > 0).map(([s, g]) => { const x = SUR(s); const gg = Math.ceil(g / 10) * 10;

@@ -99,8 +99,7 @@ A['f-meal'] = b => {
   if (r.varka === true) t.push('várka 4 porce'); else if (r.varka === false) t.push('čerstvě na 1 porci');
   if (r.svacina_typ) t.push(r.svacina_typ === 'pred_treninkem' ? 'svačina před tréninkem' : 'svačina na volný den');
   if (sub && t.length) sub.insertAdjacentText('beforeend', ' · ' + t.join(' · '));
-  const rows = $$s('#sheet .fing > div:not(.add)');
-  r.suroviny.forEach((i, n) => { if (JD.suroviny[i.surovina]?.zdroj_kategorie === 3 && rows[n]) rows[n].querySelector('span').insertAdjacentHTML('beforeend', '<small>hodnoty jsou obecný odhad</small>'); });
+  r.suroviny.forEach((i, n) => { const row = document.querySelector(`#sheet .fing > div[data-i="${n}"]`); if (JD.suroviny[i.surovina]?.zdroj_kategorie === 3 && row) row.querySelector('span').insertAdjacentHTML('beforeend', '<small>hodnoty jsou obecný odhad</small>'); });
 };
 
 // ---------- start jídelníčku: pondělí 23. 11. 2026 = týden A, den 1 (jednorázově) ----------
