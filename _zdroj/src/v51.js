@@ -98,8 +98,11 @@ const TRV = () => { const T = travelTexts(); return [
   ['bez', 'Den bez vaření', 'porce z mrazáku + čerstvá rýže', T.bez],
   ['rest', 'Jídlo v restauraci', 'max. zhruba 1× měsíčně', T.rest]].filter(v => v[3]); };
 const TF = () => { const f = F(); f.trips = f.trips || []; f.tripShop = f.tripShop || {}; return f; };
-const tripDays = t => [...Array(t.n)].map((_, i) => dkey(addDays(pdate(t.from), i)));
-function tripOn(k) { for (const t of TF().trips) { const i = daysBetween(t.from, k); if (i >= 0 && i < t.n) return { t, i }; } return null; }
+// do návratu: t.open = cesta trvá, dokud neklepneš „Jsem zpátky“; t.n pak znamená, na kolik dní nakupuješ
+const tLen = t => t.open ? Math.max(1, daysBetween(t.from, today()) + 60) : t.n;
+const tRng = t => t.open ? `od ${fday(t.from)} do návratu` : `${fday(t.from)} – ${fday(dkey(addDays(pdate(t.from), t.n - 1)))}`;
+const tripDays = t => [...Array(tLen(t))].map((_, i) => dkey(addDays(pdate(t.from), i)));
+function tripOn(k) { for (const t of TF().trips) { const i = daysBetween(t.from, k); if (i >= 0 && i < tLen(t)) return { t, i }; } return null; }
 // které sloty plánu doma ten den odpadají (pro nákup na vlastní období)
 function tripSkip(k) { const x = tripOn(k); if (x && x.t.v === 'easy') return SLOTS.map(s => s[0]); if (!x || x.t.v !== 'kuchyne') return []; return x.i === 0 ? ['vecere'] : SLOTS.map(s => s[0]); }
 const plain = s => mdInline(s || '');
@@ -114,8 +117,8 @@ function tripCard(k) {
     else body = `${tripMenu(T.kuch.d2)}${T.kuch.kcal ? `<p class="mut">${plain(T.kuch.kcal)}</p>` : ''}${i >= 3 ? '<p class="mut">Plán z dat je na 3 dny. Další den jez stejně jako den 2–3; až chilli dojde, uvař novou várku.</p>' : ''}`;
   } else if (t.v === 'easy') body = easyHTML(F().step);
   else body = `<p>${plain(V[3])}</p>`;
-  return `<div class="ftrip"><div class="ftrh"><span><small>Na cestě · den ${i + 1} z ${t.n}</small><b>${esc(V[1])}</b></span><button data-a="trip-open">Upravit</button></div>${body}
-    ${t.v === 'kuchyne' || t.v === 'easy' ? `<button class="ftrb" data-a="trip-shop" data-id="${t.id}">${t.v === 'easy' ? 'Co nakoupit na cestu' : 'Co vzít a co koupit na místě'}</button>` : ''}</div>`;
+  return `<div class="ftrip"><div class="ftrh"><span><small>Na cestě · den ${i + 1}${t.open ? '' : ' z ' + t.n}</small><b>${esc(V[1])}</b></span><button data-a="trip-open">Upravit</button></div>${body}
+    <div class="two" style="margin-top:12px">${t.v === 'kuchyne' || t.v === 'easy' ? `<button class="ftrb" data-a="trip-shop" data-id="${t.id}">${t.v === 'easy' ? 'Nákup na cestu' : 'Co vzít a koupit'}</button>` : ''}${k === today() || t.open ? `<button class="ftrb" data-a="trip-end" data-id="${t.id}">Jsem zpátky</button>` : ''}</div></div>`;
 }
 const _51fden = XV['f-den'];
 XV['f-den'] = function () {
@@ -130,33 +133,36 @@ XV['f-den'] = function () {
 
 // ---------- nastavení cesty ----------
 function tripSheet() {
-  const f = TF(); const d = view.trip || (view.trip = (() => { const x = tripOn(view.d || today()); return x ? { ...x.t } : { id: 't' + Date.now(), from: view.d && view.d > today() ? view.d : today(), n: 3, v: 'easy', exc: false }; })());
+  const f = TF(); const d = view.trip || (view.trip = (() => { const x = tripOn(view.d || today()); return x ? { ...x.t } : { id: 't' + Date.now(), from: view.d && view.d > today() ? view.d : today(), n: 3, open: true, v: 'easy', exc: false }; })());
   const strip = [...Array(14)].map((_, i) => dkey(addDays(new Date(), i))); const V = TRV(); const editing = f.trips.some(t => t.id === d.id);
-  const others = f.trips.filter(t => t.id !== d.id && dkey(addDays(pdate(t.from), t.n - 1)) >= today());
+  const others = f.trips.filter(t => t.id !== d.id && dkey(addDays(pdate(t.from), tLen(t) - 1)) >= today());
   return `<h2>Na cestě</h2><p class="mut" style="margin:4px 0 0">Vyber dny a jak budeš jíst. Den se pak v Jídle ukáže s kartou „Na cestě“.</p>
     <div class="lbl" style="margin:16px 2px 8px">Odjezd</div>
     <div class="rgbuy">${strip.map(k => `<button class="${k === d.from ? 'on' : ''}" data-a="trip-from" data-v="${k}"><small>${k === today() ? 'dnes' : k === dkey(addDays(new Date(), 1)) ? 'zítra' : DOW[pdate(k).getDay()]}</small><b>${pdate(k).getDate()}.</b></button>`).join('')}</div>
     <div class="lbl" style="margin:16px 2px 8px">Na kolik dní</div>
-    <div class="chips swhen">${[1, 2, 3, 4, 5, 6, 7].map(n => `<button class="chip ${d.n === n ? 'on' : ''}" data-a="trip-n" data-v="${n}">${n === 1 ? '1 den' : n < 5 ? n + ' dny' : n + ' dní'}</button>`).join('')}</div>
-    <p class="mut" style="font-size:12px;margin:8px 2px 0">${fday(d.from)} – ${fday(dkey(addDays(pdate(d.from), d.n - 1)))}</p>
+    <div class="chips swhen"><button class="chip ${d.open ? 'on' : ''}" data-a="trip-n" data-v="0">Do návratu</button>${[1, 2, 3, 4, 5, 6, 7].map(n => `<button class="chip ${!d.open && d.n === n ? 'on' : ''}" data-a="trip-n" data-v="${n}">${n === 1 ? '1 den' : n < 5 ? n + ' dny' : n + ' dní'}</button>`).join('')}</div>
+    <p class="mut" style="font-size:12px;margin:8px 2px 0">${tRng(d)}${d.open ? ' – každý den stejné menu, cestu ukončíš tlačítkem „Jsem zpátky“' : ''}</p>
     <div class="lbl" style="margin:16px 2px 8px">Jak budeš jíst</div>
     <div class="ftv">${V.map(([id, l, s]) => `<button class="${d.v === id ? 'on' : ''}" data-a="trip-v" data-v="${id}"><span class="rd"></span><span><b>${esc(l)}</b><small>${esc(s)}</small></span></button>`).join('')}</div>
     <button class="fsi ${d.exc ? 'on' : ''}" style="margin-top:12px" data-a="trip-exc"><span class="cb">${d.exc ? ico('check') : ''}</span><span class="t"><b>Týden nepočítat do hodnocení</b><small>výjimka „cesta“ – hodnocení váhy se posune o týden</small></span></button>
     <div class="actions">${editing ? '<button class="btn" data-a="trip-del">Zrušit cestu</button>' : '<button class="btn" data-a="close">Zpět</button>'}<button class="btn white" data-a="trip-save">Uložit</button></div>
-    ${others.length ? `<div class="lbl" style="margin:18px 2px 8px">Další naplánované cesty</div>${others.map(t => `<button class="li" data-a="trip-edit" data-id="${t.id}"><div class="t"><b>${fday(t.from)} – ${fday(dkey(addDays(pdate(t.from), t.n - 1)))}</b><small>${esc((V.find(v => v[0] === t.v) || [, ''])[1])}</small></div></button>`).join('')}` : ''}`;
+    ${others.length ? `<div class="lbl" style="margin:18px 2px 8px">Další naplánované cesty</div>${others.map(t => `<button class="li" data-a="trip-edit" data-id="${t.id}"><div class="t"><b>${tRng(t)}</b><small>${esc((V.find(v => v[0] === t.v) || [, ''])[1])}</small></div></button>`).join('')}` : ''}`;
 }
 const tripRe = () => sheet(tripSheet());
 A['trip-open'] = () => { view.trip = null; tripRe(); };
 A['trip-edit'] = b => { const t = TF().trips.find(x => x.id === b.dataset.id); view.trip = t ? { ...t } : null; tripRe(); };
 A['trip-from'] = b => { view.trip.from = b.dataset.v; tripRe(); };
-A['trip-n'] = b => { view.trip.n = +b.dataset.v; tripRe(); };
+A['trip-n'] = b => { const v = +b.dataset.v; view.trip.open = !v; if (v) view.trip.n = v; tripRe(); };
 A['trip-v'] = b => { view.trip.v = b.dataset.v; tripRe(); };
 A['trip-exc'] = () => { view.trip.exc = !view.trip.exc; tripRe(); };
 A['trip-save'] = () => { const f = TF(); const d = view.trip; const days = tripDays(d);
   f.trips = f.trips.filter(t => t.id !== d.id && !tripDays(t).some(k => days.includes(k))); f.trips.push({ ...d }); f.trips.sort((a, b) => a.from < b.from ? -1 : 1);
-  if (d.exc) [...new Set(days.map(k => dkey(monday(pdate(k)))))].forEach(m => { const w = f.weeks[m] = f.weeks[m] || {}; w.exc = true; w.excWhy = 'cesta'; });
-  f.trips = f.trips.filter(t => dkey(addDays(pdate(t.from), t.n + 30)) >= today()); // staré cesty pryč
-  save(true); view.trip = null; closeSheet(); render(); toast(`Na cestě ${fday(d.from)} – ${fday(days[days.length - 1])}`); };
+  if (d.exc) [...new Set((d.open ? days.slice(0, 7) : days).map(k => dkey(monday(pdate(k)))))].forEach(m => { const w = f.weeks[m] = f.weeks[m] || {}; w.exc = true; w.excWhy = 'cesta'; });
+  f.trips = f.trips.filter(t => t.open || dkey(addDays(pdate(t.from), t.n + 30)) >= today()); // staré cesty pryč
+  save(true); view.trip = null; closeSheet(); render(); toast(`Na cestě ${tRng(d)}`); };
+// konec cesty: dnešek už je doma
+A['trip-end'] = b => { const f = TF(); const t = f.trips.find(x => x.id === b.dataset.id); if (!t) return; const n = daysBetween(t.from, today());
+  if (n <= 0) f.trips = f.trips.filter(x => x !== t); else { t.open = false; t.n = n; } save(true); render(); toast('Vítej doma – jídelníček zase podle plánu'); };
 A['trip-del'] = () => { const f = TF(); f.trips = f.trips.filter(t => t.id !== view.trip.id); save(true); view.trip = null; closeSheet(); render(); toast('Cesta zrušená'); };
 
 // ---------- co vzít z domova a co koupit na místě (varianta s kuchyňkou) ----------
@@ -172,7 +178,7 @@ function tripLists(t) {
 function tripShopSheet(id) {
   const f = TF(); const t = f.trips.find(x => x.id === id); if (!t) return '<h2>Cesta nenalezena</h2>'; if (t.v === 'easy') return easyShop(t); const st = f.tripShop[id] = f.tripShop[id] || {}; const { home, buy } = tripLists(t);
   const row = (p, x, i) => { const key = p + i; return `<button class="fsi ${st[key] ? 'on' : ''}" data-a="trip-chk" data-id="${id}" data-k="${key}"><span class="cb">${st[key] ? ico('check') : ''}</span><span class="t"><b>${esc(x.t)}</b>${x.pozn ? `<small>${esc(x.pozn)}</small>` : ''}</span></button>`; };
-  return `<h2>Na cestu</h2><p class="mut" style="margin:4px 0 0">${fday(t.from)} – ${fday(dkey(addDays(pdate(t.from), t.n - 1)))} · s kuchyňkou</p>
+  return `<h2>Na cestu</h2><p class="mut" style="margin:4px 0 0">${tRng(t)} · s kuchyňkou</p>${shopN(t)}
     <div class="lbl" style="margin:16px 2px 8px">Vzít z domova</div>${home.map((x, i) => row('h', x, i)).join('')}
     <div class="lbl" style="margin:16px 2px 8px">Koupit na místě</div>${buy.map((x, i) => row('b', x, i)).join('')}
     <p class="mut" style="font-size:12px;margin:12px 2px 0">Seznam je složený z textu plánu (cestovní chilli a menu na den 2–3). Gramy u snídaně a svačiny jsou na 1 den.</p>
@@ -218,8 +224,12 @@ function easyShop(t) {
   D.forEach(m => m.items.forEach(i => { const x = sum[i.s] = sum[i.s] || { g: 0, ks: 0 }; x.g += i.g * t.n; x.ks += i.ks * t.n; }));
   const q = (s, x) => s === 'vejce' ? `${x.ks} ks` : x.ks ? `${x.ks} ks (${x.g} g)` : x.g >= 1000 ? `${nf(x.g / 1000, 1)} ${s === 'mleko' ? 'l' : 'kg'}` : `${x.g} ${s === 'mleko' ? 'ml' : 'g'}`;
   const rows = Object.entries(sum).sort((a, b) => ingGroup({ surovina: a[0] }) - ingGroup({ surovina: b[0] })).map(([s, x]) => `<button class="fsi ${st[s] ? 'on' : ''}" data-a="trip-chk" data-id="${t.id}" data-k="${s}"><span class="cb">${st[s] ? ico('check') : ''}</span><span class="t"><b>${easyNm(s)}</b></span><span class="q">${q(s, x)}</span></button>`).join('');
-  return `<h2>Nákup na cestu</h2><p class="mut" style="margin:4px 0 0">${fday(t.from)} – ${fday(dkey(addDays(pdate(t.from), t.n - 1)))} · jednoduchá jídla na ${t.n} ${t.n === 1 ? 'den' : t.n < 5 ? 'dny' : 'dní'} · krok ${sgn(f.step)}</p>
-    <div style="margin-top:14px">${rows}</div>
+  return `<h2>Nákup na cestu</h2><p class="mut" style="margin:4px 0 0">${tRng(t)} · jednoduchá jídla na ${t.n} ${t.n === 1 ? 'den' : t.n < 5 ? 'dny' : 'dní'} · krok ${sgn(f.step)}</p>
+    ${shopN(t)}<div style="margin-top:14px">${rows}</div>
     <p class="mut" style="font-size:12px;margin:12px 2px 0">K tomu zelenina podle chuti. Kuře, mleté a rýži můžeš uvařit doma dopředu – v lednici max. 3 dny, rýže 24 h, převážet v chladicí tašce.</p>
     <div class="actions"><button class="btn white" data-a="close">Hotovo</button></div>`;
 }
+
+// nákup u cesty: na kolik dní nakupuješ (u „do návratu“ hlavně)
+function shopN(t) { if (!t.open) return ''; return `<div class="lbl" style="margin:14px 2px 8px">Nakupuju na</div><div class="chips swhen">${[1, 2, 3, 4, 5, 6, 7].map(n => `<button class="chip ${t.n === n ? 'on' : ''}" data-a="trip-sn" data-id="${t.id}" data-v="${n}">${n === 1 ? '1 den' : n < 5 ? n + ' dny' : n + ' dní'}</button>`).join('')}</div>`; }
+A['trip-sn'] = b => { const f = TF(); const t = f.trips.find(x => x.id === b.dataset.id); if (!t) return; t.n = +b.dataset.v; save(); sheet(tripShopSheet(t.id)); };
