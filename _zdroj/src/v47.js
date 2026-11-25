@@ -5,6 +5,7 @@ const PO_FISH = /^(losos|krevety|tunak|sardinky)/;
 const poWanted = s => { const x = JD.suroviny[s]; if (!x) return false; return x.kategorie_nakupu === 'Maso a ryby' || (x.kategorie_nakupu === 'Mražené' && (x.na_100g?.bilkoviny_g || 0) >= 15); };
 const SLOTL = { snidane: 'snídaně', obed: 'oběd', svacina: 'svačina', vecere: 'večeře' };
 function poPlan(wi, list) {
+  if (isV3()) return poPlan3(wi, list);
   const f = F(); const R = RX(); const order = JD.meta.poradi_cyklu || ['A', 'B', 'C']; const w = order[wi % order.length];
   const mon = dkey(addDays(pdate(f.start), wi * 7)); const buy = dkey(addDays(pdate(mon), list === 'N1' ? -2 : 2));
   const out = {}; const it = s => (out[s] = out[s] || { s, batch: [], fresh: [] });
@@ -51,6 +52,6 @@ document.addEventListener('input', e => { const i = e.target; if (!i.matches || 
   const [wi, list] = i.dataset.key.split(':'); const { buy, items } = poPlan(+wi, list); const p = items.find(x => x.s === i.dataset.po); const el = document.getElementById('fpr-' + i.dataset.po); if (p && el) el.innerHTML = poResult(p, buy, m[i.dataset.po]); });
 const _47nakup = XV['f-nakup'];
 XV['f-nakup'] = function () {
-  const h = _47nakup(); const l = view.list || 'N1'; if (l !== 'N1' && l !== 'N2') return h;
+  const h = _47nakup(); const l = view.list || 'N1'; if (!/^N\d$/.test(l)) return h;
   return h.replace('<div class="lbl">Maso a ryby</div>', '<div class="lbl fonl"><span>Maso a ryby</span><button data-a="po-man">Jak naporcovat</button></div>');
 };

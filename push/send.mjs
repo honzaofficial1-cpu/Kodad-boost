@@ -23,9 +23,9 @@ if (ev === 'schedule') {
     if (local !== cfg.hour) { console.log(`Přeskakuji (${sched}, Praha ${off}).`); process.exit(0); }
     const wd = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Prague', weekday: 'short' }).format(new Date());
     payload = { title: 'Dobré ráno', body: 'Váha nalačno po toaletě, spánek a kroky za včerejšek.', url: './?open=den' };
-    if (wd === 'Sun') payload = { title: 'Neděle: pas a váha', body: 'Ráno nalačno váha a pas ve výši pupku. Večer týdenní hodnocení v Jídle → Vývoj.', url: './?open=den' };
-    if (wd === 'Sat') payload = { title: 'Dobré ráno · nákup N1', body: 'Váha nalačno. Dnes víkendový nákup na příští týden (Po–St) – seznam je v Jídle.', url: './?open=nakup' };
-    if (wd === 'Wed') payload = { title: 'Dobré ráno · nákup N2', body: 'Váha nalačno. Dnes středeční nákup a vaření do zásoby – seznam je v Jídle.', url: './?open=nakup' };
+    if (wd === 'Sun') payload = { title: 'Neděle: pas, nákup N1, vaření', body: 'Ráno nalačno váha a pas. Nákup N1 (blok Po–Út), večer vaření do zásoby a týdenní hodnocení.', url: './?open=nakup' };
+    if (wd === 'Tue') payload = { title: 'Dobré ráno · nákup N2', body: 'Váha nalačno. Dnes nákup N2 a vaření bloku St–Čt (večer nebo ráno před odjezdem).', url: './?open=nakup' };
+    if (wd === 'Thu') payload = { title: 'Dobré ráno · nákup N3', body: 'Váha nalačno. Dnes nákup N3 a večer vaření bloku Pá–So.', url: './?open=nakup' };
   }
 } else {
   payload = { title: 'Kodad boost', body: 'Upozornění fungují.', url: './' };

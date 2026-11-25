@@ -80,7 +80,7 @@ setTimeout(() => { if ((F().quits || []).length) checkBadges(); }, 2600);
 // ---------- nákup na vlastní období ----------
 const _20nakup = XV['f-nakup'];
 XV['f-nakup'] = function () {
-  const segs = `<div class="seg">${[['N1', 'Víkend'], ['N2', 'Středa'], ['R', 'Vlastní'], ['Z', 'Zásoba']].map(([v, l]) => `<button data-a="f-list" data-v="${v}" class="${v === (view.list || 'N1') ? 'on' : ''}">${l}</button>`).join('')}</div>`;
+  const segs = `<div class="seg">${[...(isV3() ? LISTS() : [['N1', 'Víkend'], ['N2', 'Středa']]), ['R', 'Vlastní'], ['Z', 'Zásoba']].map(([v, l]) => `<button data-a="f-list" data-v="${v}" class="${v === (view.list || 'N1') ? 'on' : ''}">${l}</button>`).join('')}</div>`;
   if (view.list !== 'R') return _20nakup().replace(/<div class="seg">(?:(?!<\/div>)[\s\S])*?data-a="f-list"[\s\S]*?<\/div>/, segs);
   const f = F(); if (!f.start) return XV['f-den']();
   const r = f.rng = f.rng && f.rng.to >= today() ? f.rng : { from: today(), to: nextSun(today()) }; if (!r.buy || r.buy < today()) r.buy = today(); if (r.from < r.buy) r.from = r.buy; if (r.to < r.from) r.to = r.from;
@@ -112,8 +112,9 @@ function rangeItems(from, to) {
   const R = RX(), f = F(), sum = {}; let days = 0, meals = 0; const add = (s, g) => { if (s && g) sum[s] = (sum[s] || 0) + g; };
   for (let k = from, i = 0; k <= to && i < 60; k = dkey(addDays(pdate(k), 1)), i++) {
     const c = cyc(k); if (!c || c.before) continue; const day = planDayF(c.w, c.di, k); if (!day) continue; days++;
-    SLOTS.forEach(([s]) => { const r = R[day.jidla[s]]; if (!r) return; meals++; r.suroviny.forEach(x => add(shopSur(x), x.g)); });
-    (day.upravy || []).forEach(u => add(u.surovina, u.g)); Object.values(stepMods(f.step, day)).flat().forEach(m => add(m.surovina, m.g));
+    const skip = typeof tripSkip === 'function' ? tripSkip(k) : []; if (skip.length >= SLOTS.length) { days--; continue; } // na cestě s kuchyňkou
+    SLOTS.forEach(([s]) => { if (skip.includes(s)) return; const r = R[day.jidla[s]]; if (!r) return; meals++; r.suroviny.forEach(x => add(shopSur(x), x.g)); });
+    (day.upravy || []).forEach(u => add(u.surovina, u.g)); Object.entries(stepMods(f.step, day)).forEach(([s, L]) => { if (!skip.includes(s)) L.forEach(m => add(m.surovina, m.g)); });
   }
   const items = Object.entries(sum).filter(([, g]) => g > 0).map(([s, g]) => { const x = SUR(s); const gg = Math.ceil(g / 10) * 10;
     const ks = s === 'vejce' ? ` (~${Math.round(g / 55)} ks)` : '';

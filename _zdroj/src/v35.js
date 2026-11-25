@@ -40,7 +40,7 @@ CATS.splice(CATS.length - 1, 0, 'Kvůli záměnám');
 const _35shopItems = shopItems;
 shopItems = function (wi, list) {
   const items = _35shopItems(wi, list); if (list === 'Z') return items; const f = FX(); const R = RX();
-  const order = JD.meta.poradi_cyklu || ['A', 'B', 'C']; const w = order[wi % order.length]; const rng = list === 'N1' ? [0, 1, 2] : [3, 4, 5, 6]; const add = {};
+  const order = JD.meta.poradi_cyklu || ['A', 'B', 'C']; const w = order[wi % order.length]; const rng = listDays(list); const add = {};
   rng.forEach(di => { const k = dkey(addDays(pdate(f.start), wi * 7 + di)); const sw = f.swaps[k]; if (!sw) return; const base = _35planDayF(w, di, k);
     Object.entries(sw).forEach(([s, kod]) => { const o = R[base.jidla[s]], n = R[kod]; if (!o || !n) return; if (!(base.z_varky || []).includes(s)) o.suroviny.forEach(i => add[shopSur(i)] = (add[shopSur(i)] || 0) - i.g); n.suroviny.forEach(i => add[shopSur(i)] = (add[shopSur(i)] || 0) + i.g); }); });
   Object.entries(add).forEach(([s, g]) => { if (Math.abs(g) >= 1) items.push({ id: 'sw:' + s, nazev: SUR(s).nazev, mnozstvi: `${g > 0 ? '+' : ''}${g} g`, pozn: g > 0 ? 'kvůli výměně jídla' : 'kvůli výměně – kup o tolik méně', kat: 'Kvůli záměnám' }); });
