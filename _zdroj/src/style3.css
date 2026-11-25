@@ -600,3 +600,10 @@ svg.rchart .pt{fill:var(--rb);stroke:var(--ra);stroke-width:2}svg.rchart .pt.on{
 .ftv button span:last-child{display:flex;flex-direction:column;gap:2px}.ftv small{font-size:12px;color:var(--mut)}
 .ftv .rd{width:18px;height:18px;border-radius:50%;border:2px solid var(--mut);flex:none}.ftv button.on .rd{border:5px solid var(--hot)}
 .ftrn{margin:10px 2px 0;color:var(--fg)}
+/* v2.33: pořadí surovin, zelenina sbalená */
+.fing>[hidden]{display:none!important}
+.fing>div>b small{display:block;font-family:inherit;font-size:11px;font-weight:500;color:var(--mut);text-align:right}
+.fvgh{display:flex;align-items:center;gap:12px;width:100%;padding:11px 2px;border-bottom:1px solid var(--line);background:none;color:var(--fg);text-align:left}
+.fvgh>span{flex:1;min-width:0;display:flex;flex-direction:column}.fvgh>span b{font-size:15px;font-weight:600;font-family:inherit}.fvgh>span small{font-size:12px;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fvgh>b{font-family:var(--fd);font-weight:700;font-size:17px;white-space:nowrap}.fvgh i{display:flex;color:var(--mut);transform:rotate(90deg);transition:transform .15s}.fvgh.on i{transform:rotate(-90deg)}
+.fvg{padding-left:12px!important}

@@ -20,12 +20,12 @@ const DNYL = ['Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek', 'Sobota',
 const r10 = v => Math.round(v / 10) * 10;
 const shortN = n => String(n || '').replace(/\s*\((syrov[áéý]|syrové|bez slupky|dužina)\)/i, '');
 function cellIngr(r, mods) {
-  const base = r.suroviny.filter(i => !isVolna(i)).map(i => ({ ...i })); const extra = [];
+  const base = ingSorted(r).filter(x => x.g < 3).map(x => ({ ...x.i, grp: x.g })); const vegG = ingSorted(r).filter(x => x.g === 3 && !isVolna(x.i)).reduce((a, x) => a + (x.i.g || 0), 0); const extra = [];
   mods.forEach(m => { const x = base.find(i => i.surovina === m.surovina); if (x) x.g += m.g; else extra.push({ surovina: m.surovina, nazev: SUR(m.surovina).nazev, g: m.g, plus: 1 }); });
   const small = i => i.g <= 15 && ((SUR(i.surovina).na_100g || {}).kcal || 0) < 80;
-  const fmt = i => { const ks = /(\d+)\s*ks/.exec(i.poznamka || ''); return `${esc(shortN(i.nazev))} ${ks && i.g === r.suroviny.find(x => x.surovina === i.surovina)?.g ? `${ks[1]} ks` : `${i.plus && i.g > 0 ? '+' : ''}${i.g} g`}`; };
+  const fmt = i => { if (i.grp === 1 && i.surovina === 'vejce') return `${esc(shortN(i.nazev))} ${eggKs(i)} ks`; const ks = /(\d+)\s*ks/.exec(i.poznamka || ''); return `${esc(shortN(i.nazev))} ${ks && i.g === r.suroviny.find(x => x.surovina === i.surovina)?.g ? `${ks[1]} ks` : `${i.plus && i.g > 0 ? '+' : ''}${i.g} g`}`; };
   const big = [...base, ...extra].filter(i => i.g && !small(i)), sm = [...base, ...extra].filter(i => i.g && small(i));
-  const zv = volnaG(r); return `<ul>${big.map(i => `<li>${fmt(i)}</li>`).join('')}${zv ? `<li>+ zelenina ~${zv} g</li>` : ''}</ul>${sm.length ? `<p class="wsm">${sm.map(fmt).join(', ')}</p>` : ''}`;
+  const zv = volnaG(r) + vegG; return `<ul>${big.map(i => `<li>${fmt(i)}</li>`).join('')}${zv ? `<li>zelenina ~${Math.round(zv / 10) * 10} g</li>` : ''}</ul>${sm.length ? `<p class="wsm">${sm.map(fmt).join(', ')}</p>` : ''}`;
 }
 XV['f-tyden'] = withUP(function () {
   const f = F(); if (!f.start) return XV['f-den']();
