@@ -44,7 +44,11 @@ function cookRow(v, mon) {
     ${v.poznamka ? `<p>${esc(v.poznamka)}</p>` : ''}</div>`;
 }
 function cookTodayHTML(c) { const k = view.d || today(); if (typeof tripSkip === 'function' && tripSkip(k).length >= SLOTS.length) return ''; const L = cookFor(c.w, c.di); const mon = dkey(addDays(pdate(k), -c.di));
-  return L.length ? `<div class="fsec"><div class="lbl">Vaření dnes</div><div class="fvar">${L.map(v => cookRow(v, v.dalsi ? dkey(addDays(pdate(mon), 7)) : mon)).join('')}</div></div>` : ''; }
+  return L.length ? `<div class="fsec"><div class="lbl">Vaření dnes</div><div class="fvar">${L.map(v => cookRow(v, v.dalsi ? dkey(addDays(pdate(mon), 7)) : mon)).join('')}</div><button class="btn block" style="margin-top:10px" data-a="pr-plan" data-v="${esc(L.map(v => v.blok).join(','))}">Spočítat suroviny a porce</button></div>` : ''; }
+// z „Vaření dnes“: předvyplní dny bloku, na který se vaří, a hlavní chody
+A['pr-plan'] = b => { const f = F(); const k = view.d || today(); const c = cyc(k); const mon = dkey(addDays(pdate(k), -(c ? c.di : 0)));
+  const days = []; b.dataset.v.split(',').forEach(bl => { const off = { 'Po–Út': [7, 8], 'St–Čt': [2, 3], 'Pá–So': [4, 5], 'Ne': [6] }[bl] || []; off.forEach(o => days.push(dkey(addDays(pdate(mon), o)))); });
+  f.prep = { at: today(), days: [...new Set(days)].filter(x => x >= today()).sort(), slots: ['obed', 'vecere'], n: 0, from: 0 }; save(); go('f-prep'); };
 function cookWeekHTML(w) { const L = JD.cyklus[w]?.vareni || []; const mon = weekDateFor(w, 0); return L.length ? `<div class="fsec" style="margin-top:4px"><div class="lbl">Vaření</div><div class="fvar">${L.map(v => cookRow(v, mon)).join('')}</div></div>` : ''; }
 // týden: nadpisy bloků nad dvojicemi dnů
 function blockRow(days) { const g = []; days.forEach(x => { const b = x.day.blok || ''; if (g.length && g[g.length - 1].b === b) g[g.length - 1].n++; else g.push({ b, n: 1 }); });
@@ -114,7 +118,7 @@ function tripCard(k) {
 const _51fden = XV['f-den'];
 XV['f-den'] = function () {
   let h = _51fden(); const f = F(); if (!f.start) return h; const k = view.d || today(); const x = tripOn(k);
-  const btn = `<button class="btn block" style="margin-top:10px" data-a="trip-open">${x ? 'Upravit cestu' : 'Jsem na cestě'}</button>`;
+  const btn = `<div class="two" style="margin-top:14px"><button class="btn white" data-a="tab" data-v="f-prep">${ico('prep')} Jdu vařit</button><button class="btn" data-a="trip-open">${x ? 'Upravit cestu' : 'Jsem na cestě'}</button></div>`;
   h = h.replace(/(<\/div>)(<nav class="tabs)/, `${btn}$1$2`);
   if (!x) return h;
   h = h.replace(/(<div class="fdnav">[\s\S]*?<\/div><button class="round" data-a="f-day" data-v="1"[^>]*>[\s\S]*?<\/button><\/div>)/, `$1${tripCard(k)}`);

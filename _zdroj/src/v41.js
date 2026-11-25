@@ -79,25 +79,36 @@ XV['f-prep'] = withUP(function () {
   const sum = {}; rows.forEach(x => { x.r.suroviny.forEach(i => sum[shopSur(i)] = (sum[shopSur(i)] || 0) + i.g); x.mods.forEach(m => sum[m.surovina] = (sum[m.surovina] || 0) + m.g); });
   const ingr = Object.entries(sum).filter(([, g]) => g > 0).map(([s, g]) => [SUR(s), g, s]).sort((a, b) => (a[0].kategorie_nakupu || '').localeCompare(b[0].kategorie_nakupu || '') || a[0].nazev.localeCompare(b[0].nazev, 'cs'));
   const chip = (on, a, v, l, extra = '') => `<button class="chip ${on ? 'on' : ''}" data-a="${a}" data-v="${v}" ${extra}>${l}</button>`;
-  return `<div class="wrap">${fHdr('Předpříprava', '<span></span>')}
-    <p class="mut" style="margin:0 2px 12px;font-size:14px">Dnes je ${flong(today())}. Vyber dny, na které si chceš jídlo připravit dopředu, a která jídla.</p>
+  return `<div class="wrap">${fHdr('Jdu vařit', '<span></span>')}
+    <p class="mut" style="margin:0 2px 12px;font-size:14px">Dnes je ${flong(today())}. Vyber, na kolik dní vaříš a která jídla. Appka spočítá porce a suroviny.</p>
     <div class="lbl" style="margin:0 2px 8px">Na kolik dní vaříš</div><div class="chips">${[1, 2, 3, 4, 5].map(n => chip(prRun(sel) === `${n}|${P.from || 0}`, 'pr-n', n, n === 1 ? '1 den' : n < 5 ? n + ' dny' : n + ' dní')).join('')}</div>
     <div class="chips" style="margin-top:8px">${chip(!P.from, 'pr-from', 0, 'Od dneška')}${chip(P.from === 1, 'pr-from', 1, 'Od zítřka')}</div>
     <div class="lbl" style="margin:16px 2px 8px">Dny</div><div class="prd">${next.map(k => { const d = pdate(k); return `<button class="${sel.includes(k) ? 'on' : ''}" data-a="pr-day" data-v="${k}"><small>${k === today() ? 'dnes' : DOW[d.getDay()]}</small><b>${d.getDate()}.</b></button>`; }).join('')}</div>
-    <div class="lbl" style="margin:16px 2px 8px">Jídla</div><div class="chips">${SLOTS.map(([s, l]) => chip(P.slots.includes(s), 'pr-slot', s, l)).join('')}${chip(P.slots.length === 4, 'pr-slot', 'all', 'Vše')}</div>
+    <div class="lbl" style="margin:16px 2px 8px">Jídla</div><div class="chips">${chip(P.slots.length === 2 && P.slots.includes('obed') && P.slots.includes('vecere'), 'pr-slot', 'main', 'Hlavní chody')}${chip(P.slots.length === 4, 'pr-slot', 'all', 'Vše')}</div><div class="chips" style="margin-top:8px">${SLOTS.map(([s, l]) => chip(P.slots.includes(s), 'pr-slot', s, l)).join('')}</div>
     ${!rows.length ? '<div class="empty" style="margin-top:18px"><b>Vyber dny a jídla</b><span>Třeba středu a čtvrtek, jen obědy a svačiny. Ukáže se, co uvařit, kolik porcí a do kterých krabiček.</span></div>' : `
     <div class="fsec"><div class="lbl">Co kdy · ${rows.length} ${rows.length === 1 ? 'porce' : rows.length < 5 ? 'porce' : 'porcí'}</div>
       ${sel.map(k => { const L = rows.filter(x => x.k === k); return L.length ? `<div class="prday"><b>${flong(k)}</b>${L.map(x => `<button class="prm" data-a="f-meal" data-id="${x.r.kod}" data-s="${x.s}" data-k="${x.k}"><i>${x.l}</i><span>${esc(x.r.nazev)}</span></button>`).join('')}</div>` : ''; }).join('')}</div>
-    <div class="fsec"><div class="lbl">Co uvařit</div>${Object.values(byR).map(({ r, L }) => `<div class="prr"><b>${esc(r.nazev)}</b><span class="n">× ${L.length}</span><small>${L.map(x => `${DOW[pdate(x.k).getDay()]} ${x.l.toLowerCase()}`).join(' · ')}</small><small class="mut">${esc(r.skladovani || '')}</small></div>`).join('')}</div>
+    <div class="fsec"><div class="lbl">Co uvařit</div>${Object.values(byR).map(({ r, L }) => `<div class="prr"><b>${esc(r.nazev)}</b><span class="n">× ${L.length}</span><small>${L.map(x => `${DOW[pdate(x.k).getDay()]} ${x.l.toLowerCase()}`).join(' · ')}</small>${prIngr(r, L)}<small class="mut">${esc(r.skladovani || '')}</small></div>`).join('')}</div>
     <div class="fsec"><div class="lbl">Suroviny celkem</div>${ingr.map(([x, g]) => `<div class="fwr"><span>${esc(x.nazev)}</span><b>${g >= 1000 ? nf(g / 1000, 2) + ' kg' : r0(g) + ' g'}</b><small>${esc(x.kategorie_nakupu || '')}</small></div>`).join('')}</div>`}
   </div>${tabs()}`;
 });
+// suroviny na všechny porce jednoho jídla: maso → vejce → hlavní → dochucení → zelenina celkem
+function prIngr(r, L) {
+  const sum = {}; const n = L.length; r.suroviny.forEach(i => sum[i.surovina] = (sum[i.surovina] || 0) + (i.g || 0) * n); L.forEach(x => x.mods.forEach(m => sum[m.surovina] = (sum[m.surovina] || 0) + m.g));
+  const seen = new Set(); const G = ingSorted(r).filter(x => !seen.has(x.i.surovina) && seen.add(x.i.surovina));
+  const nm = i => esc(shortN(SUR(i.surovina).nazev || i.nazev).split(' (')[0]);
+  const q = x => x.g === 1 && x.i.surovina === 'vejce' ? `${eggKs(x.i) * n} ks` : `${r0(sum[x.i.surovina])} g`;
+  const main = G.filter(x => x.g < 3 && sum[x.i.surovina] > 0).map(x => `<span><em>${nm(x.i)}</em><b>${q(x)}</b></span>`).join('');
+  const cond = G.filter(x => x.g === 3 && sum[x.i.surovina] > 0).map(x => `${nm(x.i).toLowerCase()} ${r0(sum[x.i.surovina])} g`).join(', ');
+  const veg = G.filter(x => x.g === 4).reduce((a, x) => a + (isVolna(x.i) ? 0 : sum[x.i.surovina] || 0), 0) + volnaG(r) * n;
+  return `<div class="prig"><div class="lbl">Na ${n} ${n === 1 ? 'porci' : n < 5 ? 'porce' : 'porcí'}</div>${main}${cond ? `<p>Dochucení: ${cond}</p>` : ''}${veg ? `<p>Zelenina celkem ~${Math.round(veg / 50) * 50} g</p>` : ''}</div>`;
+}
 // rychlá volba: N dní za sebou od dneška / od zítřka
 function prRun(sel) { const f = F().prep || {}; const st = f.from || 0; if (!sel.length) return ''; const exp = [...Array(sel.length)].map((_, i) => dkey(addDays(new Date(), st + i))); return exp.every((k, i) => sel[i] === k) ? `${sel.length}|${st}` : ''; }
 A['pr-n'] = b => { const P = F().prep; const n = +b.dataset.v, st = P.from || 0; P.n = n; P.days = [...Array(n)].map((_, i) => dkey(addDays(new Date(), st + i))); save(); const y = $('#app').scrollTop; render(); $('#app').scrollTop = y; };
 A['pr-from'] = b => { const P = F().prep; const run = prRun(P.days.filter(k => k >= today()).sort()); if (run) P.n = +run.split('|')[0]; P.from = +b.dataset.v; if (P.n) P.days = [...Array(P.n)].map((_, i) => dkey(addDays(new Date(), P.from + i))); save(); const y = $('#app').scrollTop; render(); $('#app').scrollTop = y; };
 A['pr-day'] = b => { const P = F().prep; P.n = 0; const i = P.days.indexOf(b.dataset.v); if (i >= 0) P.days.splice(i, 1); else P.days.push(b.dataset.v); save(); const y = $('#app').scrollTop; render(); $('#app').scrollTop = y; };
-A['pr-slot'] = b => { const P = F().prep; if (b.dataset.v === 'all') P.slots = P.slots.length === 4 ? ['obed'] : SLOTS.map(s => s[0]); else { const i = P.slots.indexOf(b.dataset.v); if (i >= 0) P.slots.splice(i, 1); else P.slots.push(b.dataset.v); } save(); const y = $('#app').scrollTop; render(); $('#app').scrollTop = y; };
+A['pr-slot'] = b => { const P = F().prep; if (b.dataset.v === 'main') P.slots = ['obed', 'vecere']; else if (b.dataset.v === 'all') P.slots = P.slots.length === 4 ? ['obed'] : SLOTS.map(s => s[0]); else { const i = P.slots.indexOf(b.dataset.v); if (i >= 0) P.slots.splice(i, 1); else P.slots.push(b.dataset.v); } save(); const y = $('#app').scrollTop; render(); $('#app').scrollTop = y; };
 const _21tabs3 = tabs;
 tabs = () => view.n === 'f-prep' ? _21tabs3().replace('data-v="f-tyden" class="', 'data-v="f-tyden" class="on ') : _21tabs3();
 const _21fden3 = XV['f-den'];
