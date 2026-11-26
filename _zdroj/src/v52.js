@@ -57,7 +57,7 @@
     used.add(e.id); X[k] = e;
   }
   const T = {
-    'Upper 1': [['tbarW', 2], ['inclM', 2], ['latW', 2], ['upKl', 2], ['pec', 2], ['predp', 1], ['triL', 2], ['prea', 2], ['rpd', 1], ['bicN', 1]],
+    'Upper 1': [['tbarW', 2], ['inclM', 2], ['latW', 2], ['upKl', 2], ['pec', 2], ['triL', 2], ['prea', 2], ['predp', 1], ['rpd', 1], ['bicN', 1]],
     'Lower 1': [['pend', 2], ['zak', 2], ['predk', 2], ['hyp', 1], ['lytS', 2], ['add', 2], ['crun', 2], ['wrist', 1], ['neck', 1]],
     'Upper 2': [['smith', 2], ['tbarN', 2], ['upSt', 2], ['pull', 2], ['shM', 2], ['pec', 2], ['triO', 2], ['incC', 2]],
     'Lower 2': [['rdl', 2], ['pend', 2], ['zak', 2], ['predk', 1], ['lytM', 2], ['add', 2], ['abd', 1], ['abs', 2], ['wrist', 1], ['neck', 1]],
@@ -336,3 +336,19 @@ A['rg-open'] = b => { closeSheet(); rgSheet(+b.dataset.i); };
 // ---------- 7) shrnutí a dokončení: štítek fitka ----------
 const _52vFin = vFin;
 vFin = function () { const s = sesById(view.id); let h = _52vFin(); if (s && s.away) h = h.replace('<div class="chips"><span class="chip o">', `<div class="chips"><span class="chip o">${esc(s.gymName || 'Jiné fitko')}</span><span class="chip o">`); return h; };
+
+// ---------- v2.38.1: Upper 1 – předpažování až po preacher curlu ----------
+(function () {
+  if (S.settings.migTL2) return;
+  const t = S.templates.find(x => x.name === 'Upper 1'); const pr = S.exercises.find(e => e.name === 'Preacher curl jednoruč'), pd = S.exercises.find(e => e.name === 'Předpažování na kladce jednoruč (bez švihu)');
+  const move = arr => { const i = arr.indexOf(pd.id); if (i < 0 || arr.indexOf(pr.id) < 0) return; arr.splice(i, 1); arr.splice(arr.indexOf(pr.id) + 1, 0, pd.id); };
+  if (t && pr && pd) {
+    move(t.ex);
+    // rozjetý dnešní Upper 1 přeskládat taky (zápisy zůstanou)
+    S.sessions.filter(s => !s.end && s.tid === t.id).forEach(s => {
+      const ids = s.entries.map(e => e.exId); const open = s.entries[s.open]; move(ids);
+      s.entries = ids.map(id => s.entries.find(e => e.exId === id)); if (open) s.open = s.entries.indexOf(open);
+    });
+  }
+  S.settings.migTL2 = 1; save(true);
+})();
