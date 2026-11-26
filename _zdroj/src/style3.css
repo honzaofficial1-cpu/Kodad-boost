@@ -624,3 +624,17 @@ svg.rchart .pt{fill:var(--rb);stroke:var(--ra);stroke-width:2}svg.rchart .pt.on{
 .ftezh b{font-size:15px}.ftezh span{font-size:12px;color:var(--mut);align-self:end;white-space:nowrap}
 .ftezi{margin-top:6px}.ftezi span{display:flex;justify-content:space-between;padding:2px 0;font-size:14px}.ftezi em{font-style:normal}.ftezi b{font-family:var(--fd);font-weight:700}
 .ftezm small{display:block;margin-top:4px;font-size:12px;color:var(--mut)}
+/* v2.38: rozsah v tréninku, jiné fitko, sestava */
+.wkl{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;width:calc(100% - 24px);margin:12px 12px 0;padding:9px 12px;border:1px dashed var(--line);border-radius:12px;background:none;color:var(--mut);font-size:13px;text-align:left;line-height:1.35}
+.wkl span{white-space:nowrap}.wkl i{font-style:normal;margin-right:4px;color:var(--dim)}.wkl b{color:var(--fg);font-weight:600;font-variant-numeric:tabular-nums}.wkl em{font-style:normal;color:var(--dim)}
+.wkl u{margin-left:auto;display:inline-flex;align-items:center;gap:4px;text-decoration:none;color:var(--fg);font-size:12px;font-weight:600}.wkl u svg.i{width:15px;height:15px}
+.tr .rg{cursor:pointer;-webkit-user-select:none;user-select:none}.tr .rg>span:last-child{border-bottom:1px dotted var(--dim)}
+.gymtg{display:flex;gap:4px;width:max-content;max-width:100%;margin:-4px auto 14px;padding:3px;border:1px solid var(--line);border-radius:999px}
+.gymtg button{min-height:36px;padding:0 14px;border:0;border-radius:999px;background:none;color:var(--mut);font-size:14px;font-weight:600;max-width:190px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gymtg button.on{background:var(--fg);color:var(--ink)}
+.awaynote{margin:-6px 8px 14px;text-align:center;font-size:12px;color:var(--mut)}
+.tplsave{display:grid;gap:10px;margin:14px 2px 0;padding:14px;border:1px solid var(--line);border-radius:16px;font-size:14px;color:var(--mut)}.tplsave b{color:var(--fg)}
+.holdr{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;min-height:52px;padding:0 8px 0 16px;border:1px solid var(--line);border-radius:14px;background:none;color:var(--fg);font-size:16px;text-align:left}
+.holdr i{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:var(--card2);color:var(--mut)}.holdr.ok i{background:var(--fg);color:var(--ink)}
+.notep{font-size:16px!important}
+.wkl small{font-size:12px;color:var(--dim)}

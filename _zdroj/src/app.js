@@ -49,7 +49,7 @@ try { navigator.storage && navigator.storage.persist && navigator.storage.persis
 
 const exById = id => S.exercises.find(e => e.id === id);
 const adjSets = (sets, n) => { if (!n || n === sets.length) return sets; if (n < sets.length) return sets.slice(0, n); const o = sets.slice(); while (o.length < n) o.push({ ...o[o.length - 1] }); return o; };
-const exE = e => { const ex = exById(e.exId); if (!ex || !e.n || e.n === ex.sets.length) return ex; return Object.assign(Object.create(ex), { sets: adjSets(ex.sets, e.n) }); };
+const exE = e => { const ex = exById(e.exId); if (!ex) return ex; if (Array.isArray(e.rg) && e.rg.length) return Object.assign(Object.create(ex), { sets: e.rg }); if (!e.n || e.n === ex.sets.length) return ex; return Object.assign(Object.create(ex), { sets: adjSets(ex.sets, e.n) }); };
 const tplById = id => S.templates.find(t => t.id === id);
 const sesById = id => S.sessions.find(s => s.id === id);
 const finished = () => S.sessions.filter(s => s.end).sort((a, b) => b.start - a.start);
