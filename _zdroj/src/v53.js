@@ -62,3 +62,17 @@ A['pl-save'] = () => {
 // po uložení / zrušení sestavy zpět do plánů (dělá už původní go('tpls'))
 
 IC.minus = IC.minus || '<path d="M5 12h14"/>';
+
+// v2.39.1: rychlý vstup do plánů z úvodu (i během tréninku) a z menu tréninku
+const _53home = vHome;
+vHome = function () {
+  const h = _53home(); const i = h.indexOf('<div class="scard food'); if (i < 0) return h;
+  const names = plTpls().main.map(m => esc(m.t.name)).join(' · ') || 'Tvoje tréninky';
+  return h.slice(0, i) + `<button class="mvhome none" data-a="tab" data-v="tpls"><span class="lbl">Tréninkové plány</span><b>${names}</b>${ico('chev')}</button>` + h.slice(i);
+};
+const _53wm = A['w-menu'];
+A['w-menu'] = function () {
+  _53wm.apply(this, arguments); const list = $('#sheet .list');
+  if (list) list.insertAdjacentHTML('beforeend', `<button class="li" data-a="pl-go"><div class="t"><b>Tréninkové plány</b><small>Série a rozsahy všech tréninků</small></div></button>`);
+};
+A['pl-go'] = () => { closeSheet(); go('tpls'); };
