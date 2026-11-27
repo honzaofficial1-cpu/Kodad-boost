@@ -218,7 +218,7 @@ function vGym() {
     <div class="lbl" style="margin:26px 6px 10px">Přehled</div>
     <div class="list">
       <button class="li" data-a="tab" data-v="prog"><span class="ic" style="color:var(--prog)">${ico('chart')}</span><div class="t"><b>Progres cviků</b><small>Grafy, historie, kde stagnuješ · ${tot} tréninků</small></div><span class="chev">${ico('chev')}</span></button>
-      <button class="li" data-a="tab" data-v="tpls"><span class="ic" style="color:var(--done)">${ico('dumbbell')}</span><div class="t"><b>Moje tréninky</b><small>${S.templates.length} sestav · pořadí = rotace</small></div><span class="chev">${ico('chev')}</span></button>
+      <button class="li" data-a="tab" data-v="tpls"><span class="ic" style="color:var(--done)">${ico('dumbbell')}</span><div class="t"><b>Tréninkové plány</b><small>Všechny tréninky, série a rozsahy na jednom místě</small></div><span class="chev">${ico('chev')}</span></button>
       <button class="li" data-a="tab" data-v="lib"><span class="ic">${ico('list')}</span><div class="t"><b>Knihovna cviků</b><small>${S.exercises.length} cviků · rozsahy, krok váhy, info</small></div><span class="chev">${ico('chev')}</span></button>
     </div>
   </div>${tabs()}`;
@@ -744,7 +744,7 @@ function vSettings() {
     <section class="sec"><button class="sw ${S.settings.paceEval ? 'on' : ''}" data-a="tog-pace"><span>Hodnotit tempo nabírání<small>Hlášky typu „pod cílem“ a cílový pás v grafu. Vypnuto = jen čísla.</small></span><span class="k"></span></button></section>
     <section class="sec"><div class="lbl" style="margin:0 6px 10px">Tréninků týdně (cíl)</div>
       <div class="seg">${[2, 3, 4, 5, 6].map(v => `<button data-a="goal" data-v="${v}" class="${(S.settings.weekGoal || 4) === v ? 'on' : ''}">${v}</button>`).join('')}</div></section>
-    <section class="sec"><button class="li" data-a="tab" data-v="tpls"><span class="ic" style="color:var(--done)">${ico('dumbbell')}</span><div class="t"><b>Moje tréninky</b><small>${S.templates.length} sestav · rotace</small></div><span class="chev">${ico('chev')}</span></button></section>
+    <section class="sec"><button class="li" data-a="tab" data-v="tpls"><span class="ic" style="color:var(--done)">${ico('dumbbell')}</span><div class="t"><b>Tréninkové plány</b><small>Série a rozsahy na jednom místě</small></div><span class="chev">${ico('chev')}</span></button></section>
     <section class="sec"><div class="lbl" style="margin:0 6px 10px">Záloha dat</div>
       <div class="card" style="display:grid;gap:14px"><p style="margin:0;font-size:15px" class="mut">Všechno se ukládá jen v tvém iPhonu, proto appka jede i bez signálu. Když appku smažeš nebo změníš telefon, data zmizí. Záloha je jeden soubor do iCloudu, který kdykoliv nahraješ zpátky.</p>
       <div class="two"><button class="btn white" data-a="export">${ico('share')} Zálohovat</button><label class="btn" for="imp">Obnovit</label></div><input id="imp" type="file" accept="application/json,.json" hidden>

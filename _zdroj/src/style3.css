@@ -638,3 +638,18 @@ svg.rchart .pt{fill:var(--rb);stroke:var(--ra);stroke-width:2}svg.rchart .pt.on{
 .holdr i{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:var(--card2);color:var(--mut)}.holdr.ok i{background:var(--fg);color:var(--ink)}
 .notep{font-size:16px!important}
 .wkl small{font-size:12px;color:var(--dim)}
+/* v2.39: Tréninkové plány */
+.plt{margin:0 0 18px;border:1px solid var(--line);border-radius:20px;overflow:hidden}
+.plth{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:16px 16px 12px}
+.plth h2{margin:0;font-size:26px;line-height:1}.plth small{display:block;margin-top:6px;color:var(--mut);font-size:13px}
+.plth .btn{flex:none;gap:6px}.plth .btn svg.i{width:16px;height:16px}
+.plxs{border-top:1px solid var(--line)}
+.plx{display:grid;grid-template-columns:22px 1fr auto;align-items:center;gap:10px;width:100%;min-height:56px;padding:10px 16px;border:0;border-bottom:1px solid var(--line);background:none;color:var(--fg);text-align:left}
+.plx:last-child{border-bottom:0}.plx:active{background:var(--card2)}
+.plno{color:var(--dim);font-size:13px;font-variant-numeric:tabular-nums}
+.pln b{display:block;font-size:15px;font-weight:500;line-height:1.25}.pln small{display:block;margin-top:2px;color:var(--mut);font-size:12px}
+.pls{font-size:14px;color:var(--mut);white-space:nowrap;font-variant-numeric:tabular-nums}.pls em{font-style:normal;color:var(--fg);font-weight:600;margin-right:6px}.pls sup{font-size:9px;margin-left:1px;color:var(--fg)}
+.plcnt{display:flex;align-items:center;justify-content:space-between;margin-top:18px;padding:10px 0;border-bottom:1px solid var(--line)}
+.plcnt>div{display:flex;align-items:center;gap:14px}.plcnt b{min-width:20px;text-align:center;font-size:22px}.plcnt .round{width:44px;height:44px}
+#pl-sets .setcfg{grid-template-columns:24px 1fr 1fr 46px}
+.plgh{display:grid;grid-template-columns:24px 1fr 1fr 46px;gap:8px;margin:14px 0 6px;font-size:12px;color:var(--dim);text-align:center}
