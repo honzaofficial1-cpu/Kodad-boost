@@ -60,7 +60,6 @@ XV['f-tyden'] = withUP(function () {
     <p class="wsub"><b>Jídelníček · krok ${sgn(f.step)}${verzeOf(f.step) ? ' · verze ' + verzeOf(f.step) : ''} · ~${thou(r10(avg.kcal))} kcal</b>${isV3() ? '' : dailyCook(w) ? `<br>Vaření: ${esc(W.vareni || JD.meta.vareni || 'každý večer 2 porce')}` : `<br>Vaření do zásoby: neděle předem <b>${esc(R[monBatch(w)]?.nazev || '')}</b> (večeře + obědy ${lunchDays(monBatch(w), W)}) · středa <b>${esc(R[thuBatch(w)]?.nazev || '')}</b> (večeře + obědy ${lunchDays(thuBatch(w), W)})`}</p>
     <div class="wscroll">${grid}</div>
     <p class="wfoot"><b>Průměr týdne: ~${thou(r10(avg.kcal))} kcal · B ${r0(avg.bilkoviny_g)} g · S ${r0(avg.sacharidy_g)} g · T ${r0(avg.tuky_g)} g · vláknina ${r0(avg.vlaknina_g)} g.</b></p>
-    ${isV3() ? `<div style="margin-top:18px">${cookWeekHTML(w)}</div>` : ''}
     <p class="wfoot">Jednotky: ${esc(JD.meta.jednotky || '')}. ${esc(fo.poznamka || '')} ${esc(JD.meta.upozorneni || '')}</p>
     <button class="btn block" style="margin-top:14px" data-a="tab" data-v="f-prep">${ico('prep')} Předpřipravit jídlo na víc dní</button>
   </div>${tabs()}`;

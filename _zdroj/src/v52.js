@@ -113,9 +113,9 @@ function refillWeights(s) {
     ex.sets.forEach((c, i) => {
       const st = e.sets[i] || (e.sets[i] = { w: null, reps: null, l: null, r: null });
       if (st.reps != null || st.l != null || st.r != null) return;
-      const est = i > 0 && setGoalW(ex, e, i, last).est;
-      if (!ex.uni) { st.w = est ? null : target(ex, i, last).w; return; }
-      const wl = est ? null : targetSide(ex, i, last, 'l').w, wr = est ? null : targetSide(ex, i, last, 'r').w, ws = [wl, wr].filter(x => x != null);
+      const g = i > 0 ? setGoalW(ex, e, i, last) : null, est = !!(g && g.est); if (est) st.auto = 1; else delete st.auto;
+      if (!ex.uni) { st.w = est ? g.w : target(ex, i, last).w; return; }
+      const wl = est ? g.w : targetSide(ex, i, last, 'l').w, wr = est ? g.w : targetSide(ex, i, last, 'r').w, ws = [wl, wr].filter(x => x != null);
       st.wl = wl; st.wr = wr; st.w = ws.length ? Math.min(...ws) : null;
     });
   });
@@ -221,7 +221,7 @@ const _52add = addEntry;
 addEntry = function (s, exId, n) {
   _52add.apply(this, arguments); const e = s.entries[s.entries.length - 1]; if (!e || e.exId !== exId) return;
   const ex = exE(e); if (!ex || ex.hold) return; const last = lastBefore(exId, s);
-  ex.sets.forEach((c, i) => { if (!i) return; const g = setGoalW(ex, e, i, last); if (!g.est) return; const st = e.sets[i]; if (!st) return; st.w = null; if (ex.uni) { st.wl = null; st.wr = null; } });
+  ex.sets.forEach((c, i) => { if (!i) return; const g = setGoalW(ex, e, i, last); if (!g.est) return; const st = e.sets[i]; if (!st) return; st.w = g.w; st.auto = 1; if (ex.uni) { st.wl = g.w; st.wr = g.w; } });
 };
 IC.edit = '<path d="M4 20h4L19 9l-4-4L4 16v4zM13.5 6.5l4 4"/>';
 
@@ -287,6 +287,11 @@ updateCard = function (card, s, e) {
     if (!i) return; const g = setGoalW(ex, e, i, last); if (!g.est || g.w == null) return;
     const inp = ex.uni ? $(`.tr[data-i="${i}"][data-side="l"] [data-f=wl]`, card) : $(`.tr[data-i="${i}"] [data-f=w]`, card);
     if (inp) inp.placeholder = kg(g.w);
+    const st = e.sets[i]; // doporučená váha předvyplněná automaticky: dokud ji neměníš, jde s 1. sérií
+    if (st && st.auto && st.reps == null && st.l == null && st.r == null && g.w != null) {
+      if (ex.uni) { st.wl = st.wr = st.w = g.w; $$(`.tr[data-i="${i}"] [data-f=wl], .tr[data-i="${i}"] [data-f=wr]`, card).forEach(x => { if (document.activeElement !== x) x.value = kg(g.w); }); }
+      else { st.w = g.w; if (inp && document.activeElement !== inp) inp.value = kg(g.w); }
+    }
   });
 };
 
@@ -352,3 +357,10 @@ vFin = function () { const s = sesById(view.id); let h = _52vFin(); if (s && s.a
   }
   S.settings.migTL2 = 1; save(true);
 })();
+
+// ruční přepsání váhy = už ne automatická
+document.addEventListener('input', ev => {
+  const i = ev.target; if (view.n !== 'workout' || !i.matches('[data-f=w],[data-f=wl],[data-f=wr]')) return;
+  const row = i.closest('.tr'), card = i.closest('.ex'); const s = sesById(view.id); if (!row || !card || !s) return;
+  const st = s.entries[+card.dataset.idx]?.sets[+row.dataset.i]; if (st) delete st.auto;
+}, true);
