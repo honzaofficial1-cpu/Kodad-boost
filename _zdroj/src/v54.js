@@ -128,3 +128,80 @@ const _54fb = fixBottom;
 fixBottom = function () { _54fb.apply(this, arguments); const f = (window.__vb && window.__vb.fix) || 0; document.documentElement.style.setProperty('--fixpx', (S.settings.vbStretch && f > 20 ? f : 0) + 'px'); };
 fixBottom();
 addEventListener('resize', () => setTimeout(() => { const f = (window.__vb && window.__vb.fix) || 0; document.documentElement.style.setProperty('--fixpx', (S.settings.vbStretch && f > 20 ? f : 0) + 'px'); }, 50));
+
+// ---------- v2.40.1: proč je surovina v jídelníčku (ⓘ u každé suroviny) ----------
+const WHY = [
+  [/^hov_/, 'Bílkovina pro svaly. Hemové železo, které tělo vstřebá nejlíp, zinek a vitamin B12. Přirozeně i kreatin.'],
+  [/^(krut|kur)_/, 'Libová bílkovina s málem tuku. Vitaminy B3 a B6 (energie z jídla) a selen.'],
+  [/^losos/, 'Bílkovina a omega-3 mastné kyseliny (EPA, DHA) pro srdce, klouby a regeneraci. Vitamin D a selen.'],
+  [/^sardinky/, 'Omega-3 (EPA, DHA), vápník z jemných kostí, vitamin D a B12.'],
+  [/^tunak/, 'Skoro čistá bílkovina. Selen a vitamin B12.'],
+  [/^krevety/, 'Libová bílkovina, jód, selen a vitamin B12.'],
+  [/^vejce$/, 'Kompletní bílkovina se všemi esenciálními aminokyselinami. Cholin, B12, vitamin D a lutein ze žloutku.'],
+  [/^whey/, 'Rychlá a kvalitní bílkovina s hodně leucinem, který spouští stavbu svalů.'],
+  [/^(recky_jogurt|cottage)/, 'Bílkovina (hlavně kasein, sytí dlouho) a vápník.'],
+  [/^(jogurt_bily|kefir)/, 'Živé kultury pro střeva, vápník a bílkovina.'],
+  [/^mleko/, 'Vápník, bílkovina a vitamin B2.'],
+  [/^(feta|parmazan)/, 'Bílkovina a vápník v malém množství a hodně chuti.'],
+  [/^smetana/, 'Tuk, tedy energie, a krémovost omáčky.'],
+  [/^maslo/, 'Tuk (energie) a vitamin A.'],
+  [/^(basmati|arborio|sushi_ryze|ryzova_kase|ryzove_nudle|testoviny$|gnocchi)/, 'Sacharidy = palivo na trénink a doplnění glykogenu. Lehké na trávení.'],
+  [/^(testoviny_cz|tortilla_cz|mouka_spaldova|chleb_zitny|bulgur)/, 'Sacharidy na trénink a k tomu vláknina, hořčík a vitaminy B z celého zrna.'],
+  [/^(cizrna|fazole_cerne)/, 'Vláknina, rostlinná bílkovina, hořčík, folát a železo.'],
+  [/^edamame/, 'Rostlinná bílkovina, vláknina, folát a vitamin K.'],
+  [/^hrasek/, 'Vláknina, rostlinná bílkovina a vitamin C.'],
+  [/^kukurice/, 'Sacharidy a vláknina.'],
+  [/^banan/, 'Rychlé sacharidy (ideál kolem tréninku) a draslík.'],
+  [/^boruvky/, 'Antioxidanty (antokyany), vitamin C a vláknina.'],
+  [/^jablko/, 'Vláknina (pektin) a sytost.'],
+  [/^kiwi/, 'Hodně vitaminu C, vláknina a pomoc trávení.'],
+  [/^pomeranc/, 'Vitamin C a folát.'],
+  [/^datle/, 'Rychlé sacharidy a draslík.'],
+  [/^avokado/, 'Nenasycené tuky, draslík a vláknina.'],
+  [/^olej_olivovy/, 'Zdravé mononenasycené tuky, vitamin E a polyfenoly. Pomáhá vstřebat vitaminy A, D, E, K ze zeleniny.'],
+  [/^olej_sezamovy/, 'Tuk (energie) a typická chuť.'],
+  [/^vlasske/, 'Rostlinná omega-3 (ALA), hořčík a zdravé tuky.'],
+  [/^mandle/, 'Vitamin E, hořčík a zdravé tuky.'],
+  [/^dynova/, 'Hořčík, zinek, železo a zdravé tuky.'],
+  [/^sezam/, 'Vápník a zdravé tuky.'],
+  [/^kakao/, 'Hořčík, železo a polyfenoly, bez cukru.'],
+  [/^(med|cukr)$/, 'Rychlé sacharidy a chuť.'],
+  [/^brokolice/, 'Vitamin C a K, folát a vláknina.'],
+  [/^spenat/, 'Folát, vitamin K, hořčík a železo.'],
+  [/^paprika/, 'Velmi hodně vitaminu C a vitamin A.'],
+  [/^(rajcata|passata)/, 'Lykopen (antioxidant, z vařených rajčat se vstřebá líp), vitamin C a draslík.'],
+  [/^mrkev/, 'Beta-karoten (vitamin A) pro oči a kůži.'],
+  [/^cuketa/, 'Velký objem jídla za málo kalorií, vláknina a draslík.'],
+  [/^(cibule|cesnek)/, 'Prebiotická vláknina pro střevní bakterie a chuť.'],
+  [/^zazvor/, 'Chuť a podpora trávení.'],
+  [/^(celer|petrzel)/, 'Vláknina, draslík a chuť vývaru.'],
+  [/^(okurka|salat)/, 'Objem, voda a vitamin K skoro bez kalorií.'],
+  [/^klicky/, 'Vitamin C, folát a vláknina.'],
+  [/^zampiony/, 'Vitaminy B, selen a vláknina.'],
+  [/^kysane_zeli/, 'Vitamin C a vláknina. Domácí nepasterované má i živé kultury pro střeva.'],
+  [/^nori/, 'Jód pro štítnou žlázu.'],
+  [/^vyvar_hovezi/, 'Tekutiny, minerály a chuť.'],
+  [/^vyvar/, 'Tekutina a základ polévky.'],
+  [/^(citron|limetka)/, 'Chuť a vitamin C, který pomáhá vstřebat železo z rostlin.'],
+  [/^(sojova|rybi_omacka|horcice|ryzovy_ocet)/, 'Jen chuť (hlavně sůl). Výživově to nehraje roli.'],
+  [/^zelenina_volna/, 'Vláknina, vitaminy a minerály a objem jídla.'],
+];
+function whyTxt(i) {
+  const w = WHY.find(([rx]) => rx.test(i.surovina)); const n = nutOf(i.surovina, i.g || 0);
+  const m = [n.bilkoviny_g >= 1 ? `B ${Math.round(n.bilkoviny_g)} g` : '', n.sacharidy_g >= 1 ? `S ${Math.round(n.sacharidy_g)} g` : '', n.tuky_g >= 1 ? `T ${Math.round(n.tuky_g)} g` : '', n.vlaknina_g >= 1 ? `Vl ${Math.round(n.vlaknina_g)} g` : ''].filter(Boolean).join(' · ');
+  return `${w ? esc(w[1]) : 'Doplňuje energii a chuť jídla.'}${i.g ? `<small>V téhle porci (${i.g} g): ${Math.round(n.kcal || 0)} kcal${m ? ' · ' + m : ''}</small>` : ''}`;
+}
+A['f-why'] = b => { const el = document.getElementById('fw-' + b.dataset.v); if (!el) return; el.hidden = !el.hidden; b.classList.toggle('on', !el.hidden); };
+const _541fm = A['f-meal'];
+A['f-meal'] = function (b) {
+  _541fm.apply(this, arguments); const r = RX()[b.dataset.id]; if (!r) return;
+  $$('#sheet .fing > div[data-i]').forEach(d => {
+    const i = r.suroviny[+d.dataset.i]; if (!i) return; const sp = d.querySelector('span'); if (!sp) return;
+    // stejné řádky „krok −7 (příloha)“ za sebou jen jednou
+    const seen = new Set(); [...sp.querySelectorAll('small')].forEach(x => { const t = x.textContent.trim(); if (seen.has(t)) x.remove(); else seen.add(t); });
+    const tn = [...sp.childNodes].find(x => x.nodeType === 3 && x.textContent.trim());
+    const btn = `<button class="finf" data-a="f-why" data-v="${d.dataset.i}" aria-label="Proč je to v jídelníčku">i</button>`;
+    if (tn) tn.after(document.createRange().createContextualFragment(btn)); else sp.insertAdjacentHTML('afterbegin', btn);
+    d.insertAdjacentHTML('afterend', `<section class="fexp fwhy" id="fw-${d.dataset.i}" hidden>${whyTxt(i)}</section>`);
+  });
+};
