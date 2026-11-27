@@ -205,3 +205,11 @@ A['f-meal'] = function (b) {
     d.insertAdjacentHTML('afterend', `<section class="fexp fwhy" id="fw-${d.dataset.i}" hidden>${whyTxt(i)}</section>`);
   });
 };
+
+// v2.40.2: Statistiky a Gym přímo z úvodu (karta tréninku vede do tréninku/shrnutí, takže na Gym se jinak nedostaneš)
+const _542home = vHome;
+vHome = function () {
+  const h = _542home(); const i = h.indexOf('<button class="mvhome none" data-a="tab" data-v="tpls"'); if (i < 0) return h;
+  const row = `<div class="hqk"><button data-a="tab" data-v="prog">${ico('chart') || ''}<b>Statistiky</b><small>grafy, partie, progres</small></button><button data-a="tab" data-v="gym">${ico('dumbbell')}<b>Gym</b><small>odznaky, knihovna</small></button></div>`;
+  return h.slice(0, i) + row + h.slice(i);
+};
