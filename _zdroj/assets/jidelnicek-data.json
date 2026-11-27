@@ -2,8 +2,8 @@
  "meta": {
   "format": "nabiraci-system",
   "schema": 2,
-  "nazev": "Nabírací systém v3.1 (2denní bloky, cyklus 2 týdny, verze 2 700 / 3 000 / 3 400)",
-  "verze": "3.1",
+  "nazev": "Nabírací systém v3.2 (2denní bloky, cyklus 2 týdny, verze 2 700 / 3 000 / 3 400)",
+  "verze": "3.2",
   "datum": "2026-11-27",
   "vychozi_krok": -7,
   "aktualni_krok": -7,
@@ -40,10 +40,11 @@
    "Ne"
   ],
   "zmeny_3_0": "Cyklus 2 týdny (T1, T2) místo A/B/C, jídla ve 2denních blocích. Vypadly S-Čt (tuňáková pomazánka) a S-Ne C; P4 jen záměna. P-V1 a P2 celý kelímek jogurtu (140 g), H5 bílý jogurt 75 g, H4 řecký jogurt 80 g. Ferment: kefír 100 ml v Po a Út T1. Nové pořadí ubírání kroků (krok −7 = olej k obědu −11 g místo přílohy). Nákupy N1 neděle / N2 úterý / N3 čtvrtek. Rýže max. 24 h v lednici. Maso u receptů jako doporučený kus s náhradou (kuřecí prsa/stehna, hovězí zadní/kližka, krůtí/kuřecí prsa); výpočty a nákup s doporučeným kusem.",
-  "zmeny_3_1": "Mikroživiny u každé suroviny + cile_mikrozivin + suplementy_obsah + kontrola_tydne. Náhrady (nahrady s pomerem) a \"proc\" u surovin. Role v receptu: skupina \"dochuceni\" + pole \"nutne\". Trvanlivost receptů (lednice_dni, mrazak_dni). Tekutiny jednotka ml. Maso: obecný název, doporučený kus, vareny_faktor a vareny_g. Volná zelenina zastropena (150/200 g). Pravidlo tréninkové svačiny, stropy porcí, páté jídlo (P5-A až P5-E), cestovní varianty, mrazení masa. Nové suroviny: brambory, krupice, jáhly, kakaové boby."
+  "zmeny_3_1": "Mikroživiny u každé suroviny + cile_mikrozivin + suplementy_obsah + kontrola_tydne. Náhrady (nahrady s pomerem) a \"proc\" u surovin. Role v receptu: skupina \"dochuceni\" + pole \"nutne\". Trvanlivost receptů (lednice_dni, mrazak_dni). Tekutiny jednotka ml. Maso: obecný název, doporučený kus, vareny_faktor a vareny_g. Volná zelenina zastropena (150/200 g). Pravidlo tréninkové svačiny, stropy porcí, páté jídlo (P5-A až P5-E), cestovní varianty, mrazení masa. Nové suroviny: brambory, krupice, jáhly, kakaové boby.",
+  "zmeny_3_2": "Role surovin podle uživatele: nutne = celý základ receptu (hlavní suroviny + ovoce + povinná zelenina, včetně kakaa, sójové omáčky a rýžového octa tam, kde dělají chuť jídla); dochucení = volitelné (citron, limetka, česnek, zázvor, jarní cibulka, sezam, nori, parmazán, hořčice, rybí omáčka, cukr, sezamový olej) + koření. Nový seznam vhodné a méně vhodné zeleniny (zobrazeni_zeleniny.vhodna, mene_vhodna)."
  },
  "plan_nabirani": {
-  "verze": "3.1 (27. 11. 2026)",
+  "verze": "3.2 (27. 11. 2026)",
   "shrnuti": "Metoda z PDF: zjistit udržovací příjem, k němu +200–300 kcal a pak upravovat po 100–200 kcal podle dvoutýdenního hodnocení. Jídla zůstávají stejná, mění se jen přílohy a tuky po krocích (~100 kcal). O změně rozhoduje celkový obraz: tempo hmotnosti (hlavní číslo), fotky, pas a výkon. Pas sám nikdy nerozhoduje. Vaří se do zásoby 2× týdně: v neděli a ve středu várka 4 porcí (večeře + 3 obědy); ostatní večeře čerstvě na 1 porci.",
   "faze": [
    {
@@ -266,7 +267,7 @@
   "presnost": "Hodnoty surovin mají kategorii zdroje (1 etiketa, 2 databáze konkrétního výrobku, 3 obecný odhad). Energie je odhad; přesnost je pracovní předpoklad zhruba ±5–10 % (nejde o změřenou chybu). Skutečný příjem doladí kalibrace podle váhy.",
   "texty": {
    "strategie_a_struktura": "Kostra je metoda z PDF: udržovací příjem, k němu +200–300 kcal a úpravy po 100–200 kcal. Doplnění přidávají kalibraci, cílové tempo a horní hranici.\n\n## Strategie\n\n| Oblast | Nastavení | Opora |\n| --- | --- | --- |\n| Metoda | Udržovací příjem → +200–300 kcal → podle vývoje ±100–200 kcal | PDF; Garthe 2013, Slater 2019 |\n| Ověření | 4 týdny kalibrace na kroku 0, porovná se průměr týdne 2 a 4 | dohodnuto |\n| Tempo | ~0,15–0,25 % hmotnosti týdně (při 90 kg ~0,27–0,45 kg za 2 týdny) | Iraki 2019 |\n| Bílkoviny | 2,0–2,2 g/kg, 4 jídla po ~0,4–0,55 g/kg | Morton 2018, Schoenfeld & Aragon 2018 |\n| Tuky | ~80–100 g, nasycené pod 10 % energie | Iraki 2019, EFSA |\n| Sacharidy | zbytek energie (~4,5 g/kg), víc před tréninkem a po něm | systematický přehled v PDF |\n| Vláknina | 40–60 g, v jídle před tréninkem méně | PDF, EFSA |\n| Tréninkové vs. volné dny | stejný příjem, mění se jen svačina | praktická volba |\n| Kofein | max. ~270 mg, co nejdřív před tréninkem | PDF |\n\n## Nutriční struktura (krok 0)\n\nPrůměr cyklu (krok 0 = verze 3 400): **3 450 kcal**  bílkoviny 197 g  sacharidy 421 g  tuky 98 g  vláknina 50 g. Je to start kalibrace, ne finální číslo.\n\n| Jídlo | Čas | kcal | Bílkoviny | Skladba |\n| --- | --- | --- | --- | --- |\n| Snídaně | ~7:30 | ~850 | 45–55 g | vejce, cottage nebo ryba + chléb, tortilla či kaše + ovoce a zelenina |\n| Oběd | ~11:30 | ~900 | 45–60 g | krabička z várky (o modul přílohy méně) + 15 g ořechů |\n| Svačina | ~15:00 | ~700 | 35–45 g | před tréninkem rýžová kaše nebo kefírový shake; volný den sendvič, tortilla nebo miska |\n| Večeře | ~18:30 | ~930 | 50–60 g | z bloku na 2 dny (ryba 3× v cyklu na blok), v neděli první porce várky |\n\n## Týdenní rytmus\n\n- 2denní bloky Po–Út, St–Čt, Pá–So + čerstvá neděle; cyklus 2 týdny (T1, T2).\n- Dušená jídla na 4 porce: svíčková, chilli, kuličky, ragú; curry, kuře na paprice a večeře na 2 porce.\n- Tučná ryba (losos, sardinky) 5 jídel týdně, krevety 1× týdně.\n- Rýže nejvýš 2 jídla denně, v lednici max. 24 h.\n- Červené maso ~570 g syrového týdně (WCRF: max. 350–500 g vařeného), vejce ~11 týdně.\n\n## Sledování\n\nRozhoduje trend týdenních průměrů hmotnosti spolu s pasem, fotkami a výkonem, nikdy jedno vážení. Pravidla hodnocení jsou v aplikaci v části Plán.\n",
-   "urovne_prijmu": "1 krok = ~100 kcal = 1 modul. Jídla zůstávají stejná, mění se příloha, ořechy nebo olej. Verze: **krok −7 = 2 700**, **krok −4 = 3 000**, **krok 0 = 3 400**.\n\n| Krok | kcal | B (g) | S (g) | T (g) |\n| --- | --- | --- | --- | --- |\n| -7 (2 700) | 2 726 | 180 | 312 | 75 |\n| -6 | 2 812 | 180 | 312 | 85 |\n| -5 | 2 916 | 182 | 313 | 95 |\n| -4 (3 000) | 3 020 | 185 | 335 | 95 |\n| -3 | 3 126 | 188 | 357 | 95 |\n| -2 | 3 228 | 190 | 378 | 96 |\n| -1 | 3 330 | 193 | 397 | 97 |\n| 0 (3 400) | 3 434 | 196 | 419 | 97 |\n| +1 | 3 539 | 198 | 441 | 98 |\n| +2 | 3 644 | 201 | 464 | 98 |\n| +3 | 3 748 | 204 | 465 | 108 |\n| +4 | 3 850 | 206 | 485 | 109 |\n| +5 | 3 954 | 209 | 507 | 109 |\n| +6 | 4 053 | 209 | 507 | 120 |\n| +7 | 4 155 | 212 | 526 | 121 |\n| +8 | 4 254 | 212 | 526 | 132 |\n| +9 | 4 360 | 215 | 549 | 132 |\n| +10 | 4 462 | 217 | 569 | 133 |\n\n**Dolů:** −1 příloha večeře, −2 příloha snídaně, −3 příloha svačiny, −4 příloha oběda, −5 příloha večeře, −6 bez 15 g ořechů, −7 olivový olej k obědu o 11 g méně.\n\n**Nahoru:** +1 příloha večeře, +2 příloha oběda. Od ~3 650 kcal (krok +3) už porce nezvětšujeme a přidáváme **páté jídlo** (~450 kcal: rýžová, krupicová nebo jáhlová kaše, toast s cottage, tortilla s cottage). Napojení na kroky doladíme, až tam dojdeme.\n\n**Kdy přidat:** Hodnotí se každé 2 týdny podle průměru ranních vážení. Cíl: +0,3–0,5 % hmotnosti za 2 týdny (při 90 kg ~0,3–0,45 kg). Pod 0,3 % → +1 až 2 kroky. V pásmu → beze změny. Nad 0,5 % nebo pas roste rychleji než váha → −1 krok. Nikdy podle jednoho vážení; zohlednit pas, fotky, výkon, hlad a spánek.\n\n**Stropy porcí:** oběd/večeře max. ~160 g suché přílohy (gnocchi ~350 g), snídaně max. ~200 g chleba nebo ~120 g kaše, svačina max. ~110 g kaše.\n\n**Tréninková svačina ve volný den:** Trénink ve dni s volnou svačinou: pokud je snídaně rýžová kaše (S6) nebo je ten den už jídlo s rýží či rýžovými nudlemi (H1, H3, H5, H9, H7, H13, H10), dej kefírový shake P-T1; jinak rýžovou kaši P1. Gramáž podle kroku jako u ostatních svačin.",
+   "urovne_prijmu": "1 krok = ~100 kcal = 1 modul. Jídla zůstávají stejná, mění se příloha, ořechy nebo olej. Verze: **krok −7 = 2 700**, **krok −4 = 3 000**, **krok 0 = 3 400**.\n\n| Krok | kcal | B (g) | S (g) | T (g) |\n| --- | --- | --- | --- | --- |\n| -7 (2 700) | 2 726 | 180 | 312 | 75 |\n| -6 | 2 812 | 180 | 312 | 85 |\n| -5 | 2 916 | 182 | 313 | 95 |\n| -4 (3 000) | 3 020 | 185 | 335 | 95 |\n| -3 | 3 126 | 188 | 357 | 95 |\n| -2 | 3 228 | 190 | 378 | 96 |\n| -1 | 3 330 | 193 | 397 | 97 |\n| 0 (3 400) | 3 434 | 196 | 419 | 97 |\n| +1 | 3 539 | 198 | 441 | 98 |\n| +2 | 3 644 | 201 | 464 | 98 |\n| +3 | 3 748 | 204 | 465 | 108 |\n| +4 | 3 850 | 206 | 485 | 109 |\n| +5 | 3 954 | 209 | 507 | 109 |\n| +6 | 4 053 | 209 | 507 | 120 |\n| +7 | 4 155 | 212 | 526 | 121 |\n| +8 | 4 254 | 212 | 526 | 132 |\n| +9 | 4 360 | 215 | 549 | 132 |\n| +10 | 4 462 | 217 | 569 | 133 |\n\n**Dolů:** −1 příloha večeře, −2 příloha snídaně, −3 příloha svačiny, −4 příloha oběda, −5 příloha večeře, −6 bez 15 g ořechů, −7 olivový olej k obědu o 11 g méně.\n\n**Nahoru:** +1 příloha večeře, +2 příloha oběda. Od ~3 650 kcal (krok +3) už porce nezvětšujeme a přidáváme **páté jídlo** (~450 kcal: rýžová, krupicová nebo jáhlová kaše, toast s cottage, tortilla s cottage). Napojení na kroky doladíme, až tam dojdeme.\n\n**Kdy přidat:** Hodnotí se každé 2 týdny podle průměru ranních vážení. Cíl: +0,3–0,5 % hmotnosti za 2 týdny (při 90 kg ~0,3–0,45 kg). Pod 0,3 % → +1 až 2 kroky. V pásmu → beze změny. Nad 0,5 % nebo pas roste rychleji než váha → −1 krok. Nikdy podle jednoho vážení; zohlednit pas, fotky, výkon, hlad a spánek.\n\n**Stropy porcí:** oběd/večeře max. ~160 g suché přílohy (gnocchi ~350 g), snídaně max. ~200 g chleba nebo ~120 g kaše, svačina max. ~110 g kaše.\n\n**Tréninková svačina ve volný den:** Trénink ve dni s volnou svačinou: pokud je snídaně rýžová kaše (S6) nebo je ten den už jídlo s rýží či rýžovými nudlemi (H1, H3, H5, H9, H7, H13, H10), dej kefírový shake P-T1; jinak rýžovou kaši P1. Gramáž podle kroku jako u ostatních svačin.\n\n**Trénink a příjem:** Příjem je každý den stejný bez ohledu na trénink (upper, lower, volno i thajský box). Mění se jen svačina: když je trénink nebo box ve dni s volnou svačinou a snídaně je rýžová kaše (S6) nebo je ten den už jídlo s rýží či rýžovými nudlemi (H1, H3, H5, H9, H7, H13, H10), dej kefírový shake P-T1; jinak rýžovou kaši P1. Když naopak připadne volno na den s tréninkovou svačinou, svačina zůstává (stejné kalorie). Pojistka fermentu: pokud by po změně den neměl žádný jogurt ani kefír, přidej k obědu 100 ml kefíru.\n\n**Thajský box:** Občasný box příjem nemění – svačinu před ním ber jako tréninkovou. Box ve stejný den jako posilování: svačina před prvním tréninkem, po druhém normální jídlo. Když se box stane pravidelným (1–2× týdně déle než 2 týdny) a trend váhy zaostane pod 0,3 % za 2 týdny, přidá se 1 krok (~100 kcal) podle běžného pravidla. Ve dny boxu víc pít, při silném pocení špetka soli navíc.\n\n**Ranní trénink:** Trénink 1–2 h po probuzení: snídaně je jídlo před tréninkem, svačina se posune po tréninku. Nic jiného se nemění.",
    "zameny_a_mimoradne_dny": "## Záměny jídel\n\n- Jídla v rámci stejného slotu můžeš prohodit mezi dny; energie se liší do ~±100 kcal, v týdenním průměru se to srovná.\n- Celé bloky lze prohodit nebo posunout o den (např. Ne–Po, Út–St, Čt–Pá a čerstvá sobota).\n- Čerstvé večeře můžeš přesunout na den, kdy jsi doma; ryby nejlépe v den nákupu nebo z mrazáku.\n\n## Jiný trénink\n\n- **Jiné tréninkové dny:** prohodí se jen svačiny (před tréninkem rýžová kaše nebo kefírový shake (kuře s gnocchi jako záměna); volný den sendvič, tortilla nebo miska). Energie dne zůstává.\n- **Ranní trénink:** 60–90 min před tréninkem rýžová kaše nebo shake, snídaně až po tréninku. Denní součet stejný.\n- **Kuře s gnocchi** před tréninkem nejméně 1,5 h předem.\n\n## Přejíždění a mimořádné dny\n\n- **Krabičky na cestu:** obědy z várky převážej v chladicí tašce s chladicí vložkou, doma hned do lednice; mimo lednici max. 2 h.\n- **Den bez vaření:** porce svíčkové nebo chilli z mrazáku (rezerva z várek) + čerstvá rýže.\n- **Restaurace (max. ~1× měsíčně):** bílkovina + příloha + zelenina, omáčky a smažené střídmě; zbytek dne normálně.\n\n\n### 3 dny mimo domov s kuchyňkou\n- Den 1: oběd krabička z várky (termotaška), večer uvař cestovní chilli na 4 porce (krůtí 500 g + hovězí 400 g, 1 plechovka černých fazolí, passata 500 g, 4 papriky, 2 cibule, malá kukuřice, řecký jogurt 140 g) a rýži na 2 porce.\n- Den 2–3: snídaně 3 vejce + cottage 90 g + žitný chléb 110 g + rajčata, paprika, kiwi; svačina rýžová kaše 55 g + mléko 300 ml + whey 20 g + banán + med; oběd a večeře chilli s 40 g rýže (rýži vař každý den zvlášť). Kefír 100 ml denně.\n- Na kroku −7 vychází den na ~2 750 kcal a B ~198 g. Každý krok navíc: +30 g rýže k jedné porci chilli nebo +50 g chleba.\n- Z domova: rýžová kaše, whey, basmati, med, olej, koření, krabička na den 1, termotaška.\n\n## Cestovní varianty (z obchodu, max. 4 suroviny)\n\n- **Vejce, chléb, cottage, zelenina** (845 kcal, B 60 g): Vejce celá (bez skořápky) 165 g, Žitný kváskový chléb Breadway (Lidl) 200 g, Cottage sýr Pilos 200 g, zelenina 150 g\n- **Cottage, chléb, banán, med (bez vaření)** (794 kcal, B 40 g): Cottage sýr Pilos 200 g, Žitný kváskový chléb Breadway (Lidl) 200 g, Banán (bez slupky) 120 g, Med 20 g, zelenina 150 g\n- **Hovězí mleté s brambory a zeleninou** (899 kcal, B 56 g): Hovězí mleté (do 5 % tuku), syrové 200 g, Brambory (syrové, oloupané) 600 g, zelenina 200 g, Extra panenský olivový olej 15 g\n- **Kuře s rýží a zeleninou** (892 kcal, B 55 g): Kuřecí maso – prsa (syrová) 180 g, Rýže basmati (suchá) 150 g, zelenina 200 g, Extra panenský olivový olej 15 g\n- **Vejce s brambory a cottage** (927 kcal, B 58 g): Vejce celá (bez skořápky) 220 g, Brambory (syrové, oloupané) 500 g, Cottage sýr Pilos 150 g, zelenina 200 g, Extra panenský olivový olej 5 g\n- **Bez vaření: sardinky, chléb, zelenina** (858 kcal, B 63 g): Sardinky Vilgain ve vlastní šťávě (slité) 170 g, Žitný kváskový chléb Breadway (Lidl) 250 g, zelenina 200 g, Extra panenský olivový olej 5 g\n- **Řecký jogurt s banánem a medem (bez vaření)** (651 kcal, B 34 g): Řecký jogurt 0 % (Milko) 280 g, Banán (bez slupky) 150 g, Med 20 g, Datle (bez pecek) 50 g, Vlašské ořechy 20 g\n- **Tortilla s cottage a banánem (bez vaření)** (678 kcal, B 35 g): Celozrnná tortilla Santa Maria 120 g, Cottage sýr Pilos 200 g, Banán (bez slupky) 120 g, Med 10 g\n\nNa cesty: 1 snídaně + 1 svačina + 2 hlavní jídla z tohoto seznamu ≈ stejný příjem jako běžný den (verze 3 400). Na nižší verzi uber přílohu (chléb, brambory, rýže) o ~30 %. Kupuj jen to, co je v seznamu.",
    "nakup_a_priprava": "## Jak se vaří\n\n- **Neděle večer (blok Po–Út):** dušené jídlo na 4 porce – 1 k nedělní večeři, 2 obědy Po a Út, 1 do mrazáku jako rezerva (T1 svíčková, T2 chilli; v T1 neděli se vaří chilli pro T2 a naopak). K tomu večeře na Po a Út (2 porce).\n- **Úterý (blok St–Čt):** večer nebo ráno před odjezdem. Oběd a večeře na 2 dny.\n- **Čtvrtek večer (blok Pá–So):** oběd a večeře na 2 dny.\n- **Neděle poledne:** krevetové rizoto čerstvě.\n- **Kuličky (H6) a ragú (H2):** vždy 4 porce, 2 sníš, 2 zamrazíš – v příštím cyklu se nevaří.\n- **Vývar na pho:** jednou za ~4 týdny 2 l, zamrazit po 1 l.\n- Do obědových krabiček dej o modul přílohy méně, k obědu 15 g ořechů.\n\n## Nákup\n\n- **N1 neděle:** blok Po–Út + celá várka dušeného jídla. **N2 úterý:** blok St–Čt. **N3 čtvrtek:** blok Pá–So + neděle. Trvanlivé suroviny jednou za cyklus (Zásoba).\n- Cottage, jogurty, gnocchi, avokádo a smetana vycházejí na celá balení v rámci bloku.\n- Chléb a tortilly zamraz po porcích.\n\n## Bezpečnost\n\n- Vše do 1 h zchladit. Maso a ryba max. 3–4 dny v lednici.\n- **Rýže max. 24 h v lednici** – porci na další den hned po vychladnutí zamrazit, nebo uvařit čerstvou. Ohřívat jen jednou, dokud není horká v celém objemu.\n- Rýži na sushi a rýžové nudle připravuj každý den čerstvé.\n- Krabičky na cestu v termotašce s chladicí vložkou, mimo lednici max. 2 h.",
    "mikrozivy": "Výpočet z mikroživin u každé suroviny (databázový odhad ±10–20 %  u jódu a selenu ±50 %)  průměr 14 dní  verze 3 400 (krok 0). Cíle EFSA pro muže 18–24 let.\n\n| Živina | Průměr (min–max den) | Cíl / limit | Hodnocení |\n| --- | --- | --- | --- |\n| Vitamin D | 8 µg (0.3–20.3) | 15 / UL 100 | **mezera → D3+K2 2 000 IU** |\n| Jód | 175 µg (110–223) | 150 / 600 | v pořádku; na špetku soli jodidovaná sůl |\n| Selen | 213 µg (max 249) | 70 / 255 | pod UL → žádný selen v doplňcích |\n| Zinek | 20 mg (max 24) | 14 / 25 | pod UL → žádný zinek v doplňcích |\n| Vápník | 1 493 mg | 1 000 / 2 500 | v pořádku |\n| Hořčík | 732 mg (+150 mg doplněk) | 350 | v pořádku |\n| Železo | 22 mg | 11 | v pořádku – doplněk jen podle ferritinu |\n| Draslík | 6 306 mg | 3 500 | výborně |\n| EPA+DHA | 1.4 g | 0 25 | výborně |\n| Sodík | 2 626 mg (max 4 013) | ~2 000 | mírně nad; proplachovat luštěniny  nesolit navíc |\n| Vitamin A / C / E / K | 1364 µg / 276 mg / 14.9 mg / 494 µg | 750 / 110 / 13 / 70 | v pořádku |\n| B12 / folát | 11 µg / 716 µg | 4 / 330 | v pořádku |\n\nVýpočet z tabulek není diagnóza. O doplňcích rozhodnou krevní testy (25(OH)D, ferritin, lipidový profil)."
@@ -3639,9 +3640,9 @@
      "nazev": "Kakao nealkalizované, neslazené",
      "g": 12,
      "poznamka": null,
-     "skupina": "dochuceni",
+     "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "olej_olivovy",
@@ -3650,7 +3651,7 @@
      "poznamka": "na pánev",
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "recky_jogurt_0",
@@ -3677,7 +3678,7 @@
      "poznamka": "do krému",
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "boruvky",
@@ -3686,7 +3687,7 @@
      "poznamka": null,
      "skupina": "ovoce",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "vlasske",
@@ -3695,7 +3696,7 @@
      "poznamka": null,
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     }
    ],
    "hodnoty_porce": {
@@ -3756,7 +3757,7 @@
      "poznamka": null,
      "skupina": "zelenina_volna",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "paprika",
@@ -3765,7 +3766,7 @@
      "poznamka": null,
      "skupina": "zelenina_volna",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "olej_olivovy",
@@ -3774,7 +3775,7 @@
      "poznamka": "na pánev",
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "kiwi",
@@ -3783,7 +3784,7 @@
      "poznamka": "jedlá část, cca 2 ks",
      "skupina": "ovoce",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     }
    ],
    "hodnoty_porce": {
@@ -3826,7 +3827,7 @@
      "poznamka": null,
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "spenat",
@@ -3871,7 +3872,7 @@
      "poznamka": null,
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "pomeranc",
@@ -3880,7 +3881,7 @@
      "poznamka": "jedlá část",
      "skupina": "ovoce",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     }
    ],
    "hodnoty_porce": {
@@ -3942,7 +3943,7 @@
      "poznamka": null,
      "skupina": "zelenina_volna",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "rajcata",
@@ -3951,7 +3952,7 @@
      "poznamka": null,
      "skupina": "zelenina_volna",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "citron",
@@ -3960,7 +3961,8 @@
      "poznamka": null,
      "skupina": "dochuceni",
      "povinne": false,
-     "nutne": false
+     "nutne": false,
+     "volitelne": true
     },
     {
      "surovina": "olej_olivovy",
@@ -3969,7 +3971,7 @@
      "poznamka": "pokapat",
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "jablko",
@@ -3978,7 +3980,7 @@
      "poznamka": "jedlá část",
      "skupina": "ovoce",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "banan",
@@ -3987,7 +3989,7 @@
      "poznamka": null,
      "skupina": "ovoce",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     }
    ],
    "hodnoty_porce": {
@@ -4047,9 +4049,9 @@
      "nazev": "Kakao nealkalizované, neslazené",
      "g": 10,
      "poznamka": null,
-     "skupina": "dochuceni",
+     "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "banan",
@@ -4058,7 +4060,7 @@
      "poznamka": null,
      "skupina": "ovoce",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "vlasske",
@@ -4067,7 +4069,7 @@
      "poznamka": null,
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "med",
@@ -4076,7 +4078,7 @@
      "poznamka": null,
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     }
    ],
    "hodnoty_porce": {
@@ -4128,7 +4130,7 @@
      "poznamka": "slité",
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "cottage",
@@ -4146,7 +4148,7 @@
      "poznamka": null,
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "rajcata",
@@ -4155,7 +4157,7 @@
      "poznamka": null,
      "skupina": "zelenina_volna",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "paprika",
@@ -4164,7 +4166,7 @@
      "poznamka": null,
      "skupina": "zelenina_volna",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "limetka",
@@ -4173,7 +4175,8 @@
      "poznamka": null,
      "skupina": "dochuceni",
      "povinne": false,
-     "nutne": false
+     "nutne": false,
+     "volitelne": true
     }
    ],
    "hodnoty_porce": {
@@ -4244,7 +4247,7 @@
      "poznamka": null,
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "med",
@@ -4253,7 +4256,7 @@
      "poznamka": null,
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     }
    ],
    "hodnoty_porce": {
@@ -4315,7 +4318,7 @@
      "poznamka": null,
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "salat",
@@ -4324,7 +4327,7 @@
      "poznamka": null,
      "skupina": "zelenina_volna",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "rajcata",
@@ -4333,7 +4336,7 @@
      "poznamka": null,
      "skupina": "zelenina_volna",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "citron",
@@ -4342,7 +4345,8 @@
      "poznamka": null,
      "skupina": "dochuceni",
      "povinne": false,
-     "nutne": false
+     "nutne": false,
+     "volitelne": true
     },
     {
      "surovina": "banan",
@@ -4351,7 +4355,7 @@
      "poznamka": "vedle",
      "skupina": "ovoce",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "olej_olivovy",
@@ -4360,7 +4364,7 @@
      "poznamka": "do dresinku",
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     }
    ],
    "hodnoty_porce": {
@@ -4422,7 +4426,7 @@
      "poznamka": null,
      "skupina": "zelenina_volna",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "cuketa",
@@ -4431,7 +4435,7 @@
      "poznamka": "opečená",
      "skupina": "zelenina_volna",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "avokado",
@@ -4440,7 +4444,7 @@
      "poznamka": "zbytek avokáda z bloku (S7 nebo sushi bowl)",
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "limetka",
@@ -4449,7 +4453,8 @@
      "poznamka": null,
      "skupina": "dochuceni",
      "povinne": false,
-     "nutne": false
+     "nutne": false,
+     "volitelne": true
     },
     {
      "surovina": "recky_jogurt_0",
@@ -4458,7 +4463,7 @@
      "poznamka": "bylinkový dresink",
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "olej_olivovy",
@@ -4467,7 +4472,7 @@
      "poznamka": "na cuketu",
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     }
    ],
    "hodnoty_porce": {
@@ -4530,7 +4535,7 @@
      "poznamka": null,
      "skupina": "ovoce",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "med",
@@ -4539,7 +4544,7 @@
      "poznamka": null,
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     }
    ],
    "hodnoty_porce": {
@@ -4602,7 +4607,7 @@
      "poznamka": null,
      "skupina": "ovoce",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "med",
@@ -4611,7 +4616,7 @@
      "poznamka": null,
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "boruvky",
@@ -4620,7 +4625,7 @@
      "poznamka": "mražené povařit",
      "skupina": "ovoce",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     }
    ],
    "hodnoty_porce": {
@@ -4683,7 +4688,7 @@
      "poznamka": "do pomazánky",
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "rajcata",
@@ -4692,7 +4697,7 @@
      "poznamka": null,
      "skupina": "zelenina_volna",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "salat",
@@ -4701,7 +4706,7 @@
      "poznamka": null,
      "skupina": "zelenina_volna",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "okurka",
@@ -4710,7 +4715,7 @@
      "poznamka": null,
      "skupina": "zelenina_volna",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "pomeranc",
@@ -4719,7 +4724,7 @@
      "poznamka": "jedlá část",
      "skupina": "ovoce",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "banan",
@@ -4728,7 +4733,7 @@
      "poznamka": null,
      "skupina": "ovoce",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     }
    ],
    "hodnoty_porce": {
@@ -4791,7 +4796,7 @@
      "poznamka": "cherry",
      "skupina": "zelenina_volna",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "olej_olivovy",
@@ -4800,7 +4805,7 @@
      "poznamka": null,
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     }
    ],
    "hodnoty_porce": {
@@ -4846,7 +4851,7 @@
      "poznamka": null,
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "paprika",
@@ -4864,7 +4869,7 @@
      "poznamka": null,
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "vyvar_bez_soli",
@@ -4892,7 +4897,7 @@
      "poznamka": null,
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "testoviny_cz",
@@ -4910,7 +4915,7 @@
      "poznamka": "okurkový salát s octem a koprem",
      "skupina": "zelenina_volna",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     }
    ],
    "hodnoty_porce": {
@@ -4974,7 +4979,7 @@
      "poznamka": null,
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "spenat",
@@ -4992,7 +4997,7 @@
      "poznamka": null,
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "cesnek",
@@ -5001,7 +5006,8 @@
      "poznamka": null,
      "skupina": "dochuceni",
      "povinne": false,
-     "nutne": false
+     "nutne": false,
+     "volitelne": true
     },
     {
      "surovina": "citron",
@@ -5010,7 +5016,8 @@
      "poznamka": null,
      "skupina": "dochuceni",
      "povinne": false,
-     "nutne": false
+     "nutne": false,
+     "volitelne": true
     },
     {
      "surovina": "rajcata",
@@ -5019,7 +5026,7 @@
      "poznamka": null,
      "skupina": "zelenina_volna",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     }
    ],
    "hodnoty_porce": {
@@ -5093,7 +5100,7 @@
      "poznamka": null,
      "skupina": "zelenina_volna",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "cibule",
@@ -5102,7 +5109,7 @@
      "poznamka": null,
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "cesnek",
@@ -5111,7 +5118,8 @@
      "poznamka": null,
      "skupina": "dochuceni",
      "povinne": false,
-     "nutne": false
+     "nutne": false,
+     "volitelne": true
     },
     {
      "surovina": "kukurice",
@@ -5120,7 +5128,7 @@
      "poznamka": "50 → 70: malá plechovka",
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "olej_olivovy",
@@ -5129,7 +5137,7 @@
      "poznamka": "8 → 5",
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "basmati",
@@ -5147,7 +5155,7 @@
      "poznamka": "40 → 70: 1 kelímek na 2",
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     }
    ],
    "hodnoty_porce": {
@@ -5201,7 +5209,7 @@
      "poznamka": null,
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "cibule",
@@ -5210,7 +5218,7 @@
      "poznamka": null,
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "cesnek",
@@ -5219,7 +5227,8 @@
      "poznamka": null,
      "skupina": "dochuceni",
      "povinne": false,
-     "nutne": false
+     "nutne": false,
+     "volitelne": true
     },
     {
      "surovina": "vyvar_bez_soli",
@@ -5238,7 +5247,8 @@
      "poznamka": null,
      "skupina": "dochuceni",
      "povinne": false,
-     "nutne": false
+     "nutne": false,
+     "volitelne": true
     },
     {
      "surovina": "olej_olivovy",
@@ -5247,7 +5257,7 @@
      "poznamka": null,
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "maslo",
@@ -5256,7 +5266,7 @@
      "poznamka": "na konci",
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "citron",
@@ -5265,7 +5275,8 @@
      "poznamka": "+ kůra",
      "skupina": "dochuceni",
      "povinne": false,
-     "nutne": false
+     "nutne": false,
+     "volitelne": true
     },
     {
      "surovina": "salat",
@@ -5274,7 +5285,7 @@
      "poznamka": "rukola vedle",
      "skupina": "zelenina_volna",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     }
    ],
    "hodnoty_porce": {
@@ -5338,7 +5349,7 @@
      "poznamka": null,
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "zazvor",
@@ -5347,7 +5358,8 @@
      "poznamka": null,
      "skupina": "dochuceni",
      "povinne": false,
-     "nutne": false
+     "nutne": false,
+     "volitelne": true
     },
     {
      "surovina": "klicky_mungo",
@@ -5356,7 +5368,7 @@
      "poznamka": null,
      "skupina": "hlavni",
      "povinne": true,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "cibule_jarni",
@@ -5365,7 +5377,8 @@
      "poznamka": null,
      "skupina": "dochuceni",
      "povinne": false,
-     "nutne": false
+     "nutne": false,
+     "volitelne": true
     },
     {
      "surovina": "limetka",
@@ -5374,7 +5387,8 @@
      "poznamka": null,
      "skupina": "dochuceni",
      "povinne": false,
-     "nutne": false
+     "nutne": false,
+     "volitelne": true
     },
     {
      "surovina": "rybi_omacka",
@@ -5383,7 +5397,8 @@
      "poznamka": "dochutit limetkou a bylinkami",
      "skupina": "dochuceni",
      "povinne": false,
-     "nutne": false
+     "nutne": false,
+     "volitelne": true
     },
     {
      "surovina": "brokolice",
@@ -5392,7 +5407,7 @@
      "poznamka": "do vývaru",
      "skupina": "zelenina_volna",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     }
    ],
    "hodnoty_porce": {
@@ -5455,7 +5470,8 @@
      "poznamka": null,
      "skupina": "dochuceni",
      "povinne": false,
-     "nutne": false
+     "nutne": false,
+     "volitelne": true
     },
     {
      "surovina": "olej_olivovy",
@@ -5464,7 +5480,7 @@
      "poznamka": null,
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "citron",
@@ -5473,7 +5489,8 @@
      "poznamka": "+ kůra",
      "skupina": "dochuceni",
      "povinne": false,
-     "nutne": false
+     "nutne": false,
+     "volitelne": true
     },
     {
      "surovina": "spenat",
@@ -5482,7 +5499,7 @@
      "poznamka": null,
      "skupina": "zelenina_volna",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "parmazan",
@@ -5491,7 +5508,8 @@
      "poznamka": null,
      "skupina": "dochuceni",
      "povinne": false,
-     "nutne": false
+     "nutne": false,
+     "volitelne": true
     }
    ],
    "hodnoty_porce": {
@@ -5564,7 +5582,7 @@
      "poznamka": null,
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "cesnek",
@@ -5573,7 +5591,8 @@
      "poznamka": null,
      "skupina": "dochuceni",
      "povinne": false,
-     "nutne": false
+     "nutne": false,
+     "volitelne": true
     },
     {
      "surovina": "olej_olivovy",
@@ -5582,7 +5601,7 @@
      "poznamka": null,
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "testoviny",
@@ -5600,7 +5619,8 @@
      "poznamka": null,
      "skupina": "dochuceni",
      "povinne": false,
-     "nutne": false
+     "nutne": false,
+     "volitelne": true
     },
     {
      "surovina": "spenat",
@@ -5609,7 +5629,7 @@
      "poznamka": "vmíchat na konci",
      "skupina": "zelenina_volna",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     }
    ],
    "hodnoty_porce": {
@@ -5682,7 +5702,7 @@
      "poznamka": null,
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "smetana12",
@@ -5700,7 +5720,7 @@
      "poznamka": null,
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "horcice",
@@ -5709,7 +5729,8 @@
      "poznamka": null,
      "skupina": "dochuceni",
      "povinne": false,
-     "nutne": false
+     "nutne": false,
+     "volitelne": true
     },
     {
      "surovina": "basmati",
@@ -5727,7 +5748,8 @@
      "poznamka": null,
      "skupina": "dochuceni",
      "povinne": false,
-     "nutne": false
+     "nutne": false,
+     "volitelne": true
     }
    ],
    "hodnoty_porce": {
@@ -5800,7 +5822,7 @@
      "poznamka": null,
      "skupina": "zelenina_volna",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "paprika",
@@ -5809,7 +5831,7 @@
      "poznamka": null,
      "skupina": "zelenina_volna",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "cibule",
@@ -5818,7 +5840,7 @@
      "poznamka": "červená",
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "cesnek",
@@ -5827,7 +5849,8 @@
      "poznamka": null,
      "skupina": "dochuceni",
      "povinne": false,
-     "nutne": false
+     "nutne": false,
+     "volitelne": true
     },
     {
      "surovina": "feta",
@@ -5836,7 +5859,7 @@
      "poznamka": "do salátu",
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "citron",
@@ -5845,7 +5868,8 @@
      "poznamka": null,
      "skupina": "dochuceni",
      "povinne": false,
-     "nutne": false
+     "nutne": false,
+     "volitelne": true
     },
     {
      "surovina": "olej_olivovy",
@@ -5854,7 +5878,7 @@
      "poznamka": "marináda + salát",
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     }
    ],
    "hodnoty_porce": {
@@ -5927,7 +5951,7 @@
      "poznamka": null,
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "cesnek",
@@ -5936,7 +5960,8 @@
      "poznamka": null,
      "skupina": "dochuceni",
      "povinne": false,
-     "nutne": false
+     "nutne": false,
+     "volitelne": true
     },
     {
      "surovina": "zazvor",
@@ -5945,7 +5970,8 @@
      "poznamka": null,
      "skupina": "dochuceni",
      "povinne": false,
-     "nutne": false
+     "nutne": false,
+     "volitelne": true
     },
     {
      "surovina": "jogurt_bily_3",
@@ -5954,7 +5980,7 @@
      "poznamka": "1 kelímek 150 g na 2 porce, nevařit",
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "olej_olivovy",
@@ -5963,7 +5989,7 @@
      "poznamka": null,
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "basmati",
@@ -6027,7 +6053,7 @@
      "poznamka": null,
      "skupina": "zelenina_volna",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "cibule",
@@ -6036,7 +6062,7 @@
      "poznamka": null,
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "cesnek",
@@ -6045,7 +6071,8 @@
      "poznamka": null,
      "skupina": "dochuceni",
      "povinne": false,
-     "nutne": false
+     "nutne": false,
+     "volitelne": true
     },
     {
      "surovina": "olej_olivovy",
@@ -6054,7 +6081,7 @@
      "poznamka": null,
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "testoviny",
@@ -6072,7 +6099,8 @@
      "poznamka": null,
      "skupina": "dochuceni",
      "povinne": false,
-     "nutne": false
+     "nutne": false,
+     "volitelne": true
     }
    ],
    "hodnoty_porce": {
@@ -6126,7 +6154,7 @@
      "poznamka": null,
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "brokolice",
@@ -6135,7 +6163,7 @@
      "poznamka": null,
      "skupina": "zelenina_volna",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "mrkev",
@@ -6144,7 +6172,7 @@
      "poznamka": null,
      "skupina": "zelenina_volna",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "paprika",
@@ -6153,16 +6181,16 @@
      "poznamka": null,
      "skupina": "zelenina_volna",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "sojova_omacka",
      "nazev": "Sójová omáčka (se sníženým obsahem soli)",
      "g": 15,
      "poznamka": null,
-     "skupina": "dochuceni",
+     "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "zazvor",
@@ -6171,7 +6199,8 @@
      "poznamka": null,
      "skupina": "dochuceni",
      "povinne": false,
-     "nutne": false
+     "nutne": false,
+     "volitelne": true
     },
     {
      "surovina": "cesnek",
@@ -6180,7 +6209,8 @@
      "poznamka": null,
      "skupina": "dochuceni",
      "povinne": false,
-     "nutne": false
+     "nutne": false,
+     "volitelne": true
     },
     {
      "surovina": "olej_sezamovy",
@@ -6189,7 +6219,8 @@
      "poznamka": null,
      "skupina": "dochuceni",
      "povinne": false,
-     "nutne": false
+     "nutne": false,
+     "volitelne": true
     },
     {
      "surovina": "olej_olivovy",
@@ -6198,7 +6229,7 @@
      "poznamka": null,
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "sezam",
@@ -6207,7 +6238,8 @@
      "poznamka": null,
      "skupina": "dochuceni",
      "povinne": false,
-     "nutne": false
+     "nutne": false,
+     "volitelne": true
     },
     {
      "surovina": "limetka",
@@ -6216,7 +6248,8 @@
      "poznamka": null,
      "skupina": "dochuceni",
      "povinne": false,
-     "nutne": false
+     "nutne": false,
+     "volitelne": true
     }
    ],
    "hodnoty_porce": {
@@ -6268,9 +6301,9 @@
      "nazev": "Rýžový ocet (neochucený)",
      "g": 20,
      "poznamka": null,
-     "skupina": "dochuceni",
+     "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "cukr",
@@ -6279,7 +6312,8 @@
      "poznamka": "do rýže",
      "skupina": "dochuceni",
      "povinne": false,
-     "nutne": false
+     "nutne": false,
+     "volitelne": true
     },
     {
      "surovina": "avokado",
@@ -6288,7 +6322,7 @@
      "poznamka": null,
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "edamame",
@@ -6306,7 +6340,7 @@
      "poznamka": null,
      "skupina": "zelenina_volna",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "mrkev",
@@ -6315,7 +6349,7 @@
      "poznamka": null,
      "skupina": "zelenina_volna",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "nori",
@@ -6324,16 +6358,17 @@
      "poznamka": null,
      "skupina": "dochuceni",
      "povinne": false,
-     "nutne": false
+     "nutne": false,
+     "volitelne": true
     },
     {
      "surovina": "sojova_omacka",
      "nazev": "Sójová omáčka (se sníženým obsahem soli)",
      "g": 15,
      "poznamka": null,
-     "skupina": "dochuceni",
+     "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "sezam",
@@ -6342,7 +6377,8 @@
      "poznamka": null,
      "skupina": "dochuceni",
      "povinne": false,
-     "nutne": false
+     "nutne": false,
+     "volitelne": true
     }
    ],
    "hodnoty_porce": {
@@ -6413,7 +6449,8 @@
      "poznamka": null,
      "skupina": "dochuceni",
      "povinne": false,
-     "nutne": false
+     "nutne": false,
+     "volitelne": true
     }
    ],
    "hodnoty_porce": {
@@ -6473,7 +6510,7 @@
      "poznamka": null,
      "skupina": "ovoce",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     }
    ],
    "hodnoty_porce": {
@@ -6533,7 +6570,7 @@
      "poznamka": null,
      "skupina": "ovoce",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "vlasske",
@@ -6593,7 +6630,7 @@
      "poznamka": null,
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "banan",
@@ -6602,7 +6639,7 @@
      "poznamka": null,
      "skupina": "ovoce",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     }
    ],
    "hodnoty_porce": {
@@ -6653,7 +6690,7 @@
      "poznamka": null,
      "skupina": "ovoce",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     },
     {
      "surovina": "med",
@@ -6662,7 +6699,7 @@
      "poznamka": null,
      "skupina": "hlavni",
      "povinne": false,
-     "nutne": false
+     "nutne": true
     }
    ],
    "hodnoty_porce": {
@@ -35093,7 +35130,7 @@
    "3 000": -4,
    "3 400": 0
   },
-  "pravidlo_treninkove_svaciny": "Trénink ve dni s volnou svačinou: pokud je snídaně rýžová kaše (S6) nebo je ten den už jídlo s rýží či rýžovými nudlemi (H1, H3, H5, H9, H7, H13, H10), dej kefírový shake P-T1; jinak rýžovou kaši P1. Gramáž podle kroku jako u ostatních svačin.",
+  "pravidlo_treninkove_svaciny": "Příjem je každý den stejný bez ohledu na trénink (upper, lower, volno i thajský box). Mění se jen svačina: když je trénink nebo box ve dni s volnou svačinou a snídaně je rýžová kaše (S6) nebo je ten den už jídlo s rýží či rýžovými nudlemi (H1, H3, H5, H9, H7, H13, H10), dej kefírový shake P-T1; jinak rýžovou kaši P1. Když naopak připadne volno na den s tréninkovou svačinou, svačina zůstává (stejné kalorie). Pojistka fermentu: pokud by po změně den neměl žádný jogurt ani kefír, přidej k obědu 100 ml kefíru.",
   "stropy_porci": {
    "popis": "Nad krokem +2 (~3 650 kcal) už porce nezvětšovat – další přírůstky jdou do pátého jídla.",
    "obed_vecere": "rýže/těstoviny/bulgur/nudle max. ~160 g suché, gnocchi max. ~350 g",
@@ -35111,7 +35148,9 @@
     "P5-E"
    ]
   },
-  "kdy_pridat": "Hodnotí se každé 2 týdny podle průměru ranních vážení. Cíl: +0,3–0,5 % hmotnosti za 2 týdny (při 90 kg ~0,3–0,45 kg). Pod 0,3 % → +1 až 2 kroky. V pásmu → beze změny. Nad 0,5 % nebo pas roste rychleji než váha → −1 krok. Nikdy podle jednoho vážení; zohlednit pas, fotky, výkon, hlad a spánek."
+  "kdy_pridat": "Hodnotí se každé 2 týdny podle průměru ranních vážení. Cíl: +0,3–0,5 % hmotnosti za 2 týdny (při 90 kg ~0,3–0,45 kg). Pod 0,3 % → +1 až 2 kroky. V pásmu → beze změny. Nad 0,5 % nebo pas roste rychleji než váha → −1 krok. Nikdy podle jednoho vážení; zohlednit pas, fotky, výkon, hlad a spánek.",
+  "thajsky_box": "Občasný box příjem nemění – svačinu před ním ber jako tréninkovou. Box ve stejný den jako posilování: svačina před prvním tréninkem, po druhém normální jídlo. Když se box stane pravidelným (1–2× týdně déle než 2 týdny) a trend váhy zaostane pod 0,3 % za 2 týdny, přidá se 1 krok (~100 kcal) podle běžného pravidla. Ve dny boxu víc pít, při silném pocení špetka soli navíc.",
+  "ranni_trenink": "Trénink 1–2 h po probuzení: snídaně je jídlo před tréninkem, svačina se posune po tréninku. Nic jiného se nemění."
  },
  "nahrady_ovoce": {
   "princip": "Ovoce měň podle sacharidů, ne gram za gram. Řádek = množství s ~20 g sacharidů (≈ 100 g banánu). Před tréninkem preferuj banán, hrozny nebo datle.",
@@ -35162,7 +35201,74 @@
   "pravidla": "U jídla ukaž hlavní suroviny (skupina hlavni a ovoce). Volnou zeleninu (skupina zelenina_volna) nevypisuj jednotlivě: místo ní jeden řádek „+ zelenina ~X g, jakákoli“ (X = zelenina_volna_g, už zaokrouhleno na 50 g). Povinná zelenina (povinne true) zůstává v hlavních surovinách se štítkem „povinné“. Ovoce se značkou ⇄ a tabulkou nahrady_ovoce.",
   "vypocty": "Součty jídel a dnů se počítají z gramů v receptech beze změny (zelenina v nich je uvedena konkrétně). Výběr jiné zeleniny mění energii jen o desítky kcal za den.",
   "nakup": "Volná zelenina je v nákupu jako jedna položka „Zelenina podle chuti“ (surovina zelenina_volna); povinná zelenina zůstává jako konkrétní položky.",
-  "strop_volne": "Volná zelenina max. 150 g ke snídani a svačině, 200 g k obědu a večeři."
+  "strop_volne": "Volná zelenina max. 150 g ke snídani a svačině, 200 g k obědu a večeři.",
+  "volna_zelenina_vysvetleni": "„+ zelenina ~X g, jakákoli“ = množství je součást základu (nutné), druh si vybereš podle seznamu vhodné zeleniny.",
+  "vhodna": {
+   "snidane_a_svaciny_syrova": [
+    "okurka",
+    "rajčata a cherry rajčata",
+    "paprika",
+    "ředkvičky",
+    "salát (ledový, římský, polníček)",
+    "mrkev",
+    "kedluben",
+    "řapíkatý celer",
+    "klíčky"
+   ],
+   "tepla_jidla_a_vary": [
+    "brokolice",
+    "květák",
+    "cuketa",
+    "zelené fazolky",
+    "mrkev",
+    "paprika",
+    "špenát",
+    "žampiony",
+    "červená řepa",
+    "pórek",
+    "cibule",
+    "lilek",
+    "hrášek (počítá se jako příloha, max ~50 g)"
+   ],
+   "asijska_jidla": [
+    "brokolice",
+    "paprika",
+    "mrkev",
+    "zelené fazolky",
+    "pak choi / čínské zelí",
+    "žampiony",
+    "mungo klíčky",
+    "jarní cibulka",
+    "cuketa"
+   ],
+   "kdykoli_navic": [
+    "nepasterované kysané zelí (zároveň ferment)",
+    "červená řepa (vařená nebo pečená)",
+    "okurka a salát – nejvíc objemu s nejmenší sytostí"
+   ]
+  },
+  "mene_vhodna": [
+   {
+    "co": "brambory, batáty, kukuřice, hrášek, luštěniny",
+    "proc": "nejsou volná zelenina – mají hodně sacharidů a počítají se jako příloha nebo bílkovina"
+   },
+   {
+    "co": "nakládaná zelenina v octovém nálevu, olivy, sušená rajčata v oleji",
+    "proc": "hodně soli nebo oleje navíc (olivy navíc nechceš)"
+   },
+   {
+    "co": "zelenina na smetaně, v trojobalu, hranolky, zeleninové chipsy",
+    "proc": "tuk navíc, nepočítá se jako volná zelenina"
+   },
+   {
+    "co": "velká porce syrové košťáloviny (zelí, květák, brokolice) těsně před tréninkem",
+    "proc": "může nadýmat – před tréninkem raději okurka, rajčata, paprika"
+   },
+   {
+    "co": "kapusta",
+    "proc": "nechceš ji"
+   }
+  ]
  },
  "cestovni_varianty": {
   "pravidlo": "Na cesty: 1 snídaně + 1 svačina + 2 hlavní jídla z tohoto seznamu ≈ stejný příjem jako běžný den (verze 3 400). Na nižší verzi uber přílohu (chléb, brambory, rýže) o ~30 %. Kupuj jen to, co je v seznamu.",
@@ -35189,25 +35295,29 @@
       "surovina": "vejce",
       "g": 165,
       "skupina": "hlavni",
-      "poznamka": "3 ks, míchaná nebo natvrdo"
+      "poznamka": "3 ks, míchaná nebo natvrdo",
+      "nutne": true
      },
      {
       "surovina": "chleb_zitny",
       "g": 200,
       "skupina": "hlavni",
-      "poznamka": null
+      "poznamka": null,
+      "nutne": true
      },
      {
       "surovina": "cottage",
       "g": 200,
       "skupina": "hlavni",
-      "poznamka": "1 balení"
+      "poznamka": "1 balení",
+      "nutne": true
      },
      {
       "surovina": "zelenina_volna",
       "g": 150,
       "skupina": "zelenina_volna",
-      "poznamka": "okurka, rajče, paprika"
+      "poznamka": "okurka, rajče, paprika",
+      "nutne": true
      }
     ],
     "hodnoty": {
@@ -35228,31 +35338,36 @@
       "surovina": "cottage",
       "g": 200,
       "skupina": "hlavni",
-      "poznamka": "1 balení"
+      "poznamka": "1 balení",
+      "nutne": true
      },
      {
       "surovina": "chleb_zitny",
       "g": 200,
       "skupina": "hlavni",
-      "poznamka": null
+      "poznamka": null,
+      "nutne": true
      },
      {
       "surovina": "banan",
       "g": 120,
       "skupina": "ovoce",
-      "poznamka": "1 ks"
+      "poznamka": "1 ks",
+      "nutne": true
      },
      {
       "surovina": "med",
       "g": 20,
       "skupina": "hlavni",
-      "poznamka": null
+      "poznamka": null,
+      "nutne": true
      },
      {
       "surovina": "zelenina_volna",
       "g": 150,
       "skupina": "zelenina_volna",
-      "poznamka": null
+      "poznamka": null,
+      "nutne": true
      }
     ],
     "hodnoty": {
@@ -35273,25 +35388,29 @@
       "surovina": "hov_mlete5",
       "g": 200,
       "skupina": "hlavni",
-      "poznamka": "1/2 balení"
+      "poznamka": "1/2 balení",
+      "nutne": true
      },
      {
       "surovina": "brambory",
       "g": 600,
       "skupina": "hlavni",
-      "poznamka": "syrové, oloupané"
+      "poznamka": "syrové, oloupané",
+      "nutne": true
      },
      {
       "surovina": "zelenina_volna",
       "g": 200,
       "skupina": "zelenina_volna",
-      "poznamka": "jakákoli, i mražená"
+      "poznamka": "jakákoli, i mražená",
+      "nutne": true
      },
      {
       "surovina": "olej_olivovy",
       "g": 15,
       "skupina": "hlavni",
-      "poznamka": null
+      "poznamka": null,
+      "nutne": true
      }
     ],
     "hodnoty": {
@@ -35312,25 +35431,29 @@
       "surovina": "kur_prsa",
       "g": 180,
       "skupina": "hlavni",
-      "poznamka": "nebo stehna"
+      "poznamka": "nebo stehna",
+      "nutne": true
      },
      {
       "surovina": "basmati",
       "g": 150,
       "skupina": "hlavni",
-      "poznamka": "suchá"
+      "poznamka": "suchá",
+      "nutne": true
      },
      {
       "surovina": "zelenina_volna",
       "g": 200,
       "skupina": "zelenina_volna",
-      "poznamka": "jakákoli, i mražená"
+      "poznamka": "jakákoli, i mražená",
+      "nutne": true
      },
      {
       "surovina": "olej_olivovy",
       "g": 15,
       "skupina": "hlavni",
-      "poznamka": null
+      "poznamka": null,
+      "nutne": true
      }
     ],
     "hodnoty": {
@@ -35351,31 +35474,36 @@
       "surovina": "vejce",
       "g": 220,
       "skupina": "hlavni",
-      "poznamka": "4 ks"
+      "poznamka": "4 ks",
+      "nutne": true
      },
      {
       "surovina": "brambory",
       "g": 500,
       "skupina": "hlavni",
-      "poznamka": "syrové, oloupané"
+      "poznamka": "syrové, oloupané",
+      "nutne": true
      },
      {
       "surovina": "cottage",
       "g": 150,
       "skupina": "hlavni",
-      "poznamka": null
+      "poznamka": null,
+      "nutne": true
      },
      {
       "surovina": "zelenina_volna",
       "g": 200,
       "skupina": "zelenina_volna",
-      "poznamka": null
+      "poznamka": null,
+      "nutne": true
      },
      {
       "surovina": "olej_olivovy",
       "g": 5,
       "skupina": "hlavni",
-      "poznamka": null
+      "poznamka": null,
+      "nutne": true
      }
     ],
     "hodnoty": {
@@ -35396,25 +35524,29 @@
       "surovina": "sardinky",
       "g": 170,
       "skupina": "hlavni",
-      "poznamka": "2 plechovky"
+      "poznamka": "2 plechovky",
+      "nutne": true
      },
      {
       "surovina": "chleb_zitny",
       "g": 250,
       "skupina": "hlavni",
-      "poznamka": null
+      "poznamka": null,
+      "nutne": true
      },
      {
       "surovina": "zelenina_volna",
       "g": 200,
       "skupina": "zelenina_volna",
-      "poznamka": null
+      "poznamka": null,
+      "nutne": true
      },
      {
       "surovina": "olej_olivovy",
       "g": 5,
       "skupina": "hlavni",
-      "poznamka": null
+      "poznamka": null,
+      "nutne": true
      }
     ],
     "hodnoty": {
@@ -35435,31 +35567,36 @@
       "surovina": "recky_jogurt_0",
       "g": 280,
       "skupina": "hlavni",
-      "poznamka": "2 kelímky"
+      "poznamka": "2 kelímky",
+      "nutne": true
      },
      {
       "surovina": "banan",
       "g": 150,
       "skupina": "ovoce",
-      "poznamka": null
+      "poznamka": null,
+      "nutne": true
      },
      {
       "surovina": "med",
       "g": 20,
       "skupina": "hlavni",
-      "poznamka": null
+      "poznamka": null,
+      "nutne": true
      },
      {
       "surovina": "datle",
       "g": 50,
       "skupina": "hlavni",
-      "poznamka": null
+      "poznamka": null,
+      "nutne": true
      },
      {
       "surovina": "vlasske",
       "g": 20,
       "skupina": "hlavni",
-      "poznamka": null
+      "poznamka": null,
+      "nutne": true
      }
     ],
     "hodnoty": {
@@ -35480,25 +35617,29 @@
       "surovina": "tortilla_cz",
       "g": 120,
       "skupina": "hlavni",
-      "poznamka": "3 ks"
+      "poznamka": "3 ks",
+      "nutne": true
      },
      {
       "surovina": "cottage",
       "g": 200,
       "skupina": "hlavni",
-      "poznamka": "1 balení"
+      "poznamka": "1 balení",
+      "nutne": true
      },
      {
       "surovina": "banan",
       "g": 120,
       "skupina": "ovoce",
-      "poznamka": null
+      "poznamka": null,
+      "nutne": true
      },
      {
       "surovina": "med",
       "g": 10,
       "skupina": "hlavni",
-      "poznamka": null
+      "poznamka": null,
+      "nutne": true
      }
     ],
     "hodnoty": {

@@ -26,6 +26,8 @@ if (ev === 'schedule') {
     if (wd === 'Sun') payload = { title: 'Neděle: pas, nákup N1, vaření', body: 'Ráno nalačno váha a pas. Nákup N1 (blok Po–Út), večer vaření do zásoby a týdenní hodnocení.', url: './?open=nakup' };
     if (wd === 'Tue') payload = { title: 'Dobré ráno · nákup N2', body: 'Váha nalačno. Dnes nákup N2 a vaření bloku St–Čt (večer nebo ráno před odjezdem).', url: './?open=nakup' };
     if (wd === 'Thu') payload = { title: 'Dobré ráno · nákup N3', body: 'Váha nalačno. Dnes nákup N3 a večer vaření bloku Pá–So.', url: './?open=nakup' };
+    const ymd = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Prague' }).format(new Date());
+    if (cfg.special && cfg.special[ymd]) payload = { url: './?open=den', ...cfg.special[ymd] };
   }
 } else {
   payload = { title: 'Kodad boost', body: 'Upozornění fungují.', url: './' };

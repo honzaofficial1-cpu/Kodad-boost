@@ -3,5 +3,15 @@
  "hour": 7,
  "minute": 30,
  "subject": "https://honzaofficial1-cpu.github.io/Kodad-boost/",
- "weekHour": 19
+ "weekHour": 19,
+ "special": {
+  "2026-12-06": {
+   "title": "Zítra začíná plán na 3 400 kcal",
+   "body": "Od pondělí krok 0 a 4 týdny kalibrace. Dnes ještě normálně, nákup N1 a vaření podle plánu."
+  },
+  "2026-12-07": {
+   "title": "Dnes začíná plán na 3 400 kcal",
+   "body": "Krok 0 je nastavený. Zvaž se nalačno a jez podle Dnes. Váha první týden poskočí, to je voda."
+  }
+ }
 }
